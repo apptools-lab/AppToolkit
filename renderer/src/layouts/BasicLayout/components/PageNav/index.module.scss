@@ -1,0 +1,43 @@
+.nav {
+  :global {
+    .next-nav {
+      &.next-normal .next-nav-item.next-menu-item {
+        height: 32px;
+        line-height: 32px;
+        margin-bottom: 10px;
+
+        &:hover {
+          background-color: rgb(235, 235, 235);
+        }
+        &.next-selected {
+          background-color: rgb(211, 211, 211);
+          color: #666;
+          border-radius: 8px;
+        }
+
+        &:before {
+          background-color: #ebebeb;
+        }
+      }
+      &.next-ver {
+        height: 32px;
+        line-height: 32px;
+        .next-menu-item-inner {
+          height: 32px;
+        }
+        .next-menu-item {
+          padding: 0 6px;
+        }
+      }
+    }
+  }
+}
+
+.link {
+  &:link {
+    color: inherit;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}

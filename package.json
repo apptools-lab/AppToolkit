@@ -32,7 +32,7 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2020 Appworks Toolkit",
+    "copyright": "Copyright © 2020 icejs",
     "mac": {
       "target": [
         "dmg",
@@ -63,11 +63,16 @@
     }
   },
   "dependencies": {
-    "electron-is-dev": "^2.0.0"
+    "@shockpkg/hdi-mac": "^1.6.1",
+    "electron-is-dev": "^2.0.0",
+    "fs-extra": "^9.1.0",
+    "globby": "^11.0.3",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@iceworks/spec": "^1.0.0",
     "@types/electron": "^1.6.10",
+    "@types/shelljs": "^0.8.8",
     "commitlint": "^8.3.5",
     "concurrently": "^5.1.0",
     "electron": "^12.0.0",

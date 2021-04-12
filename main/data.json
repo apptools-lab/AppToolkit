@@ -1,0 +1,103 @@
+{
+  "base": [
+    {
+      "name": "Node.js",
+      "description": "Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时",
+      "icon": "",
+      "url": "",
+      "version": "14.16.0",
+      "recommended": true,
+      "isInternal": false,
+      "type": "tool"
+    },
+    {
+      "name": "Git",
+      "description": "分布式版本控制软件",
+      "icon": "",
+      "url": "",
+      "version": "2.29.2",
+      "recommended": true,
+      "isInternal": false,
+      "type": "tool"
+    },
+    {
+      "name": "Google Chrome",
+      "description": "谷歌浏览器",
+      "icon": "",
+      "url": "",
+      "version": "89.0.4389.114",
+      "recommended": true,
+      "isInternal": false,
+      "type": "app"
+    },
+    {
+      "name": "Visual Studio Code",
+      "description": "Visual Studio Code 是一款由微软开发且跨平台的免费源代码编辑器",
+      "icon": "",
+      "url": "",
+      "version": "1.51.1",
+      "recommended": true,
+      "isInternal": false,
+      "type": "app"
+    }
+  ],
+  "app": [
+    {
+      "name": "Chrome",
+      "description": "谷歌浏览器",
+      "icon": "",
+      "url": "",
+      "version": "89.0.4389.114",
+      "recommended": true,
+      "isInternal": false
+    }
+  ],
+  "npmPackages": [
+    {
+      "name": "@ali/def-cli",
+      "description": "DEF 脚手架",
+      "version": "",
+      "recommended": true,
+      "isInternal": true
+    }
+  ],
+  "npmRegistries": [
+    {
+      "name": "npm",
+      "registry": "https://registry.npmjs.org/",
+      "isInternal": false
+    },
+    {
+      "name": "taobao",
+      "registry": "https://registry.npm.taobao.org/",
+      "isInternal": false
+    },
+    {
+      "name": "tnpm",
+      "registry": " https://registry.npm.alibaba-inc.com/",
+      "isInternal": true
+    }
+  ],
+  "browserExtension": [
+    {
+      "name": "React Developer Tools",
+      "description": "",
+      "icon": "",
+      "url": "",
+      "version": "",
+      "recommended": true,
+      "isInternal": false
+    }
+  ],
+  "IdeExtension": [
+    {
+      "name": "Iceworks Pack",
+      "description": "",
+      "icon": "",
+      "url": "",
+      "version": "0.19.2",
+      "recommended": true,
+      "isInternal": false
+    }
+  ]
+}

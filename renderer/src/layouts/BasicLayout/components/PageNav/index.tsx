@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'ice';
 import { Nav } from '@alifd/next';
 import { asideMenuConfig } from '../../menuConfig';
+import styles from './index.module.scss';
 
 const { SubNav } = Nav;
 const NavItem = Nav.Item;
@@ -62,7 +63,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
   }
   const navItem = (
     <NavItem key={item.path} icon={item.icon}>
-      <Link to={item.path}>
+      <Link to={item.path} className={styles.link}>
         {item.name}
       </Link>
     </NavItem>
@@ -95,23 +96,26 @@ const Navigation = (props, context) => {
   }, [pathname]);
 
   return (
-    <Nav
-      type="normal"
-      openKeys={openKeys}
-      selectedKeys={[pathname]}
-      defaultSelectedKeys={[pathname]}
-      embeddable
-      activeDirection="right"
-      iconOnly={isCollapse}
-      hasArrow={false}
-      mode={isCollapse ? 'popup' : 'inline'}
-      onOpen={(keys) => {
+    <div className={styles.nav}>
+      <Nav
+        type="normal"
+        openKeys={openKeys}
+        selectedKeys={[pathname]}
+        defaultSelectedKeys={[pathname]}
+        embeddable
+        activeDirection="right"
+        iconOnly={isCollapse}
+        hasArrow={false}
+        mode={isCollapse ? 'popup' : 'inline'}
+        onOpen={(keys) => {
         // @ts-ignore
-        setOpenKeys(keys);
-      }}
-    >
-      {getNavMenuItems(asideMenuConfig, 0, AUTH_CONFIG)}
-    </Nav>
+          setOpenKeys(keys);
+        }}
+      >
+        {getNavMenuItems(asideMenuConfig, 0, AUTH_CONFIG)}
+      </Nav>
+    </div>
+
   );
 };
 

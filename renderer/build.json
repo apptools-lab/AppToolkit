@@ -1,5 +1,7 @@
 {
   "outputDir": "../dist/assets",
+  "publicPath": "./",
+  "customWebpack": true,
   "plugins": [
     [
       "build-plugin-fusion",
@@ -16,7 +18,9 @@
       }
     ],
     "build-plugin-css-assets-local",
+    ["build-plugin-webpack5", {
+      "remoteRuntime": true
+    }],
     "./build.plugin.js"
-  ],
-   "publicPath": "./"
+  ]
 }
