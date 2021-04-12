@@ -1,0 +1,24 @@
+{
+  "extends": "../tsconfig.json",
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "build",
+    "module": "esnext",
+    "target": "es6",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["es6", "dom"],
+    "allowJs": true,
+    "rootDir": "./",
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "ice": [".ice/index.ts"],
+      "ice/*": [".ice/pages/*"]
+    }
+  },
+  "include": ["src", ".ice"],
+  "exclude": ["node_modules", "public"]
+}

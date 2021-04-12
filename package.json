@@ -1,0 +1,80 @@
+{
+  "name": "iceworks-toolkit",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "setup": "rm -rf node_modules && npm run install:main && npm run install:renderer",
+    "install:main": "ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install --registry=http://registry.npm.taobao.org",
+    "install:renderer": "cd renderer && npm install --registry=http://registry.npm.taobao.org",
+    "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && electron ./dist\" ",
+    "watch": "npm run watch:renderer & npm run watch:main",
+    "watch:renderer": "cd ./renderer && npm start",
+    "watch:main": "tsc --build ./main/tsconfig.json -w",
+    "build": "npm run build:renderer && npm run build:main",
+    "build:renderer": "cd ./renderer && npm run build",
+    "build:main": "tsc --build ./main/tsconfig.json",
+    "package": "npm run build && NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --mac",
+    "lint": "npm run eslint && npm run stylelint",
+    "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "eslint:fix": "npm run eslint -- --fix",
+    "stylelint": "stylelint \"**/*.{css,scss,less}\""
+  },
+  "main": "./dist/index.js",
+  "build": {
+    "appId": "iceworks-toolkit",
+    "productName": "Iceworks Toolkit",
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "asar": false,
+    "directories": {
+      "buildResources": "resource",
+      "output": "release"
+    },
+    "copyright": "Copyright © 2020 icejs",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "resources/icon.icns"
+    },
+    "dmg": {
+      "background": "resources/background.png",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 410,
+          "y": 180,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 180,
+          "type": "file"
+        }
+      ],
+      "iconSize": 128
+    }
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0"
+  },
+  "devDependencies": {
+    "@iceworks/spec": "^1.0.0",
+    "@types/electron": "^1.6.10",
+    "commitlint": "^8.3.5",
+    "concurrently": "^5.1.0",
+    "electron": "^12.0.0",
+    "electron-builder": "^22.10.5",
+    "eslint": "^6.8.0",
+    "stylelint": "^13.2.0",
+    "typescript": "^3.8.2",
+    "wait-on": "^5.3.0"
+  }
+}
