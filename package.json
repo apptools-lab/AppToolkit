@@ -1,5 +1,5 @@
 {
-  "name": "iceworks-toolkit",
+  "name": "appworks-toolkit",
   "private": true,
   "version": "0.1.0",
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "main": "./dist/index.js",
   "build": {
-    "appId": "iceworks-toolkit",
-    "productName": "Iceworks Toolkit",
+    "appId": "appworks-toolkit",
+    "productName": "Appworks Toolkit",
     "files": [
       "dist/**/*",
       "package.json"
@@ -32,7 +32,7 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2020 icejs",
+    "copyright": "Copyright © 2020 Appworks Toolkit",
     "mac": {
       "target": [
         "dmg",
