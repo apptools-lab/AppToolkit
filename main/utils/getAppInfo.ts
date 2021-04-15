@@ -27,7 +27,7 @@ function getAppInfo(appName: string, latestVersion: string) {
   const info = execa.sync('cat', [`${appPath}/Contents/Info.plist`]);
   const infoStr = info.stdout;
 
-  const versionMatchRes = infoStr.match(/<key>CFBundleShortVersionString<\/key>[\r\n\s]*<string>(\d+(\.\d+)*)<\/string>/);
+  const versionMatchRes = infoStr.match(/<key>CFBundleShortVersionString<\/key>[\r\n\s]*<string>(\d+(\.\d+)*).*<\/string>/);
   if (versionMatchRes && versionMatchRes.length > 1) {
     appInfo.version = versionMatchRes[1];
   }

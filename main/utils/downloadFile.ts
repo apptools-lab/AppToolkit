@@ -10,6 +10,7 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
   }
 
   return new Promise((resolve, reject) => {
+    console.log(`[appworks-toolkit] Start to download ${url}.`);
     fetch(url).then((res) => {
       const splits = url.split('/');
       const name = splits[splits.length - 1];
@@ -18,6 +19,7 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
       res.body
         .pipe(dest)
         .on('finish', () => {
+          console.log(`Download ${url} to ${filePath} successfully.`);
           resolve({ filePath });
         }).on('error', (err) => {
           reject(err);
