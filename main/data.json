@@ -1,41 +1,67 @@
 {
   "base": [
     {
-      "name": "Node.js",
+      "title": "Node.js",
+      "name": "node",
       "description": "Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时",
-      "icon": "",
-      "url": "",
+      "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
+      "downloadUrl": "",
       "version": "14.16.0",
       "recommended": true,
       "isInternal": false,
       "type": "tool"
     },
     {
-      "name": "Git",
+      "title": "Git",
+      "name": "git",
       "description": "分布式版本控制软件",
-      "icon": "",
-      "url": "",
+      "icon": "https://img.alicdn.com/imgextra/i3/O1CN01Vtq1id1I5gA0lWOzG_!!6000000000842-55-tps-32-32.svg",
+      "downloadUrl": "",
       "version": "2.29.2",
       "recommended": true,
       "isInternal": false,
       "type": "tool"
     },
     {
+      "title": "Google Chrome",
       "name": "Google Chrome",
       "description": "谷歌浏览器",
-      "icon": "",
-      "url": "",
+      "icon": "https://img.alicdn.com/imgextra/i3/O1CN01cspie61ZOm8vgQfKl_!!6000000003185-55-tps-32-32.svg",
+      "downloadUrl": "",
       "version": "89.0.4389.114",
       "recommended": true,
       "isInternal": false,
       "type": "app"
     },
     {
+      "title": "Visual Studio Code",
       "name": "Visual Studio Code",
       "description": "Visual Studio Code 是一款由微软开发且跨平台的免费源代码编辑器",
-      "icon": "",
-      "url": "",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
+      "downloadUrl": "",
       "version": "1.51.1",
+      "recommended": true,
+      "isInternal": false,
+      "type": "app"
+    },
+    {
+      "title": "Visual Studio Code - Insiders",
+      "name": "Visual Studio Code - Insiders",
+      "description": "Visual Studio Code - Insiders 是一款由微软开发且跨平台的免费源代码编辑器",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
+      "version": "1.51.1",
+      "recommended": true,
+      "isInternal": false,
+      "type": "app"
+    },
+    {
+      "title": "语雀桌面客户端",
+      "name": "语雀",
+      "description": "语雀文档桌面客户端",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Yuque-0.7.14.dmg",
+      "version": "0.7.14",
       "recommended": true,
       "isInternal": false,
       "type": "app"
@@ -43,10 +69,10 @@
   ],
   "app": [
     {
-      "name": "Chrome",
+      "name": "Google Chrome",
       "description": "谷歌浏览器",
-      "icon": "",
-      "url": "",
+      "icon": "https://img.alicdn.com/imgextra/i3/O1CN01cspie61ZOm8vgQfKl_!!6000000003185-55-tps-32-32.svg",
+      "downloadUrl": "",
       "version": "89.0.4389.114",
       "recommended": true,
       "isInternal": false
@@ -83,7 +109,7 @@
       "name": "React Developer Tools",
       "description": "",
       "icon": "",
-      "url": "",
+      "downloadUrl": "",
       "version": "",
       "recommended": true,
       "isInternal": false
@@ -94,7 +120,7 @@
       "name": "Iceworks Pack",
       "description": "",
       "icon": "",
-      "url": "",
+      "downloadUrl": "",
       "version": "0.19.2",
       "recommended": true,
       "isInternal": false

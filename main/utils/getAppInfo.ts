@@ -1,16 +1,18 @@
-import * as shell from 'shelljs';
+import * as execa from 'execa';
 import * as globby from 'globby';
-import { APPLICATION_PATH } from '../constants';
+import { APPLICATIONS_DIR_PATH } from '../constants';
+import getVersionStatus from './getVersionStatus';
 
-function findApp(appName: string) {
+function getAppInfo(appName: string, latestVersion: string) {
   const app = /\.app$/.test(appName) ? appName : `${appName }.app`;
   const appInfo = {
     version: null,
     path: null,
+    installStatus: 'notInstalled',
   };
 
   const paths = globby.sync([app], {
-    cwd: APPLICATION_PATH,
+    cwd: APPLICATIONS_DIR_PATH,
     onlyDirectories: true,
     deep: 1,
   });
@@ -19,9 +21,10 @@ function findApp(appName: string) {
     return appInfo;
   }
 
-  appInfo.path = `${APPLICATION_PATH}/${app}`;
+  const appPath = `${APPLICATIONS_DIR_PATH}/${app}`;
+  appInfo.path = appPath;
 
-  const info = shell.cat(`${APPLICATION_PATH}/${app}/Contents/Info.plist`);
+  const info = execa.sync('cat', [`${appPath}/Contents/Info.plist`]);
   const infoStr = info.stdout;
 
   const versionMatchRes = infoStr.match(/<key>CFBundleShortVersionString<\/key>[\r\n\s]*<string>(\d+(\.\d+)*)<\/string>/);
@@ -29,7 +32,9 @@ function findApp(appName: string) {
     appInfo.version = versionMatchRes[1];
   }
 
+  appInfo.installStatus = getVersionStatus(appInfo.version, latestVersion);
+
   return appInfo;
 }
 
-export default findApp;
+export default getAppInfo;

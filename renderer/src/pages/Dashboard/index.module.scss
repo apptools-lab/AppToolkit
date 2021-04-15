@@ -1,5 +1,5 @@
 .dashboard {
-  margin: 0 30px;
+  margin: 0 40px;
   .head {
     display: flex;
     flex-direction: row;
@@ -10,5 +10,8 @@
 
   main {
     margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }

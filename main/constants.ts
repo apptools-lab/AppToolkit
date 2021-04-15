@@ -1,1 +1,1 @@
-export const APPLICATION_PATH = '/Applications';
+export const APPLICATIONS_DIR_PATH = '/Applications';

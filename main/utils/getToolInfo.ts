@@ -1,27 +1,28 @@
-import * as shell from 'shelljs';
+import * as execa from 'execa';
+import getVersionStatus from './getVersionStatus';
 
-function findTool(toolName: string) {
+function findTool(toolName: string, latestVersion: string) {
   const toolInfo = {
     version: null,
     path: null,
+    installStatus: null,
   };
-  const toolRes = shell.which(toolName);
+
+  const toolRes = execa.sync('which', [toolName]);
   if (!toolRes) {
     return toolInfo;
   }
-  // eslint-disable-next-line @iceworks/best-practices/recommend-polyfill
-  toolInfo.path = toolRes.toString();
-  const toolVersion = shell.exec(`${toolName} --version`);
-  if (toolVersion) {
-    // eslint-disable-next-line @iceworks/best-practices/recommend-polyfill
-    const versionStr = toolVersion.toString();
+
+  toolInfo.path = toolRes.stdout;
+  const toolVersionRes = execa.sync(toolName, ['--version']);
+
+  if (toolVersionRes) {
+    const versionStr = toolVersionRes.stdout;
     const versionStrMatch = versionStr.match(/(\d+(\.\d+)*)/);
-    if (versionStrMatch && versionStrMatch.length > 1) {
-      toolInfo.version = versionStrMatch[1];
-    } else {
-      toolInfo.version = versionStr;
-    }
+    toolInfo.version = versionStrMatch && versionStrMatch.length > 1 ? versionStrMatch[1] : versionStr;
   }
+
+  toolInfo.installStatus = getVersionStatus(toolInfo.version, latestVersion);
 
   return toolInfo;
 }
