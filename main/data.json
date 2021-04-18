@@ -1,22 +1,23 @@
 {
-  "base": [
+  "bases": [
     {
       "title": "Node.js",
       "name": "node",
+      "managerName": "nvm",
       "description": "Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时",
       "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
-      "downloadUrl": "",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/sh/install-nvm.sh",
       "version": "14.16.0",
       "recommended": true,
       "isInternal": false,
-      "type": "tool"
+      "type": "node"
     },
     {
       "title": "Git",
       "name": "git",
       "description": "分布式版本控制软件",
       "icon": "https://img.alicdn.com/imgextra/i3/O1CN01Vtq1id1I5gA0lWOzG_!!6000000000842-55-tps-32-32.svg",
-      "downloadUrl": "",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
       "version": "2.29.2",
       "recommended": true,
       "isInternal": false,
@@ -38,7 +39,7 @@
       "name": "Visual Studio Code",
       "description": "Visual Studio Code 是一款由微软开发且跨平台的免费源代码编辑器",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
-      "downloadUrl": "",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin.zip",
       "version": "1.51.1",
       "recommended": true,
       "isInternal": false,
@@ -67,7 +68,7 @@
       "type": "app"
     }
   ],
-  "app": [
+  "apps": [
     {
       "name": "Google Chrome",
       "description": "谷歌浏览器",
@@ -104,7 +105,7 @@
       "isInternal": true
     }
   ],
-  "browserExtension": [
+  "browserExtensions": [
     {
       "name": "React Developer Tools",
       "description": "",
@@ -115,7 +116,7 @@
       "isInternal": false
     }
   ],
-  "IdeExtension": [
+  "IdeExtensions": [
     {
       "name": "Iceworks Pack",
       "description": "",

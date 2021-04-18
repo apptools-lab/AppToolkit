@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [state, dispatchers] = store.useModel('dashboard');
   useEffect(() => {
     const init = async function () {
-      await dispatchers.getBasePackage();
+      await dispatchers.getBasePackages();
     };
     init();
   }, []);

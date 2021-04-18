@@ -12,10 +12,11 @@ export interface IBasePackage {
   description: string;
   icon: string;
   url?: string;
+  managerName?: string;
   recommended: boolean;
   isInternal: boolean;
-  type: 'tool' | 'app';
-  version: string | null;
+  type: 'node' | 'tool' | 'app';
+  latestVersion: string | null;
   path: string | null;
   installStatus: 'installed' | 'notInstalled' | 'upgradeable';
 }

@@ -6,11 +6,14 @@ import * as compareVersions from 'compare-versions';
  * 2. installed    已安装
  * 3. upgradeable  可升级
  */
-function getVersionStatus(currentVersion: string | null | undefined, latestVersion: string) {
+function getVersionStatus(currentVersion: string | null | undefined, latestVersion: string | null) {
   if (!currentVersion) {
     return 'notInstalled';
+  } else if (!latestVersion) {
+    return 'installed';
+  } else {
+    return compareVersions.compare(currentVersion, latestVersion, '>=') ? 'installed' : 'upgradeable';
   }
-  return compareVersions.compare(currentVersion, latestVersion, '>=') ? 'installed' : 'upgradeable';
 }
 
 export default getVersionStatus;

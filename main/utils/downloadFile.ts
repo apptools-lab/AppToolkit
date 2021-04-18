@@ -21,7 +21,8 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
         .on('finish', () => {
           console.log(`Download ${url} to ${filePath} successfully.`);
           resolve({ filePath });
-        }).on('error', (err) => {
+        })
+        .on('error', (err) => {
           reject(err);
         });
     });

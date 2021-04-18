@@ -4,8 +4,11 @@ import * as globby from 'globby';
 import * as path from 'path';
 import * as AdmZip from 'adm-zip';
 import * as decompress from 'decompress';
+import * as execa from 'execa';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import downloadFile from './downloadFile';
+import { IBasePackageInfo } from '../types';
+import executeBashProfileFile from './executeBashProfileFile';
 
 process.noAsar = true;
 
@@ -14,14 +17,40 @@ const installPackageFuncMap = {
   '.zip': unzipAndCopyToApplication,
 };
 
-async function installPackage(downloadUrl: string) {
+async function installPackage(packageInfo: IBasePackageInfo) {
+  const { downloadUrl, type } = packageInfo;
   // download package to the disk
-  const { filePath } = await downloadFile(downloadUrl);
-  const extname = path.extname(filePath);
-  // install package
-  const installPackageFunc = installPackageFuncMap[extname];
-  if (installPackageFunc) {
-    await installPackageFunc(filePath);
+
+  if (type === 'node') {
+    // install node
+    const { filePath: managerInstallShellPath } = await downloadFile(downloadUrl);
+    // const { filePath: nodeInstallShellPath } = await downloadFile(nodeInstall);
+    console.log('start install node', managerInstallShellPath);
+    await installNvm(managerInstallShellPath);
+  } else {
+    const { filePath } = await downloadFile(downloadUrl as string);
+    // install dmg package
+    const extname = path.extname(filePath);
+    const installPackageFunc = installPackageFuncMap[extname];
+    if (installPackageFunc) {
+      await installPackageFunc(filePath);
+    }
+  }
+}
+
+async function executeSh(filePath: string) {
+  return await execa.command(`sh ${filePath}`);
+}
+
+async function installNvm(filePath: string) {
+  const nvmDownloadRes = await executeSh(filePath);
+  if (nvmDownloadRes) {
+    const nvmDownloadStdout = nvmDownloadRes.stdout;
+    const matchRes = nvmDownloadStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
+    if (matchRes) {
+      const nvmBashProfilePath = matchRes[1];
+      executeBashProfileFile(nvmBashProfilePath);
+    }
   }
 }
 

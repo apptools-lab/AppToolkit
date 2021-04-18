@@ -14,8 +14,8 @@ export default {
     },
   },
   effects: (dispatch) => ({
-    async getBasePackage() {
-      const data = await ipcRenderer.invoke('getBasePackage');
+    async getBasePackages() {
+      const data = await ipcRenderer.invoke('getBasePackages');
       dispatch.dashboard.updateBasePackageData(data);
     },
   }),

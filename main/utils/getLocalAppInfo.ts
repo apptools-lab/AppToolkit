@@ -3,8 +3,8 @@ import * as globby from 'globby';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import getVersionStatus from './getVersionStatus';
 
-function getAppInfo(appName: string, latestVersion: string) {
-  const app = /\.app$/.test(appName) ? appName : `${appName }.app`;
+function getLocalAppInfo(name: string, latestVersion: string | null) {
+  const app = /\.app$/.test(name) ? name : `${name }.app`;
   const appInfo = {
     version: null,
     path: null,
@@ -28,7 +28,7 @@ function getAppInfo(appName: string, latestVersion: string) {
   const infoStr = info.stdout;
 
   const versionMatchRes = infoStr.match(/<key>CFBundleShortVersionString<\/key>[\r\n\s]*<string>(\d+(\.\d+)*).*<\/string>/);
-  if (versionMatchRes && versionMatchRes.length > 1) {
+  if (versionMatchRes) {
     appInfo.version = versionMatchRes[1];
   }
 
@@ -37,4 +37,4 @@ function getAppInfo(appName: string, latestVersion: string) {
   return appInfo;
 }
 
-export default getAppInfo;
+export default getLocalAppInfo;
