@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Shell, ConfigProvider } from '@alifd/next';
+import React from 'react';
 import PageNav from './components/PageNav';
 import styles from './index.module.scss';
 

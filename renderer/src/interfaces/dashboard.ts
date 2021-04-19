@@ -4,6 +4,7 @@ export interface IAppCard {
   icon: string;
   recommended?: boolean;
   versionStatus: 'installed' | 'notInstalled' | 'upgradeable';
+  showSplitLine?: boolean;
 }
 
 export interface IBasePackage {

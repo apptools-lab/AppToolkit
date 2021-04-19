@@ -8,9 +8,12 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 722,
-    minHeight: 722,
+    width: 1100,
+    height: 724,
+    minHeight: 500,
+    minWidth: 1000,
+    titleBarStyle: 'hiddenInset',
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,

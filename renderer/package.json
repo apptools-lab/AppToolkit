@@ -4,10 +4,11 @@
   "description": "",
   "dependencies": {
     "@alifd/next": "^1.19.4",
+    "@alifd/theme-design-pro": "^0.x",
+    "classnames": "^2.3.1",
     "moment": "^2.24.0",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "@alifd/theme-design-pro": "^0.x"
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "build-plugin-css-assets-local": "^0.1.0",

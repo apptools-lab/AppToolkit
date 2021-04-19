@@ -3,7 +3,7 @@
     {
       "title": "Node.js",
       "name": "node",
-      "description": "Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时",
+      "description": "是一个基于 Chrome V8 引擎的 JavaScript 运行时",
       "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/sh/install-nvm.sh",
       "version": "14.16.0",
@@ -42,7 +42,7 @@
     {
       "title": "Visual Studio Code",
       "name": "Visual Studio Code",
-      "description": "Visual Studio Code 是一款由微软开发且跨平台的免费源代码编辑器",
+      "description": "是一款由微软开发且跨平台的免费源代码编辑器",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin.zip",
       "version": "1.51.1",
@@ -54,7 +54,7 @@
     {
       "title": "Visual Studio Code - Insiders",
       "name": "Visual Studio Code - Insiders",
-      "description": "Visual Studio Code - Insiders 是一款由微软开发且跨平台的免费源代码编辑器",
+      "description": "beta 版本的 code insiders",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
       "version": "1.51.1",
@@ -70,7 +70,7 @@
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01hjwJ671LAfJmxBpFy_!!6000000001259-55-tps-32-32.svg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Yuque-0.7.14.dmg",
       "version": "0.7.14",
-      "recommended": true,
+      "recommended": false,
       "isInternal": false,
       "type": "dmg",
       "platform": "darwin"

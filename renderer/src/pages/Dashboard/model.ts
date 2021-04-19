@@ -2,12 +2,12 @@ import { ipcRenderer } from 'electron';
 
 export default {
   state: {
-    basePackageData: [],
+    basePackagesData: [],
     isInstalling: false,
   },
   reducers: {
-    updateBasePackageData(prevState, payload) {
-      prevState.basePackageData = payload;
+    updateBasePackagesData(prevState, payload) {
+      prevState.basePackagesData = payload;
     },
     updateInstallStatus(prevState, payload: boolean) {
       prevState.isInstalling = payload;
@@ -16,7 +16,7 @@ export default {
   effects: (dispatch) => ({
     async getBasePackages() {
       const data = await ipcRenderer.invoke('getBasePackages');
-      dispatch.dashboard.updateBasePackageData(data);
+      dispatch.dashboard.updateBasePackagesData(data);
     },
   }),
 };

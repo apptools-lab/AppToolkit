@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { Button, Grid } from '@alifd/next';
+import { ipcRenderer } from 'electron';
+import PageHeader from '@/components/PageHeader';
 import AppCard from './components/AppCard';
 import styles from './index.module.scss';
 import store from './store';
 import { IBasePackage } from '@/interfaces/dashboard';
-import { ipcRenderer } from 'electron';
 
 const { Row, Col } = Grid;
 
@@ -20,7 +21,7 @@ const Dashboard = () => {
   async function handleInstall() {
     dispatchers.updateInstallStatus(true);
 
-    const packagesList = state.basePackageData.filter((basePackage: IBasePackage) => {
+    const packagesList = state.basePackagesData.filter((basePackage: IBasePackage) => {
       return basePackage.versionStatus !== 'installed';
     });
     for (const packageInfo of packagesList) {
@@ -32,31 +33,31 @@ const Dashboard = () => {
     dispatchers.updateInstallStatus(false);
   }
 
-  console.log('state.basePackageData:', state.basePackageData);
+  console.log('state.basePackagesData:', state.basePackagesData);
   return (
     <div className={styles.dashboard}>
-      <div className={styles.head}>
-        <h1>前端开发必备</h1>
-        {state.isInstalling ?
+      <PageHeader
+        title="前端开发必备"
+        button={state.isInstalling ?
           <Button type="normal" onClick={handleCancel}>取消安装</Button> :
           <Button type="primary" onClick={handleInstall}>一键安装</Button>}
-      </div>
+      />
       <main>
         <Row wrap>
           {
-            state.basePackageData.map((item: IBasePackage) => (
-              <Col span="12" key={item.name}>
+            state.basePackagesData.map((item: IBasePackage) => (
+              <Col s={12} l={8} key={item.name}>
                 <AppCard
                   name={item.title}
                   description={item.description}
                   icon={item.icon}
                   versionStatus={item.versionStatus}
+                  recommended={item.recommended}
                 />
               </Col>
             ))
           }
         </Row>
-
       </main>
     </div>
   );
