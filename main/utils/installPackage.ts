@@ -33,7 +33,7 @@ async function installPackage(packageInfo: IPackageInfo) {
 
 async function installSh(filePath: string, { packageName }: IPackageInfo) {
   if (packageName === 'node') {
-    // install node
+    // install nvm and node.js
     await installNvm(filePath);
   }
 }
@@ -67,7 +67,7 @@ async function installDmg(filePath: string) {
   const appPaths = globby.sync(['*.app', '*.pkg'], { onlyFiles: false, deep: 1, cwd: mountPoint });
   for (const appPath of appPaths) {
     const extname = path.extname(appPath);
-    const source = path.join(mountPoint, appPath).replace(/ /g, '\\ ');
+    const source = path.join(mountPoint, appPath);
     if (extname === '.app') {
       await installApp(source, appPath);
     } else if (extname === '.pkg') {
@@ -88,11 +88,12 @@ async function installApp(source: string, appName: string) {
 }
 
 function installPkg(source: string) {
+  const modifiedSource = source.replace(/ /g, '\\ ');
   const options = { name: 'Appworks Toolkit' };
-  log.info(`Start to install pkg ${source}.`);
+  log.info(`Start to install pkg ${modifiedSource}.`);
   return new Promise((resolve, reject) => {
     sudo.exec(
-      `installer -pkg ${source} -target ${APPLICATIONS_DIR_PATH}`,
+      `installer -pkg ${modifiedSource} -target ${APPLICATIONS_DIR_PATH}`,
       options,
       (error, stdout, stderr) => {
         if (error) {
@@ -103,7 +104,7 @@ function installPkg(source: string) {
         }
         if (stdout) {
           log.info(stdout);
-          log.info(`Install pkg ${source} successfully.`);
+          log.info(`Install pkg ${modifiedSource} successfully.`);
           resolve(stdout);
         }
       },
