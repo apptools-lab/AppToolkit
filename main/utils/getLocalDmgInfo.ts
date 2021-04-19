@@ -1,14 +1,16 @@
 import * as execa from 'execa';
 import * as globby from 'globby';
+import { IBasicPackageInfo } from 'types';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import getVersionStatus from './getVersionStatus';
 
-function getLocalAppInfo(name: string, latestVersion: string | null) {
-  const app = /\.app$/.test(name) ? name : `${name }.app`;
+function getLocalDmgInfo(basicPackageInfo: IBasicPackageInfo) {
+  const { name, version: latestVersion } = basicPackageInfo;
+  const app = /\.app$/.test(name) ? name : `${name}.app`;
   const appInfo = {
     version: null,
     path: null,
-    installStatus: 'notInstalled',
+    versionStatus: 'notInstalled',
   };
 
   const paths = globby.sync([app], {
@@ -32,9 +34,9 @@ function getLocalAppInfo(name: string, latestVersion: string | null) {
     appInfo.version = versionMatchRes[1];
   }
 
-  appInfo.installStatus = getVersionStatus(appInfo.version, latestVersion);
+  appInfo.versionStatus = getVersionStatus(appInfo.version, latestVersion);
 
   return appInfo;
 }
 
-export default getLocalAppInfo;
+export default getLocalDmgInfo;

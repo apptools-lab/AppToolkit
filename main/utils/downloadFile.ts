@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import * as fse from 'fs-extra';
 import * as path from 'path';
+import log from './log';
 
 const defaultDestination = path.join(process.env.HOME, '.toolkit');
 
@@ -10,7 +11,7 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
   }
 
   return new Promise((resolve, reject) => {
-    console.log(`[appworks-toolkit] Start to download ${url}.`);
+    log.info(`Start to download ${url}.`);
     fetch(url).then((res) => {
       const splits = url.split('/');
       const name = splits[splits.length - 1];
@@ -19,7 +20,7 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
       res.body
         .pipe(dest)
         .on('finish', () => {
-          console.log(`Download ${url} to ${filePath} successfully.`);
+          log.info(`Download ${url} to ${filePath} successfully.`);
           resolve({ filePath });
         })
         .on('error', (err) => {

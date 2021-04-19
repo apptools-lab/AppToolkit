@@ -21,18 +21,10 @@ const Dashboard = () => {
     dispatchers.updateInstallStatus(true);
 
     const packagesList = state.basePackageData.filter((basePackage: IBasePackage) => {
-      return basePackage.installStatus !== 'installed';
+      return basePackage.versionStatus !== 'installed';
     });
-    // packagesList.forEach(async (packageInfo: IBasePackage) => {
-    //   console.log('start');
-    //   await ipcRenderer.invoke('installPackage', packageInfo);
-    //   console.log('finished');
-    // });
-
     for (const packageInfo of packagesList) {
-      console.log('start');
       await ipcRenderer.invoke('installPackage', packageInfo);
-      console.log('finished');
     }
   }
 
@@ -58,7 +50,7 @@ const Dashboard = () => {
                   name={item.title}
                   description={item.description}
                   icon={item.icon}
-                  installStatus={item.installStatus}
+                  versionStatus={item.versionStatus}
                 />
               </Col>
             ))

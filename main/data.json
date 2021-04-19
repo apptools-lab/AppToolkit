@@ -3,14 +3,17 @@
     {
       "title": "Node.js",
       "name": "node",
-      "managerName": "nvm",
       "description": "Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时",
       "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/sh/install-nvm.sh",
       "version": "14.16.0",
       "recommended": true,
       "isInternal": false,
-      "type": "node"
+      "type": "cmd",
+      "platform": "darwin",
+      "options": {
+        "managerName": "nvm"
+      }
     },
     {
       "title": "Git",
@@ -21,7 +24,8 @@
       "version": "2.29.2",
       "recommended": true,
       "isInternal": false,
-      "type": "tool"
+      "type": "cmd",
+      "platform": "darwin"
     },
     {
       "title": "Google Chrome",
@@ -32,7 +36,8 @@
       "version": "89.0.4389.114",
       "recommended": true,
       "isInternal": false,
-      "type": "app"
+      "type": "dmg",
+      "platform": "darwin"
     },
     {
       "title": "Visual Studio Code",
@@ -43,7 +48,8 @@
       "version": "1.51.1",
       "recommended": true,
       "isInternal": false,
-      "type": "app"
+      "type": "dmg",
+      "platform": "darwin"
     },
     {
       "title": "Visual Studio Code - Insiders",
@@ -54,7 +60,8 @@
       "version": "1.51.1",
       "recommended": true,
       "isInternal": false,
-      "type": "app"
+      "type": "dmg",
+      "platform": "darwin"
     },
     {
       "title": "语雀桌面客户端",
@@ -65,7 +72,8 @@
       "version": "0.7.14",
       "recommended": true,
       "isInternal": false,
-      "type": "app"
+      "type": "dmg",
+      "platform": "darwin"
     }
   ],
   "apps": [

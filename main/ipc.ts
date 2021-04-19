@@ -2,36 +2,35 @@ import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import * as fse from 'fs-extra';
 import * as path from 'path';
-import { IBasePackageInfo } from './types';
-import getLocalNodeInfo from './utils/getLocalNodeInfo';
-import getLocalAppInfo from './utils/getLocalAppInfo';
-import getLocalToolInfo from './utils/getLocalToolInfo';
+import { IBasicPackageInfo, IPackageInfo } from './types';
+import getLocalCmdInfo from './utils/getLocalCmdInfo';
+import getLocalDmgInfo from './utils/getLocalDmgInfo';
 import installPackage from './utils/installPackage';
+import log from './utils/log';
 
-const getInfoFuncMap = {
-  app: ({ name, version }: IBasePackageInfo) => getLocalAppInfo(name, version),
-  tool: ({ name, version }: IBasePackageInfo) => getLocalToolInfo(name, version),
-  node: ({ name, managerName, version }: IBasePackageInfo) => getLocalNodeInfo(name, managerName, version),
+const getLocalInfoFuncMap = {
+  dmg: getLocalDmgInfo,
+  cmd: getLocalCmdInfo,
 };
 
 export default () => {
   ipcMain.handle('getBasePackages', async () => {
-    // TODO: get data.json from OSS
+    // TODO: get data.json from OSS and save it in the storage
     const data = await fse.readJSON(path.join(__dirname, 'data.json'));
-    const { bases } = data;
-    const newBaseData = bases.map((basePackageInfo: IBasePackageInfo) => {
-      const getInfoFunc = getInfoFuncMap[basePackageInfo.type];
-      if (getInfoFunc) {
-        const info = getInfoFunc(basePackageInfo);
-        return { ...basePackageInfo, ...info };
+    const { bases }: { bases: IBasicPackageInfo[] } = data;
+    const packagesData = bases.map((basePackageInfo: IBasicPackageInfo) => {
+      const getLocalInfoFunc = getLocalInfoFuncMap[basePackageInfo.type];
+      if (getLocalInfoFunc) {
+        const localPackageInfo = getLocalInfoFunc(basePackageInfo);
+        return { ...basePackageInfo, ...localPackageInfo };
       }
-      return { ...basePackageInfo };
+      return basePackageInfo;
     });
-    console.log('newBaseData:', newBaseData);
-    return newBaseData;
+    log.info('newBaseData:', packagesData);
+    return packagesData;
   });
 
-  ipcMain.handle('installPackage', async (event: IpcMainInvokeEvent, packageInfo: IBasePackageInfo) => {
+  ipcMain.handle('installPackage', async (event: IpcMainInvokeEvent, packageInfo: IPackageInfo) => {
     await installPackage(packageInfo);
   });
 };

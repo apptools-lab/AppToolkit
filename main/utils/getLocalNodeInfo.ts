@@ -2,33 +2,28 @@ import * as execa from 'execa';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import getLocalToolInfo from './getLocalToolInfo';
+import { INodeVersionManagerInfo } from '../types';
+import { PACKAGE_JSON_FILE_NAME } from '../constants';
 
-interface INodeVersionManagerInfo {
-  managerPath: string | null;
-  managerVersion: string | null;
-}
+function getLocalNodeInfo(
+  name: string,
+  latestVersion: string | null,
+  options: { [k: string]: any},
+) {
+  const { managerName } = options;
 
-function getLocalNodeInfo(name: string, managerName: string, latestVersion: string | null) {
   let localNodeInfo = getLocalToolInfo(name, latestVersion);
 
   let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
   if (managerName === 'nvm') {
     nodeManagerInfo = getNvmInfo();
   }
-  const { managerPath, managerVersion } = nodeManagerInfo;
-  /**
-   * there are four cases about node version info checking
-   * 1. has installed nvm and installed node
-   * 2. has installed node but not installed nvm
-   * 3. has installed nvm but not installed node
-   * 4. has not installed nvm or not installed node
-   */
-  localNodeInfo = Object.assign(localNodeInfo, { managerVersion, managerPath });
-  if (!(managerPath && managerVersion)) {
+
+  localNodeInfo = Object.assign(localNodeInfo, nodeManagerInfo);
+  if (!(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
     localNodeInfo.warningMessage =
       `Detect that you have installed Node but have not installed ${managerName}. We recommend you to install ${managerName} to manage node Version.`;
-    // TODO:
-    localNodeInfo.installStatus = 'notInstalled';
+    localNodeInfo.versionStatus = 'notInstalled';
   }
 
   return localNodeInfo;
@@ -43,13 +38,12 @@ function getNvmInfo(): INodeVersionManagerInfo {
   if (nvmDirRes) {
     const nvmDir = nvmDirRes.stdout;
     nvmInfo.managerPath = nvmDir;
-    const nvmPackageJsonPath = path.join(nvmDir, 'package.json');
+
+    const nvmPackageJsonPath = path.join(nvmDir, PACKAGE_JSON_FILE_NAME);
     if (fse.pathExistsSync(nvmPackageJsonPath)) {
-      const nvmPkgJSON = fse.readJSONSync(nvmPackageJsonPath);
-      if (nvmPkgJSON) {
-        const { version } = nvmPkgJSON;
-        nvmInfo.managerVersion = version;
-      }
+      const nvmPkgJSON = fse.readJSONSync(nvmPackageJsonPath) || {};
+      const { version } = nvmPkgJSON;
+      nvmInfo.managerVersion = version;
     }
   }
 

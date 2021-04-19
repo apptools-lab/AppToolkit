@@ -1,23 +1,46 @@
-export interface IBasePackageInfo {
+export interface IBasicPackageInfo {
   title: string;
   name: string;
-  managerName?: string;
   description: string;
   icon: string;
   downloadUrl: string;
   version: string;
   recommended: boolean;
   isInternal: boolean;
-  type: PackageType;
+  type: keyof typeof PACKAGE_TYPE;
+  platform: Platform;
+  options?: {
+    [k: string]: any;
+  };
 }
 
-export type PackageType = 'tool' | 'app' | 'node';
+export type Platform = 'win32' | 'darwin';
 
-export type VersionStatus = 'installed' | 'notInstalled' | 'upgradeable';
+export enum PACKAGE_TYPE {
+  'cmd',
+  'dmg',
+  'exe',
+  'vscodeExtension',
+  'chromeExtension',
+  'npm'
+}
+
+export enum VERSION_STATUS {
+  'installed',
+  'notInstalled',
+  'upgradeable'
+}
 
 export interface ILocalPackageInfo {
   localVersion: string | null;
   localPath: string | null;
-  installStatus: VersionStatus;
+  versionStatus: keyof typeof VERSION_STATUS;
   warningMessage?: string;
+  [key: string]: any;
 }
+export interface INodeVersionManagerInfo {
+  managerPath: string | null;
+  managerVersion: string | null;
+}
+
+export interface IPackageInfo extends IBasicPackageInfo, ILocalPackageInfo {}
