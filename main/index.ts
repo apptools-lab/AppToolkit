@@ -1,36 +1,8 @@
-import * as isDev from 'electron-is-dev';
 import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
 import handleIPC from './ipc';
+import { createWindow } from './window';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
-
-function createWindow() {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1100,
-    height: 724,
-    minHeight: 500,
-    minWidth: 1000,
-    titleBarStyle: 'hiddenInset',
-    frame: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  });
-
-  // and load the index.html of the app.
-  if (isDev) {
-    // eslint-disable-next-line @iceworks/best-practices/no-http-url
-    mainWindow.loadURL('http://localhost:3000');
-  } else {
-    mainWindow.loadFile(path.resolve(__dirname, './assets/index.html'));
-  }
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

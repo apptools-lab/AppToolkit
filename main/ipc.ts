@@ -3,10 +3,8 @@ import { IpcMainInvokeEvent } from 'electron/main';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import { IBasicPackageInfo, IPackageInfo } from './types';
-import getLocalCmdInfo from './utils/getLocalCmdInfo';
-import getLocalDmgInfo from './utils/getLocalDmgInfo';
+import { getLocalCmdInfo, getLocalDmgInfo } from './getLocalInfo';
 import installPackage from './utils/installPackage';
-import log from './utils/log';
 
 const getLocalInfoFuncMap = {
   dmg: getLocalDmgInfo,
@@ -14,7 +12,7 @@ const getLocalInfoFuncMap = {
 };
 
 export default () => {
-  ipcMain.handle('getBasePackages', async () => {
+  ipcMain.handle('get-base-packages', async () => {
     // TODO: get data.json from OSS and save it in the storage
     const data = await fse.readJSON(path.join(__dirname, 'data.json'));
     const { bases }: { bases: IBasicPackageInfo[] } = data;
@@ -26,11 +24,11 @@ export default () => {
       }
       return basePackageInfo;
     });
-    log.info('newBaseData:', packagesData);
+
     return packagesData;
   });
 
-  ipcMain.handle('installPackage', async (event: IpcMainInvokeEvent, packageInfo: IPackageInfo) => {
-    await installPackage(packageInfo);
+  ipcMain.handle('install-package', async (event: IpcMainInvokeEvent, packageInfo: IPackageInfo, channel: string) => {
+    await installPackage(packageInfo, channel);
   });
 };

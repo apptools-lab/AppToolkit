@@ -1,7 +1,7 @@
 import * as execa from 'execa';
 import { ILocalPackageInfo } from '../types';
-import getVersionStatus from './getVersionStatus';
-import log from './log';
+import getVersionStatus from '../utils/getVersionStatus';
+import log from '../utils/log';
 
 function getLocalToolInfo(name: string, latestVersion: string | null) {
   const localToolInfo: ILocalPackageInfo = {

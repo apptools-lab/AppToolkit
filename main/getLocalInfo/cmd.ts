@@ -1,6 +1,6 @@
 import { IBasicPackageInfo } from '../types';
-import getLocalNodeInfo from './getLocalNodeInfo';
-import getLocalToolInfo from './getLocalToolInfo';
+import getLocalNodeInfo from './node';
+import getLocalToolInfo from './tool';
 
 function getLocalCmdInfo(basicPackageInfo: IBasicPackageInfo) {
   const { name, version, options } = basicPackageInfo;

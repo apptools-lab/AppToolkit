@@ -2,7 +2,7 @@ import * as execa from 'execa';
 import * as globby from 'globby';
 import { IBasicPackageInfo } from 'types';
 import { APPLICATIONS_DIR_PATH } from '../constants';
-import getVersionStatus from './getVersionStatus';
+import getVersionStatus from '../utils/getVersionStatus';
 
 function getLocalDmgInfo(basicPackageInfo: IBasicPackageInfo) {
   const { name, version: latestVersion } = basicPackageInfo;

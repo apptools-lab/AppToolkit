@@ -6,14 +6,15 @@
 }
 
 .aside {
-  // margin: 78px 8px 0 8px;
+  position: fixed;
+  width: 220px;
   margin-top: 60px;
   flex: 0 0 220px;
 }
 
 .main {
   width: calc(100vw - 170px - 10px - 10px);
-  height: 100vh;
   background-color: white;
+  margin-left: 220px;
 }
 

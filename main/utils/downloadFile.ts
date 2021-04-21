@@ -1,17 +1,20 @@
 import fetch from 'node-fetch';
 import * as fse from 'fs-extra';
 import * as path from 'path';
-import log from './log';
+import { send as sendMainWindow } from '../window';
+import wirteLog from './writeLog';
+import { TOOLKIT_TMP_DIR } from '../constants';
 
-const defaultDestination = path.join(process.env.HOME, '.toolkit');
-
-function downloadFile(url: string, destination = defaultDestination): Promise<{ filePath: string }> {
+function downloadFile({ url, destination = TOOLKIT_TMP_DIR, channel }): Promise<{ filePath: string }> {
   if (!fse.existsSync(destination)) {
     fse.mkdirSync(destination);
   }
 
   return new Promise((resolve, reject) => {
-    log.info(`Start to download ${url}.`);
+    wirteLog(
+      `Downloading ${url}...`,
+      { sendWindowMessage: sendMainWindow, channel },
+    );
     fetch(url).then((res) => {
       const splits = url.split('/');
       const name = splits[splits.length - 1];
@@ -20,10 +23,17 @@ function downloadFile(url: string, destination = defaultDestination): Promise<{ 
       res.body
         .pipe(dest)
         .on('finish', () => {
-          log.info(`Download ${url} to ${filePath} successfully.`);
+          wirteLog(
+            `Download ${url} to ${filePath} successfully.`,
+            { sendWindowMessage: sendMainWindow, channel },
+          );
           resolve({ filePath });
         })
         .on('error', (err) => {
+          wirteLog(
+            err.message,
+            { sendWindowMessage: sendMainWindow, channel },
+          );
           reject(err);
         });
     });
