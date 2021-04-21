@@ -10,6 +10,7 @@ const AppCard: React.FC<IAppCard> = ({
   versionStatus,
   showSplitLine = true,
 }) => {
+  console.log(showSplitLine);
   return (
     <div className={styles.card}>
       <div className={styles.left}>

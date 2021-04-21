@@ -1,8 +1,7 @@
 import fetch from 'node-fetch';
 import * as fse from 'fs-extra';
 import * as path from 'path';
-import { send as sendMainWindow } from '../window';
-import wirteLog from './writeLog';
+import log from './log';
 import { TOOLKIT_TMP_DIR } from '../constants';
 
 function downloadFile({ url, destination = TOOLKIT_TMP_DIR, channel }): Promise<{ filePath: string }> {
@@ -11,10 +10,7 @@ function downloadFile({ url, destination = TOOLKIT_TMP_DIR, channel }): Promise<
   }
 
   return new Promise((resolve, reject) => {
-    wirteLog(
-      `Downloading ${url}...`,
-      { sendWindowMessage: sendMainWindow, channel },
-    );
+    writeLog(channel, `Downloading ${url} ...`);
     fetch(url).then((res) => {
       const splits = url.split('/');
       const name = splits[splits.length - 1];
@@ -23,22 +19,19 @@ function downloadFile({ url, destination = TOOLKIT_TMP_DIR, channel }): Promise<
       res.body
         .pipe(dest)
         .on('finish', () => {
-          wirteLog(
-            `Download ${url} to ${filePath} successfully.`,
-            { sendWindowMessage: sendMainWindow, channel },
-          );
+          writeLog(channel, `Download ${url} to ${filePath} successfully.`);
           resolve({ filePath });
         })
         .on('error', (err) => {
-          wirteLog(
-            err.message,
-            { sendWindowMessage: sendMainWindow, channel },
-          );
           reject(err);
         });
     });
   });
 }
 
+function writeLog(channel: string, chunk: string) {
+  log.info(chunk);
+  process.send({ channel, data: { chunk } });
+}
 
 export default downloadFile;

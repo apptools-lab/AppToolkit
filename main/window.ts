@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import * as path from 'path';
-import * as isDev from 'electron-is-dev';
+// import * as isDev from 'electron-is-dev';
 
 let mainWindow: BrowserWindow;
 
@@ -21,12 +21,14 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  if (isDev) {
-    // eslint-disable-next-line @iceworks/best-practices/no-http-url
-    mainWindow.loadURL('http://localhost:3000');
-  } else {
-    mainWindow.loadFile(path.resolve(__dirname, './assets/index.html'));
-  }
+  // if (isDev) {
+  //   // eslint-disable-next-line @iceworks/best-practices/no-http-url
+  //   mainWindow.loadURL('http://localhost:3000');
+  // } else {
+  //   mainWindow.loadFile(path.resolve(__dirname, './assets/index.html'));
+  // }
+  // eslint-disable-next-line @iceworks/best-practices/no-http-url
+  mainWindow.loadURL('http://localhost:3000');
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 }

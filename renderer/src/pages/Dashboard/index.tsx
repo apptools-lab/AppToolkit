@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Button, Grid, Step } from '@alifd/next';
+import { Button, Grid, Step, Icon } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
@@ -11,32 +11,49 @@ import { IBasePackage } from '@/interfaces/dashboard';
 
 const { Row, Col } = Grid;
 
+const StepItemRender = (index: number, status: string) => {
+  const iconType = {
+    finish: 'success',
+    process: 'loading',
+    error: 'error',
+  };
+  return (
+    <div className={styles.customNode}>
+      {Object.keys(iconType).includes(status) ? <Icon type={iconType[status]} /> : <span>{index + 1}</span>}
+    </div>
+  );
+};
+
 const Dashboard = () => {
   const [state, dispatchers] = store.useModel('dashboard');
-  const { basePackagesData, isInstalling } = state;
-  const TERM_ID = 'dashboard';
-  const INSTALL_PACKAGE_CHANNEL_NAME = 'install-base-package';
+  const { basePackagesList, isInstalling, installPackagesList, stepsStatus, currentStep } = state;
 
-  const writeChunk = (e: IpcRendererEvent, data: string) => {
+  const TERM_ID = 'dashboard';
+  const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
+  const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
+
+  const writeChunk = (e: IpcRendererEvent, data: { chunk: string; ln?: boolean }) => {
+    const { chunk, ln } = data;
     const xterm = xtermManager.getTerm(TERM_ID);
-    xterm.writeChunk(data);
+    xterm.writeChunk(chunk, ln);
   };
 
   async function handleInstall() {
     dispatchers.updateInstallStatus(true);
-    const packagesList = basePackagesData.filter((basePackage: IBasePackage) => {
-      return basePackage.versionStatus !== 'installed';
-    });
-    for (const packageInfo of packagesList) {
-      await ipcRenderer.invoke('install-package', packageInfo, INSTALL_PACKAGE_CHANNEL_NAME);
-    }
-
-    dispatchers.updateInstallStatus(false);
-    await dispatchers.getBasePackages();
+    dispatchers.initStepStatus(installPackagesList.length);
+    await ipcRenderer.invoke(
+      'install-base-package',
+      {
+        packagesList: installPackagesList,
+        installChannel: INSTALL_PACKAGE_CHANNEL,
+        processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
+      },
+    );
   }
 
-  function handleCancelInstall() {
+  async function handleCancelInstall() {
     dispatchers.updateInstallStatus(false);
+    await ipcRenderer.invoke('cancel-install-base-package', INSTALL_PACKAGE_CHANNEL);
   }
 
   useEffect(() => {
@@ -47,29 +64,57 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    ipcRenderer.on(INSTALL_PACKAGE_CHANNEL_NAME, writeChunk);
+    ipcRenderer.on(INSTALL_PACKAGE_CHANNEL, writeChunk);
     return () => {
-      ipcRenderer.removeListener(INSTALL_PACKAGE_CHANNEL_NAME, writeChunk);
+      ipcRenderer.removeListener(INSTALL_PACKAGE_CHANNEL, writeChunk);
     };
   }, []);
 
+  useEffect(() => {
+    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, errMsg }) {
+      if (status === 'success') {
+        dispatchers.updateInstallStatus(false);
+        dispatchers.getBasePackages();
+      } else {
+        dispatchers.updateCurrentStep({ currentIndex, status });
+      }
+      if (errMsg) {
+        // TODO
+        console.log(errMsg);
+      }
+    }
+
+    ipcRenderer.on(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+    return () => {
+      ipcRenderer.removeListener(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+    };
+  }, []);
+  const installButton = isInstalling ?
+    <Button type="normal" onClick={handleCancelInstall}>取消安装</Button> :
+    <Button type="primary" onClick={handleInstall}>一键安装</Button>;
   return (
     <div className={styles.dashboard}>
       <PageHeader
         title="前端开发必备"
-        button={isInstalling ?
-          <Button type="normal" onClick={handleCancelInstall}>取消安装</Button> :
-          <Button type="primary" onClick={handleInstall}>一键安装</Button>}
+        button={installPackagesList.length ? installButton : null}
       />
       <main>
         {isInstalling ? (
           <div>
-            <Step />
-            <XtermTerminal id={TERM_ID} name={TERM_ID} />
+            <Step current={currentStep} itemRender={StepItemRender}>
+              {
+                installPackagesList.map((item: IBasePackage, index: number) => (
+                  <Step.Item key={item.name} title={item.title} status={stepsStatus[index]} />
+                ))
+              }
+            </Step>
+            <div className={styles.term}>
+              <XtermTerminal id={TERM_ID} name={TERM_ID} />
+            </div>
           </div>) : (
             <Row wrap>
               {
-              basePackagesData.map((item: IBasePackage, index: number) => (
+              basePackagesList.map((item: IBasePackage, index: number) => (
                 <Col s={12} l={8} key={item.name}>
                   <AppCard
                     name={item.title}
@@ -77,7 +122,7 @@ const Dashboard = () => {
                     icon={item.icon}
                     versionStatus={item.versionStatus}
                     recommended={item.recommended}
-                    showSplitLine={basePackagesData.length - 2 > index}
+                    showSplitLine={basePackagesList.length - 2 > index}
                   />
                 </Col>
               ))

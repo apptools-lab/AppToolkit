@@ -10,8 +10,7 @@ import { APPLICATIONS_DIR_PATH } from '../constants';
 import downloadFile from './downloadFile';
 import { IPackageInfo } from '../types';
 import executeBashProfileFile from './executeBashProfileFile';
-import { send as sendMainWindow } from '../window';
-import writeLog from './writeLog';
+import log from './log';
 
 process.noAsar = true;
 
@@ -21,7 +20,7 @@ const installPackageFuncMap = {
   '.sh': installSh,
 };
 
-async function installPackage(packageInfo: IPackageInfo, channel: string) {
+async function install(packageInfo: IPackageInfo, channel: string) {
   const { downloadUrl } = packageInfo;
   // download package to the disk
   const { filePath } = await downloadFile({ url: downloadUrl, channel });
@@ -52,7 +51,7 @@ function installNvm({ filePath, channel }) {
     const listenFunc = (buffer: Buffer) => {
       const chunk = buffer.toString();
       stdout += chunk;
-      sendMainWindow(channel, chunk);
+      process.send({ channel, data: { chunk, ln: false } });
     };
 
     const cp = execa('sh', [filePath]);
@@ -85,7 +84,7 @@ async function installDmg({ filePath, channel }) {
     return device.mountPoint;
   });
   if (!mountDevice) {
-    writeLog(`no mountPoint was found in ${devices}`, { channel, sendWindowMessage: sendMainWindow });
+    writeLog(channel, `no mountPoint was found in ${devices}`);
     return;
   }
 
@@ -108,29 +107,29 @@ async function installApp(source: string, appName: string, channel: string) {
   const dest = path.join(APPLICATIONS_DIR_PATH, appName);
   // copy xxx.app to `/Applications` dir
   await fse.copy(source, dest, { overwrite: true });
-  const writeLogOpts = { channel, sendWindowMessage: sendMainWindow };
-  writeLog(`Copy ${source} to ${dest} successfully.`, writeLogOpts);
+  const chunk = `Copy ${source} to ${dest} successfully.`;
+  writeLog(channel, chunk);
 }
 
 function installPkg(source: string, channel: string) {
   const modifiedSource = source.replace(/ /g, '\\ ');
   const options = { name: 'Appworks Toolkit' };
-  const writeLogOpts = { channel, sendWindowMessage: sendMainWindow };
+
   return new Promise((resolve, reject) => {
     sudo.exec(
       `installer -pkg ${modifiedSource} -target ${APPLICATIONS_DIR_PATH}`,
       options,
       (error, stdout, stderr) => {
         if (error) {
-          writeLog(error.message, writeLogOpts);
+          writeLog(channel, error.message);
           reject(error);
         }
         if (stderr) {
-          writeLog(stderr.toString(), writeLogOpts);
+          writeLog(channel, stderr.toString());
           reject(stderr);
         }
         if (stdout) {
-          writeLog(stdout.toString(), writeLogOpts);
+          writeLog(channel, stdout.toString());
           resolve(stdout);
         }
       },
@@ -144,9 +143,42 @@ async function unzipAndCopyToApplicationsDir({ filePath, channel }) {
 
   if (appEntry && /\.app\/?$/.test(appEntry.entryName)) {
     await decompress(filePath, APPLICATIONS_DIR_PATH);
-    const writeLogOpts = { channel, sendWindowMessage: sendMainWindow };
-    writeLog(`Unzip ${filePath} to ${APPLICATIONS_DIR_PATH} successfully.`, writeLogOpts);
+    const chunk = `Unzip ${filePath} to ${APPLICATIONS_DIR_PATH} successfully.`;
+    writeLog(channel, chunk);
   }
 }
 
-export default installPackage;
+function writeLog(channel: string, chunk: string, ln = true) {
+  log.info(chunk);
+  process.send({ channel, data: { chunk, ln } });
+}
+
+function processListener({
+  packagesList,
+  installChannel,
+  processChannel,
+}: {
+  packagesList: IPackageInfo[];
+  installChannel: string;
+  processChannel: string;
+}) {
+  async function installPackages() {
+    for (let i = 0; i < packagesList.length; i++) {
+      const packageInfo = packagesList[i];
+      try {
+        process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
+        await install(packageInfo, installChannel);
+        process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
+      } catch (error) {
+        const errMsg = error.message;
+        log.info(errMsg);
+        process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
+      }
+    }
+
+    process.send({ channel: processChannel, data: { status: 'success' } });
+  }
+  installPackages();
+}
+
+process.on('message', processListener);
