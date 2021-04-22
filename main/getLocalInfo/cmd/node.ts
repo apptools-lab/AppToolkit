@@ -2,8 +2,8 @@ import * as execa from 'execa';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import getLocalToolInfo from './tool';
-import { INodeVersionManagerInfo } from '../types';
-import { PACKAGE_JSON_FILE_NAME } from '../constants';
+import { INodeVersionManagerInfo } from '../../types';
+import { PACKAGE_JSON_FILE_NAME } from '../../constants';
 
 function getLocalNodeInfo(
   name: string,

@@ -1,4 +1,4 @@
-import { IBasicPackageInfo } from '../types';
+import { IBasicPackageInfo } from '../../types';
 import getLocalNodeInfo from './node';
 import getLocalToolInfo from './tool';
 

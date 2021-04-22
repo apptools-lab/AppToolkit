@@ -27,7 +27,6 @@ const StepItemRender = (index: number, status: string) => {
 const Dashboard = () => {
   const [state, dispatchers] = store.useModel('dashboard');
   const { basePackagesList, isInstalling, installPackagesList, stepsStatus, currentStep } = state;
-
   const TERM_ID = 'dashboard';
   const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
   const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';

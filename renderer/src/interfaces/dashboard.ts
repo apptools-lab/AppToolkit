@@ -3,7 +3,7 @@ export interface IAppCard {
   description: string;
   icon: string;
   recommended?: boolean;
-  versionStatus: 'installed' | 'notInstalled' | 'upgradeable';
+  versionStatus: keyof typeof VersionStatus;
   showSplitLine?: boolean;
 }
 
@@ -23,6 +23,7 @@ export interface IBasePackage {
   localVersion: string | null;
   localPath: string | null;
   warningMessage?: string;
+  options?: { [key: string]: any };
   [key: string]: any;
 }
 

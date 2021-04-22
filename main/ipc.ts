@@ -32,10 +32,6 @@ export default () => {
     return packagesData;
   });
 
-  ipcMain.handle('get-install-base-package-status', (event: IpcMainInvokeEvent, installChannel: string) => {
-
-  });
-
   ipcMain.handle('install-base-package', async (
     event: IpcMainInvokeEvent,
     { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string },
@@ -45,7 +41,7 @@ export default () => {
       return;
     }
     // fork a child process to install package
-    const childProcess = child_process.fork(path.join(__dirname, 'utils/installPackage'));
+    const childProcess = child_process.fork(path.join(__dirname, 'utils/installPackages'));
     childProcessMap.set(installChannel, childProcess);
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {

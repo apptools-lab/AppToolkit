@@ -9,7 +9,7 @@ import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import downloadFile from './downloadFile';
 import { IPackageInfo } from '../types';
-import executeBashProfileFile from './executeBashProfileFile';
+import executeBashConfigFile from './executeBashConfigFile';
 import log from './log';
 
 process.noAsar = true;
@@ -69,7 +69,7 @@ function installNvm({ filePath, channel }) {
       const matchRes = stdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
       if (matchRes) {
         const nvmBashProfilePath = matchRes[1];
-        executeBashProfileFile(nvmBashProfilePath);
+        executeBashConfigFile(nvmBashProfilePath);
       }
       resolve(code);
     });
