@@ -38,27 +38,30 @@ export default () => {
 
   ipcMain.handle('install-base-package', async (
     event: IpcMainInvokeEvent,
-    { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string},
+    { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string },
   ) => {
-    console.log('packagesList:', packagesList);
-    // TODO warning
-    // if (childProcessMap.get(installChannel)) {
-    //   return;
-    // }
+    if (childProcessMap.get(installChannel)) {
+      // TODO show warning
+      return;
+    }
     // fork a child process to install package
     const childProcess = child_process.fork(path.join(__dirname, 'utils/installPackage'));
     childProcessMap.set(installChannel, childProcess);
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {
+      if (channel === processChannel && data.status === 'success') {
+        childProcessMap.set(installChannel, null);
+      }
       sendMainWindow(channel, data);
     });
   });
 
-  ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, channelName: string) => {
-    const childProcess = childProcessMap.get(channelName);
+  ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, installChannel: string) => {
+    const childProcess = childProcessMap.get(installChannel);
     if (childProcess && childProcess.kill) {
       // kill child process
       childProcess.kill();
+      childProcessMap.set(installChannel, null);
     }
   });
 };

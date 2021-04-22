@@ -54,6 +54,7 @@ const Dashboard = () => {
   async function handleCancelInstall() {
     dispatchers.updateInstallStatus(false);
     await ipcRenderer.invoke('cancel-install-base-package', INSTALL_PACKAGE_CHANNEL);
+    dispatchers.getBasePackages();
   }
 
   useEffect(() => {
