@@ -84,8 +84,9 @@ async function installDmg({ filePath, channel }) {
     return device.mountPoint;
   });
   if (!mountDevice) {
-    writeLog(channel, `no mountPoint was found in ${devices}`);
-    return;
+    const errMsg = `no mountPoint was found in ${devices}`;
+    writeLog(channel, errMsg);
+    throw new Error(errMsg);
   }
 
   const { mountPoint } = mountDevice;

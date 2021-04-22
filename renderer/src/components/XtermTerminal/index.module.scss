@@ -9,10 +9,15 @@
     top: 10px;
     z-index: 9;
     cursor: pointer;
+    color: white;
   }
 }
 
 .xtermRef {
-  height: 100%;
-  padding: 10px;
+  height: calc(100% + 20px);
+  width: calc(100% + 20px);
+
+  &>div {
+    padding: 10px;
+  }
 }

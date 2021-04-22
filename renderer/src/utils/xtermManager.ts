@@ -71,7 +71,6 @@ class XtermManager {
 
     // Note: need to initialize the fit plugin when the component is re-rendered
     // make the terminal's size and geometry fit the size of #terminal-container
-    console.log('this.terms[id]:', this.terms[id]);
     this.terms[id].fitAddon.fit();
 
     return this.terms[id];

@@ -5,6 +5,7 @@
   "dependencies": {
     "@alifd/next": "^1.19.4",
     "@alifd/theme-design-pro": "^0.x",
+    "@icedesign/dynamic-icon": "^0.1.8",
     "classnames": "^2.3.1",
     "date-time": "^3.1.0",
     "deepmerge": "^4.2.2",

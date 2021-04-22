@@ -3,11 +3,11 @@ export interface IBasicPackageInfo {
   name: string;
   description: string;
   icon: string;
-  downloadUrl: string;
-  version: string;
+  downloadUrl?: string;
+  version: string | null;
   recommended: boolean;
   isInternal: boolean;
-  type: keyof typeof PACKAGE_TYPE;
+  type: PackageType;
   platform: Platform;
   options?: {
     [k: string]: any;
@@ -16,25 +16,14 @@ export interface IBasicPackageInfo {
 
 export type Platform = 'win32' | 'darwin';
 
-export enum PACKAGE_TYPE {
-  'cmd',
-  'dmg',
-  'exe',
-  'vscodeExtension',
-  'chromeExtension',
-  'npm'
-}
+export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
 
-export enum VERSION_STATUS {
-  'installed',
-  'notInstalled',
-  'upgradeable'
-}
+export type VersionStatus = 'installed' | 'notInstalled' | 'upgradeable';
 
 export interface ILocalPackageInfo {
   localVersion: string | null;
   localPath: string | null;
-  versionStatus: keyof typeof VERSION_STATUS;
+  versionStatus: VersionStatus;
   warningMessage?: string;
   [key: string]: any;
 }

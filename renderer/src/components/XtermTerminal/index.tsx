@@ -1,6 +1,6 @@
 import { useRef, useEffect, FC } from 'react';
 import debounce from 'lodash.debounce';
-import { Icon } from '@alifd/next';
+import Icon from '@/components/Icon';
 import xtermManager from '@/utils/xtermManager';
 import 'xterm/css/xterm.css';
 import styles from './index.module.scss';
@@ -39,7 +39,7 @@ const XtermTerminal: FC<IXtermTerminal> = ({ id, name, options }) => {
   return (
     <div className={styles.xtermContainer}>
       <Icon
-        type="ashbin"
+        type="clear"
         className={styles.clearIcon}
         onClick={() => term.clear(id)}
       />

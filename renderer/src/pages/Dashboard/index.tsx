@@ -79,8 +79,7 @@ const Dashboard = () => {
         dispatchers.updateCurrentStep({ currentIndex, status });
       }
       if (errMsg) {
-        // TODO
-        console.log(errMsg);
+        // TODO show error
       }
     }
 
@@ -89,9 +88,11 @@ const Dashboard = () => {
       ipcRenderer.removeListener(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
     };
   }, []);
+
   const installButton = isInstalling ?
     <Button type="normal" onClick={handleCancelInstall}>取消安装</Button> :
     <Button type="primary" onClick={handleInstall}>一键安装</Button>;
+
   return (
     <div className={styles.dashboard}>
       <PageHeader

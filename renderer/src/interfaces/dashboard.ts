@@ -12,15 +12,23 @@ export interface IBasePackage {
   title: string;
   description: string;
   icon: string;
-  url?: string;
-  managerName?: string;
+  downloadUrl?: string;
   recommended: boolean;
   isInternal: boolean;
-  type: 'node' | 'tool' | 'app';
+  type: PackageType;
+  platform: Platform;
   version: string | null;
   path: string | null;
-  versionStatus: 'installed' | 'notInstalled' | 'upgradeable';
+  versionStatus: keyof typeof VersionStatus;
+  localVersion: string | null;
+  localPath: string | null;
+  warningMessage?: string;
+  [key: string]: any;
 }
+
+export type Platform = 'win32' | 'darwin';
+
+export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
 
 export enum VersionStatus {
   'installed' = '已安装',
