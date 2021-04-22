@@ -102,6 +102,7 @@ const Dashboard = () => {
       <main>
         {isInstalling ? (
           <div>
+            {/* TODO 考虑只安装一个 package 的时候进度的展示，目前只有一个 StepItem */}
             <Step current={currentStep} itemRender={StepItemRender}>
               {
                 installPackagesList.map((item: IBasePackage, index: number) => (
@@ -123,7 +124,7 @@ const Dashboard = () => {
                     icon={item.icon}
                     versionStatus={item.versionStatus}
                     recommended={item.recommended}
-                    showSplitLine={basePackagesList.length - 2 > index}
+                    showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
                   />
                 </Col>
               ))
