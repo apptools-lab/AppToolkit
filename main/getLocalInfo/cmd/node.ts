@@ -11,7 +11,6 @@ function getLocalNodeInfo(
   options: { [k: string]: any},
 ) {
   const { managerName } = options;
-
   let localNodeInfo = getLocalToolInfo(name, latestVersion);
 
   let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
@@ -22,7 +21,7 @@ function getLocalNodeInfo(
   localNodeInfo = Object.assign(localNodeInfo, nodeManagerInfo);
   if (!(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
     localNodeInfo.warningMessage =
-      `Detect that you have installed Node but have not installed ${managerName}. We recommend you to install ${managerName} to manage node Version.`;
+      `检测到你已经安装了 Node.js，但未安装 ${managerName}. 推荐安装 ${managerName} 以更好管理 Node.js 版本。`;
     localNodeInfo.versionStatus = 'notInstalled';
   }
 

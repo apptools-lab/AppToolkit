@@ -1,6 +1,7 @@
 import classnames from 'classnames';
-import styles from './index.module.scss';
+import { Icon, Balloon } from '@alifd/next';
 import { IAppCard, VersionStatus } from '@/interfaces/dashboard';
+import styles from './index.module.scss';
 
 const AppCard: React.FC<IAppCard> = ({
   name,
@@ -9,6 +10,7 @@ const AppCard: React.FC<IAppCard> = ({
   recommended,
   versionStatus,
   showSplitLine = true,
+  wanringMessage = '',
 }) => {
   return (
     <div className={styles.card}>
@@ -27,6 +29,11 @@ const AppCard: React.FC<IAppCard> = ({
           className={classnames(styles.status, { [styles.availableStatus]: versionStatus !== 'installed' })}
         >
           {VersionStatus[versionStatus]}
+          {wanringMessage && (
+            <Balloon trigger={<Icon type="warning" />} closable={false}>
+              {wanringMessage}
+            </Balloon>
+          )}
         </div>
       </div>
     </div>

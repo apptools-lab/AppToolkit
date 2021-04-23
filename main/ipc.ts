@@ -43,7 +43,7 @@ export default () => {
 
   ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, installChannel: string) => {
     const childProcess = childProcessMap.get(installChannel);
-    if (childProcess && childProcess.kill) {
+    if (childProcess && childProcess.kill instanceof Function) {
       // kill child process
       childProcess.kill();
       childProcessMap.set(installChannel, null);

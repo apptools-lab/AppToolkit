@@ -1,6 +1,7 @@
 import { IBasicPackageInfo } from '../types';
 import getLocalCmdInfo from './cmd';
 import getLocalDmgInfo from './dmg';
+import log from '../utils/log';
 
 const getLocalInfoProcessor = {
   dmg: getLocalDmgInfo,
@@ -11,10 +12,14 @@ function getLocalInfo(packageInfo: IBasicPackageInfo) {
   const { type } = packageInfo;
   const getLocalInfoFunc = getLocalInfoProcessor[type];
   if (getLocalInfoFunc) {
-    const localPackageInfo = getLocalInfoFunc(packageInfo);
-    return { ...packageInfo, ...localPackageInfo };
+    try {
+      const localPackageInfo = getLocalInfoFunc(packageInfo);
+      return { ...packageInfo, ...localPackageInfo };
+    } catch (error) {
+      log.error(error.message);
+    }
   }
-  return {};
+  return packageInfo;
 }
 
 export default getLocalInfo;

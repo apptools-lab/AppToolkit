@@ -27,7 +27,7 @@ export default {
     },
     initStepStatus(prevState, payload: number) {
       prevState.currentStep = 0;
-      prevState.stepsStatus = Array.from({ length: payload }, () => 'wait');
+      prevState.stepsStatus = Array.from({ length: payload }, () => 'error');
     },
   },
   effects: (dispatch) => ({

@@ -5,6 +5,7 @@ export interface IAppCard {
   recommended?: boolean;
   versionStatus: keyof typeof VersionStatus;
   showSplitLine?: boolean;
+  wanringMessage?: string;
 }
 
 export interface IBasePackage {

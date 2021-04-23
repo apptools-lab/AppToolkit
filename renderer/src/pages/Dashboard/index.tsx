@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
-import { Button, Grid, Step, Icon } from '@alifd/next';
+import { useEffect, useState } from 'react';
+import { Button, Grid, Step, Icon, Message } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import AppCard from './components/AppCard';
+import InstallConfirmDialog from './components/InstallConfirmDialog';
 import styles from './index.module.scss';
 import store from './store';
 import { IBasePackage } from '@/interfaces/dashboard';
+import classNames from 'classnames';
 
 const { Row, Col } = Grid;
 
@@ -17,16 +19,24 @@ const StepItemRender = (index: number, status: string) => {
     process: 'loading',
     error: 'error',
   };
+  const isWaitStatus = Object.keys(iconType).includes(status);
   return (
-    <div className={styles.customNode}>
-      {Object.keys(iconType).includes(status) ? <Icon type={iconType[status]} /> : <span>{index + 1}</span>}
+    <div className={classNames(styles.customNode, { [styles.activeNode]: !isWaitStatus })}>
+      {
+        isWaitStatus ?
+          <Icon type={iconType[status]} /> :
+          <span>{index + 1}</span>
+        }
     </div>
   );
 };
 
 const Dashboard = () => {
+  const [visible, setVisible] = useState(false);
+
   const [state, dispatchers] = store.useModel('dashboard');
   const { basePackagesList, isInstalling, installPackagesList, stepsStatus, currentStep } = state;
+
   const TERM_ID = 'dashboard';
   const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
   const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
@@ -37,17 +47,35 @@ const Dashboard = () => {
     xterm.writeChunk(chunk, ln);
   };
 
-  async function handleInstall() {
+  function onDialogConfirm(packageNames: string[]) {
+    onDialogClose();
+    if (!packageNames.length) {
+      return;
+    }
+    const selectedInstallPackagesList = installPackagesList.filter((item) => {
+      return packageNames.includes(item.name);
+    });
+
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStepStatus(installPackagesList.length);
-    await ipcRenderer.invoke(
+    dispatchers.initStepStatus(selectedInstallPackagesList.length);
+    ipcRenderer.invoke(
       'install-base-package',
       {
-        packagesList: installPackagesList,
+        packagesList: selectedInstallPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       },
-    );
+    ).catch((error) => {
+      Message.error(error.message);
+    });
+  }
+
+  function onDialogOpen() {
+    setVisible(true);
+  }
+
+  function onDialogClose() {
+    setVisible(false);
   }
 
   async function handleCancelInstall() {
@@ -91,7 +119,7 @@ const Dashboard = () => {
 
   const installButton = isInstalling ?
     <Button type="normal" onClick={handleCancelInstall}>取消安装</Button> :
-    <Button type="primary" onClick={handleInstall}>一键安装</Button>;
+    <Button type="primary" onClick={onDialogOpen}>一键安装</Button>;
 
   return (
     <div className={styles.dashboard}>
@@ -106,7 +134,11 @@ const Dashboard = () => {
             <Step current={currentStep} itemRender={StepItemRender}>
               {
                 installPackagesList.map((item: IBasePackage, index: number) => (
-                  <Step.Item key={item.name} title={item.title} status={stepsStatus[index]} />
+                  <Step.Item
+                    key={item.name}
+                    title={item.title}
+                    status={stepsStatus[index] === 'error' ? 'finish' : stepsStatus[index]}
+                  />
                 ))
               }
             </Step>
@@ -125,6 +157,7 @@ const Dashboard = () => {
                     versionStatus={item.versionStatus}
                     recommended={item.recommended}
                     showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
+                    wanringMessage={item.warningMessage}
                   />
                 </Col>
               ))
@@ -132,6 +165,11 @@ const Dashboard = () => {
             </Row>
         )}
       </main>
+      {visible && <InstallConfirmDialog
+        packages={installPackagesList}
+        onCancel={onDialogClose}
+        onOk={onDialogConfirm}
+      />}
     </div>
   );
 };

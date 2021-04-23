@@ -3,7 +3,7 @@
     {
       "title": "Node.js",
       "name": "node",
-      "description": "是一个基于 Chrome V8 引擎的 JavaScript 运行时",
+      "description": "基于 Chrome V8 引擎的 JavaScript 运行时",
       "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
       "shellPath": "install-nvm.sh",
       "version": null,
