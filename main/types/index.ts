@@ -4,6 +4,7 @@ export interface IBasicPackageInfo {
   description: string;
   icon: string;
   downloadUrl?: string;
+  shellPath?: string;
   version: string | null;
   recommended: boolean;
   isInternal: boolean;

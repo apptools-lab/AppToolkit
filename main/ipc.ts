@@ -4,14 +4,8 @@ import { IpcMainInvokeEvent } from 'electron/main';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import { IBasicPackageInfo, IPackageInfo } from './types';
-import { getLocalCmdInfo, getLocalDmgInfo } from './getLocalInfo';
+import getLocalInfo from './getLocalInfo';
 import { send as sendMainWindow } from './window';
-// import installPackage from './utils/installPackage';
-
-const getLocalInfoFuncMap = {
-  dmg: getLocalDmgInfo,
-  cmd: getLocalCmdInfo,
-};
 
 const childProcessMap = new Map();
 
@@ -21,12 +15,7 @@ export default () => {
     const data = await fse.readJSON(path.join(__dirname, 'data.json'));
     const { bases }: { bases: IBasicPackageInfo[] } = data;
     const packagesData = bases.map((basePackageInfo: IBasicPackageInfo) => {
-      const getLocalInfoFunc = getLocalInfoFuncMap[basePackageInfo.type];
-      if (getLocalInfoFunc) {
-        const localPackageInfo = getLocalInfoFunc(basePackageInfo);
-        return { ...basePackageInfo, ...localPackageInfo };
-      }
-      return basePackageInfo;
+      return getLocalInfo(basePackageInfo);
     });
 
     return packagesData;
@@ -41,7 +30,7 @@ export default () => {
       return;
     }
     // fork a child process to install package
-    const childProcess = child_process.fork(path.join(__dirname, 'utils/installPackages'));
+    const childProcess = child_process.fork(path.join(__dirname, 'installPackage/index'));
     childProcessMap.set(installChannel, childProcess);
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {

@@ -4,23 +4,23 @@ import * as path from 'path';
 import log from './log';
 import { TOOLKIT_TMP_DIR } from '../constants';
 
-function downloadFile({ url, destination = TOOLKIT_TMP_DIR, channel }): Promise<{ filePath: string }> {
+function downloadFile(downloadUrl: string, channel: string, destination = TOOLKIT_TMP_DIR): Promise<string> {
   if (!fse.existsSync(destination)) {
     fse.mkdirSync(destination);
   }
 
   return new Promise((resolve, reject) => {
-    writeLog(channel, `Downloading ${url} ...`);
-    fetch(url).then((res) => {
-      const splits = url.split('/');
+    writeLog(channel, `Downloading ${downloadUrl} ...`);
+    fetch(downloadUrl).then((res) => {
+      const splits = downloadUrl.split('/');
       const name = splits[splits.length - 1];
       const filePath = path.join(destination, name);
       const dest = fse.createWriteStream(filePath);
       res.body
         .pipe(dest)
         .on('finish', () => {
-          writeLog(channel, `Download ${url} to ${filePath} successfully.`);
-          resolve({ filePath });
+          writeLog(channel, `Download ${downloadUrl} to ${filePath} successfully.`);
+          resolve(filePath);
         })
         .on('error', (err) => {
           reject(err);
