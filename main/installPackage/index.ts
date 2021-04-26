@@ -19,6 +19,7 @@ function processListener({
   const packageInstaller = new PackageInstaller(installChannel);
 
   async function installPackages() {
+    const installError = [];
     for (let i = 0; i < packagesList.length; i++) {
       const packageInfo = packagesList[i];
       try {
@@ -36,13 +37,18 @@ function processListener({
 
         process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
       } catch (error) {
-        const errMsg = error.message;
+        const errMsg = error instanceof Error ? error.message : error;
         log.info(errMsg);
         process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
+        installError.push(errMsg);
       }
     }
 
-    process.send({ channel: processChannel, data: { status: 'success' } });
+    if (installError.length) {
+      process.send({ channel: processChannel, data: { status: 'fail', error: JSON.stringify(installError) } });
+    } else {
+      process.send({ channel: processChannel, data: { status: 'success' } });
+    }
   }
   installPackages();
 }

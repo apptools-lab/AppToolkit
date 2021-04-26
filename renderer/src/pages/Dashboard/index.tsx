@@ -19,14 +19,19 @@ const StepItemRender = (index: number, status: string) => {
     process: 'loading',
     error: 'error',
   };
+
   const isWaitStatus = Object.keys(iconType).includes(status);
   return (
-    <div className={classNames(styles.customNode, { [styles.activeNode]: !isWaitStatus })}>
-      {
-        isWaitStatus ?
-          <Icon type={iconType[status]} /> :
-          <span>{index + 1}</span>
-        }
+    <div
+      className={classNames(styles.customNode, {
+        [styles.activeNode]: !isWaitStatus,
+      })}
+    >
+      {isWaitStatus ? (
+        <Icon type={iconType[status]} />
+      ) : (
+        <span>{index + 1}</span>
+      )}
     </div>
   );
 };
@@ -35,13 +40,22 @@ const Dashboard = () => {
   const [visible, setVisible] = useState(false);
 
   const [state, dispatchers] = store.useModel('dashboard');
-  const { basePackagesList, isInstalling, installPackagesList, stepsStatus, currentStep } = state;
+  const {
+    basePackagesList,
+    isInstalling,
+    installPackagesList,
+    stepsStatus,
+    currentStep,
+  } = state;
 
   const TERM_ID = 'dashboard';
   const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
   const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
 
-  const writeChunk = (e: IpcRendererEvent, data: { chunk: string; ln?: boolean }) => {
+  const writeChunk = (
+    e: IpcRendererEvent,
+    data: { chunk: string; ln?: boolean },
+  ) => {
     const { chunk, ln } = data;
     const xterm = xtermManager.getTerm(TERM_ID);
     xterm.writeChunk(chunk, ln);
@@ -58,16 +72,15 @@ const Dashboard = () => {
 
     dispatchers.updateInstallStatus(true);
     dispatchers.initStepStatus(selectedInstallPackagesList.length);
-    ipcRenderer.invoke(
-      'install-base-package',
-      {
+    ipcRenderer
+      .invoke('install-base-package', {
         packagesList: selectedInstallPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
-      },
-    ).catch((error) => {
-      Message.error(error.message);
-    });
+      })
+      .catch((error) => {
+        Message.error(error.message);
+      });
   }
 
   function onDialogOpen() {
@@ -80,7 +93,10 @@ const Dashboard = () => {
 
   async function handleCancelInstall() {
     dispatchers.updateInstallStatus(false);
-    await ipcRenderer.invoke('cancel-install-base-package', INSTALL_PACKAGE_CHANNEL);
+    await ipcRenderer.invoke(
+      'cancel-install-base-package',
+      INSTALL_PACKAGE_CHANNEL,
+    );
     dispatchers.getBasePackages();
   }
 
@@ -103,23 +119,37 @@ const Dashboard = () => {
       if (status === 'success') {
         dispatchers.updateInstallStatus(false);
         dispatchers.getBasePackages();
+      } else if (status === 'fail') {
+        // TODO: show all the error message
       } else {
-        dispatchers.updateCurrentStep({ currentIndex, status });
-      }
-      if (errMsg) {
-        // TODO show error
+        dispatchers.updateCurrentStep({
+          currentIndex: currentIndex + 1,
+          status,
+        });
+        if (errMsg) {
+          Message.error(errMsg);
+        }
       }
     }
 
     ipcRenderer.on(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
     return () => {
-      ipcRenderer.removeListener(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+      ipcRenderer.removeListener(
+        INSTALL_PROCESS_STATUS_CHANNEL,
+        handleUpdateInstallStatus,
+      );
     };
   }, []);
 
-  const installButton = isInstalling ?
-    <Button type="normal" onClick={handleCancelInstall}>取消安装</Button> :
-    <Button type="primary" onClick={onDialogOpen}>一键安装</Button>;
+  const installButton = isInstalling ? (
+    <Button type="normal" onClick={handleCancelInstall}>
+      取消安装
+    </Button>
+  ) : (
+    <Button type="primary" onClick={onDialogOpen}>
+      一键安装
+    </Button>
+  );
 
   return (
     <div className={styles.dashboard}>
@@ -130,46 +160,53 @@ const Dashboard = () => {
       <main>
         {isInstalling ? (
           <div>
-            {/* TODO 考虑只安装一个 package 的时候进度的展示，目前只有一个 StepItem */}
             <Step current={currentStep} itemRender={StepItemRender}>
-              {
-                installPackagesList.map((item: IBasePackage, index: number) => (
-                  <Step.Item
-                    key={item.name}
-                    title={item.title}
-                    status={stepsStatus[index] === 'error' ? 'finish' : stepsStatus[index]}
-                  />
-                ))
-              }
+              <Step.Item title="开始" />
+              {installPackagesList.map((item: IBasePackage, index: number) => (
+                <Step.Item
+                  key={item.name}
+                  title={item.title}
+                  status={
+                    stepsStatus[index + 1] === 'error'
+                      ? 'finish'
+                      : stepsStatus[index + 1]
+                  }
+                />
+              ))}
             </Step>
             <div className={styles.term}>
               <XtermTerminal id={TERM_ID} name={TERM_ID} />
             </div>
-          </div>) : (
-            <Row wrap>
-              {
-              basePackagesList.map((item: IBasePackage, index: number) => (
-                <Col s={12} l={8} key={item.name}>
-                  <AppCard
-                    name={item.title}
-                    description={item.description}
-                    icon={item.icon}
-                    versionStatus={item.versionStatus}
-                    recommended={item.recommended}
-                    showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
-                    wanringMessage={item.warningMessage}
-                  />
-                </Col>
-              ))
-              }
-            </Row>
+          </div>
+        ) : (
+          <Row wrap>
+            {basePackagesList.map((item: IBasePackage, index: number) => (
+              <Col s={12} l={8} key={item.name}>
+                <AppCard
+                  name={item.title}
+                  description={item.description}
+                  icon={item.icon}
+                  versionStatus={item.versionStatus}
+                  recommended={item.recommended}
+                  showSplitLine={
+                    basePackagesList.length -
+                      (basePackagesList.length % 2 ? 1 : 2) >
+                    index
+                  }
+                  wanringMessage={item.warningMessage}
+                />
+              </Col>
+            ))}
+          </Row>
         )}
       </main>
-      {visible && <InstallConfirmDialog
-        packages={installPackagesList}
-        onCancel={onDialogClose}
-        onOk={onDialogConfirm}
-      />}
+      {visible && (
+        <InstallConfirmDialog
+          packages={installPackagesList}
+          onCancel={onDialogClose}
+          onOk={onDialogConfirm}
+        />
+      )}
     </div>
   );
 };

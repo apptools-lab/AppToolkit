@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { IBasePackage } from '@/interfaces/dashboard';
 import { Dialog, Checkbox } from '@alifd/next';
+import styles from './index.module.scss';
 
 interface IInstallConfirmDialog {
   packages: IBasePackage[];
@@ -19,12 +20,13 @@ const InstallConfirmDialog: FC<IInstallConfirmDialog> = ({ packages, onCancel, o
   };
   return (
     <Dialog
-      title="是否继续安装以下工具"
+      title="提示"
       onCancel={onCancel}
       onOk={() => onOk(selectedPackages)}
       visible
-      style={{ minWidth: 400 }}
+      className={styles.dialog}
     >
+      <div className={styles.title}>是否继续安装以下工具：</div>
       <Checkbox.Group direction="ver" value={selectedPackages} onChange={onSelectedPackagesChange}>
         {
           packages.map((item) => (
