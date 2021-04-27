@@ -17,7 +17,7 @@
     "build:main": "tsc --build ./main/tsconfig.json",
     "package": "npm run build && NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --mac",
     "lint": "npm run eslint && npm run stylelint",
-    "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",
     "eslint:fix": "npm run eslint -- --fix",
     "stylelint": "stylelint \"**/*.{css,scss,less}\""
   },

@@ -1,10 +1,10 @@
+import * as path from 'path';
 import { Mounter } from '@shockpkg/hdi-mac';
 import * as globby from 'globby';
 import * as fse from 'fs-extra';
-import writeLog from './writeLog';
-import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
+import writeLog from './writeLog';
 
 class DmgInstaller {
   channel: string;

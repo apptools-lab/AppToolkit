@@ -1,6 +1,6 @@
 import * as AdmZip from 'adm-zip';
-import { APPLICATIONS_DIR_PATH } from '../constants';
 import * as decompress from 'decompress';
+import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from './writeLog';
 
 class ZipInstaller {

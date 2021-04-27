@@ -1,8 +1,8 @@
+import * as path from 'path';
+import { IPackageInfo } from '../types';
 import DmgInstaller from './DmgInstaller';
 import ShInstaller from './ShInstaller';
 import ZipInstaller from './ZipInstaller';
-import * as path from 'path';
-import { IPackageInfo } from '../types';
 
 class PackageInstaller {
   packageProcessor = {

@@ -1,7 +1,7 @@
 import { IBasicPackageInfo } from '../types';
+import log from '../utils/log';
 import getLocalCmdInfo from './cmd';
 import getLocalDmgInfo from './dmg';
-import log from '../utils/log';
 
 const getLocalInfoProcessor = {
   dmg: getLocalDmgInfo,

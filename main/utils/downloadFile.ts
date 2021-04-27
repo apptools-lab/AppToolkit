@@ -1,8 +1,8 @@
+import * as path from 'path';
 import fetch from 'node-fetch';
 import * as fse from 'fs-extra';
-import * as path from 'path';
-import log from './log';
 import { TOOLKIT_TMP_DIR } from '../constants';
+import log from './log';
 
 function downloadFile(downloadUrl: string, channel: string, destination = TOOLKIT_TMP_DIR): Promise<string> {
   if (!fse.existsSync(destination)) {

@@ -4,12 +4,12 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
+import { IBasePackage } from '@/interfaces/dashboard';
+import classNames from 'classnames';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
 import styles from './index.module.scss';
 import store from './store';
-import { IBasePackage } from '@/interfaces/dashboard';
-import classNames from 'classnames';
 
 const { Row, Col } = Grid;
 

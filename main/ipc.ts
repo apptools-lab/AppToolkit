@@ -1,8 +1,8 @@
-import { ipcMain } from 'electron';
 import * as child_process from 'child_process';
+import * as path from 'path';
+import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import * as fse from 'fs-extra';
-import * as path from 'path';
 import { IBasicPackageInfo, IPackageInfo } from './types';
 import getLocalInfo from './getLocalInfo';
 import { send as sendMainWindow } from './window';

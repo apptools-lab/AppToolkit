@@ -1,5 +1,5 @@
-import { BrowserWindow } from 'electron';
 import * as path from 'path';
+import { BrowserWindow } from 'electron';
 import * as isDev from 'electron-is-dev';
 
 let mainWindow: BrowserWindow;
