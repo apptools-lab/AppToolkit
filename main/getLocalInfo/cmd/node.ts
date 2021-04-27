@@ -5,6 +5,10 @@ import { INodeVersionManagerInfo } from '../../types';
 import { PACKAGE_JSON_FILE_NAME } from '../../constants';
 import getLocalToolInfo from './tool';
 
+const nodeManagerInfoProcessor = {
+  nvm: getNvmInfo,
+};
+
 function getLocalNodeInfo(
   name: string,
   latestVersion: string | null,
@@ -14,10 +18,10 @@ function getLocalNodeInfo(
   let localNodeInfo = getLocalToolInfo(name, latestVersion);
 
   let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
-  if (managerName === 'nvm') {
-    nodeManagerInfo = getNvmInfo();
+  const getNodeManagerInfoFunc = nodeManagerInfoProcessor[managerName];
+  if (getNodeManagerInfoFunc) {
+    nodeManagerInfo = getNodeManagerInfoFunc();
   }
-
   localNodeInfo = Object.assign(localNodeInfo, nodeManagerInfo);
   if (!(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
     localNodeInfo.warningMessage =
