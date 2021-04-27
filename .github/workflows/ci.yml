@@ -1,0 +1,21 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set branch name
+        run: echo >>$GITHUB_ENV BRANCH_NAME=${GITHUB_REF#refs/heads/}
+      - name: Echo branch name
+        run: echo ${BRANCH_NAME}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Install Dependencies
+        run: npm run setup
+      - name: Lint
+        run: npm run lint
