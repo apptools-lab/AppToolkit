@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
-import handleIPC from './ipc';
+import modifyProcessEnvPath from './utils/modifyProcessEnvPath';
 import { createWindow } from './window';
+import handleIPC from './ipc';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
@@ -8,8 +9,12 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  modifyProcessEnvPath();
+
   createWindow();
+
   handleIPC();
+
   app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

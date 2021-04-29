@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { Icon, Balloon } from '@alifd/next';
-import { IAppCard, VersionStatus } from '@/interfaces/dashboard';
+import { IAppCard, VersionStatus } from '@/interfaces';
 import styles from './index.module.scss';
 
 const AppCard: React.FC<IAppCard> = ({

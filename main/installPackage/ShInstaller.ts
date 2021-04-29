@@ -1,7 +1,7 @@
 import * as execa from 'execa';
-import executeBashConfigFile from '../utils/executeBashConfigFile';
 import { IPackageInfo } from '../types';
 import log from '../utils/log';
+import executeBashConfigFile from '../utils/executeBashConfigFile';
 
 class ShInstaller {
   channel: string;

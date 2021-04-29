@@ -1,7 +1,8 @@
 import * as execa from 'execa';
-import { ILocalPackageInfo } from '../../types';
+import * as shell from 'shelljs';
 import getVersionStatus from '../../utils/getVersionStatus';
 import log from '../../utils/log';
+import { ILocalPackageInfo } from '../../types';
 
 function getLocalToolInfo(name: string, latestVersion: string | null) {
   const localToolInfo: ILocalPackageInfo = {
@@ -9,28 +10,27 @@ function getLocalToolInfo(name: string, latestVersion: string | null) {
     localPath: null,
     versionStatus: 'notInstalled',
   };
-
-  let toolRes;
+  // get tool local path
   try {
-    toolRes = execa.sync('which', [name]);
-  } catch {
-    log.error(`Tool ${name} is not found.`);
+    const toolPath = shell.which(name);
+    if (!toolPath) {
+      throw new Error(`Tool ${name} is not found.`);
+    }
+    localToolInfo.localPath = toolPath.stdout;
+  } catch (error) {
+    log.error(error.message);
     return localToolInfo;
   }
-  localToolInfo.localPath = toolRes.stdout;
-
-  let toolVersionRes;
+  // get local tool version
   try {
-    toolVersionRes = execa.sync(name, ['--version'], { shell: true });
-  } catch {
-    log.error(`Tool ${name} version is not found.`);
-  }
-
-  if (toolVersionRes) {
+    const toolVersionRes = execa.sync(localToolInfo.localPath, ['--version'], { shell: true });
     const versionStr = toolVersionRes.stdout;
     const versionStrMatch = versionStr.match(/(\d+(\.\d+)*)/);
     localToolInfo.localVersion = versionStrMatch ? versionStrMatch[1] : versionStr;
+  } catch (error) {
+    log.error(`Tool ${name} version is not found. Error: ${error.message}`);
   }
+  // get local tool version status
   localToolInfo.versionStatus = getVersionStatus(localToolInfo.localVersion, latestVersion);
 
   return localToolInfo;

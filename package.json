@@ -40,10 +40,9 @@
         "dmg",
         "zip"
       ],
-      "icon": "resources/icon.icns"
+      "icon": "resources/mac/icon.icns"
     },
     "dmg": {
-      "background": "resources/background.png",
       "window": {
         "width": 540,
         "height": 380
@@ -75,20 +74,23 @@
     "fs-extra": "^9.1.0",
     "globby": "^11.0.3",
     "node-fetch": "^2.6.1",
-    "sudo-prompt": "^9.2.1"
+    "shelljs": "^0.8.4",
+    "strip-ansi": "^6.0.0",
+    "sudo-prompt": "^9.2.1",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@iceworks/spec": "^1.0.0",
     "@types/decompress": "^4.2.3",
     "@types/electron": "^1.6.10",
     "@types/node-fetch": "^2.5.10",
+    "@types/shelljs": "^0.8.8",
     "commitlint": "^8.3.5",
     "concurrently": "^5.1.0",
     "electron": "^12.0.0",
     "electron-builder": "^22.10.5",
     "eslint": "^6.8.0",
     "stylelint": "^13.2.0",
-    "tslib": "^2.2.0",
     "typescript": "^3.8.2",
     "wait-on": "^5.3.0"
   }

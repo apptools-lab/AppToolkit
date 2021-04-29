@@ -6,16 +6,17 @@ import * as fse from 'fs-extra';
 import { IBasicPackageInfo, IPackageInfo } from './types';
 import getLocalInfo from './getLocalInfo';
 import { send as sendMainWindow } from './window';
+import getNodeManager from './node';
 
 const childProcessMap = new Map();
 
 export default () => {
-  ipcMain.handle('get-base-packages', async () => {
-    // TODO: get data.json from OSS and save it in the storage
+  ipcMain.handle('get-base-packages-info', async () => {
+    // TODO: get data.json from OSS and save it in the storage when app starts first
     const data = await fse.readJSON(path.join(__dirname, 'data.json'));
-    const { bases }: { bases: IBasicPackageInfo[] } = data;
-    const packagesData = bases.map((basePackageInfo: IBasicPackageInfo) => {
-      return getLocalInfo(basePackageInfo);
+    const { bases = [] }: { bases: IBasicPackageInfo[] } = data;
+    const packagesData = bases.map((basicPackageInfo: IBasicPackageInfo) => {
+      return getLocalInfo(basicPackageInfo);
     });
 
     return packagesData;
@@ -48,5 +49,36 @@ export default () => {
       childProcess.kill();
       childProcessMap.set(installChannel, null);
     }
+  });
+
+  ipcMain.handle('get-node-info', async () => {
+    // TODO: get data.json from OSS and save it in the storage when app starts first
+    const data = await fse.readJSON(path.join(__dirname, 'data.json'));
+    const { bases = [] }: { bases: IBasicPackageInfo[] } = data;
+    const nodeBasicInfo = bases.find((base: IBasicPackageInfo) => base.name === 'node');
+    const localNodeInfo = getLocalInfo(nodeBasicInfo);
+
+    return localNodeInfo;
+  });
+
+  ipcMain.handle('get-node-versions-list', async (event: IpcMainInvokeEvent, managerName: string) => {
+    const nodeManager = getNodeManager(managerName);
+    const nodeVersionsList = await nodeManager.getNodeVersionsList();
+    return nodeVersionsList;
+  });
+
+  ipcMain.handle('install-node', async (event: IpcMainInvokeEvent, managerName: string, nodeVersion: string, isReinstallPackages: boolean) => {
+    // const nodeManager = getNodeManager(managerName);
+    // await nodeManager.installNode(nodeVersion, isReinstallPackages);
+    const childProcess = child_process.fork(path.join(__dirname, 'node/index'));
+    childProcess.send({ managerName, nodeVersion, isReinstallPackages });
+    childProcess.on('message', (...args) => {
+      console.log('message===>', args);
+      // if (channel === processChannel && data.status === 'success') {
+      //   childProcessMap.set(installChannel, null);
+      // }
+
+      // sendMainWindow(channel, data);
+    });
   });
 };

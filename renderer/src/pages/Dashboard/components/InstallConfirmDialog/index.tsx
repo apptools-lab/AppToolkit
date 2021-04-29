@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { IBasePackage } from '@/interfaces/dashboard';
+import { IBasePackage } from '@/interfaces';
 import { Dialog, Checkbox } from '@alifd/next';
 import styles from './index.module.scss';
 
@@ -23,6 +23,7 @@ const InstallConfirmDialog: FC<IInstallConfirmDialog> = ({ packages, onCancel, o
       title="提示"
       onCancel={onCancel}
       onOk={() => onOk(selectedPackages)}
+      closeable={false}
       visible
       className={styles.dialog}
     >
