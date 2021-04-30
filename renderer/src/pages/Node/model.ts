@@ -1,6 +1,5 @@
 import { IBasePackage } from '@/interfaces';
 import { ipcRenderer } from 'electron';
-import { Message } from '@alifd/next';
 
 export default {
   state: {
@@ -36,21 +35,13 @@ export default {
   },
   effects: (dispatch) => ({
     async getNodeInfo() {
-      try {
-        const nodeInfo: IBasePackage = await ipcRenderer.invoke('get-node-info');
-        dispatch.node.updateNodeInfo(nodeInfo);
-      } catch (error) {
-        Message.error(error.message);
-      }
+      const nodeInfo: IBasePackage = await ipcRenderer.invoke('get-node-info');
+      dispatch.node.updateNodeInfo(nodeInfo);
     },
 
     async getNodeVersionsList(managerName: string) {
-      try {
-        const nodeVersionsList: string[] = await ipcRenderer.invoke('get-node-versions-list', managerName);
-        dispatch.node.updateNodeVersionsList(nodeVersionsList);
-      } catch (error) {
-        Message.error(error.message);
-      }
+      const nodeVersionsList: string[] = await ipcRenderer.invoke('get-node-versions-list', managerName);
+      dispatch.node.updateNodeVersionsList(nodeVersionsList);
     },
   }),
 };

@@ -1,6 +1,5 @@
-import { useEffect, FC, useState } from 'react';
+import { useEffect, FC } from 'react';
 import { Step, Button, Field, Form, Box, Icon, Typography, Switch, Select, Loading, Message } from '@alifd/next';
-import ReactMarkdown from 'react-markdown';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
@@ -19,6 +18,19 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   const [state, dispatchers] = store.useModel('node');
   const { currentStep, nodeVersionsList, installStatus, installErrMsg } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
+  const effectsErrors = store.useModelEffectsError('node');
+
+  useEffect(() => {
+    if (effectsErrors.getNodeVersionsList.error) {
+      Message.error(effectsErrors.getNodeVersionsList.error.message);
+    }
+  }, [effectsErrors.getNodeVersionsList.error]);
+
+  useEffect(() => {
+    if (effectsErrors.getNodeInfo.error) {
+      Message.error(effectsErrors.getNodeInfo.error.message);
+    }
+  }, [effectsErrors.getNodeInfo.error]);
 
   const TERM_ID = 'node';
   const INSTALL_PROCESS_STATUS_CHANNEL = 'install-node-process-status';
