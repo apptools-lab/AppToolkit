@@ -1,74 +1,86 @@
 import { useEffect, useState } from 'react';
 import { Grid, Button } from '@alifd/next';
+import { ipcRenderer } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import { IBasePackage } from '@/interfaces';
-import { ipcRenderer } from 'electron';
 import styles from './index.module.scss';
 import store from './store';
-import SwitchVersionDialog from './components/SwitchVersionDialog';
+import InstallStep from './components/InstallStep';
 
 const { Row, Col } = Grid;
 
 const Node = () => {
-  const [visible, setVisible] = useState(false);
+  const [installNodeStepVisible, setInstallNodeStepVisible] = useState(false);
 
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInfo } = state;
+  const { nodeInfo, currentStep } = state;
   const { options = {} } = nodeInfo as IBasePackage;
   const { managerName } = options;
   const { localVersion } = nodeInfo as IBasePackage;
+  const INSTALL_NODE_CHANNEL = 'install-node';
 
   const onSwitchVersionBtnClick = () => {
-    onDialogOpen();
+    dispatchers.initStep();
+    dispatchers.initNodeInstall();
+    setInstallNodeStepVisible(true);
   };
 
-  const onDialogClose = () => {
-    setVisible(false);
-  };
-
-  const onDialogOpen = () => {
-    setVisible(true);
-  };
-
-  const onDialogConfirm = async ({ reinstallGlobalDeps, nodeVersion }) => {
-    await ipcRenderer.invoke('install-node', managerName, nodeVersion, reinstallGlobalDeps);
+  const getNodeInfo = async function () {
+    await dispatchers.getNodeInfo();
   };
 
   useEffect(() => {
-    const init = async function () {
-      await dispatchers.getNodeInfo();
-    };
-    init();
+    getNodeInfo();
   }, []);
+
+  const goBack = async () => {
+    setInstallNodeStepVisible(false);
+    await getNodeInfo();
+  };
+
+  const cancelNodeInstall = async () => {
+    await ipcRenderer.invoke(
+      'cancel-install-node',
+      INSTALL_NODE_CHANNEL,
+    );
+    goBack();
+  };
+
+  const headerBtn = (currentStep !== 2 && installNodeStepVisible) ? (
+    <Button type="normal" onClick={cancelNodeInstall}>
+      取消安装
+    </Button>
+  ) : null;
 
   return (
     <div className={styles.nodeContainer}>
-      <PageHeader title="Node 管理" />
-      <main>
-        <Row className={styles.row}>
-          <Col span={12}>
-            <div className={styles.subTitle}>Node 版本</div>
-          </Col>
-          <Col span={12}>
-            {localVersion}
-            <Button
-              text
-              type="primary"
-              className={styles.switchVersionBtn}
-              onClick={onSwitchVersionBtnClick}
-            >
-              切换版本
-            </Button>
-          </Col>
-        </Row>
-      </main>
-      {visible && (
-        <SwitchVersionDialog
-          managerName={managerName}
-          onCancel={onDialogClose}
-          onOk={onDialogConfirm}
-        />
-      )}
+      <PageHeader title="Node 管理" button={headerBtn} />
+      {
+        installNodeStepVisible ? (
+          <InstallStep
+            managerName={managerName}
+            INSTALL_NODE_CHANNEL={INSTALL_NODE_CHANNEL}
+            goBack={goBack}
+          />
+        ) : (
+          <Row className={styles.row}>
+            <Col span={12}>
+              <div className={styles.subTitle}>Node 版本</div>
+            </Col>
+            <Col span={12}>
+              {localVersion}
+              <Button
+                text
+                type="primary"
+                className={styles.switchVersionBtn}
+                onClick={onSwitchVersionBtnClick}
+              >
+                切换版本
+              </Button>
+            </Col>
+          </Row>
+        )
+      }
     </div>
   );
 };

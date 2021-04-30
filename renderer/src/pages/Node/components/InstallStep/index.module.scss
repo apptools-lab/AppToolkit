@@ -1,0 +1,33 @@
+.installStepContainer {
+  margin-top: 40px;
+}
+
+.step {
+  margin-bottom: 40px;
+}
+
+.successIcon {
+  color: $color-success-3;
+}
+
+.submitBtn {
+  margin-top: 40px;
+  text-align: right;
+}
+
+.loading {
+  width: 100%;
+}
+
+.code {
+  display: block;
+  background: #f1f1f1;
+  padding: 4px;
+  width: 400px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
+.text {
+  margin: 20px 0;
+}

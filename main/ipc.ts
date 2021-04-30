@@ -35,20 +35,15 @@ export default () => {
     childProcessMap.set(installChannel, childProcess);
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && data.status === 'success') {
-        childProcessMap.set(installChannel, null);
+      if (channel === processChannel && (data.status === 'success' || data.status === 'fail')) {
+        killChannelChildProcess(childProcessMap, installChannel);
       }
       sendMainWindow(channel, data);
     });
   });
 
   ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, installChannel: string) => {
-    const childProcess = childProcessMap.get(installChannel);
-    if (childProcess && childProcess.kill instanceof Function) {
-      // kill child process
-      childProcess.kill();
-      childProcessMap.set(installChannel, null);
-    }
+    killChannelChildProcess(childProcessMap, installChannel);
   });
 
   ipcMain.handle('get-node-info', async () => {
@@ -67,18 +62,54 @@ export default () => {
     return nodeVersionsList;
   });
 
-  ipcMain.handle('install-node', async (event: IpcMainInvokeEvent, managerName: string, nodeVersion: string, isReinstallPackages: boolean) => {
-    // const nodeManager = getNodeManager(managerName);
-    // await nodeManager.installNode(nodeVersion, isReinstallPackages);
+  ipcMain.handle('install-node', (
+    event: IpcMainInvokeEvent,
+    {
+      managerName,
+      nodeVersion,
+      reinstallGlobalDeps,
+      installChannel,
+      processChannel,
+    }: {
+      managerName: string;
+      nodeVersion: string;
+      reinstallGlobalDeps: boolean;
+      installChannel: string;
+      processChannel: string;
+    },
+  ) => {
     const childProcess = child_process.fork(path.join(__dirname, 'node/index'));
-    childProcess.send({ managerName, nodeVersion, isReinstallPackages });
-    childProcess.on('message', (...args) => {
-      console.log('message===>', args);
-      // if (channel === processChannel && data.status === 'success') {
-      //   childProcessMap.set(installChannel, null);
-      // }
+    childProcessMap.set(installChannel, childProcess);
 
-      // sendMainWindow(channel, data);
+    childProcess.send({
+      managerName,
+      nodeVersion,
+      reinstallGlobalDeps,
+      installChannel,
+      processChannel,
+    });
+
+    childProcess.on('message', ({ channel, data }: any) => {
+      if (channel === processChannel && (data.status === 'success' || data.status === 'error')) {
+        killChannelChildProcess(childProcessMap, installChannel);
+      }
+      sendMainWindow(channel, data);
     });
   });
+
+  ipcMain.handle('cancel-install-node', (event: IpcMainInvokeEvent, installChannel: string) => {
+    killChannelChildProcess(childProcessMap, installChannel);
+  });
 };
+
+function killChannelChildProcess(
+  channelChildProcessMap: Map<string, child_process.ChildProcess>,
+  channel: string,
+) {
+  const childProcess = channelChildProcessMap.get(channel);
+  if (childProcess && childProcess.kill instanceof Function) {
+    // kill child process
+    childProcess.kill();
+    channelChildProcessMap.delete(channel);
+  }
+}

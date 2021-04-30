@@ -1,7 +1,17 @@
 import classnames from 'classnames';
 import { Icon, Balloon } from '@alifd/next';
-import { IAppCard, VersionStatus } from '@/interfaces';
+import { VersionStatus } from '@/interfaces';
 import styles from './index.module.scss';
+
+interface IAppCard {
+  name: string;
+  description: string;
+  icon: string;
+  recommended?: boolean;
+  versionStatus: keyof typeof VersionStatus;
+  showSplitLine?: boolean;
+  wanringMessage?: string;
+}
 
 const AppCard: React.FC<IAppCard> = ({
   name,

@@ -1,26 +1,35 @@
-import executeBashConfigFile from '../utils/executeBashConfigFile';
+import log from '../utils/log';
 import NvmManager from './NvmManager';
 
 const nodeManagerProcessor = {
   nvm: NvmManager,
 };
 
-export default (managerName: string) => {
+export default function getNodeManager(managerName: string, channel?: string) {
   const NodeManager = nodeManagerProcessor[managerName];
-  const nodeManager = new NodeManager();
-  return nodeManager;
-};
-
-function processListener({ managerName, nodeVersion, isReinstallPackages }) {
-  const NodeManager = nodeManagerProcessor[managerName];
-  const nodeManager = new NodeManager();
-  async function installNode() {
-    await nodeManager.installNode(nodeVersion, isReinstallPackages);
-    executeBashConfigFile('/Users/luhc228/.zshrc');
-    process.send('finish');
+  if (!NodeManager) {
+    throw new Error(`Node manager ${managerName} class was not found.`);
   }
+  const nodeManager = new NodeManager(channel);
+  return nodeManager;
+}
+
+function processListener({ managerName, nodeVersion, reinstallGlobalDeps, installChannel, processChannel }) {
+  const nodeManager = getNodeManager(managerName, installChannel);
+
+  async function installNode() {
+    try {
+      process.send({ channel: processChannel, data: { status: 'process' } });
+      await nodeManager.installNode(nodeVersion, reinstallGlobalDeps);
+      process.send({ channel: processChannel, data: { status: 'success' } });
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : error;
+      log.info(errMsg);
+      process.send({ channel: processChannel, data: { status: 'error', errMsg } });
+    }
+  }
+
   installNode();
-  // process.send(nodeManager);
 }
 
 process.on('message', processListener);

@@ -34,3 +34,8 @@ export interface INodeVersionManagerInfo {
 }
 
 export interface IPackageInfo extends IBasicPackageInfo, ILocalPackageInfo {}
+
+export interface INodeManager {
+  installNode: Function;
+  getNodeVersionsList: Function;
+}

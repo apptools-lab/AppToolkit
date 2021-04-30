@@ -1,17 +1,27 @@
 import * as path from 'path';
 import * as execa from 'execa';
+import { INodeManager } from '../types';
 import log from '../utils/log';
 // eslint-disable-next-line import/order
 import stripAnsi = require('strip-ansi');
 
-class NvmManager {
-  async installNode(version: string, isReinstallPackages = true) {
+class NvmManager implements INodeManager {
+  channel: string;
+
+  constructor(channel = '') {
+    this.channel = channel;
+  }
+
+  async installNode(version: string, reinstallGlobalDeps = true) {
     const shFilePath = path.resolve(__dirname, '../sh', 'nvm-install-node.sh');
-    const reinstallPackagesArg = isReinstallPackages ? '--reinstall-packages-from=current' : '';
+    const reinstallPackagesArg = reinstallGlobalDeps ? '--reinstall-packages-from=current' : '';
+
     const listenFunc = (buffer: Buffer) => {
       const chunk = buffer.toString();
       log.info(chunk);
+      process.send({ channel: this.channel, data: { chunk, ln: false } });
     };
+
     return new Promise((resolve, reject) => {
       const cp = execa('sh', [shFilePath, version, reinstallPackagesArg]);
 

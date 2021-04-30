@@ -1,5 +1,5 @@
 .dashboard {
-  margin: 0 40px;
+  margin: 0 38px;
 
   main {
     margin-top: 40px;
@@ -12,29 +12,4 @@
       margin-top: 20px;
     }
   }
-}
-
-.customNode {
-  height: 100%;
-  width: 100%;
-  border-radius: 50%;
-  border: 1px solid #3e71f1;
-  text-align: center;
-  background: #3e71f1;
-  color: #fff;
-  position: relative;
-
-  i, span {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.activeNode {
-  background: #fff;
-  color: #3e71f1;
 }

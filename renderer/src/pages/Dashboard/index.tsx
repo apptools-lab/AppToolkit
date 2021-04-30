@@ -1,40 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid, Step, Icon, Message } from '@alifd/next';
+import { Button, Grid, Step, Message } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { IBasePackage } from '@/interfaces';
-import classNames from 'classnames';
+import StepItemRender from '@/components/StepItemRender';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
 import styles from './index.module.scss';
 import store from './store';
 
 const { Row, Col } = Grid;
-
-const StepItemRender = (index: number, status: string) => {
-  const iconType = {
-    finish: 'success',
-    process: 'loading',
-    error: 'error',
-  };
-
-  const isWaitStatus = Object.keys(iconType).includes(status);
-  return (
-    <div
-      className={classNames(styles.customNode, {
-        [styles.activeNode]: !isWaitStatus,
-      })}
-    >
-      {isWaitStatus ? (
-        <Icon type={iconType[status]} />
-      ) : (
-        <span>{index + 1}</span>
-      )}
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const [visible, setVisible] = useState(false);

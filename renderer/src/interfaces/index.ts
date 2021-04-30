@@ -1,13 +1,3 @@
-export interface IAppCard {
-  name: string;
-  description: string;
-  icon: string;
-  recommended?: boolean;
-  versionStatus: keyof typeof VersionStatus;
-  showSplitLine?: boolean;
-  wanringMessage?: string;
-}
-
 export interface IBasePackage {
   name: string;
   title: string;
