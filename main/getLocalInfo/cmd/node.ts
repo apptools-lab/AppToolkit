@@ -23,7 +23,7 @@ function getLocalNodeInfo(
     nodeManagerInfo = getNodeManagerInfoFunc();
   }
   localNodeInfo = Object.assign(localNodeInfo, nodeManagerInfo);
-  if (!(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
+  if (localNodeInfo.versionStatus !== 'notInstalled' && !(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
     localNodeInfo.warningMessage =
       `检测到你已经安装了 Node.js，但未安装 ${managerName}。 推荐安装 ${managerName} 以更好管理 Node.js 版本。`;
     localNodeInfo.versionStatus = 'notInstalled';
