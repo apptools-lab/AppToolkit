@@ -45,7 +45,7 @@ function processListener({
     }
 
     if (installError.length) {
-      process.send({ channel: processChannel, data: { status: 'fail', error: JSON.stringify(installError) } });
+      process.send({ channel: processChannel, data: { status: 'fail', errMsg: JSON.stringify(installError) } });
     } else {
       process.send({ channel: processChannel, data: { status: 'success' } });
     }

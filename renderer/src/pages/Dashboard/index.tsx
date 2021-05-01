@@ -1,40 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid, Step, Icon, Message } from '@alifd/next';
+import { Button, Grid, Step, Message } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { IBasePackage } from '@/interfaces';
-import classNames from 'classnames';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
+import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
 import store from './store';
 
 const { Row, Col } = Grid;
-
-const StepItemRender = (index: number, status: string) => {
-  const iconType = {
-    finish: 'success',
-    process: 'loading',
-    error: 'error',
-  };
-
-  const isWaitStatus = Object.keys(iconType).includes(status);
-  return (
-    <div
-      className={classNames(styles.customNode, {
-        [styles.activeNode]: !isWaitStatus,
-      })}
-    >
-      {isWaitStatus ? (
-        <Icon type={iconType[status]} />
-      ) : (
-        <span>{index + 1}</span>
-      )}
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const [visible, setVisible] = useState(false);
@@ -46,6 +23,7 @@ const Dashboard = () => {
     installPackagesList,
     stepsStatus,
     currentStep,
+    installErrMsg,
   } = state;
 
   const TERM_ID = 'dashboard';
@@ -91,13 +69,17 @@ const Dashboard = () => {
     setVisible(false);
   }
 
-  async function handleCancelInstall() {
+  function goBack() {
     dispatchers.updateInstallStatus(false);
+    dispatchers.getBasePackages();
+  }
+
+  async function handleCancelInstall() {
     await ipcRenderer.invoke(
       'cancel-install-base-package',
       INSTALL_PACKAGE_CHANNEL,
     );
-    dispatchers.getBasePackages();
+    goBack();
   }
 
   useEffect(() => {
@@ -116,20 +98,20 @@ const Dashboard = () => {
 
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, errMsg }) {
-      if (status === 'success') {
-        dispatchers.updateInstallStatus(false);
-        dispatchers.getBasePackages();
-      } else if (status === 'fail') {
-        // TODO: show all the error message
+      const { dashboard } = store.getState();
+      let nextStep;
+      if (typeof currentIndex !== 'number') {
+        nextStep = dashboard.currentStep + 1;
       } else {
-        dispatchers.updateCurrentStep({
-          currentIndex: currentIndex + 1,
-          status,
-        });
+        nextStep = currentIndex + 1;
+      }
+      if (status === 'success' || status === 'fail') {
         if (errMsg) {
-          Message.error(errMsg);
+          dispatchers.setInstallErrMsg(JSON.parse(errMsg));
         }
       }
+      dispatchers.updateCurrentStep(nextStep);
+      dispatchers.updateStepStatus({ currentStep: nextStep, status });
     }
 
     ipcRenderer.on(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
@@ -141,11 +123,13 @@ const Dashboard = () => {
     };
   }, []);
 
-  const installButton = isInstalling ? (
+  const cancelInstallBtn = stepsStatus.length - 1 === currentStep ? null : (
     <Button type="normal" onClick={handleCancelInstall}>
       取消安装
     </Button>
-  ) : (
+  );
+
+  const installButton = isInstalling ? cancelInstallBtn : (
     <Button type="primary" onClick={onDialogOpen}>
       一键安装
     </Button>
@@ -159,25 +143,29 @@ const Dashboard = () => {
       />
       <main>
         {isInstalling ? (
-          <div>
-            <Step current={currentStep} itemRender={StepItemRender}>
+          <>
+            <Step current={currentStep}>
               <Step.Item title="开始" />
-              {installPackagesList.map((item: IBasePackage, index: number) => (
+              {installPackagesList.map((item: IBasePackage) => (
                 <Step.Item
                   key={item.name}
                   title={item.title}
-                  status={
-                    stepsStatus[index + 1] === 'error'
-                      ? 'finish'
-                      : stepsStatus[index + 1]
-                  }
                 />
               ))}
+              <Step.Item title="完成" />
             </Step>
-            <div className={styles.term}>
-              <XtermTerminal id={TERM_ID} name={TERM_ID} />
+            <div className={styles.content}>
+              {(stepsStatus.length - 1 === currentStep) ? (
+                <InstallResult
+                  status={stepsStatus[stepsStatus.length - 1]}
+                  installErrMsg={installErrMsg}
+                  goBack={goBack}
+                />
+              ) : (
+                <XtermTerminal id={TERM_ID} name={TERM_ID} />
+              )}
             </div>
-          </div>
+          </>
         ) : (
           <Row wrap>
             {basePackagesList.map((item: IBasePackage, index: number) => (

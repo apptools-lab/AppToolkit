@@ -8,6 +8,7 @@ export default {
     installPackagesList: [],
     currentStep: 0,
     stepsStatus: [],
+    installErrMsg: [],
   },
   reducers: {
     updateBasePackagesList(prevState, payload: IBasePackage[]) {
@@ -19,15 +20,23 @@ export default {
     updateInstallPackagesList(prevState, payload: IBasePackage[]) {
       prevState.installPackagesList = payload;
     },
-    updateCurrentStep(prevState, { currentIndex, status }) {
-      prevState.currentStep = currentIndex;
+    updateCurrentStep(prevState, currentStep) {
+      prevState.currentStep = currentStep;
+    },
+    updateStepStatus(prevState, { currentStep, status }) {
       const modifiedStepsStatus = [...prevState.stepsStatus];
-      modifiedStepsStatus[currentIndex] = status;
+      modifiedStepsStatus[currentStep] = status;
       prevState.stepsStatus = modifiedStepsStatus;
     },
     initStepStatus(prevState, payload: number) {
+      // start step + install steps + result step
+      prevState.stepsStatus = ['finish'].concat(Array.from({ length: payload }, () => 'wait')).concat(['wait']);
+      // skip the start step
       prevState.currentStep = 1;
-      prevState.stepsStatus = ['finish'].concat(Array.from({ length: payload }, () => 'wait'));
+      prevState.installErrMsg = [];
+    },
+    setInstallErrMsg(prevState, errMsg: string[]) {
+      prevState.installErrMsg = errMsg;
     },
   },
   effects: (dispatch) => ({

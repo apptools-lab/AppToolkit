@@ -1,6 +1,18 @@
 {
   "bases": [
     {
+      "title": "Git",
+      "name": "git",
+      "description": "分布式版本控制软件",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN012cOEYH1QgKmtKX8Ju_!!6000000002005-2-tps-200-200.png",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
+      "version": "2.29.2",
+      "recommended": true,
+      "isInternal": false,
+      "type": "cmd",
+      "platform": "darwin"
+    },
+    {
       "title": "Node.js (NVM)",
       "name": "node",
       "description": "基于 Chrome V8 引擎的 JavaScript 运行时",
@@ -14,18 +26,6 @@
       "options": {
         "managerName": "nvm"
       }
-    },
-    {
-      "title": "Git",
-      "name": "git",
-      "description": "分布式版本控制软件",
-      "icon": "https://img.alicdn.com/imgextra/i2/O1CN012cOEYH1QgKmtKX8Ju_!!6000000002005-2-tps-200-200.png",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
-      "version": "2.29.2",
-      "recommended": true,
-      "isInternal": false,
-      "type": "cmd",
-      "platform": "darwin"
     },
     {
       "title": "Google Chrome",
