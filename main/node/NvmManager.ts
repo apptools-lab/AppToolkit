@@ -18,7 +18,6 @@ class NvmManager implements INodeManager {
 
     const listenFunc = (buffer: Buffer) => {
       const chunk = buffer.toString();
-      log.info(chunk);
       process.send({ channel: this.channel, data: { chunk, ln: false } });
     };
 

@@ -8,7 +8,7 @@ function getLocalToolInfo(name: string, latestVersion: string | null) {
   const localToolInfo: ILocalPackageInfo = {
     localVersion: null,
     localPath: null,
-    versionStatus: 'notInstalled',
+    versionStatus: 'uninstalled',
   };
   // get tool local path
   try {

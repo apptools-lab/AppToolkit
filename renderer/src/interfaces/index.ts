@@ -25,6 +25,6 @@ export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExten
 
 export enum VersionStatus {
   'installed' = '已安装',
-  'notInstalled' = '未安装',
+  'uninstalled' = '未安装',
   'upgradeable' = '可升级'
 }

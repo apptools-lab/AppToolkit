@@ -10,7 +10,7 @@ function getLocalDmgInfo(basicPackageInfo: IBasicPackageInfo) {
   const appInfo = {
     version: null,
     path: null,
-    versionStatus: 'notInstalled',
+    versionStatus: 'uninstalled',
   };
 
   const paths = globby.sync([app], {
