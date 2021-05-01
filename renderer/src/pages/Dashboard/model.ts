@@ -1,4 +1,4 @@
-import { IBasePackage } from '@/interfaces/dashboard';
+import { IBasePackage } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -32,7 +32,7 @@ export default {
   },
   effects: (dispatch) => ({
     async getBasePackages() {
-      const data = await ipcRenderer.invoke('get-base-packages');
+      const data = await ipcRenderer.invoke('get-base-packages-info');
       dispatch.dashboard.updateBasePackagesList(data);
       const packagesList = data.filter((basePackage: IBasePackage) => {
         return basePackage.versionStatus !== 'installed';

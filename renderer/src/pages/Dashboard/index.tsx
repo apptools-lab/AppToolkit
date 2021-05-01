@@ -4,7 +4,7 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
-import { IBasePackage } from '@/interfaces/dashboard';
+import { IBasePackage } from '@/interfaces';
 import classNames from 'classnames';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';

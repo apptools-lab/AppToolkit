@@ -19,7 +19,7 @@ export type Platform = 'win32' | 'darwin';
 
 export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
 
-export type VersionStatus = 'installed' | 'notInstalled' | 'upgradeable';
+export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
 export interface ILocalPackageInfo {
   localVersion: string | null;

@@ -1,13 +1,3 @@
-export interface IAppCard {
-  name: string;
-  description: string;
-  icon: string;
-  recommended?: boolean;
-  versionStatus: keyof typeof VersionStatus;
-  showSplitLine?: boolean;
-  wanringMessage?: string;
-}
-
 export interface IBasePackage {
   name: string;
   title: string;
@@ -35,6 +25,6 @@ export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExten
 
 export enum VersionStatus {
   'installed' = '已安装',
-  'notInstalled' = '未安装',
+  'uninstalled' = '未安装',
   'upgradeable' = '可升级'
 }

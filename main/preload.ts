@@ -1,5 +1,6 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
+
 // 在顶部插入一个可以移动的dom
 function initTopDrag() {
   const topDiv = document.createElement('div'); // 创建节点

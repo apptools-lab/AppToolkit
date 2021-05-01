@@ -10,12 +10,12 @@ import { send as sendMainWindow } from './window';
 const childProcessMap = new Map();
 
 export default () => {
-  ipcMain.handle('get-base-packages', async () => {
-    // TODO: get data.json from OSS and save it in the storage
+  ipcMain.handle('get-base-packages-info', async () => {
+    // TODO: get data.json from OSS and save it in the storage when app starts first
     const data = await fse.readJSON(path.join(__dirname, 'data.json'));
-    const { bases }: { bases: IBasicPackageInfo[] } = data;
-    const packagesData = bases.map((basePackageInfo: IBasicPackageInfo) => {
-      return getLocalInfo(basePackageInfo);
+    const { bases = [] }: { bases: IBasicPackageInfo[] } = data;
+    const packagesData = bases.map((basicPackageInfo: IBasicPackageInfo) => {
+      return getLocalInfo(basicPackageInfo);
     });
 
     return packagesData;
@@ -34,19 +34,26 @@ export default () => {
     childProcessMap.set(installChannel, childProcess);
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && data.status === 'success') {
-        childProcessMap.set(installChannel, null);
+      if (channel === processChannel && (data.status === 'success' || data.status === 'fail')) {
+        killChannelChildProcess(childProcessMap, installChannel);
       }
       sendMainWindow(channel, data);
     });
   });
 
   ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, installChannel: string) => {
-    const childProcess = childProcessMap.get(installChannel);
-    if (childProcess && childProcess.kill instanceof Function) {
-      // kill child process
-      childProcess.kill();
-      childProcessMap.set(installChannel, null);
-    }
+    killChannelChildProcess(childProcessMap, installChannel);
   });
 };
+
+function killChannelChildProcess(
+  channelChildProcessMap: Map<string, child_process.ChildProcess>,
+  channel: string,
+) {
+  const childProcess = channelChildProcessMap.get(channel);
+  if (childProcess && childProcess.kill instanceof Function) {
+    // kill child process
+    childProcess.kill();
+    channelChildProcessMap.delete(channel);
+  }
+}
