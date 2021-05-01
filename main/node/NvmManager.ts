@@ -47,7 +47,7 @@ class NvmManager implements INodeManager {
     return stdout
       .split('\n')
       .reverse()
-      .map((version: string) => stripAnsi(version).trim());
+      .map((version: string) => stripAnsi.default(version).trim());
   }
 }
 

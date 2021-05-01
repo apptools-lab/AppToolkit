@@ -157,7 +157,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       break;
   }
 
-  const steps = ['选择版本', '安装', '结果'].map(
+  const steps = ['选择版本', '安装', '完成'].map(
     (item, index) => (
       <Step.Item
         aria-current={index === currentStep ? 'step' : null}

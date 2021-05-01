@@ -4,12 +4,12 @@ const asideMenuConfig = [
   {
     name: '首页',
     path: '/',
-    icon: 'smile',
+    icon: 'shouye',
   },
   {
     name: 'Node 管理',
     path: '/node',
-    icon: 'smile',
+    icon: 'nodejs',
   },
 ];
 
