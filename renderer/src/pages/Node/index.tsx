@@ -14,9 +14,9 @@ const Node = () => {
 
   const [state, dispatchers] = store.useModel('node');
   const { nodeInfo, currentStep } = state;
-  const { options = {} } = nodeInfo as IBasePackage;
+  const { options = {}, localVersion } = nodeInfo as IBasePackage;
   const { managerName } = options;
-  const { localVersion } = nodeInfo as IBasePackage;
+
   const INSTALL_NODE_CHANNEL = 'install-node';
 
   const onSwitchVersionBtnClick = () => {
