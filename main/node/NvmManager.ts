@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as execa from 'execa';
 import { INodeManager } from '../types';
 import log from '../utils/log';
+import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
 // eslint-disable-next-line import/order
 import stripAnsi = require('strip-ansi');
 
@@ -41,7 +42,7 @@ class NvmManager implements INodeManager {
   }
 
   async getNodeVersionsList() {
-    const shFilePath = path.resolve(__dirname, '../sh', 'nvm-node-version.sh');
+    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../sh', 'nvm-node-version.sh'));
     const { stdout } = await execa.command(`sh ${shFilePath}`);
 
     return stdout

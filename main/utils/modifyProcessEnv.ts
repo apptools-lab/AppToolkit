@@ -1,7 +1,7 @@
 import * as isDev from 'electron-is-dev';
 import getEnvFromShell from './getEnvFromShell';
 
-function modifyProcessEnvPath() {
+function modifyProcessEnv() {
   if (isDev) {
     return;
   }
@@ -9,4 +9,4 @@ function modifyProcessEnvPath() {
   process.env = { ...process.env, ...env };
 }
 
-export default modifyProcessEnvPath;
+export default modifyProcessEnv;

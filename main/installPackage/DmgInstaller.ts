@@ -4,6 +4,7 @@ import * as globby from 'globby';
 import * as fse from 'fs-extra';
 import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
+import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
 import writeLog from './writeLog';
 
 class DmgInstaller {
@@ -57,12 +58,12 @@ class DmgInstaller {
   };
 
   installPkg = async ({ sourcePath }) => {
-    const modifiedSource = sourcePath.replace(/ /g, '\\ ');
+    const modifiedSourcePath = formatWhitespaceInPath(sourcePath);
     const options = { name: 'Appworks Toolkit' };
 
     return new Promise((resolve, reject) => {
       sudo.exec(
-        `installer -pkg ${modifiedSource} -target ${APPLICATIONS_DIR_PATH}`,
+        `installer -pkg ${modifiedSourcePath} -target ${APPLICATIONS_DIR_PATH}`,
         options,
         (error, stdout, stderr) => {
           if (error) {

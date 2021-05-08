@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import modifyProcessEnvPath from './utils/modifyProcessEnvPath';
+import modifyProcessEnv from './utils/modifyProcessEnv';
 import { createWindow } from './window';
 import handleIPC from './ipc';
 
@@ -9,7 +9,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  modifyProcessEnvPath();
+  modifyProcessEnv();
 
   createWindow();
 
