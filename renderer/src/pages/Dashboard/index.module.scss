@@ -3,17 +3,22 @@
 
   main {
     margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
 
-    .content {
-      margin-top: 20px;
+    .install {
+      :global {
+        .next-step-vertical {
+          height: 100%;
+        }
+
+        .next-step-vertical > .next-step-item > div {
+          &:nth-child(2) {
+            width: 120px !important;
+          }
+        }
+      }
+      .itemStep {
+        margin-top: 20px;
+      }
     }
   }
-}
-
-.step {
-  margin-bottom: 40px;
 }

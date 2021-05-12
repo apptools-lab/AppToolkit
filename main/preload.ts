@@ -1,3 +1,11 @@
+window.addEventListener('DOMContentLoaded', () => {
+  ['chrome', 'node', 'electron'].forEach((type) => {
+    console.log(`${type}-version`, process.versions[type]);
+  });
+
+  initTopDrag();
+});
+
 // add draggable dom at the top of Window
 function initTopDrag() {
   const topDiv = document.createElement('div');
@@ -12,12 +20,3 @@ function initTopDrag() {
   topDiv.style['-webkit-app-region'] = 'drag';
   document.body.appendChild(topDiv);
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-  ['chrome', 'node', 'electron'].forEach((type) => {
-    console.log(`${type}-version`, process.versions[type]);
-  });
-
-  initTopDrag();
-});
-

@@ -7,36 +7,40 @@ export default {
     isInstalling: false,
     installPackagesList: [],
     currentStep: 0,
-    stepsStatus: [],
-    installErrMsg: [],
+    pkgInstallStep: 0,
+    pkgInstallStatuses: [],
   },
   reducers: {
-    updateBasePackagesList(prevState, payload: IBasePackage[]) {
-      prevState.basePackagesList = payload;
+    updateBasePackagesList(prevState, basePackagesList: IBasePackage[]) {
+      prevState.basePackagesList = basePackagesList;
     },
-    updateInstallStatus(prevState, payload: boolean) {
-      prevState.isInstalling = payload;
+
+    updateInstallStatus(prevState, isInstalling: boolean) {
+      prevState.isInstalling = isInstalling;
     },
-    updateInstallPackagesList(prevState, payload: IBasePackage[]) {
-      prevState.installPackagesList = payload;
+
+    updateInstallPackagesList(prevState, installPackagesList: IBasePackage[]) {
+      prevState.installPackagesList = installPackagesList;
     },
-    updateCurrentStep(prevState, currentStep) {
-      prevState.currentStep = currentStep;
+
+    updateCurrentStep(prevState, step: number) {
+      prevState.currentStep = step;
     },
-    updateStepStatus(prevState, { currentStep, status }) {
-      const modifiedStepsStatus = [...prevState.stepsStatus];
-      modifiedStepsStatus[currentStep] = status;
-      prevState.stepsStatus = modifiedStepsStatus;
+
+    updatePkgInstallStep(prevState, step: number) {
+      prevState.pkgInstallStep = step;
     },
-    initStepStatus(prevState, payload: number) {
-      // start step + install steps + result step
-      prevState.stepsStatus = ['finish'].concat(Array.from({ length: payload }, () => 'wait')).concat(['wait']);
+
+    updatePkgInstallStepStatus(prevState, { step, status }) {
+      prevState.pkgInstallStatuses[step].status = status;
+    },
+
+    initStep(prevState, installPackagesList: IBasePackage[]) {
       // skip the start step
       prevState.currentStep = 1;
-      prevState.installErrMsg = [];
-    },
-    setInstallErrMsg(prevState, errMsg: string[]) {
-      prevState.installErrMsg = errMsg;
+      prevState.pkgInstallStep = 0;
+      prevState.pkgInstallStatuses = installPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
+      prevState.installPackagesList = installPackagesList;
     },
   },
   effects: (dispatch) => ({

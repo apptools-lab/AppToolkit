@@ -27,7 +27,7 @@ class ShInstaller {
     }
   };
 
-  installNode = async ({ shPath, packageInfo }) => {
+  private installNode = async ({ shPath, packageInfo }) => {
     const { options } = packageInfo;
     const { managerName } = options;
     const installManagerFunc = this.nodeProcessor[managerName];
@@ -36,7 +36,7 @@ class ShInstaller {
     }
   };
 
-  installNvm = ({ shPath }) => {
+  private installNvm = ({ shPath }) => {
     return new Promise((resolve, reject) => {
       let installStdout = '';
       const listenFunc = (buffer: Buffer) => {

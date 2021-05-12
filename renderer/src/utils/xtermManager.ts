@@ -16,7 +16,7 @@ const defaultTheme = {
 };
 
 const defaultOptions = {
-  cols: 86,
+  cols: 90,
   rows: 24,
   theme: defaultTheme,
 };
