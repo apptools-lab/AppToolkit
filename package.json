@@ -8,7 +8,7 @@
     "install:renderer": "cd renderer && npm install --registry=http://registry.npm.taobao.org --no-package-lock",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:electron": "npm run static:copy && electron ./dist",
-    "static:copy": "cp -R ./main/sh ./dist && cp ./main/data.json ./dist",
+    "static:copy": "cp -R ./main/data ./dist",
     "watch": "npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
     "watch:main": "tsc --build ./main/tsconfig.json -w",

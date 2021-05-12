@@ -1,11 +1,11 @@
 import * as shell from 'shelljs';
 import * as globby from 'globby';
-import { IBasicPackageInfo } from 'types';
+import { IBasePackageInfo } from 'types';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import getVersionStatus from '../utils/getVersionStatus';
 
-function getLocalDmgInfo(basicPackageInfo: IBasicPackageInfo) {
-  const { name, version: latestVersion } = basicPackageInfo;
+function getLocalDmgInfo(basePackageInfo: IBasePackageInfo) {
+  const { name, version: latestVersion } = basePackageInfo;
   const app = /\.app$/.test(name) ? name : `${name}.app`;
   const appInfo = {
     version: null,

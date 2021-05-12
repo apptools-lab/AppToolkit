@@ -51,7 +51,7 @@ const Dashboard = () => {
     dispatchers.updateInstallStatus(true);
     dispatchers.initStep(selectedInstallPackagesList);
     ipcRenderer
-      .invoke('install-base-package', {
+      .invoke('install-base-packages', {
         packagesList: selectedInstallPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
@@ -76,17 +76,14 @@ const Dashboard = () => {
 
   async function handleCancelInstall() {
     await ipcRenderer.invoke(
-      'cancel-install-base-package',
+      'cancel-install-base-packages',
       INSTALL_PACKAGE_CHANNEL,
     );
     goBack();
   }
 
   useEffect(() => {
-    const init = async function () {
-      await dispatchers.getBasePackages();
-    };
-    init();
+    dispatchers.getBasePackages();
   }, []);
 
   useEffect(() => {
@@ -137,9 +134,6 @@ const Dashboard = () => {
       一键安装
     </Button>
   );
-
-  console.log('pkgInstallStatuses:', pkgInstallStatuses);
-
   return (
     <div className={styles.dashboard}>
       <PageHeader

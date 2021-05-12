@@ -6,7 +6,9 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
 app.whenReady().then(() => {
   createWindow();
+
   handleIPC();
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

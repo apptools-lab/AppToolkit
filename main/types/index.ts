@@ -1,10 +1,10 @@
-export interface IBasicPackageInfo {
+export interface IBasePackageInfo {
   title: string;
   name: string;
   description: string;
   icon: string;
   downloadUrl?: string;
-  shellPath?: string;
+  shellName?: string;
   version: string | null;
   recommended: boolean;
   isInternal: boolean;
@@ -33,4 +33,4 @@ export interface INodeVersionManagerInfo {
   managerVersion: string | null;
 }
 
-export interface IPackageInfo extends IBasicPackageInfo, ILocalPackageInfo {}
+export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}

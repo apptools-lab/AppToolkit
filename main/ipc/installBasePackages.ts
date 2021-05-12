@@ -2,36 +2,25 @@ import * as child_process from 'child_process';
 import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import * as fse from 'fs-extra';
-import { IBasicPackageInfo, IPackageInfo } from './types';
-import getLocalInfo from './getLocalInfo';
-import { send as sendMainWindow } from './window';
+import { send as sendMainWindow } from '../window';
+import { IPackageInfo } from '../types';
 
 const childProcessMap = new Map();
 
 export default () => {
-  ipcMain.handle('get-base-packages-info', async () => {
-    // TODO: get data.json from OSS and save it in the storage when app starts first
-    const data = await fse.readJSON(path.join(__dirname, 'data.json'));
-    const { bases = [] }: { bases: IBasicPackageInfo[] } = data;
-    const packagesData = bases.map((basicPackageInfo: IBasicPackageInfo) => {
-      return getLocalInfo(basicPackageInfo);
-    });
-
-    return packagesData;
-  });
-
-  ipcMain.handle('install-base-package', async (
+  ipcMain.handle('install-base-packages', async (
     event: IpcMainInvokeEvent,
     { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string },
   ) => {
-    if (childProcessMap.get(installChannel)) {
-      // TODO show warning
-      return;
-    }
+    let childProcess = childProcessMap.get(installChannel);
+    if (childProcess) {
+      console.log(`Channel ${installChannel} has an existed child process.`);
+    } else {
     // fork a child process to install package
-    const childProcess = child_process.fork(path.join(__dirname, 'installPackage/index'));
-    childProcessMap.set(installChannel, childProcess);
+      childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
+      childProcessMap.set(installChannel, childProcess);
+    }
+
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {
       if (channel === processChannel && (data.status === 'success' || data.status === 'fail')) {
@@ -41,7 +30,7 @@ export default () => {
     });
   });
 
-  ipcMain.handle('cancel-install-base-package', async (event: IpcMainInvokeEvent, installChannel: string) => {
+  ipcMain.handle('cancel-install-base-packages', async (event: IpcMainInvokeEvent, installChannel: string) => {
     killChannelChildProcess(childProcessMap, installChannel);
   });
 };

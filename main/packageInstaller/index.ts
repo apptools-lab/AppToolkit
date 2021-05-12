@@ -2,10 +2,14 @@ import * as path from 'path';
 import downloadFile from '../utils/downloadFile';
 import { IPackageInfo } from '../types';
 import log from '../utils/log';
-import PackageInstaller from './PackageInstaller';
+import DmgInstaller from './DmgInstaller';
+import ShInstaller from './ShInstaller';
+import ZipInstaller from './ZipInstaller';
 
 // avoid error `Invalid package /Applications/xxx.app/Contents/Resources/app.asar`
 process.noAsar = true;
+
+process.on('message', processListener);
 
 function processListener({
   packagesList,
@@ -28,28 +32,24 @@ async function installPackages({
   installChannel: string;
   processChannel: string;
 }) {
-  const installError = [];
-
   for (let i = 0; i < packagesList.length; i++) {
     const packageInfo = packagesList[i];
     try {
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
 
-      const { downloadUrl, shellPath } = packageInfo;
+      const { downloadUrl, shellName } = packageInfo;
       let packagePath;
       if (downloadUrl) {
         packagePath = await downloadFile(downloadUrl, installChannel);
-      } else if (shellPath) {
-        packagePath = path.resolve(__dirname, '../sh', shellPath);
+      } else if (shellName) {
+        packagePath = path.resolve(__dirname, '../main/sh', shellName);
       }
 
       if (!packagePath) {
         throw new Error('No package was found.');
       }
 
-      const packageInstaller = new PackageInstaller(installChannel);
-
-      await packageInstaller.install(packagePath, packageInfo);
+      await install({ packagePath, packageInfo, channel: installChannel });
 
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
     } catch (error) {
@@ -61,4 +61,15 @@ async function installPackages({
   process.send({ channel: processChannel, data: { status: 'done' } });
 }
 
-process.on('message', processListener);
+const packageProcessor = {
+  '.sh': ShInstaller,
+  '.zip': ZipInstaller,
+  '.dmg': DmgInstaller,
+};
+
+async function install({ channel, packagePath, packageInfo }: { channel: string; packagePath: string; packageInfo: IPackageInfo }) {
+  const extname = path.extname(packagePath);
+  const Installer = packageProcessor[extname];
+  const installer = new Installer(channel);
+  await installer.install(packagePath, packageInfo);
+}

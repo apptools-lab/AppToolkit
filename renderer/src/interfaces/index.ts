@@ -4,7 +4,7 @@ export interface IBasePackage {
   description: string;
   icon: string;
   downloadUrl?: string;
-  shellPath?: string;
+  shellName?: string;
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
