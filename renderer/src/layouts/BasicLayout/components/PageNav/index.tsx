@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, withRouter } from 'ice';
 import { Nav } from '@alifd/next';
 import { asideMenuConfig } from '../../menuConfig';
@@ -72,12 +71,11 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
   return navItem;
 }
 
-const Navigation = (props, context) => {
+const Navigation = (props) => {
   const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   const { location } = props;
   const { pathname } = location;
-  const { isCollapse } = context;
 
   useEffect(() => {
     const curSubNav = asideMenuConfig.find((menuConfig) => {
@@ -104,9 +102,7 @@ const Navigation = (props, context) => {
         defaultSelectedKeys={[pathname]}
         embeddable
         activeDirection="right"
-        iconOnly={isCollapse}
         hasArrow={false}
-        mode={isCollapse ? 'popup' : 'inline'}
         onOpen={(keys) => {
         // @ts-ignore
           setOpenKeys(keys);
@@ -117,10 +113,6 @@ const Navigation = (props, context) => {
     </div>
 
   );
-};
-
-Navigation.contextTypes = {
-  isCollapse: PropTypes.bool,
 };
 
 const PageNav = withRouter(Navigation);

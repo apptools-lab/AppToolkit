@@ -4,6 +4,7 @@ import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { send as sendMainWindow } from '../window';
 import { IPackageInfo } from '../types';
+import log from '../utils/log';
 
 const childProcessMap = new Map();
 
@@ -14,7 +15,7 @@ export default () => {
   ) => {
     let childProcess = childProcessMap.get(installChannel);
     if (childProcess) {
-      console.log(`Channel ${installChannel} has an existed child process.`);
+      log.error(`Channel ${installChannel} has an existed child process.`);
     } else {
     // fork a child process to install package
       childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));

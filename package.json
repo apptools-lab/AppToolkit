@@ -35,7 +35,7 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2021 Appworks Toolkit",
+    "copyright": "Copyright © 2021 Appworks",
     "mac": {
       "target": [
         "dmg",
