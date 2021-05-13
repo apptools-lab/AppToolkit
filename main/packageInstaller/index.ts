@@ -58,6 +58,7 @@ async function installPackages({
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
     }
   }
+
   process.send({ channel: processChannel, data: { status: 'done' } });
 }
 

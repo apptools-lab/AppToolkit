@@ -5,6 +5,7 @@ import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { IBasePackage } from '@/interfaces';
+import { STEP_STATUS_ICON } from '@/constants';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
@@ -61,13 +62,9 @@ const Dashboard = () => {
       });
   }
 
-  function onDialogOpen() {
-    setVisible(true);
-  }
+  function onDialogOpen() { setVisible(true); }
 
-  function onDialogClose() {
-    setVisible(false);
-  }
+  function onDialogClose() { setVisible(false); }
 
   function goBack() {
     dispatchers.updateInstallStatus(false);
@@ -96,17 +93,7 @@ const Dashboard = () => {
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, errMsg }) {
       const { dashboard } = store.getState();
-      // let nextStep;
-      // if (typeof currentIndex !== 'number') {
-      //   nextStep = dashboard.currentStep + 1;
-      // } else {
-      //   nextStep = currentIndex + 1;
-      // }
       if (status === 'done') {
-        // finish package installation
-        // if (errMsg) {
-        //   dispatchers.setInstallErrMsg(JSON.parse(errMsg));
-        // }
         dispatchers.updateCurrentStep(dashboard.currentStep + 1);
         return;
       }
@@ -134,6 +121,7 @@ const Dashboard = () => {
       一键安装
     </Button>
   );
+
   return (
     <div className={styles.dashboard}>
       <PageHeader
@@ -152,10 +140,11 @@ const Dashboard = () => {
                     content={
                       <div className={styles.itemStep}>
                         <Step current={pkgInstallStep} direction="ver" shape="dot">
-                          {installPackagesList.map((item: IBasePackage) => (
+                          {installPackagesList.map((item: IBasePackage, index: number) => (
                             <Step.Item
                               key={item.name}
                               title={item.title}
+                              icon={STEP_STATUS_ICON[pkgInstallStatuses[index].status]}
                             />
                           ))}
                         </Step>

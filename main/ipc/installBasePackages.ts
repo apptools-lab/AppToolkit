@@ -9,15 +9,16 @@ import log from '../utils/log';
 const childProcessMap = new Map();
 
 export default () => {
-  ipcMain.handle('install-base-packages', async (
+  ipcMain.handle('install-base-packages', (
     event: IpcMainInvokeEvent,
     { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string },
   ) => {
     let childProcess = childProcessMap.get(installChannel);
     if (childProcess) {
       log.error(`Channel ${installChannel} has an existed child process.`);
+      return;
     } else {
-    // fork a child process to install package
+      // fork a child process to install package
       childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
       childProcessMap.set(installChannel, childProcess);
     }
@@ -31,7 +32,7 @@ export default () => {
     });
   });
 
-  ipcMain.handle('cancel-install-base-packages', async (event: IpcMainInvokeEvent, installChannel: string) => {
+  ipcMain.handle('cancel-install-base-packages', (event: IpcMainInvokeEvent, installChannel: string) => {
     killChannelChildProcess(childProcessMap, installChannel);
   });
 };
