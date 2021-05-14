@@ -1,12 +1,14 @@
 import { DEFAULT_LOCAL_PACKAGE_INFO } from '../constants';
 import { IBasePackageInfo, ILocalPackageInfo, IPackageInfo } from '../types';
 import log from '../utils/log';
-import getLocalCmdInfo from './cmd';
+import getLocalCliInfo from './cli';
 import getLocalDmgInfo from './dmg';
+import getIDEExtensionInfo from './IDEExtension';
 
 const getLocalInfoProcessor = {
   dmg: getLocalDmgInfo,
-  cmd: getLocalCmdInfo,
+  cli: getLocalCliInfo,
+  IDEExtension: getIDEExtensionInfo,
 };
 
 export function getLocalInfo(packageInfo: IBasePackageInfo): IPackageInfo {

@@ -9,7 +9,7 @@ export interface IBasePackageInfo {
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform: Platform;
+  platform?: Platform;
   options?: {
     [k: string]: any;
   };
@@ -17,14 +17,14 @@ export interface IBasePackageInfo {
 
 export type Platform = 'win32' | 'darwin';
 
-export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
+export type PackageType = 'cli' | 'dmg' | 'exe'| 'IDEExtension' | 'npm';
 
 export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
 export interface ILocalPackageInfo {
   localVersion: string | null;
-  localPath: string | null;
   versionStatus: VersionStatus;
+  localPath?: string | null;
   warningMessage?: string;
   [key: string]: any;
 }
@@ -34,3 +34,7 @@ export interface INodeVersionManagerInfo {
 }
 
 export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}
+
+export interface IPackageIntaller {
+  install: (packageInfo: IPackageInfo, packagePath?: string) => void;
+}

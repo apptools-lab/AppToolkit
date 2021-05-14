@@ -189,7 +189,7 @@ nvm_install_node() {
   if [ -z "$NODE_VERSION_LOCAL" ] || [ "$NODE_VERSION_LOCAL" = "N/A" ]; then
     # return 0
     NODE_VERSION_LOCAL="$(NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node nvm version-remote --lts)"
-    nvm_echo "=> The Local Node is empty. It will install node "$NODE_VERSION_LOCAL" version."
+    nvm_echo "=> The Local Node is not found. It will install node "$NODE_VERSION_LOCAL" version."
   fi
 
   nvm_echo "=> Installing Node.js version $NODE_VERSION_LOCAL"

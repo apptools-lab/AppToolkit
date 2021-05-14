@@ -4,12 +4,13 @@ import * as globby from 'globby';
 import * as fse from 'fs-extra';
 import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
-import writeLog from './writeLog';
+import writeLog from '../utils/writeLog';
+import { IPackageIntaller, IPackageInfo } from '../types';
 
-class DmgInstaller {
+class DmgInstaller implements IPackageIntaller {
   channel: string;
 
-  dmgProcessor: {[k: string]: Function};
+  dmgProcessor: { [k: string]: Function };
 
   constructor(channel: string) {
     this.channel = channel;
@@ -19,7 +20,7 @@ class DmgInstaller {
     };
   }
 
-  async install(dmgPath: string) {
+  async install(packageInfo: IPackageInfo, dmgPath: string) {
     // mount app to the disk
     const mounter = new Mounter();
     const { devices, eject } = await mounter.attach(dmgPath);

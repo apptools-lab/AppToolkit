@@ -12,3 +12,5 @@ export const DEFAULT_LOCAL_PACKAGE_INFO: ILocalPackageInfo = {
   localPath: null,
   versionStatus: 'uninstalled',
 };
+
+export const VSCODE_CLI_COMAMND_NAME = 'code';

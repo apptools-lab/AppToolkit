@@ -3,11 +3,21 @@ import downloadFile from '../utils/downloadFile';
 import { IPackageInfo } from '../types';
 import log from '../utils/log';
 import DmgInstaller from './DmgInstaller';
-import ShInstaller from './ShInstaller';
+import CliInstaller from './CliInstaller';
 import ZipInstaller from './ZipInstaller';
+import IDEExtensionInstaller from './IDEExtensionInstaller';
 
 // avoid error `Invalid package /Applications/xxx.app/Contents/Resources/app.asar`
 process.noAsar = true;
+
+const packageProcessor = {
+  sh: CliInstaller,
+  zip: ZipInstaller,
+  dmg: DmgInstaller,
+  IDEExtension: IDEExtensionInstaller,
+};
+
+const NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE = ['IDEExtension'];
 
 process.on('message', processListener);
 
@@ -37,15 +47,15 @@ async function installPackages({
     try {
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
 
-      const { downloadUrl, shellName } = packageInfo;
+      const { downloadUrl, shellName, type } = packageInfo;
       let packagePath;
       if (downloadUrl) {
         packagePath = await downloadFile(downloadUrl, installChannel);
       } else if (shellName) {
-        packagePath = path.resolve(__dirname, '../main/sh', shellName);
+        packagePath = path.resolve(__dirname, '../data/shells', shellName);
       }
 
-      if (!packagePath) {
+      if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {
         throw new Error('No package was found.');
       }
 
@@ -62,15 +72,17 @@ async function installPackages({
   process.send({ channel: processChannel, data: { status: 'done' } });
 }
 
-const packageProcessor = {
-  '.sh': ShInstaller,
-  '.zip': ZipInstaller,
-  '.dmg': DmgInstaller,
-};
-
 async function install({ channel, packagePath, packageInfo }: { channel: string; packagePath: string; packageInfo: IPackageInfo }) {
-  const extname = path.extname(packagePath);
-  const Installer = packageProcessor[extname];
-  const installer = new Installer(channel);
-  await installer.install(packagePath, packageInfo);
+  let processorKey;
+  if (packagePath) {
+    processorKey = path.extname(packagePath).replace('.', '');
+  } else {
+    processorKey = packageInfo.type;
+  }
+  const Installer = packageProcessor[processorKey];
+  if (Installer) {
+    const installer = new Installer(channel);
+    log.info('channel', channel);
+    await installer.install(packageInfo, packagePath);
+  }
 }

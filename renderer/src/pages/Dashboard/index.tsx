@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid, Step, Message } from '@alifd/next';
+import { Button, Grid, Step, Message, Loading } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [visible, setVisible] = useState(false);
 
   const [state, dispatchers] = store.useModel('dashboard');
+  const effectsState = store.useModelEffectsState('dashboard');
   const {
     basePackagesList,
     isInstalling,
@@ -123,7 +124,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className={styles.dashboard}>
+    <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
       <PageHeader
         title="前端开发必备"
         button={installPackagesList.length ? installButton : null}
@@ -190,7 +191,7 @@ const Dashboard = () => {
           onOk={onDialogConfirm}
         />
       )}
-    </div>
+    </Loading>
   );
 };
 

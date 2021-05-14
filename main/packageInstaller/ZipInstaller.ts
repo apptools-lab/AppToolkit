@@ -1,16 +1,17 @@
 import * as AdmZip from 'adm-zip';
 import * as decompress from 'decompress';
 import { APPLICATIONS_DIR_PATH } from '../constants';
-import writeLog from './writeLog';
+import writeLog from '../utils/writeLog';
+import { IPackageIntaller, IPackageInfo } from '../types';
 
-class ZipInstaller {
+class ZipInstaller implements IPackageIntaller {
   channel: string;
 
   constructor(channel: string) {
     this.channel = channel;
   }
 
-  install = async (zipPath: string) => {
+  install = async (packageInfo: IPackageInfo, zipPath: string) => {
     const zip = new AdmZip(zipPath);
     const appEntry = zip.getEntries()[0];
     if (appEntry) {

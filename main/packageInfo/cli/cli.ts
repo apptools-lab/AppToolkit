@@ -1,16 +1,12 @@
 import * as execa from 'execa';
 import * as shell from 'shelljs';
+import { DEFAULT_LOCAL_PACKAGE_INFO } from '../../constants';
 import getVersionStatus from '../../utils/getVersionStatus';
 import log from '../../utils/log';
-import { ILocalPackageInfo } from '../../types';
 
 function getLocalToolInfo(name: string, latestVersion: string | null) {
-  const localToolInfo: ILocalPackageInfo = {
-    localVersion: null,
-    localPath: null,
-    versionStatus: 'uninstalled',
-  };
-  // get tool local path
+  const localToolInfo = DEFAULT_LOCAL_PACKAGE_INFO;
+  // get the local path of cli
   try {
     const toolPath = shell.which(name);
     if (!toolPath) {
@@ -30,7 +26,7 @@ function getLocalToolInfo(name: string, latestVersion: string | null) {
   } catch (error) {
     log.error(`Tool ${name} version is not found. Error: ${error.message}`);
   }
-  // get local tool version status
+  // get local version status of cli
   localToolInfo.versionStatus = getVersionStatus(localToolInfo.localVersion, latestVersion);
 
   return localToolInfo;

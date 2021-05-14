@@ -15,13 +15,12 @@ export default () => {
   ) => {
     let childProcess = childProcessMap.get(installChannel);
     if (childProcess) {
-      log.error(`Channel ${installChannel} has an existed child process.`);
+      log.info(`Channel ${installChannel} has an existed child process.`);
       return;
-    } else {
-      // fork a child process to install package
-      childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
-      childProcessMap.set(installChannel, childProcess);
     }
+    // fork a child process to install package
+    childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
+    childProcessMap.set(installChannel, childProcess);
 
     childProcess.send({ packagesList, installChannel, processChannel });
     childProcess.on('message', ({ channel, data }: any) => {

@@ -9,7 +9,7 @@
       "version": "2.29.2",
       "recommended": true,
       "isInternal": false,
-      "type": "cmd",
+      "type": "cli",
       "platform": "darwin"
     },
     {
@@ -21,7 +21,7 @@
       "version": null,
       "recommended": true,
       "isInternal": false,
-      "type": "cmd",
+      "type": "cli",
       "platform": "darwin",
       "options": {
         "managerName": "nvm"
@@ -64,16 +64,17 @@
       "platform": "darwin"
     },
     {
-      "title": "语雀",
-      "name": "语雀",
-      "description": "语雀",
-      "icon": "https://img.alicdn.com/imgextra/i3/O1CN019RVexE29gw0zGgRFw_!!6000000008098-2-tps-225-225.png",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Yuque-0.7.14.dmg",
-      "version": "0.7.14",
-      "recommended": false,
+      "title": "Appworks",
+      "name": "iceworks-team.iceworks",
+      "description": "Appworks 前端研发套件",
+      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01PkaZpW1K3xuisg58t_!!6000000001109-2-tps-512-512.png",
+      "version": "0.19.0",
+      "recommended": true,
       "isInternal": false,
-      "type": "dmg",
-      "platform": "darwin"
+      "type": "IDEExtension",
+      "options": {
+        "IDEType": "VSCode"
+      }
     }
   ],
   "apps": [
