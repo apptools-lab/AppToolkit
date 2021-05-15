@@ -19,8 +19,37 @@
         }
       }
 
-      .itemStep {
-        margin-top: 20px;
+      .installStep {
+        margin-top: 40px;
+
+        .installStepItem {
+          :global {
+            .next-step-item-node-placeholder {
+              width: 18px;
+              height: 18px;
+            }
+            .next-icon:before {
+              width: 18px;
+              font-size: 18px;
+            }
+          }
+        }
+
+        .installSuccess {
+          :global {
+            .next-step-item-node {
+              color: rgb(103, 194, 58);
+            }
+          }
+        }
+
+        .installError {
+          :global {
+            .next-step-item-node {
+              color: red;
+            }
+          }
+        }
       }
     }
   }

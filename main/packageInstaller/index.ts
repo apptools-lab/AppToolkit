@@ -60,9 +60,12 @@ async function installPackages({
       if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {
         throw new Error('No package was found.');
       }
-
+      // install package
       const { name, localPath } = await install({ packagePath, packageInfo, channel: installChannel });
+      // install package command
+      // e.g: VS Code cli command 'code'
       await installPkgCommandToPath(name, localPath);
+
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : error;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Grid, Step, Message, Loading } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import classnames from 'classnames';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
@@ -139,15 +140,22 @@ const Dashboard = () => {
                   <Step.Item
                     title="安装"
                     content={
-                      <div className={styles.itemStep}>
+                      <div className={styles.installStep}>
                         <Step current={pkgInstallStep} direction="ver" shape="dot">
-                          {installPackagesList.map((item: IBasePackage, index: number) => (
-                            <Step.Item
-                              key={item.name}
-                              title={item.title}
-                              icon={STEP_STATUS_ICON[pkgInstallStatuses[index].status]}
-                            />
-                          ))}
+                          {installPackagesList.map((item: IBasePackage, index: number) => {
+                            const status = pkgInstallStatuses[index].status;
+                            return (
+                              <Step.Item
+                                key={item.name}
+                                title={item.title}
+                                className={classnames(
+                                  styles.installStepItem,
+                                  { [styles.installSuccess]: status === 'finish', [styles.installError]: status === 'error' },
+                                )}
+                                icon={STEP_STATUS_ICON[status]}
+                              />
+                            );
+                          })}
                         </Step>
                       </div>
               }
