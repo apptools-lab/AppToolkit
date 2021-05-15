@@ -177,7 +177,7 @@ const Dashboard = () => {
                   versionStatus={item.versionStatus}
                   recommended={item.recommended}
                   showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
-                  wanringMessage={item.warningMessage}
+                  warningMessage={item.warningMessage}
                 />
               </Col>
             ))}

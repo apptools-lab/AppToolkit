@@ -23,10 +23,12 @@ export default () => {
     childProcessMap.set(installChannel, childProcess);
 
     childProcess.send({ packagesList, installChannel, processChannel });
+
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && (data.status === 'success' || data.status === 'fail')) {
+      if (channel === processChannel && data.status === 'done') {
         killChannelChildProcess(childProcessMap, installChannel);
       }
+
       sendMainWindow(channel, data);
     });
   });

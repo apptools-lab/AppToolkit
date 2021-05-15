@@ -14,3 +14,11 @@ export const DEFAULT_LOCAL_PACKAGE_INFO: ILocalPackageInfo = {
 };
 
 export const VSCODE_CLI_COMAMND_NAME = 'code';
+
+export const INSTALL_COMMAND_PACKAGES = [
+  {
+    name: 'Visual Studio Code',
+    command: 'code',
+    commandRelativePath: './Contents/Resources/app/bin/code',
+  },
+];

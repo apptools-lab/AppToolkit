@@ -10,7 +10,7 @@ interface IAppCard {
   recommended?: boolean;
   versionStatus: keyof typeof VersionStatus;
   showSplitLine?: boolean;
-  wanringMessage?: string;
+  warningMessage?: string;
 }
 
 const AppCard: React.FC<IAppCard> = ({
@@ -20,7 +20,7 @@ const AppCard: React.FC<IAppCard> = ({
   recommended,
   versionStatus,
   showSplitLine = true,
-  wanringMessage = '',
+  warningMessage = '',
 }) => {
   return (
     <div className={styles.card}>
@@ -39,9 +39,9 @@ const AppCard: React.FC<IAppCard> = ({
           className={classnames(styles.status, { [styles.availableStatus]: versionStatus !== 'installed' })}
         >
           {VersionStatus[versionStatus]}
-          {wanringMessage && (
+          {warningMessage && (
             <Balloon trigger={<Icon type="warning" />} closable={false}>
-              {wanringMessage}
+              {warningMessage}
             </Balloon>
           )}
         </div>

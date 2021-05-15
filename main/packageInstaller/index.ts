@@ -2,12 +2,14 @@ import * as path from 'path';
 import downloadFile from '../utils/downloadFile';
 import { IPackageInfo } from '../types';
 import log from '../utils/log';
+import { INSTALL_COMMAND_PACKAGES } from '../constants';
+import installCommandToPath from '../utils/installCommandToPath';
 import DmgInstaller from './DmgInstaller';
 import CliInstaller from './CliInstaller';
 import ZipInstaller from './ZipInstaller';
 import IDEExtensionInstaller from './IDEExtensionInstaller';
 
-// avoid error `Invalid package /Applications/xxx.app/Contents/Resources/app.asar`
+// avoid error: 'Invalid package /Applications/xxx.app/Contents/Resources/app.asar'
 process.noAsar = true;
 
 const packageProcessor = {
@@ -48,7 +50,7 @@ async function installPackages({
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
 
       const { downloadUrl, shellName, type } = packageInfo;
-      let packagePath;
+      let packagePath: string;
       if (downloadUrl) {
         packagePath = await downloadFile(downloadUrl, installChannel);
       } else if (shellName) {
@@ -59,8 +61,8 @@ async function installPackages({
         throw new Error('No package was found.');
       }
 
-      await install({ packagePath, packageInfo, channel: installChannel });
-
+      const { name, localPath } = await install({ packagePath, packageInfo, channel: installChannel });
+      await installPkgCommandToPath(name, localPath);
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : error;
@@ -82,7 +84,15 @@ async function install({ channel, packagePath, packageInfo }: { channel: string;
   const Installer = packageProcessor[processorKey];
   if (Installer) {
     const installer = new Installer(channel);
-    log.info('channel', channel);
-    await installer.install(packageInfo, packagePath);
+    return await installer.install(packageInfo, packagePath);
+  }
+}
+
+async function installPkgCommandToPath(name: string, localPath: string | null) {
+  const res = INSTALL_COMMAND_PACKAGES.find((pkg) => pkg.name === name);
+  if (res) {
+    const { command, commandRelativePath } = res;
+    const source = path.join(localPath, commandRelativePath);
+    await installCommandToPath(source, command);
   }
 }

@@ -19,16 +19,19 @@ class IDEExtensionInstaller implements IPackageIntaller {
 
   install = async (packageInfo: IPackageInfo) => {
     const { name, options: { IDEType } } = packageInfo;
+    // TODO: get the local path of IDE extension
+    const ret = { name, localPath: null };
     const installFunc = this.IDETypeProcessor[IDEType];
     if (installFunc) {
       await installFunc(name);
     }
+    return ret;
   };
 
   private installVSCodeExtension = (extensionId: string) => {
     return new Promise((resolve, reject) => {
       if (!isCliInstalled(VSCODE_CLI_COMAMND_NAME)) {
-        const errMsg = `IDEExtensionInstaller: vscode command '${VSCODE_CLI_COMAMND_NAME}' was not installed.`;
+        const errMsg = `IDE Extension Installer: VS Code command '${VSCODE_CLI_COMAMND_NAME}' was not installed.`;
         writeLog(this.channel, errMsg, true, 'error');
         reject(errMsg);
       } else {

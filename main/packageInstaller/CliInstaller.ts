@@ -28,6 +28,8 @@ class CliInstaller implements IPackageIntaller {
     if (installFunc) {
       await installFunc({ shPath, packageInfo });
     }
+    // TODO: return node local path
+    return { name, localPath: null };
   };
 
   private installNode = async ({ shPath, packageInfo }) => {
@@ -60,14 +62,14 @@ class CliInstaller implements IPackageIntaller {
         reject(chunk);
       });
 
-      cp.on('exit', (code) => {
+      cp.on('exit', () => {
         log.info(installStdout);
         const matchRes = installStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
         if (matchRes) {
           const nvmBashProfilePath = matchRes[1];
           executeBashConfigFile(nvmBashProfilePath);
         }
-        resolve(code);
+        resolve(null);
       });
     });
   };

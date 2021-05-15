@@ -52,18 +52,6 @@
       "platform": "darwin"
     },
     {
-      "title": "Insiders",
-      "name": "Visual Studio Code - Insiders",
-      "description": "beta 版本的 code insiders",
-      "icon": "https://img.alicdn.com/imgextra/i3/O1CN019RVexE29gw0zGgRFw_!!6000000008098-2-tps-225-225.png",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
-      "version": "1.51.1",
-      "recommended": false,
-      "isInternal": false,
-      "type": "dmg",
-      "platform": "darwin"
-    },
-    {
       "title": "Appworks",
       "name": "iceworks-team.iceworks",
       "description": "Appworks 前端研发套件",

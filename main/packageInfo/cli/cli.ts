@@ -5,7 +5,7 @@ import getVersionStatus from '../../utils/getVersionStatus';
 import log from '../../utils/log';
 
 function getLocalToolInfo(name: string, latestVersion: string | null) {
-  const localToolInfo = DEFAULT_LOCAL_PACKAGE_INFO;
+  const localToolInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
   // get the local path of cli
   try {
     const toolPath = shell.which(name);

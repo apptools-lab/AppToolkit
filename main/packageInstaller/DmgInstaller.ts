@@ -5,6 +5,7 @@ import * as fse from 'fs-extra';
 import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from '../utils/writeLog';
+import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
 import { IPackageIntaller, IPackageInfo } from '../types';
 
 class DmgInstaller implements IPackageIntaller {
@@ -21,6 +22,7 @@ class DmgInstaller implements IPackageIntaller {
   }
 
   async install(packageInfo: IPackageInfo, dmgPath: string) {
+    const { name } = packageInfo;
     // mount app to the disk
     const mounter = new Mounter();
     const { devices, eject } = await mounter.attach(dmgPath);
@@ -36,17 +38,23 @@ class DmgInstaller implements IPackageIntaller {
     const { mountPoint } = mountDevice;
     const regPkgType = Object.keys(this.dmgProcessor).map((key) => `*${key}`);
     const appNames = globby.sync(regPkgType, { onlyFiles: false, deep: 1, cwd: mountPoint });
+
+    const ret = { name, localPath: null };
+
     // install app
     for (const appName of appNames) {
       const sourcePath = path.join(mountPoint, appName);
       const extname = path.extname(appName);
       const installFunc = this.dmgProcessor[extname];
       if (installFunc) {
-        await installFunc({ sourcePath, appName });
+        const localPath = await installFunc({ sourcePath, appName, name });
+        ret.localPath = localPath;
       }
     }
     // eject app from disk
     await eject();
+
+    return ret;
   }
 
   installApp = async ({ sourcePath, appName }) => {
@@ -55,10 +63,11 @@ class DmgInstaller implements IPackageIntaller {
     await fse.copy(sourcePath, dest, { overwrite: true });
     const chunk = `Copy ${sourcePath} to ${dest} successfully.`;
     writeLog(this.channel, chunk);
+    return dest;
   };
 
-  installPkg = async ({ sourcePath }) => {
-    const modifiedSource = sourcePath.replace(/ /g, '\\ ');
+  installPkg = async ({ sourcePath, name }) => {
+    const modifiedSource = formatWhitespaceInPath(sourcePath);
     const options = { name: 'Appworks Toolkit' };
 
     return new Promise((resolve, reject) => {
@@ -67,16 +76,18 @@ class DmgInstaller implements IPackageIntaller {
         options,
         (error, stdout, stderr) => {
           if (error) {
-            writeLog(this.channel, error.message);
-            reject(error);
+            const errMsg = error.message;
+            writeLog(this.channel, errMsg);
+            reject(errMsg);
           }
           if (stderr) {
-            writeLog(this.channel, stderr.toString());
-            reject(stderr);
+            const errMsg = stderr.toString();
+            writeLog(this.channel, errMsg);
+            reject(errMsg);
           }
           if (stdout) {
             writeLog(this.channel, stdout.toString());
-            resolve(stdout);
+            resolve(path.join('/usr/local', name));
           }
         },
       );
