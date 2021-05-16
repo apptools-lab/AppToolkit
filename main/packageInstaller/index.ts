@@ -1,6 +1,6 @@
 import * as path from 'path';
 import downloadFile from '../utils/downloadFile';
-import { IPackageInfo } from '../types';
+import { IInstallResult, IPackageInfo } from '../types';
 import log from '../utils/log';
 import { INSTALL_COMMAND_PACKAGES } from '../constants';
 import installCommandToPath from '../utils/installCommandToPath';
@@ -44,12 +44,16 @@ async function installPackages({
   installChannel: string;
   processChannel: string;
 }) {
+  const result: IInstallResult[] = [];
+
   for (let i = 0; i < packagesList.length; i++) {
     const packageInfo = packagesList[i];
+    const { downloadUrl, shellName, type, name } = packageInfo;
+    const startTime = Date.now();
+    let status;
+    let errMsg;
     try {
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
-
-      const { downloadUrl, shellName, type } = packageInfo;
       let packagePath: string;
       if (downloadUrl) {
         packagePath = await downloadFile(downloadUrl, installChannel);
@@ -61,20 +65,32 @@ async function installPackages({
         throw new Error('No package was found.');
       }
       // install package
-      const { name, localPath } = await install({ packagePath, packageInfo, channel: installChannel });
+      const { localPath } = await install({ packagePath, packageInfo, channel: installChannel });
       // install package command
       // e.g: VS Code cli command 'code'
       await installPkgCommandToPath(name, localPath);
 
-      process.send({ channel: processChannel, data: { currentIndex: i, status: 'finish' } });
+      status = 'finish';
+      process.send({ channel: processChannel, data: { currentIndex: i, status } });
     } catch (error) {
-      const errMsg = error instanceof Error ? error.message : error;
+      errMsg = error instanceof Error ? error.message : error;
       log.error(errMsg);
+      status = 'error';
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
+    } finally {
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+
+      result.push({
+        name,
+        status,
+        duration,
+        errMsg,
+      });
     }
   }
 
-  process.send({ channel: processChannel, data: { status: 'done' } });
+  process.send({ channel: processChannel, data: { status: 'done', result } });
 }
 
 async function install({ channel, packagePath, packageInfo }: { channel: string; packagePath: string; packageInfo: IPackageInfo }) {

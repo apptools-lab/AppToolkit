@@ -38,3 +38,10 @@ export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}
 export interface IPackageIntaller {
   install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
 }
+
+export interface IInstallResult {
+  name: string;
+  duration: number;
+  status: 'finish' | 'error';
+  errMsg?: string;
+}

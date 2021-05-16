@@ -27,6 +27,7 @@ const Dashboard = () => {
     pkgInstallStatuses,
     pkgInstallStep,
     currentStep,
+    installResult,
   } = state;
 
   const TERM_ID = 'dashboard';
@@ -93,10 +94,11 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, errMsg }) {
+    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result }) {
       const { dashboard } = store.getState();
       if (status === 'done') {
         dispatchers.updateCurrentStep(dashboard.currentStep + 1);
+        dispatchers.updateInstallResult(result);
         return;
       }
       dispatchers.updatePkgInstallStep(currentIndex);
@@ -167,6 +169,7 @@ const Dashboard = () => {
                 {(currentStep === 2) ? (
                   <InstallResult
                     goBack={goBack}
+                    result={installResult}
                   />
                 ) : (
                   <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68, rows: 30 }} />
@@ -175,7 +178,7 @@ const Dashboard = () => {
             </Row>
           </div>
         ) : (
-          <Row wrap>
+          <Row wrap gutter={8}>
             {basePackagesList.map((item: IBasePackage, index: number) => (
               <Col s={12} l={8} key={item.name}>
                 <AppCard

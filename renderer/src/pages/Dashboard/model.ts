@@ -1,4 +1,4 @@
-import { IBasePackage } from '@/interfaces';
+import { IBasePackage, IInstallResultData } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -9,6 +9,7 @@ export default {
     currentStep: 0,
     pkgInstallStep: 0,
     pkgInstallStatuses: [],
+    installResult: [],
   },
   reducers: {
     updateBasePackagesList(prevState, basePackagesList: IBasePackage[]) {
@@ -41,6 +42,11 @@ export default {
       prevState.pkgInstallStep = 0;
       prevState.pkgInstallStatuses = installPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
       prevState.installPackagesList = installPackagesList;
+      prevState.installResult = [];
+    },
+
+    updateInstallResult(prevState, installResult: IInstallResultData[]) {
+      prevState.installResult = installResult;
     },
   },
   effects: (dispatch) => ({

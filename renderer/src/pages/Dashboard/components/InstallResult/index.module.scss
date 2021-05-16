@@ -1,3 +1,19 @@
 .successIcon {
   color: $color-success-3;
 }
+
+.list {
+  width: 80%;
+  :global {
+    .next-list-item-content {
+      width: 80%;
+    }
+  }
+}
+
+.listDescription {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

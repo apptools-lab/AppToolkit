@@ -28,3 +28,10 @@ export enum VersionStatus {
   'uninstalled' = '未安装',
   'upgradeable' = '可升级'
 }
+
+export interface IInstallResultData {
+  status: 'error' | 'finish';
+  name: string;
+  duration: number;
+  errMsg?: string;
+}
