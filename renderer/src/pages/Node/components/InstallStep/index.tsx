@@ -59,7 +59,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     const { nodeVersion, reinstallGlobalDeps } = field.getValues();
     await ipcRenderer.invoke(
       'install-node',
-      { managerName,
+      {
+        managerName,
         nodeVersion,
         reinstallGlobalDeps,
         installChannel: INSTALL_NODE_CHANNEL,
@@ -91,10 +92,10 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
           >
             <Select name="nodeVersion" placeholder="请选择一个 Node 版本">
               {
-              nodeVersionsList.map((nodeVersion: string) => (
-                <Select.Option key={nodeVersion} value={nodeVersion}>{nodeVersion}</Select.Option>
-              ))
-            }
+                nodeVersionsList.map((nodeVersion: string) => (
+                  <Select.Option key={nodeVersion} value={nodeVersion}>{nodeVersion}</Select.Option>
+                ))
+              }
             </Select>
           </Form.Item>
           <Form.Item
@@ -115,7 +116,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     case 1:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 30 }} />
         </div>
       );
       break;

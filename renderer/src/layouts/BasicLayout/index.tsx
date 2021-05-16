@@ -8,7 +8,7 @@ export default function BasicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${styles.layout} iceworks-layout`}>
+    <div className={styles.layout}>
       <div className={styles.aside}>
         <PageNav />
       </div>

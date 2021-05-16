@@ -1,21 +1,6 @@
 {
   "bases": [
     {
-      "title": "Node.js (NVM)",
-      "name": "node",
-      "description": "基于 Chrome V8 引擎的 JavaScript 运行时",
-      "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
-      "shellPath": "install-nvm.sh",
-      "version": null,
-      "recommended": true,
-      "isInternal": false,
-      "type": "cmd",
-      "platform": "darwin",
-      "options": {
-        "managerName": "nvm"
-      }
-    },
-    {
       "title": "Git",
       "name": "git",
       "description": "分布式版本控制软件",
@@ -24,8 +9,23 @@
       "version": "2.29.2",
       "recommended": true,
       "isInternal": false,
-      "type": "cmd",
+      "type": "cli",
       "platform": "darwin"
+    },
+    {
+      "title": "Node.js (NVM)",
+      "name": "node",
+      "description": "基于 Chrome V8 引擎的 JavaScript 运行时",
+      "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
+      "shellName": "install-nvm.sh",
+      "version": null,
+      "recommended": true,
+      "isInternal": false,
+      "type": "cli",
+      "platform": "darwin",
+      "options": {
+        "managerName": "nvm"
+      }
     },
     {
       "title": "Google Chrome",
@@ -52,16 +52,17 @@
       "platform": "darwin"
     },
     {
-      "title": "Visual Studio Code - Insiders",
-      "name": "Visual Studio Code - Insiders",
-      "description": "beta 版本的 code insiders",
-      "icon": "https://img.alicdn.com/imgextra/i3/O1CN019RVexE29gw0zGgRFw_!!6000000008098-2-tps-225-225.png",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
-      "version": "1.51.1",
-      "recommended": false,
+      "title": "Appworks",
+      "name": "iceworks-team.iceworks",
+      "description": "Appworks 前端研发套件",
+      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01PkaZpW1K3xuisg58t_!!6000000001109-2-tps-512-512.png",
+      "version": "0.19.0",
+      "recommended": true,
       "isInternal": false,
-      "type": "dmg",
-      "platform": "darwin"
+      "type": "IDEExtension",
+      "options": {
+        "IDEType": "VSCode"
+      }
     }
   ],
   "apps": [

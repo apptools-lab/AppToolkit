@@ -1,16 +1,19 @@
 import * as execa from 'execa';
-import { IPackageInfo } from '../types';
-import log from '../utils/log';
 import executeBashConfigFile from '../utils/executeBashConfigFile';
+import { IPackageInfo, IPackageIntaller } from '../types';
+import log from '../utils/log';
+import writeLog from '../utils/writeLog';
 
-class ShInstaller {
+class CliInstaller implements IPackageIntaller {
   channel: string;
-  shProcessor: {[k: string]: Function };
-  nodeProcessor: {[k: string]: Function };
+
+  cliProcessor: { [k: string]: Function };
+
+  nodeProcessor: { [k: string]: Function };
 
   constructor(channel: string) {
     this.channel = channel;
-    this.shProcessor = {
+    this.cliProcessor = {
       node: this.installNode,
     };
 
@@ -19,15 +22,17 @@ class ShInstaller {
     };
   }
 
-  install = async (shPath: string, packageInfo: IPackageInfo) => {
+  install = async (packageInfo: IPackageInfo, shPath: string) => {
     const { name } = packageInfo;
-    const installFunc = this.shProcessor[name];
+    const installFunc = this.cliProcessor[name];
     if (installFunc) {
       await installFunc({ shPath, packageInfo });
     }
+    // TODO: return node local path
+    return { name, localPath: null };
   };
 
-  installNode = async ({ shPath, packageInfo }) => {
+  private installNode = async ({ shPath, packageInfo }) => {
     const { options } = packageInfo;
     const { managerName } = options;
     const installManagerFunc = this.nodeProcessor[managerName];
@@ -36,7 +41,7 @@ class ShInstaller {
     }
   };
 
-  installNvm = ({ shPath }) => {
+  private installNvm = ({ shPath }) => {
     return new Promise((resolve, reject) => {
       let installStdout = '';
       const listenFunc = (buffer: Buffer) => {
@@ -52,22 +57,22 @@ class ShInstaller {
       cp.stderr.on('data', listenFunc);
 
       cp.on('error', (buffer: Buffer) => {
-        listenFunc(buffer);
-        log.error(buffer.toString());
-        reject(buffer.toString());
+        const chunk = buffer.toString();
+        writeLog(this.channel, chunk, true, 'error');
+        reject(chunk);
       });
 
-      cp.on('exit', (code) => {
-        log.error(installStdout);
+      cp.on('exit', () => {
+        log.info(installStdout);
         const matchRes = installStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
         if (matchRes) {
           const nvmBashProfilePath = matchRes[1];
           executeBashConfigFile(nvmBashProfilePath);
         }
-        resolve(code);
+        resolve(null);
       });
     });
   };
 }
 
-export default ShInstaller;
+export default CliInstaller;

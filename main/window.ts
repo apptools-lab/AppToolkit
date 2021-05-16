@@ -24,11 +24,11 @@ function createWindow() {
   if (isDev) {
     // eslint-disable-next-line @iceworks/best-practices/no-http-url
     mainWindow.loadURL('http://localhost:3000');
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.resolve(__dirname, './assets/index.html'));
   }
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 }
 
 function send(channel: string, ...args: any[]) {

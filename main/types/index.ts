@@ -1,15 +1,15 @@
-export interface IBasicPackageInfo {
+export interface IBasePackageInfo {
   title: string;
   name: string;
   description: string;
   icon: string;
   downloadUrl?: string;
-  shellPath?: string;
+  shellName?: string;
   version: string | null;
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform: Platform;
+  platform?: Platform;
   options?: {
     [k: string]: any;
   };
@@ -17,14 +17,14 @@ export interface IBasicPackageInfo {
 
 export type Platform = 'win32' | 'darwin';
 
-export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
+export type PackageType = 'cli' | 'dmg' | 'exe'| 'IDEExtension' | 'npm';
 
 export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
 export interface ILocalPackageInfo {
   localVersion: string | null;
-  localPath: string | null;
   versionStatus: VersionStatus;
+  localPath?: string | null;
   warningMessage?: string;
   [key: string]: any;
 }
@@ -33,9 +33,19 @@ export interface INodeVersionManagerInfo {
   managerVersion: string | null;
 }
 
-export interface IPackageInfo extends IBasicPackageInfo, ILocalPackageInfo {}
+export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}
 
 export interface INodeManager {
   installNode: Function;
   getNodeVersionsList: Function;
+}
+export interface IPackageIntaller {
+  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
+}
+
+export interface IInstallResult {
+  title: string;
+  duration: number;
+  status: 'finish' | 'error';
+  errMsg?: string;
 }

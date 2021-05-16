@@ -66,7 +66,9 @@ nvm_source() {
     if [ "_$NVM_METHOD" = "_script" ]; then
       NVM_SOURCE_URL="https://raw.githubusercontent.com/${NVM_GITHUB_REPO}/${NVM_VERSION}/nvm.sh"
     elif [ "_$NVM_METHOD" = "_git" ] || [ -z "$NVM_METHOD" ]; then
-      NVM_SOURCE_URL="https://github.com/${NVM_GITHUB_REPO}.git"
+      # NVM_SOURCE_URL="https://github.com/${NVM_GITHUB_REPO}.git"
+      # use China mirror
+      NVM_SOURCE_URL="https://gitee.com/mirrors/nvm.git"
     else
       nvm_echo >&2 "Unexpected value \"$NVM_METHOD\" for \$NVM_METHOD"
       return 1
@@ -187,7 +189,7 @@ nvm_install_node() {
   if [ -z "$NODE_VERSION_LOCAL" ] || [ "$NODE_VERSION_LOCAL" = "N/A" ]; then
     # return 0
     NODE_VERSION_LOCAL="$(NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node nvm version-remote --lts)"
-    nvm_echo "=> The Local Node is empty. It will install node "$NODE_VERSION_LOCAL" version."
+    nvm_echo "=> The Local Node is not found. It will install node "$NODE_VERSION_LOCAL" version."
   fi
 
   nvm_echo "=> Installing Node.js version $NODE_VERSION_LOCAL"

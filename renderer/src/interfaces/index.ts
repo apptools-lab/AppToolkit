@@ -4,11 +4,11 @@ export interface IBasePackage {
   description: string;
   icon: string;
   downloadUrl?: string;
-  shellPath?: string;
+  shellName?: string;
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform: Platform;
+  platform?: Platform;
   version: string | null;
   path: string | null;
   versionStatus: keyof typeof VersionStatus;
@@ -21,10 +21,17 @@ export interface IBasePackage {
 
 export type Platform = 'win32' | 'darwin';
 
-export type PackageType = 'cmd' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
+export type PackageType = 'cli' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
 
 export enum VersionStatus {
   'installed' = '已安装',
   'uninstalled' = '未安装',
   'upgradeable' = '可升级'
+}
+
+export interface IInstallResultData {
+  status: 'error' | 'finish';
+  title: string;
+  duration: number;
+  errMsg?: string;
 }

@@ -8,18 +8,19 @@
     "install:renderer": "cd renderer && npm install --registry=http://registry.npm.taobao.org --no-package-lock",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:electron": "npm run static:copy && electron ./dist",
-    "static:copy": "cp -R ./main/sh ./dist && cp ./main/data.json ./dist",
-    "watch": "npm run watch:renderer & npm run watch:main",
+    "static:copy": "cp -R ./main/data ./dist",
+    "watch": "rm -rf ./dist && npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
     "watch:main": "tsc --build ./main/tsconfig.json -w",
-    "build": "npm run build:renderer && npm run build:main",
+    "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
     "package": "npm run build && NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --mac",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",
     "eslint:fix": "npm run eslint -- --fix",
-    "stylelint": "stylelint \"**/*.{css,scss,less}\""
+    "stylelint": "stylelint \"**/*.{css,scss,less}\"",
+    "prepare": "husky install"
   },
   "main": "./dist/index.js",
   "build": {
@@ -34,7 +35,7 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2020 icejs",
+    "copyright": "Copyright © 2021 Appworks",
     "mac": {
       "target": [
         "dmg",
@@ -80,18 +81,18 @@
     "tslib": "^2.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
     "@iceworks/spec": "^1.0.0",
     "@types/decompress": "^4.2.3",
-    "@types/electron": "^1.6.10",
     "@types/node-fetch": "^2.5.10",
     "@types/shelljs": "^0.8.8",
-    "commitlint": "^8.3.5",
     "concurrently": "^5.1.0",
     "electron": "^12.0.0",
     "electron-builder": "^22.10.5",
     "eslint": "^6.8.0",
+    "husky": "^6.0.0",
     "stylelint": "^13.2.0",
-    "typescript": "^3.8.2",
+    "typescript": "^4.0.0",
     "wait-on": "^5.3.0"
   }
 }

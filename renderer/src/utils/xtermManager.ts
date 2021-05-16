@@ -16,9 +16,10 @@ const defaultTheme = {
 };
 
 const defaultOptions = {
-  cols: 86,
-  rows: 24,
+  cols: 90,
+  rows: 36,
   theme: defaultTheme,
+  fontSize: 12,
 };
 
 // format and write the text content of the terminal
@@ -34,14 +35,12 @@ const writeChunkFn = (term) => {
       } else {
         term.write(data);
       }
-    } else {
-      term.writeln('');
     }
   };
   return writeChunk;
 };
 
-const writeLog = (term) => (data) => term.writeln(` ${dateTime()} ${data}`);
+const writeLog = (term) => (data) => term.writeln(`${dateTime()} ${data}`);
 
 class XtermManager {
   terms: any;

@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fse from 'fs-extra';
 import { INodeVersionManagerInfo } from '../../types';
 import { PACKAGE_JSON_FILE_NAME } from '../../constants';
-import getLocalToolInfo from './tool';
+import getLocalCliInfo from './cli';
 
 const nodeManagerInfoProcessor = {
   nvm: getNvmInfo,
@@ -11,10 +11,10 @@ const nodeManagerInfoProcessor = {
 function getLocalNodeInfo(
   name: string,
   latestVersion: string | null,
-  options: { [k: string]: any},
+  options: { [k: string]: any },
 ) {
   const { managerName } = options;
-  let localNodeInfo = getLocalToolInfo(name, latestVersion);
+  let localNodeInfo = getLocalCliInfo(name, latestVersion);
 
   let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
   const getNodeManagerInfoFunc = nodeManagerInfoProcessor[managerName];
@@ -49,6 +49,5 @@ function getNvmInfo(): INodeVersionManagerInfo {
 
   return nvmInfo;
 }
-
 
 export default getLocalNodeInfo;

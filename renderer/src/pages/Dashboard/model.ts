@@ -1,4 +1,4 @@
-import { IBasePackage } from '@/interfaces';
+import { IBasePackage, IInstallResultData } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -7,27 +7,46 @@ export default {
     isInstalling: false,
     installPackagesList: [],
     currentStep: 0,
-    stepsStatus: [],
+    pkgInstallStep: 0,
+    pkgInstallStatuses: [],
+    installResult: [],
   },
   reducers: {
-    updateBasePackagesList(prevState, payload: IBasePackage[]) {
-      prevState.basePackagesList = payload;
+    updateBasePackagesList(prevState, basePackagesList: IBasePackage[]) {
+      prevState.basePackagesList = basePackagesList;
     },
-    updateInstallStatus(prevState, payload: boolean) {
-      prevState.isInstalling = payload;
+
+    updateInstallStatus(prevState, isInstalling: boolean) {
+      prevState.isInstalling = isInstalling;
     },
-    updateInstallPackagesList(prevState, payload: IBasePackage[]) {
-      prevState.installPackagesList = payload;
+
+    updateInstallPackagesList(prevState, installPackagesList: IBasePackage[]) {
+      prevState.installPackagesList = installPackagesList;
     },
-    updateCurrentStep(prevState, { currentIndex, status }) {
-      prevState.currentStep = currentIndex;
-      const modifiedStepsStatus = [...prevState.stepsStatus];
-      modifiedStepsStatus[currentIndex] = status;
-      prevState.stepsStatus = modifiedStepsStatus;
+
+    updateCurrentStep(prevState, step: number) {
+      prevState.currentStep = step;
     },
-    initStepStatus(prevState, payload: number) {
+
+    updatePkgInstallStep(prevState, step: number) {
+      prevState.pkgInstallStep = step;
+    },
+
+    updatePkgInstallStepStatus(prevState, { step, status }) {
+      prevState.pkgInstallStatuses[step].status = status;
+    },
+
+    initStep(prevState, installPackagesList: IBasePackage[]) {
+      // skip the start step
       prevState.currentStep = 1;
-      prevState.stepsStatus = ['finish'].concat(Array.from({ length: payload }, () => 'wait'));
+      prevState.pkgInstallStep = 0;
+      prevState.pkgInstallStatuses = installPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
+      prevState.installPackagesList = installPackagesList;
+      prevState.installResult = [];
+    },
+
+    updateInstallResult(prevState, installResult: IInstallResultData[]) {
+      prevState.installResult = installResult;
     },
   },
   effects: (dispatch) => ({

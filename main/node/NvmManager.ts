@@ -14,7 +14,7 @@ class NvmManager implements INodeManager {
   }
 
   async installNode(version: string, reinstallGlobalDeps = true) {
-    const shFilePath = path.resolve(__dirname, '../sh', 'nvm-install-node.sh');
+    const shFilePath = path.resolve(__dirname, '../data/shells', 'nvm-install-node.sh');
     const reinstallPackagesArg = reinstallGlobalDeps ? '--reinstall-packages-from=current' : '';
 
     const listenFunc = (buffer: Buffer) => {
@@ -42,13 +42,13 @@ class NvmManager implements INodeManager {
   }
 
   async getNodeVersionsList() {
-    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../sh', 'nvm-node-version.sh'));
+    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../data/shells', 'nvm-node-version.sh'));
     const { stdout } = await execa.command(`sh ${shFilePath}`);
 
     return stdout
       .split('\n')
       .reverse()
-      .map((version: string) => stripAnsi.default(version).trim());
+      .map((version: string) => stripAnsi(version).trim());
   }
 }
 
