@@ -40,7 +40,7 @@ export interface IPackageIntaller {
 }
 
 export interface IInstallResult {
-  name: string;
+  title: string;
   duration: number;
   status: 'finish' | 'error';
   errMsg?: string;

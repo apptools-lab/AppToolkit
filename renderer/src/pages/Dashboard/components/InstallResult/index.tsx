@@ -27,8 +27,10 @@ const InstallResult: FC<IInstallResult> = ({ goBack, result }) => {
       <List size="small" className={styles.list}>
         {
           result.map((item) => (
-            <List.Item key={item.name} extra={<TagGroup>{statusTag[item.status]}</TagGroup>} title={item.name}>
-              {item.status === 'finish' && <div className={styles.listDescription}>耗时：{moment(item.duration).format('ss秒')}</div>}
+            <List.Item key={item.title} extra={<TagGroup>{statusTag[item.status]}</TagGroup>} title={item.title}>
+              {item.status === 'finish' && (
+                <div className={styles.listDescription}>耗时：{moment(item.duration).format('ss秒')}</div>
+              )}
               {item.status === 'error' && (
                 <Balloon
                   triggerType="hover"

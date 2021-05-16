@@ -160,7 +160,7 @@ const Dashboard = () => {
                           })}
                         </Step>
                       </div>
-              }
+                    }
                   />
                   <Step.Item title="完成" />
                 </Step>
@@ -172,7 +172,7 @@ const Dashboard = () => {
                     result={installResult}
                   />
                 ) : (
-                  <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68, rows: 30 }} />
+                  <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68 }} />
                 )}
               </Col>
             </Row>

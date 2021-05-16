@@ -31,7 +31,7 @@ export enum VersionStatus {
 
 export interface IInstallResultData {
   status: 'error' | 'finish';
-  name: string;
+  title: string;
   duration: number;
   errMsg?: string;
 }

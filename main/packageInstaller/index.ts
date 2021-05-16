@@ -48,7 +48,7 @@ async function installPackages({
 
   for (let i = 0; i < packagesList.length; i++) {
     const packageInfo = packagesList[i];
-    const { downloadUrl, shellName, type, name } = packageInfo;
+    const { downloadUrl, shellName, type, name, title } = packageInfo;
     const startTime = Date.now();
     let status;
     let errMsg;
@@ -82,7 +82,7 @@ async function installPackages({
       const duration = endTime - startTime;
 
       result.push({
-        name,
+        title,
         status,
         duration,
         errMsg,

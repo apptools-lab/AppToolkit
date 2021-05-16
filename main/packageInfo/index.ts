@@ -11,14 +11,14 @@ const getLocalInfoProcessor = {
   IDEExtension: getIDEExtensionInfo,
 };
 
-export function getLocalInfo(packageInfo: IBasePackageInfo): IPackageInfo {
-  const { type } = packageInfo;
+export function getPackageInfo(basePackageInfo: IBasePackageInfo): IPackageInfo {
+  const { type } = basePackageInfo;
   const getLocalInfoFunc = getLocalInfoProcessor[type];
-  const ret = { ...packageInfo, ...DEFAULT_LOCAL_PACKAGE_INFO };
+  const ret = { ...basePackageInfo, ...DEFAULT_LOCAL_PACKAGE_INFO };
 
   if (getLocalInfoFunc) {
     try {
-      const localPackageInfo: ILocalPackageInfo = getLocalInfoFunc(packageInfo);
+      const localPackageInfo: ILocalPackageInfo = getLocalInfoFunc(basePackageInfo);
       return { ...ret, ...localPackageInfo };
     } catch (error) {
       log.error(error.message);
