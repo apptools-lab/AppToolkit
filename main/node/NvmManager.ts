@@ -12,67 +12,32 @@ class NvmManager implements INodeManager {
 
   std: string;
 
+  globalNpmPackages: string[];
+
+  nodePath: string;
+
   constructor(channel = '') {
     this.channel = channel;
     this.std = '';
+    this.globalNpmPackages = [];
+    this.nodePath = '';
   }
 
-  async installNode(version: string, reinstallGlobalDeps = true) {
-    const globalNpmPackages: string[] = [];
-
+  installNode = (version: string, reinstallGlobalDeps = true) => {
     if (reinstallGlobalDeps) {
       // collect the global npm packages
       const args: string[] = ['list', '-g', '--depth=0', '--json'];
-      const { stdout } = await execa('npm', args);
+      const { stdout } = execa.sync('npm', args);
       if (stdout) {
         const { dependencies = {} } = JSON.parse(stdout);
         const depNames = Object.keys(dependencies).filter((dep: string) => (dep !== 'npm' && dep !== 'tnpm')) || [];
 
         depNames.forEach((dep: string) => {
           const { version: depVersion } = dependencies[dep];
-          globalNpmPackages.push(`${dep}@${depVersion}`);
+          this.globalNpmPackages.push(`${dep}@${depVersion}`);
         });
       }
     }
-
-    await this.installNewVersionNode(version);
-    const nodePath = this.getCurrentNodePath(this.std);
-    const npmVersion = this.getCurrentNpmVersion(this.std);
-
-    if (!!globalNpmPackages.length && nodePath) {
-      await this.reinstallPackages(nodePath, globalNpmPackages);
-    }
-
-    return { nodeVersion: version, npmVersion };
-  }
-
-  async getNodeVersionsList() {
-    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../data/shells', 'nvm-node-version.sh'));
-    const { stdout } = await execa.command(`sh ${shFilePath}`);
-
-    return stdout
-      .split('\n')
-      .reverse()
-      .map((version: string) => stripAnsi(version).trim());
-  }
-
-  private getCurrentNodePath(chunk: string) {
-    const matchResult = chunk.match(/Current Node Path: (.*)\./);
-    if (matchResult) {
-      return matchResult[1];
-    }
-    return undefined;
-  }
-
-  private getCurrentNpmVersion(chunk: string) {
-    const matchResult = chunk.match(/Current NPM Version: (.*)\./);
-    if (matchResult) {
-      return matchResult[1];
-    }
-    return undefined;
-  }
-
-  private installNewVersionNode = (version: string) => {
     const formattedVersion = formatNodeVersion(version);
     const shFilePath = path.resolve(__dirname, '../data/shells', 'nvm-install-node.sh');
 
@@ -91,19 +56,31 @@ class NvmManager implements INodeManager {
       });
 
       cp.on('exit', () => {
-        resolve(null);
+        this.nodePath = this.getCurrentNodePath(this.std);
+        const npmVersion = this.getCurrentNpmVersion(this.std);
+
+        resolve({ nodeVersion: version, npmVersion });
       });
     });
   };
 
-  private reinstallPackages = (nodePath: string, globalNpmPackages: string[]) => {
+  async getNodeVersionsList() {
+    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../data/shells', 'nvm-node-version.sh'));
+    const { stdout } = await execa.command(`sh ${shFilePath}`);
+
+    return stdout
+      .split('\n')
+      .reverse()
+      .map((version: string) => stripAnsi(version).trim());
+  }
+
+  reinstallPackages = () => {
     return new Promise((resolve, reject) => {
-      log.info('globalNpmPackages:', globalNpmPackages);
-      const args = ['i', '-g', ...globalNpmPackages, '--registry', 'https://registry.npm.taobao.org'];
+      const args = ['i', '-g', ...this.globalNpmPackages, '--registry', 'https://registry.npm.taobao.org'];
 
       const cp = execa('npm', args, {
         // specify execPath to the node path which installed just now
-        execPath: nodePath,
+        execPath: this.nodePath,
         preferLocal: true,
         // Don't extend env because it will not use the current(new) npm to install package
         extendEnv: false,
@@ -119,8 +96,8 @@ class NvmManager implements INodeManager {
         reject(buffer.toString());
       });
 
-      cp.on('exit', (code) => {
-        resolve(code);
+      cp.on('exit', () => {
+        resolve(null);
       });
     });
   };
@@ -130,6 +107,22 @@ class NvmManager implements INodeManager {
     this.std += chunk;
     process.send({ channel: this.channel, data: { chunk, ln: false } });
   };
+
+  private getCurrentNodePath(chunk: string) {
+    const matchResult = chunk.match(/Current Node Path: (.*)\./);
+    if (matchResult) {
+      return matchResult[1];
+    }
+    return undefined;
+  }
+
+  private getCurrentNpmVersion(chunk: string) {
+    const matchResult = chunk.match(/Current NPM Version: (.*)\./);
+    if (matchResult) {
+      return matchResult[1];
+    }
+    return undefined;
+  }
 }
 
 export default NvmManager;

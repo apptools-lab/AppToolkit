@@ -46,7 +46,7 @@ const Node = () => {
     goBack();
   };
 
-  const headerBtn = (currentStep !== 2 && installNodeStepVisible) ? (
+  const headerBtn = (currentStep !== 3 && installNodeStepVisible) ? (
     <Button type="normal" onClick={cancelNodeInstall}>
       取消安装
     </Button>

@@ -36,7 +36,7 @@ export default () => {
     });
 
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && (data.status === 'success' || data.status === 'error')) {
+      if (channel === processChannel && (data.status === 'done')) {
         killChannelChildProcess(childProcessMap, installChannel);
       }
       sendMainWindow(channel, data);
