@@ -17,16 +17,19 @@ function getLocalToolInfo(name: string, latestVersion: string | null) {
     log.error(error.message);
     return localToolInfo;
   }
-  // get local tool version
+  // get cli version
   try {
-    const toolVersionRes = execa.sync(localToolInfo.localPath, ['--version'], { shell: true });
-    const versionStr = toolVersionRes.stdout;
-    const versionStrMatch = versionStr.match(/(\d+(\.\d+)*)/);
-    localToolInfo.localVersion = versionStrMatch ? versionStrMatch[1] : versionStr;
+    const { stdout: cliVersion } = execa.sync(
+      localToolInfo.localPath,
+      ['--version'],
+      { shell: true, extendEnv: false },
+    );
+    const cliVersionMatch = cliVersion.match(/(\d+(\.\d+)*)/);
+    localToolInfo.localVersion = cliVersionMatch ? cliVersionMatch[1] : cliVersion;
   } catch (error) {
     log.error(`Tool ${name} version is not found. Error: ${error.message}`);
   }
-  // get local version status of cli
+  // get cli version status
   localToolInfo.versionStatus = getVersionStatus(localToolInfo.localVersion, latestVersion);
 
   return localToolInfo;

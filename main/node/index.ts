@@ -20,11 +20,11 @@ function processListener({ managerName, nodeVersion, reinstallGlobalDeps, instal
   async function installNode() {
     try {
       process.send({ channel: processChannel, data: { status: 'process' } });
-      await nodeManager.installNode(nodeVersion, reinstallGlobalDeps);
-      process.send({ channel: processChannel, data: { status: 'success' } });
+      const result = await nodeManager.installNode(nodeVersion, reinstallGlobalDeps);
+      process.send({ channel: processChannel, data: { status: 'success', result } });
     } catch (error) {
       const errMsg = error instanceof Error ? error.message : error;
-      log.info(errMsg);
+      log.error(errMsg);
       process.send({ channel: processChannel, data: { status: 'error', errMsg } });
     }
   }

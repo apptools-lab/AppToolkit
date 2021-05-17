@@ -1,6 +1,8 @@
 import { IBasePackage } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
+const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };
+
 export default {
   state: {
     nodeInfo: {},
@@ -8,6 +10,7 @@ export default {
     currentStep: 0,
     installStatus: '',
     installErrMsg: '',
+    installResult: DEFAULT_INSTALL_RESULT,
   },
   reducers: {
     updateNodeInfo(prevState, payload: IBasePackage) {
@@ -31,6 +34,10 @@ export default {
     initNodeInstall(prevState) {
       prevState.installStatus = '';
       prevState.installErrMsg = '';
+      prevState.installResult = DEFAULT_INSTALL_RESULT;
+    },
+    updateInstallResult(prevState, installResult: object) {
+      prevState.installResult = installResult;
     },
   },
   effects: (dispatch) => ({

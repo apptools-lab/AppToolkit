@@ -2,6 +2,7 @@ import { useEffect, FC } from 'react';
 import { Step, Button, Field, Form, Box, Icon, Typography, Switch, Select, Loading, Message } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
+import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import store from '../../store';
 import styles from './index.module.scss';
@@ -16,7 +17,7 @@ const defaultValues = { reinstallGlobalDeps: true };
 
 const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { currentStep, nodeVersionsList, installStatus, installErrMsg } = state;
+  const { currentStep, nodeVersionsList, installStatus, installErrMsg, installResult } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -130,9 +131,13 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
                 <Typography.H1>安装成功</Typography.H1>
                 <Typography.Text className={styles.text}>新建终端，输入以下命令，以验证 Node.js 是否安装成功：</Typography.Text>
                 <code className={styles.code}>
-                  $ node -v
+                  $ node --version
                   <br />
-                  $ npm -v
+                  {installResult.nodeVersion && <># {installResult.nodeVersion}</>}
+                  <br />
+                  $ npm --version
+                  <br />
+                  {installResult.npmVersion && <># {installResult.npmVersion}</>}
                 </code>
               </>
             )
@@ -158,12 +163,14 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       break;
   }
 
-  const steps = ['选择版本', '安装', '完成'].map(
+  const steps = ['选择版本', '安装 Node.js', '完成'].map(
     (item, index) => (
       <Step.Item
+        className={styles.stepItem}
         aria-current={index === currentStep ? 'step' : null}
         key={item}
         title={item}
+        icon={index === 1 ? STEP_STATUS_ICON[installStatus] : undefined}
       />
     ),
   );
@@ -185,13 +192,14 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     };
   }, []);
 
-  function handleUpdateInstallStatus(e: IpcRendererEvent, { status, errMsg }) {
+  function handleUpdateInstallStatus(e: IpcRendererEvent, { status, errMsg, result }) {
     dispatchers.updateInstallStatus(status);
     if (status === 'process') {
       return;
-    }
-    if (status === 'error') {
+    } else if (status === 'error') {
       dispatchers.updateInstallErrMsg(errMsg);
+    } else if (status === 'success') {
+      dispatchers.updateInstallResult(result);
     }
     goNext();
   }
@@ -207,7 +215,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   }, []);
   return (
     <div className={styles.installStepContainer}>
-      <Step current={currentStep} className={styles.step}>
+      <Step current={currentStep} className={styles.step} shape="dot">
         {steps}
       </Step>
       <Loading visible={effectsLoading.getNodeVersionsList} className={styles.loading} tip="获取 Node.js 版本中...">

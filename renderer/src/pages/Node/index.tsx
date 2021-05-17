@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Button } from '@alifd/next';
+import { Grid, Button, Balloon } from '@alifd/next';
 import { ipcRenderer } from 'electron';
 import PageHeader from '@/components/PageHeader';
 import { IBasePackage } from '@/interfaces';
@@ -14,7 +14,7 @@ const Node = () => {
 
   const [state, dispatchers] = store.useModel('node');
   const { nodeInfo, currentStep } = state;
-  const { options = {}, localVersion } = nodeInfo as IBasePackage;
+  const { options = {}, localVersion, managerVersion } = nodeInfo as IBasePackage;
   const { managerName } = options;
 
   const INSTALL_NODE_CHANNEL = 'install-node';
@@ -52,6 +52,17 @@ const Node = () => {
     </Button>
   ) : null;
 
+  const switchNodeVersionBtn = (
+    <Button
+      text
+      type="primary"
+      disabled={!managerVersion}
+      className={styles.switchVersionBtn}
+      onClick={onSwitchVersionBtnClick}
+    >
+      切换版本
+    </Button>
+  );
   return (
     <div className={styles.nodeContainer}>
       <PageHeader title="Node 管理" button={headerBtn} />
@@ -67,16 +78,15 @@ const Node = () => {
             <Col span={12}>
               <div className={styles.subTitle}>Node 版本</div>
             </Col>
-            <Col span={12}>
-              {localVersion}
-              <Button
-                text
-                type="primary"
-                className={styles.switchVersionBtn}
-                onClick={onSwitchVersionBtnClick}
-              >
-                切换版本
-              </Button>
+            <Col span={12} className={styles.col}>
+              {localVersion || 'Not Found'}
+              {!managerVersion ? (
+                <Balloon trigger={switchNodeVersionBtn}>
+                  请在首页安装 NVM 以更好安装和管理 Node 版本。
+                </Balloon>
+              ) : (
+                <>{switchNodeVersionBtn}</>)
+              }
             </Col>
           </Row>
         )
