@@ -1,10 +1,13 @@
 import { app, BrowserWindow } from 'electron';
-import handleIPC from './ipc';
+import modifyProcessEnv from './utils/modifyProcessEnv';
 import { createWindow } from './window';
+import handleIPC from './ipc';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
 app.whenReady().then(() => {
+  modifyProcessEnv();
+
   createWindow();
 
   handleIPC();

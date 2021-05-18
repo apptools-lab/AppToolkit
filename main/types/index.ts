@@ -35,6 +35,10 @@ export interface INodeVersionManagerInfo {
 
 export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}
 
+export interface INodeManager {
+  installNode: Function;
+  getNodeVersionsList: Function;
+}
 export interface IPackageIntaller {
   install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
 }

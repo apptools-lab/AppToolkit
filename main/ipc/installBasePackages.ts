@@ -2,8 +2,9 @@ import * as child_process from 'child_process';
 import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { send as sendMainWindow } from '../window';
 import { IPackageInfo } from '../types';
+import { send as sendMainWindow } from '../window';
+import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 
 const childProcessMap = new Map();
@@ -37,15 +38,3 @@ export default () => {
     killChannelChildProcess(childProcessMap, installChannel);
   });
 };
-
-function killChannelChildProcess(
-  channelChildProcessMap: Map<string, child_process.ChildProcess>,
-  channel: string,
-) {
-  const childProcess = channelChildProcessMap.get(channel);
-  if (childProcess && childProcess.kill instanceof Function) {
-    // kill child process
-    childProcess.kill();
-    channelChildProcessMap.delete(channel);
-  }
-}

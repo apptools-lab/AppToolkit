@@ -145,7 +145,7 @@ const Dashboard = () => {
                       <div className={styles.installStep}>
                         <Step current={pkgInstallStep} direction="ver" shape="dot">
                           {installPackagesList.map((item: IBasePackage, index: number) => {
-                            const status = pkgInstallStatuses[index].status;
+                            const { status } = pkgInstallStatuses[index];
                             return (
                               <Step.Item
                                 key={item.name}

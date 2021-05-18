@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, withRouter } from 'ice';
 import { Nav } from '@alifd/next';
+import Icon from '@/components/Icon';
 import { asideMenuConfig } from '../../menuConfig';
 import styles from './index.module.scss';
 
@@ -49,7 +50,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
       const subNav = (
         <SubNav
           key={item.name}
-          icon={item.icon}
+          icon={<Icon className={styles.icon} type={item.icon} />}
           label={item.name}
         >
           {childrenItems}
@@ -61,7 +62,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
     return null;
   }
   const navItem = (
-    <NavItem key={item.path} icon={item.icon}>
+    <NavItem key={item.path} icon={<Icon className={styles.icon} type={item.icon} />}>
       <Link to={item.path} className={styles.link}>
         {item.name}
       </Link>
