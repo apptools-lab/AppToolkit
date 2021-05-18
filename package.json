@@ -74,6 +74,8 @@
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "globby": "^11.0.3",
+    "ice-npm-utils": "^2.1.1",
+    "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "shelljs": "^0.8.4",
     "strip-ansi": "^6.0.0",

@@ -8,14 +8,14 @@
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
       "version": "2.29.2",
       "recommended": true,
-      "isInternal": false,
+      "isInternal": true,
       "type": "cli",
       "platform": "darwin"
     },
     {
       "title": "Node.js (NVM)",
       "name": "node",
-      "description": "基于 Chrome V8 引擎的 JavaScript 运行时",
+      "description": "基于 Chrome V8 引擎的 JavaScript 运行环境",
       "icon": "https://img.alicdn.com/imgextra/i1/O1CN01VNaknC1eqK2iyxCdG_!!6000000003922-2-tps-288-288.png",
       "shellName": "install-nvm.sh",
       "version": null,
@@ -30,7 +30,7 @@
     {
       "title": "Google Chrome",
       "name": "Google Chrome",
-      "description": "谷歌浏览器",
+      "description": "强大、快速的网页浏览器",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
       "downloadUrl": "",
       "version": "89.0.4389.114",
@@ -42,7 +42,7 @@
     {
       "title": "Visual Studio Code",
       "name": "Visual Studio Code",
-      "description": "是一款由微软开发且跨平台的免费源代码编辑器",
+      "description": "跨平台、轻量的代码编辑器",
       "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin.zip",
       "version": "1.51.1",
@@ -68,7 +68,7 @@
   "apps": [
     {
       "name": "Google Chrome",
-      "description": "谷歌浏览器",
+      "description": "强大、快速的网页浏览器",
       "icon": "https://img.alicdn.com/imgextra/i3/O1CN01cspie61ZOm8vgQfKl_!!6000000003185-55-tps-32-32.svg",
       "downloadUrl": "",
       "version": "89.0.4389.114",
@@ -115,7 +115,7 @@
   ],
   "IdeExtensions": [
     {
-      "name": "Iceworks Pack",
+      "name": "Appworks Pack",
       "description": "",
       "icon": "",
       "downloadUrl": "",

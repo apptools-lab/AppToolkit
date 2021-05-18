@@ -22,3 +22,8 @@ export const INSTALL_COMMAND_PACKAGES = [
     commandRelativePath: './Contents/Resources/app/bin/code',
   },
 ];
+
+export const NOT_REINSTALL_PACKAGES = ['npm'];
+
+export const TAOBAO_NPM_REGISTRY = 'https://registry.npm.taobao.org';
+export const ALI_NPM_REGISTRY = 'https://registry.npm.alibaba-inc.com/';

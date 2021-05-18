@@ -4,6 +4,8 @@ import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
 import formatNodeVersion from '../utils/formatNodeVersion';
+import { NOT_REINSTALL_PACKAGES } from '../constants';
+import getNpmRegistry from '../utils/getNpmRegistry';
 // eslint-disable-next-line import/order
 import stripAnsi = require('strip-ansi');
 
@@ -30,7 +32,7 @@ class NvmManager implements INodeManager {
       const { stdout } = execa.sync('npm', args);
       if (stdout) {
         const { dependencies = {} } = JSON.parse(stdout);
-        const depNames = Object.keys(dependencies).filter((dep: string) => (dep !== 'npm' && dep !== 'tnpm')) || [];
+        const depNames = Object.keys(dependencies).filter((dep: string) => !NOT_REINSTALL_PACKAGES.includes(dep)) || [];
 
         depNames.forEach((dep: string) => {
           const { version: depVersion } = dependencies[dep];
@@ -75,31 +77,32 @@ class NvmManager implements INodeManager {
   }
 
   reinstallPackages = () => {
-    return new Promise((resolve, reject) => {
-      const args = ['i', '-g', ...this.globalNpmPackages, '--registry', 'https://registry.npm.taobao.org'];
+    return getNpmRegistry()
+      .then((npmRegistry) => {
+        return new Promise((resolve, reject) => {
+          const args = ['i', '-g', ...this.globalNpmPackages, '--registry', npmRegistry];
+          const cp = execa('npm', args, {
+            // specify execPath to the node path which installed just now
+            execPath: this.nodePath,
+            preferLocal: true,
+            // Don't extend env because it will not use the current(new) npm to install package
+            extendEnv: false,
+          });
+          cp.stdout.on('data', this.listenFunc);
 
-      const cp = execa('npm', args, {
-        // specify execPath to the node path which installed just now
-        execPath: this.nodePath,
-        preferLocal: true,
-        // Don't extend env because it will not use the current(new) npm to install package
-        extendEnv: false,
+          cp.stderr.on('data', this.listenFunc);
+
+          cp.on('error', (buffer: Buffer) => {
+            this.listenFunc(buffer);
+            log.error(buffer.toString());
+            reject(buffer.toString());
+          });
+
+          cp.on('exit', () => {
+            resolve(null);
+          });
+        });
       });
-
-      cp.stdout.on('data', this.listenFunc);
-
-      cp.stderr.on('data', this.listenFunc);
-
-      cp.on('error', (buffer: Buffer) => {
-        this.listenFunc(buffer);
-        log.error(buffer.toString());
-        reject(buffer.toString());
-      });
-
-      cp.on('exit', () => {
-        resolve(null);
-      });
-    });
   };
 
   private listenFunc = (buffer: Buffer) => {
