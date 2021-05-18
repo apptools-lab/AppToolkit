@@ -59,7 +59,7 @@ class NvmManager implements INodeManager {
         this.nodePath = this.getCurrentNodePath(this.std);
         const npmVersion = this.getCurrentNpmVersion(this.std);
 
-        resolve({ nodeVersion: version, npmVersion });
+        resolve({ nodeVersion: formattedVersion, npmVersion });
       });
     });
   };

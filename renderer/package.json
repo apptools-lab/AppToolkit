@@ -25,7 +25,8 @@
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-webpack5": "^1.2.2",
     "ice.js": "^1.0.0",
-    "webpack": "^5.30.0"
+    "webpack": "^5.30.0",
+    "typescript": "^4.0.0"
   },
   "scripts": {
     "start": "icejs start --disable-open --port 3000",
