@@ -8,7 +8,7 @@
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
       "version": "2.29.2",
       "recommended": true,
-      "isInternal": true,
+      "isInternal": false,
       "type": "cli",
       "platform": "darwin"
     },
