@@ -17,7 +17,7 @@ export interface IBasePackageInfo {
 
 export type Platform = 'win32' | 'darwin';
 
-export type PackageType = 'cli' | 'dmg' | 'exe'| 'IDEExtension' | 'npm';
+export type PackageType = 'cli' | 'dmg' | 'exe' | 'IDEExtension' | 'npm';
 
 export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
@@ -33,13 +33,13 @@ export interface INodeVersionManagerInfo {
   managerVersion: string | null;
 }
 
-export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo {}
+export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
 
 export interface INodeManager {
   installNode: Function;
   getNodeVersionsList: Function;
 }
-export interface IPackageIntaller {
+export interface IPackageInstaller {
   install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
 }
 

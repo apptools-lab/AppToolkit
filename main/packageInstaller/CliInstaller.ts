@@ -1,10 +1,10 @@
 import * as execa from 'execa';
 import executeBashConfigFile from '../utils/executeBashConfigFile';
-import { IPackageInfo, IPackageIntaller } from '../types';
+import { IPackageInfo, IPackageInstaller } from '../types';
 import log from '../utils/log';
 import writeLog from '../utils/writeLog';
 
-class CliInstaller implements IPackageIntaller {
+class CliInstaller implements IPackageInstaller {
   channel: string;
 
   cliProcessor: { [k: string]: Function };

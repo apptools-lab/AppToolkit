@@ -3,9 +3,9 @@ import * as AdmZip from 'adm-zip';
 import * as decompress from 'decompress';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from '../utils/writeLog';
-import { IPackageIntaller, IPackageInfo } from '../types';
+import { IPackageInstaller, IPackageInfo } from '../types';
 
-class ZipInstaller implements IPackageIntaller {
+class ZipInstaller implements IPackageInstaller {
   channel: string;
 
   constructor(channel: string) {

@@ -1,10 +1,10 @@
 import * as execa from 'execa';
 import isCliInstalled from '../utils/isCliInstalled';
-import { IPackageInfo, IPackageIntaller } from '../types';
+import { IPackageInfo, IPackageInstaller } from '../types';
 import { VSCODE_CLI_COMAMND_NAME } from '../constants';
 import writeLog from '../utils/writeLog';
 
-class IDEExtensionInstaller implements IPackageIntaller {
+class IDEExtensionInstaller implements IPackageInstaller {
   channel: string;
 
   IDETypeProcessor: { [k: string]: Function };

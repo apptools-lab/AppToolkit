@@ -6,9 +6,9 @@ import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from '../utils/writeLog';
 import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
-import { IPackageIntaller, IPackageInfo } from '../types';
+import { IPackageInstaller, IPackageInfo } from '../types';
 
-class DmgInstaller implements IPackageIntaller {
+class DmgInstaller implements IPackageInstaller {
   channel: string;
 
   dmgProcessor: { [k: string]: Function };
