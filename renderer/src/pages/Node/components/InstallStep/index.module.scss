@@ -1,0 +1,41 @@
+.installStepContainer {
+  margin-top: 40px;
+}
+
+.step {
+  margin-bottom: 40px;
+
+  .stepItem {
+    :global {
+      .next-step-item-container {
+        padding: 0 4px;
+        display: inline-flex;
+
+        .next-step-item-node-placeholder {
+          width: 20px;
+          height: 20px;
+  
+          .next-step-item-node {
+            .next-icon:before {
+              width: 20px;
+              font-size: 20px;
+            }
+            .next-step-item-node-dot {
+              width: 20px;
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.submitBtn {
+  margin-top: 40px;
+  text-align: right;
+}
+
+.loading {
+  width: 100%;
+}

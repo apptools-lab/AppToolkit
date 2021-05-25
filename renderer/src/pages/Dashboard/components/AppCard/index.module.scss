@@ -1,0 +1,70 @@
+.card {
+  height: 146px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .left {
+    margin: 0 20px;
+
+    img {
+      width: 68px;
+      height: 68px;
+    }
+  }
+
+  .right {
+    width: calc(100% - 108px);
+
+    .title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      height: 32px;
+      line-height: 32px;
+
+      span {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      img {
+        margin-left: 10px;
+      }
+    }
+
+    .desc {
+      margin-top: 2px;
+      width: 100%;
+      font-size: 12px;
+      color: rgb(128, 128, 128);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .status {
+      margin-top: 20px;
+      margin-bottom: 22px;
+      font-size: 14px;
+      color: rgb(128, 128, 128);
+
+      i {
+        margin-left: 10px;
+        color: #ffa801;
+      }
+    }
+
+    .availableStatus {
+      color: $color-brand1-6;
+    }
+  }
+
+  .splitLine {
+    border-bottom: 1px solid #e6e6e6;
+  }
+}

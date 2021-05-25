@@ -1,0 +1,56 @@
+.dashboard {
+  padding: 0 38px;
+  width: 100%;
+  height: 100%;
+
+  main {
+    margin-top: 40px;
+
+    .install {
+      :global {
+        .next-step-vertical {
+          height: 100%;
+        }
+
+        .next-step-vertical > .next-step-item > div {
+          &:nth-child(2) {
+            width: 120px !important;
+          }
+        }
+      }
+
+      .installStep {
+        margin-top: 40px;
+
+        .installStepItem {
+          :global {
+            .next-step-item-node-placeholder {
+              width: 18px;
+              height: 18px;
+            }
+            .next-icon:before {
+              width: 18px;
+              font-size: 18px;
+            }
+          }
+        }
+
+        .installSuccess {
+          :global {
+            .next-step-item-node {
+              color: rgb(103, 194, 58);
+            }
+          }
+        }
+
+        .installError {
+          :global {
+            .next-step-item-node {
+              color: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}

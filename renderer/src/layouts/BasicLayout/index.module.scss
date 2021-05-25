@@ -1,0 +1,20 @@
+.layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: rgb(235, 235, 235);
+}
+
+.aside {
+  position: fixed;
+  width: 220px;
+  margin-top: 60px;
+  flex: 0 0 220px;
+}
+
+.main {
+  width: calc(100vw - 170px - 10px - 10px);
+  background-color: white;
+  margin-left: 220px;
+}
+

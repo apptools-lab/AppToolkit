@@ -3,21 +3,24 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "setup": "rm -rf node_modules && npm run install:main && npm run install:renderer",
+    "setup": "rm -rf node_modules renderer/node_modules && npm run install:main && npm run install:renderer",
     "install:main": "ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install --registry=http://registry.npm.taobao.org",
-    "install:renderer": "cd renderer && npm install --registry=http://registry.npm.taobao.org",
-    "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && electron ./dist\" ",
-    "watch": "npm run watch:renderer & npm run watch:main",
+    "install:renderer": "cd renderer && npm install --registry=http://registry.npm.taobao.org --no-package-lock",
+    "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
+    "start:electron": "npm run copy:static && electron ./dist",
+    "copy:static": "cp -R ./main/data ./dist",
+    "watch": "rm -rf ./dist && npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
     "watch:main": "tsc --build ./main/tsconfig.json -w",
-    "build": "npm run build:renderer && npm run build:main",
+    "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
-    "package": "npm run build && NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --mac",
+    "package": "npm run build && npm run copy:static && NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --mac",
     "lint": "npm run eslint && npm run stylelint",
-    "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",
     "eslint:fix": "npm run eslint -- --fix",
-    "stylelint": "stylelint \"**/*.{css,scss,less}\""
+    "stylelint": "stylelint \"**/*.{css,scss,less}\"",
+    "prepare": "husky install"
   },
   "main": "./dist/index.js",
   "build": {
@@ -32,16 +35,15 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2020 Appworks Toolkit",
+    "copyright": "Copyright © 2021 Appworks",
     "mac": {
       "target": [
         "dmg",
         "zip"
       ],
-      "icon": "resources/icon.icns"
+      "icon": "resources/mac/icon.icns"
     },
     "dmg": {
-      "background": "resources/background.png",
       "window": {
         "width": 540,
         "height": 380
@@ -63,18 +65,36 @@
     }
   },
   "dependencies": {
-    "electron-is-dev": "^2.0.0"
+    "@shockpkg/hdi-mac": "^1.6.1",
+    "adm-zip": "^0.5.5",
+    "compare-versions": "^3.6.0",
+    "decompress": "^4.2.1",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.3.4",
+    "execa": "^5.0.0",
+    "fs-extra": "^9.1.0",
+    "globby": "^11.0.3",
+    "ice-npm-utils": "^2.1.1",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.1",
+    "shelljs": "^0.8.4",
+    "strip-ansi": "^6.0.0",
+    "sudo-prompt": "^9.2.1",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
     "@iceworks/spec": "^1.0.0",
-    "@types/electron": "^1.6.10",
-    "commitlint": "^8.3.5",
+    "@types/decompress": "^4.2.3",
+    "@types/node-fetch": "^2.5.10",
+    "@types/shelljs": "^0.8.8",
     "concurrently": "^5.1.0",
     "electron": "^12.0.0",
     "electron-builder": "^22.10.5",
     "eslint": "^6.8.0",
+    "husky": "^6.0.0",
     "stylelint": "^13.2.0",
-    "typescript": "^3.8.2",
+    "typescript": "^4.0.0",
     "wait-on": "^5.3.0"
   }
 }
