@@ -36,8 +36,13 @@ export default () => {
     });
 
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && (data.status === 'done')) {
-        killChannelChildProcess(childProcessMap, installChannel);
+      if (channel === processChannel) {
+        const { status, result } = data;
+        if (status === 'done') {
+          killChannelChildProcess(childProcessMap, installChannel);
+        } else if (status === 'success' && result && result.nodePath) {
+          process.env.PATH = `${result.nodePath.replace('/bin/node', '/bin')}${path.delimiter}${process.env.PATH}`;
+        }
       }
       sendMainWindow(channel, data);
     });

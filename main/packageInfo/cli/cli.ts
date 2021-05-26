@@ -4,35 +4,36 @@ import { DEFAULT_LOCAL_PACKAGE_INFO } from '../../constants';
 import getVersionStatus from '../../utils/getVersionStatus';
 import log from '../../utils/log';
 
-function getLocalToolInfo(name: string, latestVersion: string | null) {
-  const localToolInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
+function getLocalCliInfo(name: string, latestVersion: string | null) {
+  const localCliInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
   // get the local path of cli
   try {
-    const toolPath = shell.which(name);
-    if (!toolPath) {
-      throw new Error(`Tool ${name} is not found.`);
+    const { stdout: cliPath } = shell.which(name);
+
+    if (!cliPath) {
+      throw new Error(`Command ${name} is not found.`);
     }
-    localToolInfo.localPath = toolPath.stdout;
+    localCliInfo.localPath = cliPath;
   } catch (error) {
     log.error(error.message);
-    return localToolInfo;
+    return localCliInfo;
   }
   // get cli version
   try {
     const { stdout: cliVersion } = execa.sync(
-      localToolInfo.localPath,
+      localCliInfo.localPath,
       ['--version'],
-      { shell: true, extendEnv: false },
+      { shell: true },
     );
     const cliVersionMatch = cliVersion.match(/(\d+(\.\d+)*)/);
-    localToolInfo.localVersion = cliVersionMatch ? cliVersionMatch[1] : cliVersion;
+    localCliInfo.localVersion = cliVersionMatch ? cliVersionMatch[1] : cliVersion;
   } catch (error) {
     log.error(`Tool ${name} version is not found. Error: ${error.message}`);
   }
   // get cli version status
-  localToolInfo.versionStatus = getVersionStatus(localToolInfo.localVersion, latestVersion);
+  localCliInfo.versionStatus = getVersionStatus(localCliInfo.localVersion, latestVersion);
 
-  return localToolInfo;
+  return localCliInfo;
 }
 
-export default getLocalToolInfo;
+export default getLocalCliInfo;
