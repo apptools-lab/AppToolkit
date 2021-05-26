@@ -52,9 +52,9 @@
       "platform": "darwin"
     },
     {
-      "title": "Appworks",
+      "title": "AppWorks Pack",
       "name": "iceworks-team.iceworks",
-      "description": "Appworks 前端研发套件",
+      "description": "基于 VS Code 的多端研发套件",
       "icon": "https://img.alicdn.com/imgextra/i4/O1CN01PkaZpW1K3xuisg58t_!!6000000001109-2-tps-512-512.png",
       "version": "0.19.0",
       "recommended": true,
@@ -115,13 +115,17 @@
   ],
   "IdeExtensions": [
     {
-      "name": "Appworks Pack",
-      "description": "",
-      "icon": "",
-      "downloadUrl": "",
-      "version": "0.19.2",
+      "title": "AppWorks Pack",
+      "name": "iceworks-team.iceworks",
+      "description": "基于 VS Code 的多端研发套件",
+      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01PkaZpW1K3xuisg58t_!!6000000001109-2-tps-512-512.png",
+      "version": "0.19.0",
       "recommended": true,
-      "isInternal": false
+      "isInternal": false,
+      "type": "IDEExtension",
+      "options": {
+        "IDEType": "VSCode"
+      }
     }
   ]
 }

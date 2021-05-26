@@ -1,4 +1,4 @@
-# Appworks Toolkit
+# AppWorks Toolkit
 
 ## Development
 
