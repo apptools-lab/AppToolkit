@@ -58,7 +58,9 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   ) => {
     const { chunk, ln } = data;
     const xterm = xtermManager.getTerm(TERM_ID);
-    xterm.writeChunk(chunk, ln);
+    if (xterm) {
+      xterm.writeChunk(chunk, ln);
+    }
   };
 
   const goNext = () => {
@@ -72,6 +74,10 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       return;
     }
     const values = field.getValues() as object;
+    const xterm = xtermManager.getTerm(TERM_ID);
+    if (xterm) {
+      xterm.clear(TERM_ID);
+    }
     dispatchers.updateInstallNodeFormValue(values);
     await ipcRenderer.invoke(
       'install-node',
