@@ -40,7 +40,9 @@ const Dashboard = () => {
   ) => {
     const { chunk, ln } = data;
     const xterm = xtermManager.getTerm(TERM_ID);
-    xterm.writeChunk(chunk, ln);
+    if (xterm) {
+      xterm.writeChunk(chunk, ln);
+    }
   };
 
   function onDialogConfirm(packageNames: string[]) {
@@ -51,7 +53,10 @@ const Dashboard = () => {
     const selectedInstallPackagesList = installPackagesList.filter((item) => {
       return packageNames.includes(item.name);
     });
-
+    const xterm = xtermManager.getTerm(TERM_ID);
+    if (xterm) {
+      xterm.clear(TERM_ID);
+    }
     dispatchers.updateInstallStatus(true);
     dispatchers.initStep(selectedInstallPackagesList);
     ipcRenderer
@@ -126,6 +131,27 @@ const Dashboard = () => {
     </Button>
   );
 
+  const installStepItem = (
+    <div className={styles.installStep}>
+      <Step current={pkgInstallStep} direction="ver" shape="dot">
+        {installPackagesList.map((item: IBasePackage, index: number) => {
+          const { status } = pkgInstallStatuses[index] || {};
+          return (
+            <Step.Item
+              key={item.name}
+              title={item.title}
+              className={classnames(
+                styles.installStepItem,
+                { [styles.installSuccess]: status === 'finish', [styles.installError]: status === 'error' },
+              )}
+              icon={STEP_STATUS_ICON[status]}
+            />
+          );
+        })}
+      </Step>
+    </div>
+  );
+
   return (
     <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
       <PageHeader
@@ -141,26 +167,7 @@ const Dashboard = () => {
                   <Step.Item title="开始" />
                   <Step.Item
                     title="安装"
-                    content={
-                      <div className={styles.installStep}>
-                        <Step current={pkgInstallStep} direction="ver" shape="dot">
-                          {installPackagesList.map((item: IBasePackage, index: number) => {
-                            const { status } = pkgInstallStatuses[index];
-                            return (
-                              <Step.Item
-                                key={item.name}
-                                title={item.title}
-                                className={classnames(
-                                  styles.installStepItem,
-                                  { [styles.installSuccess]: status === 'finish', [styles.installError]: status === 'error' },
-                                )}
-                                icon={STEP_STATUS_ICON[status]}
-                              />
-                            );
-                          })}
-                        </Step>
-                      </div>
-                    }
+                    content={installStepItem}
                   />
                   <Step.Item title="完成" />
                 </Step>
