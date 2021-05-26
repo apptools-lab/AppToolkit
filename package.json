@@ -25,7 +25,7 @@
   "main": "./dist/index.js",
   "build": {
     "appId": "appworks-toolkit",
-    "productName": "Appworks Toolkit",
+    "productName": "AppWorks Toolkit",
     "files": [
       "dist/**/*",
       "package.json"
@@ -35,7 +35,7 @@
       "buildResources": "resource",
       "output": "release"
     },
-    "copyright": "Copyright © 2021 Appworks",
+    "copyright": "Copyright © 2021-present AppWorks",
     "mac": {
       "target": [
         "dmg",

@@ -68,7 +68,7 @@ class DmgInstaller implements IPackageInstaller {
 
   installPkg = async ({ sourcePath, name }) => {
     const modifiedSource = formatWhitespaceInPath(sourcePath);
-    const options = { name: 'Appworks Toolkit' };
+    const options = { name: 'AppWorks Toolkit' };
 
     return new Promise((resolve, reject) => {
       sudo.exec(
