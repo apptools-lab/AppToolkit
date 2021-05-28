@@ -36,8 +36,16 @@ export default () => {
     });
 
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && (data.status === 'done')) {
-        killChannelChildProcess(childProcessMap, installChannel);
+      if (channel === processChannel) {
+        const { status, result } = data;
+        if (status === 'done') {
+          killChannelChildProcess(childProcessMap, installChannel);
+        } else if (status === 'success' && result && result.nodePath) {
+          // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/path -> Users/xxx/.nvm/versions/node/v14.15.0/bin
+          const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
+          // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
+          process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
+        }
       }
       sendMainWindow(channel, data);
     });

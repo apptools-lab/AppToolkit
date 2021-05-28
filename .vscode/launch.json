@@ -6,12 +6,11 @@
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-      "windows": {
-        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-      },
-      "program": "${workspaceRoot}/dist/index.js",
-      "args" : ["./dist"]
+      "runtimeExecutable": "npm",
+      "args": [
+        "run",
+        "start:electron"
+      ],
     }
   ]
 }
