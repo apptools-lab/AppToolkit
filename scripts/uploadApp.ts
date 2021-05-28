@@ -26,7 +26,7 @@ const { build: { productName }, version } = packageJSON;
   }
   const buildResourcesDir = path.join(__dirname, '..', 'release');
   // upload app resource
-  // 软件内获取的版本最新版本信息，用于升级软件。e.g: latest-mac.yml
+  // 软件内获取的版本最新版本信息，用于升级软件 e.g: latest-mac.yml
   const channelFile = `${channel}${channelExt}`;
   // 软件安装包 e.g: AppWorks Toolkit-0.1.0.dmg
   const packageFile = `${distFileName}${distFileExt}`;
