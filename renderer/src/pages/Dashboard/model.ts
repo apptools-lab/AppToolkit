@@ -5,7 +5,7 @@ export default {
   state: {
     basePackagesList: [],
     isInstalling: false,
-    installPackagesList: [],
+    uninstalledPackagesList: [],
     selectedInstallPackagesList: [],
     currentStep: 0,
     pkgInstallStep: 0,
@@ -21,8 +21,8 @@ export default {
       prevState.isInstalling = isInstalling;
     },
 
-    updateInstallPackagesList(prevState, installPackagesList: IBasePackage[]) {
-      prevState.installPackagesList = installPackagesList;
+    updateUninstalledPackagesList(prevState, uninstalledPackagesList: IBasePackage[]) {
+      prevState.uninstalledPackagesList = uninstalledPackagesList;
     },
 
     updateCurrentStep(prevState, step: number) {
@@ -57,7 +57,7 @@ export default {
       const packagesList = data.filter((basePackage: IBasePackage) => {
         return basePackage.versionStatus !== 'installed';
       });
-      dispatch.dashboard.updateInstallPackagesList(packagesList);
+      dispatch.dashboard.updateUninstalledPackagesList(packagesList);
     },
   }),
 };

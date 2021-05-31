@@ -23,7 +23,7 @@ const Dashboard = () => {
   const {
     basePackagesList,
     isInstalling,
-    installPackagesList,
+    uninstalledPackagesList,
     selectedInstallPackagesList,
     pkgInstallStatuses,
     pkgInstallStep,
@@ -51,7 +51,7 @@ const Dashboard = () => {
     if (!packageNames.length) {
       return;
     }
-    const selectedPackagesList = installPackagesList.filter((item) => {
+    const selectedPackagesList = uninstalledPackagesList.filter((item) => {
       return packageNames.includes(item.name);
     });
     const xterm = xtermManager.getTerm(TERM_ID);
@@ -157,7 +157,7 @@ const Dashboard = () => {
     <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
       <PageHeader
         title="前端开发必备"
-        button={installPackagesList.length ? installButton : null}
+        button={uninstalledPackagesList.length ? installButton : null}
       />
       <main>
         {isInstalling ? (
@@ -205,7 +205,7 @@ const Dashboard = () => {
       </main>
       {visible && (
         <InstallConfirmDialog
-          packages={installPackagesList}
+          packages={uninstalledPackagesList}
           onCancel={onDialogClose}
           onOk={onDialogConfirm}
         />
