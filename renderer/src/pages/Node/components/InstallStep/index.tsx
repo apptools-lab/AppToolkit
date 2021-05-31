@@ -108,7 +108,11 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
             required
             requiredMessage="请选择一个 Node 版本"
           >
-            <Select name="nodeVersion" placeholder="请选择一个 Node 版本">
+            <Select
+              name="nodeVersion"
+              placeholder="请选择一个 Node 版本"
+              showSearch
+            >
               {
                 nodeVersionsList.map((nodeVersion: string) => (
                   <Select.Option key={nodeVersion} value={nodeVersion}>{nodeVersion}</Select.Option>
@@ -159,13 +163,9 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     ),
   );
 
-  async function getNodeVersionsList() {
-    await dispatchers.getNodeVersionsList(managerName);
-  }
-
   useEffect(() => {
     if (!nodeVersionsList.length) {
-      getNodeVersionsList();
+      dispatchers.getNodeVersionsList();
     }
   }, []);
 

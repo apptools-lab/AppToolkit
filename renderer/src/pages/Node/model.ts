@@ -67,8 +67,8 @@ export default {
       dispatch.node.updateNodeInfo(nodeInfo);
     },
 
-    async getNodeVersionsList(managerName: string) {
-      const nodeVersionsList: string[] = await ipcRenderer.invoke('get-node-versions-list', managerName);
+    async getNodeVersionsList() {
+      const nodeVersionsList: string[] = await ipcRenderer.invoke('get-node-versions-list');
       dispatch.node.updateNodeVersionsList(nodeVersionsList);
     },
   }),

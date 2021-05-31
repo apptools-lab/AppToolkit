@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fse from 'fs-extra';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import getNodeManager from '../node';
+import getNodeVersionsList from '../utils/getNodeVersionsList';
 import { getPackageInfo } from '../packageInfo';
 import { IBasePackageInfo } from '../types';
 
@@ -17,9 +17,7 @@ export default () => {
     return localNodeInfo;
   });
 
-  ipcMain.handle('get-node-versions-list', async (event: IpcMainInvokeEvent, managerName: string) => {
-    const nodeManager = getNodeManager(managerName);
-    const nodeVersionsList = await nodeManager.getNodeVersionsList();
-    return nodeVersionsList;
+  ipcMain.handle('get-node-versions-list', async (event: IpcMainInvokeEvent) => {
+    return await getNodeVersionsList();
   });
 };
