@@ -24,6 +24,7 @@ const Dashboard = () => {
     basePackagesList,
     isInstalling,
     installPackagesList,
+    selectedInstallPackagesList,
     pkgInstallStatuses,
     pkgInstallStep,
     currentStep,
@@ -50,7 +51,7 @@ const Dashboard = () => {
     if (!packageNames.length) {
       return;
     }
-    const selectedInstallPackagesList = installPackagesList.filter((item) => {
+    const selectedPackagesList = installPackagesList.filter((item) => {
       return packageNames.includes(item.name);
     });
     const xterm = xtermManager.getTerm(TERM_ID);
@@ -58,10 +59,10 @@ const Dashboard = () => {
       xterm.clear(TERM_ID);
     }
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStep(selectedInstallPackagesList);
+    dispatchers.initStep(selectedPackagesList);
     ipcRenderer
       .invoke('install-base-packages', {
-        packagesList: selectedInstallPackagesList,
+        packagesList: selectedPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       })
@@ -134,7 +135,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {installPackagesList.map((item: IBasePackage, index: number) => {
+        {selectedInstallPackagesList.map((item: IBasePackage, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item
