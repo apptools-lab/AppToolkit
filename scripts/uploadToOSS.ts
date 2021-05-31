@@ -8,17 +8,17 @@ const ossClient = oss({
   timeout: '300s',
 });
 
-function uploadToOSS(target: string, filePath: string) {
+function uploadToOSS(ossObjectName: string, localPath: string) {
   return new Promise((resolve, reject) => {
-    console.log(`[UPLOAD] start to upload ${filePath}.`);
+    console.log(`[UPLOAD] start to upload ${localPath}.`);
     ossClient
-      .put(target, filePath)
+      .put(ossObjectName, localPath)
       .then(() => {
-        console.log(`[UPLOAD] ${filePath} upload success.`);
+        console.log(`[UPLOAD] ${localPath} upload success.`);
         resolve(0);
       })
       .catch((e: Error) => {
-        console.log(`[ERROR] ${filePath} upload failed.`);
+        console.log(`[ERROR] ${localPath} upload failed.`);
         reject(e.message);
       });
   });
