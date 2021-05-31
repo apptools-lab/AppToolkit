@@ -1,0 +1,23 @@
+.xtermContainer {
+  position: relative;
+  // width: 100%;
+  background: $color-fill1-1;
+
+  .clearIcon {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 9;
+    cursor: pointer;
+    color: white;
+  }
+}
+
+.xtermRef {
+  height: calc(100% + 20px);
+  // width: calc(100% + 20px);
+
+  &>div {
+    padding: 10px;
+  }
+}

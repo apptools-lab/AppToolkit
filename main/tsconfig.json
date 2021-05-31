@@ -4,6 +4,8 @@
     "baseUrl": "./",
     "rootDir": "./",
     "outDir": "../dist",
-    "target": "es5"
+    "target": "es5",
+    "moduleResolution": "node",
+    "sourceMap": true
   }
 }

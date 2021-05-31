@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { Link, withRouter } from 'ice';
 import { Nav } from '@alifd/next';
+import Icon from '@/components/Icon';
 import { asideMenuConfig } from '../../menuConfig';
+import styles from './index.module.scss';
 
 const { SubNav } = Nav;
 const NavItem = Nav.Item;
@@ -49,7 +50,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
       const subNav = (
         <SubNav
           key={item.name}
-          icon={item.icon}
+          icon={<Icon className={styles.icon} type={item.icon} />}
           label={item.name}
         >
           {childrenItems}
@@ -61,8 +62,8 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
     return null;
   }
   const navItem = (
-    <NavItem key={item.path} icon={item.icon}>
-      <Link to={item.path}>
+    <NavItem key={item.path} icon={<Icon className={styles.icon} type={item.icon} />}>
+      <Link to={item.path} className={styles.link}>
         {item.name}
       </Link>
     </NavItem>
@@ -71,12 +72,11 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
   return navItem;
 }
 
-const Navigation = (props, context) => {
+const Navigation = (props) => {
   const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   const { location } = props;
   const { pathname } = location;
-  const { isCollapse } = context;
 
   useEffect(() => {
     const curSubNav = asideMenuConfig.find((menuConfig) => {
@@ -95,28 +95,25 @@ const Navigation = (props, context) => {
   }, [pathname]);
 
   return (
-    <Nav
-      type="normal"
-      openKeys={openKeys}
-      selectedKeys={[pathname]}
-      defaultSelectedKeys={[pathname]}
-      embeddable
-      activeDirection="right"
-      iconOnly={isCollapse}
-      hasArrow={false}
-      mode={isCollapse ? 'popup' : 'inline'}
-      onOpen={(keys) => {
+    <div className={styles.nav}>
+      <Nav
+        type="normal"
+        openKeys={openKeys}
+        selectedKeys={[pathname]}
+        defaultSelectedKeys={[pathname]}
+        embeddable
+        activeDirection="right"
+        hasArrow={false}
+        onOpen={(keys) => {
         // @ts-ignore
-        setOpenKeys(keys);
-      }}
-    >
-      {getNavMenuItems(asideMenuConfig, 0, AUTH_CONFIG)}
-    </Nav>
-  );
-};
+          setOpenKeys(keys);
+        }}
+      >
+        {getNavMenuItems(asideMenuConfig, 0, AUTH_CONFIG)}
+      </Nav>
+    </div>
 
-Navigation.contextTypes = {
-  isCollapse: PropTypes.bool,
+  );
 };
 
 const PageNav = withRouter(Navigation);
