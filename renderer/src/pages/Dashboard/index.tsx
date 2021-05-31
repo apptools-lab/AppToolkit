@@ -24,7 +24,7 @@ const Dashboard = () => {
     basePackagesList,
     isInstalling,
     uninstalledPackagesList,
-    selectedInstallPackagesList,
+    selectedInstalledPackagesList,
     pkgInstallStatuses,
     pkgInstallStep,
     currentStep,
@@ -135,7 +135,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {selectedInstallPackagesList.map((item: IBasePackage, index: number) => {
+        {selectedInstalledPackagesList.map((item: IBasePackage, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item

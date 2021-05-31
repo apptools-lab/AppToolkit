@@ -6,7 +6,7 @@ export default {
     basePackagesList: [],
     isInstalling: false,
     uninstalledPackagesList: [],
-    selectedInstallPackagesList: [],
+    selectedInstalledPackagesList: [],
     currentStep: 0,
     pkgInstallStep: 0,
     pkgInstallStatuses: [],
@@ -37,12 +37,12 @@ export default {
       prevState.pkgInstallStatuses[step].status = status;
     },
 
-    initStep(prevState, selectedInstallPackagesList: IBasePackage[]) {
+    initStep(prevState, selectedInstalledPackagesList: IBasePackage[]) {
       // skip the start step
       prevState.currentStep = 1;
       prevState.pkgInstallStep = 0;
-      prevState.pkgInstallStatuses = selectedInstallPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
-      prevState.selectedInstallPackagesList = selectedInstallPackagesList;
+      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
+      prevState.selectedInstalledPackagesList = selectedInstalledPackagesList;
       prevState.installResult = [];
     },
 
