@@ -32,20 +32,20 @@ async function getNodeVersions(): Promise<INodeVersions> {
     .filter((item: IMajorVersion) => item.major >= MIN_MAJOR)
     .map((item: IMajorVersion) => {
       const { major, latest: latestVersion, lts } = item;
-      let title = '';
+      let status = '';
       if (major % 2 === 0 && !appearCurrentVersion) {
         appearCurrentVersion = true;
-        title = `${latestVersion} (Current)`;
+        status = '(Current)';
       } else if (lts) {
         if (!appearRecommendVerison) {
           appearRecommendVerison = true;
-          title = `${latestVersion} (Recommend)`;
+          status = '(Recommend)';
         } else {
-          title = `${latestVersion} (LTS)`;
+          status = '(LTS)';
         }
       }
 
-      return { version: latestVersion, title };
+      return { version: latestVersion, title: `${latestVersion} ${status}` };
     });
 
   return { versions, majors };
