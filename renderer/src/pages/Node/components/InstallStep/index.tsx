@@ -18,7 +18,7 @@ const defaultValues = { reinstallGlobalDeps: true };
 
 const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { installNodeFormValue, currentStep, nodeVersionsList, installStatus, installErrMsg, installResult } = state;
+  const { nodeInstallFormValue, currentStep, nodeVersionsList, nodeInstallStatus } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -78,7 +78,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     if (xterm) {
       xterm.clear(TERM_ID);
     }
-    dispatchers.updateInstallNodeFormValue(values);
+    dispatchers.updateNodeInstallFormValue(values);
     await ipcRenderer.invoke(
       'install-node',
       {
@@ -100,7 +100,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
           {...formItemLayout}
           field={field}
           fullWidth
-          onChange={dispatchers.updateInstallNodeFormValue}
+          onChange={dispatchers.updateNodeInstallFormValue}
           className={styles.form}
         >
           <Form.Item
@@ -140,7 +140,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       );
       break;
     case 3:
-      mainbody = <InstallResult goBack={goBack} />;
+      mainbody = <InstallResult goBack={goBack} reinstallGlobalDeps={nodeInstallFormValue.reinstallGlobalDeps} />;
       break;
     default:
       break;
@@ -153,8 +153,10 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
         aria-current={index === currentStep ? 'step' : null}
         key={item.name}
         title={item.title}
-        disabled={index === 2 && !installNodeFormValue.reinstallGlobalDeps}
-        icon={((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[installStatus[item.name]] : undefined}
+        disabled={index === 2 && !nodeInstallFormValue.reinstallGlobalDeps}
+        icon={
+          ((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
+        }
       />
     ),
   );
@@ -180,11 +182,11 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     if (status === 'done') {
       return;
     }
-    dispatchers.updateInstallStatus({ status, stepName: task });
+    dispatchers.updateNodeInstallStatus({ status, stepName: task });
     if (status === 'process') {
       return;
     } else if (status === 'error') {
-      dispatchers.updateInstallErrMsg({ errMsg, stepName: task });
+      dispatchers.updateNodeInstallErrMsg({ errMsg, stepName: task });
     } else if (status === 'success' && result) {
       dispatchers.updateInstallResult(result);
     }

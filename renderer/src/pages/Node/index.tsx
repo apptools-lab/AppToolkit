@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Grid, Button, Balloon } from '@alifd/next';
 import { ipcRenderer } from 'electron';
 import PageHeader from '@/components/PageHeader';
@@ -10,10 +10,8 @@ import InstallStep from './components/InstallStep';
 const { Row, Col } = Grid;
 
 const Node = () => {
-  const [installNodeStepVisible, setInstallNodeStepVisible] = useState(false);
-
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInfo, currentStep } = state;
+  const { nodeInfo, currentStep, nodeInstallVisible } = state;
   const { options = {}, localVersion, managerVersion } = nodeInfo as IBasePackage;
   const { managerName } = options;
 
@@ -22,7 +20,7 @@ const Node = () => {
   const onSwitchVersionBtnClick = () => {
     dispatchers.initStep();
     dispatchers.initNodeInstall();
-    setInstallNodeStepVisible(true);
+    dispatchers.setNodeInstallVisible(true);
   };
 
   const getNodeInfo = async function () {
@@ -34,7 +32,7 @@ const Node = () => {
   }, []);
 
   const goBack = async () => {
-    setInstallNodeStepVisible(false);
+    dispatchers.setNodeInstallVisible(false);
     await getNodeInfo();
   };
 
@@ -46,7 +44,7 @@ const Node = () => {
     goBack();
   };
 
-  const headerBtn = (currentStep !== 3 && installNodeStepVisible) ? (
+  const headerBtn = (currentStep !== 3 && nodeInstallVisible) ? (
     <Button type="normal" onClick={cancelNodeInstall}>
       取消安装
     </Button>
@@ -67,7 +65,7 @@ const Node = () => {
     <div className={styles.nodeContainer}>
       <PageHeader title="Node 管理" button={headerBtn} />
       {
-        installNodeStepVisible ? (
+        nodeInstallVisible ? (
           <InstallStep
             managerName={managerName}
             INSTALL_NODE_CHANNEL={INSTALL_NODE_CHANNEL}
