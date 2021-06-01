@@ -124,8 +124,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
               <span className={styles.label}>
                 重装全局依赖
                 <Balloon type="primary" trigger={<Icon type="help" size="medium" />} closable={false}>
-                  安装一个新版本的 Node.js 后，原来全局 npm 包将会不可用。
-                  选择此选项会自动把原来的 npm 包迁移到新版本的 Node.js 中。
+                  安装一个新版本的 Node.js 后，原来全局 npm 包可能会不可用。
+                  选择此选项会自动把原来的 npm 包适配到新版本的 Node.js 中。
                 </Balloon>
               </span>}
             required
