@@ -8,13 +8,13 @@ const nodeManagerInfoProcessor = {
   nvm: getNvmInfo,
 };
 
-function getLocalNodeInfo(
+async function getLocalNodeInfo(
   name: string,
   latestVersion: string | null,
   options: { [k: string]: any },
 ) {
   const { managerName } = options;
-  let localNodeInfo = getLocalCliInfo(name, latestVersion);
+  let localNodeInfo = await getLocalCliInfo(name, latestVersion);
 
   let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
   const getNodeManagerInfoFunc = nodeManagerInfoProcessor[managerName];

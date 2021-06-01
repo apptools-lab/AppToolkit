@@ -4,7 +4,7 @@ import { DEFAULT_LOCAL_PACKAGE_INFO } from '../../constants';
 import getVersionStatus from '../../utils/getVersionStatus';
 import log from '../../utils/log';
 
-function getLocalCliInfo(name: string, latestVersion: string | null) {
+async function getLocalCliInfo(name: string, latestVersion: string | null) {
   const localCliInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
   // get the local path of cli
   try {
@@ -20,7 +20,7 @@ function getLocalCliInfo(name: string, latestVersion: string | null) {
   }
   // get cli version
   try {
-    const { stdout: cliVersion } = execa.sync(
+    const { stdout: cliVersion } = await execa(
       localCliInfo.localPath,
       ['--version'],
       { shell: true },
