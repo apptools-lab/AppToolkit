@@ -18,15 +18,15 @@ const defaultValues = { reinstallGlobalDeps: true };
 
 const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { installNodeFormValue, currentStep, nodeVersionsList, installStatus } = state;
+  const { installNodeFormValue, currentStep, nodeVersions, installStatus } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
   useEffect(() => {
-    if (effectsErrors.getNodeVersionsList.error) {
-      Message.error(effectsErrors.getNodeVersionsList.error.message);
+    if (effectsErrors.getNodeVersions.error) {
+      Message.error(effectsErrors.getNodeVersions.error.message);
     }
-  }, [effectsErrors.getNodeVersionsList.error]);
+  }, [effectsErrors.getNodeVersions.error]);
 
   useEffect(() => {
     if (effectsErrors.getNodeInfo.error) {
@@ -113,8 +113,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
               showSearch
             >
               {
-                nodeVersionsList.map((nodeVersion: string) => (
-                  <Select.Option key={nodeVersion} value={nodeVersion}>{nodeVersion}</Select.Option>
+                nodeVersions.majors.map(({ version, title }) => (
+                  <Select.Option key={version} value={version}>{title}</Select.Option>
                 ))
               }
             </Select>
@@ -170,9 +170,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   );
 
   useEffect(() => {
-    if (!nodeVersionsList.length) {
-      dispatchers.getNodeVersionsList();
-    }
+    dispatchers.getNodeVersions();
   }, []);
 
   useEffect(() => {
@@ -211,7 +209,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       <Step current={currentStep} className={styles.step} shape="dot">
         {stepComponents}
       </Step>
-      <Loading visible={effectsLoading.getNodeVersionsList} className={styles.loading} tip="获取 Node.js 版本中...">
+      <Loading visible={effectsLoading.getNodeVersions} className={styles.loading} tip="获取 Node.js 版本中...">
         {mainbody}
       </Loading>
     </div>
