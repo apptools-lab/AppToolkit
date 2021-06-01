@@ -49,3 +49,8 @@ export interface IInstallResult {
   status: 'finish' | 'error';
   errMsg?: string;
 }
+
+export interface INodeVersions {
+  versions: string[];
+  majors: Array<{ version: string; title: string }>;
+}

@@ -1,15 +1,11 @@
 import allNodeVersions = require('all-node-versions');
 import { TAOBAO_NODE_MIRROR } from '../constants';
+import { INodeVersions } from '../types';
 
 interface IMajorVersion {
   major: number;
   latest: string;
   lts?: string;
-}
-
-interface INodeVersions {
-  versions: string[];
-  majors: Array<{ version: string; title: string }>;
 }
 
 async function getNodeVersions(): Promise<INodeVersions> {
@@ -37,16 +33,16 @@ async function getNodeVersions(): Promise<INodeVersions> {
     .map((item: IMajorVersion) => {
       const { major, latest: latestVersion, lts } = item;
       let title = '';
-      if (lts) {
+      if (major % 2 === 0 && !appearCurrentVersion) {
+        appearCurrentVersion = true;
+        title = `${latestVersion} (Current)`;
+      } else if (lts) {
         if (!appearRecommendVerison) {
           appearRecommendVerison = true;
           title = `${latestVersion} (Recommend)`;
         } else {
           title = `${latestVersion} (LTS)`;
         }
-      } else if (major % 2 === 0 && !appearCurrentVersion) {
-        appearCurrentVersion = true;
-        title = `${latestVersion} (Current)`;
       }
 
       return { version: latestVersion, title };
