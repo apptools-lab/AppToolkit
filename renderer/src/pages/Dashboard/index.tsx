@@ -23,7 +23,8 @@ const Dashboard = () => {
   const {
     basePackagesList,
     isInstalling,
-    installPackagesList,
+    uninstalledPackagesList,
+    selectedInstalledPackagesList,
     pkgInstallStatuses,
     pkgInstallStep,
     currentStep,
@@ -50,7 +51,7 @@ const Dashboard = () => {
     if (!packageNames.length) {
       return;
     }
-    const selectedInstallPackagesList = installPackagesList.filter((item) => {
+    const selectedPackagesList = uninstalledPackagesList.filter((item) => {
       return packageNames.includes(item.name);
     });
     const xterm = xtermManager.getTerm(TERM_ID);
@@ -58,10 +59,10 @@ const Dashboard = () => {
       xterm.clear(TERM_ID);
     }
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStep(selectedInstallPackagesList);
+    dispatchers.initStep(selectedPackagesList);
     ipcRenderer
       .invoke('install-base-packages', {
-        packagesList: selectedInstallPackagesList,
+        packagesList: selectedPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       })
@@ -134,7 +135,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {installPackagesList.map((item: IBasePackage, index: number) => {
+        {selectedInstalledPackagesList.map((item: IBasePackage, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item
@@ -156,7 +157,7 @@ const Dashboard = () => {
     <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
       <PageHeader
         title="前端开发必备"
-        button={installPackagesList.length ? installButton : null}
+        button={uninstalledPackagesList.length ? installButton : null}
       />
       <main>
         {isInstalling ? (
@@ -204,7 +205,7 @@ const Dashboard = () => {
       </main>
       {visible && (
         <InstallConfirmDialog
-          packages={installPackagesList}
+          packages={uninstalledPackagesList}
           onCancel={onDialogClose}
           onOk={onDialogConfirm}
         />
