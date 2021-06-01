@@ -26,14 +26,22 @@ const { build: { productName }, version } = packageJSON;
   }
   const buildResourcesDir = path.join(__dirname, '..', 'release');
   // upload app resource
-  // 软件内获取的版本最新版本信息，用于升级软件 e.g: latest-mac.yml
+  // record latest version for the auto-updater to work. e.g: latest-mac.yml
   const channelFile = `${channel}${channelExt}`;
-  // 软件安装包 e.g: AppWorks Toolkit-0.1.0.dmg
-  const packageFile = `${distFileName}${distFileExt}`;
-  // 软件压缩包 e.g: AppWorks Toolkit-0.1.0-mac.zip
+  // package installer file with version. e.g: AppWorks Toolkit.dmg
+  const packageWithoutVersionFile = `${productName}${distFileExt}`;
+  // package installer file with version. e.g: AppWorks Toolkit-0.1.0.dmg
+  const packageWithVersionFile = `${distFileName}${distFileExt}`;
+  // package zip file. e.g: AppWorks Toolkit-0.1.0-mac.zip
   const packageZipFile = `${distFileName}-${platform}.zip`;
 
+  const fileLists = [
+    { ossObjectFile: channelFile, localFile: channelFile },
+    { ossObjectFile: packageWithoutVersionFile, localFile: packageWithVersionFile },
+    { ossObjectFile: packageWithVersionFile, localFile: packageWithVersionFile },
+    { ossObjectFile: packageZipFile, localFile: packageZipFile },
+  ];
   Promise.all([
-    [channelFile, packageFile, packageZipFile].map((file: string) => uploadToOSS(`${OSSObjectDir}/${file}`, path.join(buildResourcesDir, file))),
+    fileLists.map(({ ossObjectFile, localFile }) => uploadToOSS(`${OSSObjectDir}/${ossObjectFile}`, path.join(buildResourcesDir, localFile))),
   ]);
 })();
