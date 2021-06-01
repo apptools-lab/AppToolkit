@@ -26,11 +26,12 @@
       height: 32px;
       line-height: 32px;
 
-      span {
+      a {
         max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: #333;
       }
       img {
         margin-left: 10px;
