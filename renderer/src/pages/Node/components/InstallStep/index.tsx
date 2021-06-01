@@ -1,5 +1,5 @@
 import { useEffect, FC } from 'react';
-import { Step, Field, Form, Switch, Select, Loading, Message } from '@alifd/next';
+import { Step, Field, Form, Switch, Select, Loading, Message, Balloon, Icon } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
@@ -18,7 +18,7 @@ const defaultValues = { reinstallGlobalDeps: true };
 
 const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { installNodeFormValue, currentStep, nodeVersionsList, installStatus, installErrMsg, installResult } = state;
+  const { installNodeFormValue, currentStep, nodeVersionsList, installStatus } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -101,7 +101,6 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
           field={field}
           fullWidth
           onChange={dispatchers.updateInstallNodeFormValue}
-          className={styles.form}
         >
           <Form.Item
             label="Node 版本"
@@ -121,7 +120,14 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
             </Select>
           </Form.Item>
           <Form.Item
-            label="重装全局依赖"
+            label={
+              <span className={styles.label}>
+                重装全局依赖
+                <Balloon type="primary" trigger={<Icon type="help" size="medium" />} closable={false}>
+                  安装一个新版本的 Node.js 后，原来全局 npm 包将会不可用。
+                  选择此选项会自动把原来的 npm 包迁移到新版本的 Node.js 中。
+                </Balloon>
+              </span>}
             required
             requiredMessage="请选择是否重装全局依赖"
           >
