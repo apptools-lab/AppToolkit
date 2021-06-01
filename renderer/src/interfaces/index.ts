@@ -2,6 +2,7 @@ export interface IBasePackage {
   name: string;
   title: string;
   description: string;
+  link: string;
   icon: string;
   downloadUrl?: string;
   shellName?: string;

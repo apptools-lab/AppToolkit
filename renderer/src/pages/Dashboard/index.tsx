@@ -191,6 +191,7 @@ const Dashboard = () => {
                 <AppCard
                   name={item.title}
                   description={item.description}
+                  link={item.link}
                   icon={item.icon}
                   versionStatus={item.versionStatus}
                   recommended={item.recommended}
