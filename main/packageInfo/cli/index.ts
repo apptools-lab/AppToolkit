@@ -6,11 +6,9 @@ const processor = {
   node: getLocalNodeInfo,
 };
 
-export default (basePackageInfo: IBasePackageInfo) => {
+export default async (basePackageInfo: IBasePackageInfo) => {
   const { name, version, options } = basePackageInfo;
   const getLocalInfoFunc = processor[name];
-  if (getLocalInfoFunc) {
-    return getLocalInfoFunc(name, version, options);
-  }
-  return getLocalCliInfo(name, version);
+
+  return getLocalInfoFunc ? await getLocalInfoFunc(name, version, options) : await getLocalCliInfo(name, version);
 };

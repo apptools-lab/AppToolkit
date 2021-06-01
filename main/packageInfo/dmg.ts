@@ -4,7 +4,7 @@ import { IBasePackageInfo } from 'types';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import getVersionStatus from '../utils/getVersionStatus';
 
-function getLocalDmgInfo(basePackageInfo: IBasePackageInfo) {
+async function getLocalDmgInfo(basePackageInfo: IBasePackageInfo) {
   const { name, version: latestVersion } = basePackageInfo;
   const app = /\.app$/.test(name) ? name : `${name}.app`;
   const appInfo = {
@@ -13,7 +13,7 @@ function getLocalDmgInfo(basePackageInfo: IBasePackageInfo) {
     versionStatus: 'uninstalled',
   };
 
-  const paths = globby.sync([app], {
+  const paths = await globby([app], {
     cwd: APPLICATIONS_DIR_PATH,
     onlyDirectories: true,
     deep: 1,
