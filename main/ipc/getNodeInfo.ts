@@ -12,9 +12,9 @@ export default () => {
     const data = await fse.readJSON(path.join(__dirname, '../data', 'data.json'));
     const { bases = [] }: { bases: IBasePackageInfo[] } = data;
     const nodeBasicInfo = bases.find((base: IBasePackageInfo) => base.name === 'node');
-    const localNodeInfo = getPackageInfo(nodeBasicInfo);
+    const nodeInfo = getPackageInfo(nodeBasicInfo);
 
-    return localNodeInfo;
+    return nodeInfo;
   });
 
   ipcMain.handle('get-node-versions-list', async (event: IpcMainInvokeEvent) => {

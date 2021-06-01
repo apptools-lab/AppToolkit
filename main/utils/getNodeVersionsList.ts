@@ -1,19 +1,19 @@
-import fetch from 'node-fetch';
-import * as compareVersions from 'compare-versions';
+import allNodeVersions = require('all-node-versions');
+import { TAOBAO_NODE_MIRROR } from '../constants';
 
-async function getNodeVersionsList() {
-  const res = await fetch('https://npm.taobao.org/mirrors/node');
-  const body = await res.text();
-  let matched;
-  // filter versions which are higher than 14.x
-  const re = /<a[^>]*href=[ '"](?:[^"]*)[' "][^>]*>(v1[4-9][.\d+]*).*<\/a>/g;
-  const arr = [];
-  // eslint-disable-next-line
-  while ((matched = re.exec(body)) !== null) {
-    arr.push(matched[1]);
-  }
-  // sort the version from latest to oldest
-  return arr.sort(compareVersions).reverse();
+async function getNodeVersionsList(): Promise<string[]> {
+  const MIN_MAJOR = '14';
+
+  const options = {
+    mirror: TAOBAO_NODE_MIRROR,
+    // cache for one hour
+    fetch: false,
+  };
+  const { versions = [] } = await allNodeVersions(options);
+
+  return versions.filter((version: string) => {
+    return RegExp(`${MIN_MAJOR[0]}[${MIN_MAJOR[1]}-9](.([0-9]+)){2}`).test(version);
+  });
 }
 
 export default getNodeVersionsList;
