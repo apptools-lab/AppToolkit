@@ -20,6 +20,8 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
+    // first, clear the cache
+    clearCache([installChannel, processChannel]);
     // fork a child process to install package
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
     childProcessMap.set(installChannel, childProcess);
