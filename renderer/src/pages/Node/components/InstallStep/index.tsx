@@ -1,5 +1,5 @@
 import { useEffect, FC } from 'react';
-import { Step, Field, Form, Switch, Select, Loading, Message } from '@alifd/next';
+import { Step, Field, Form, Switch, Select, Loading, Message, Balloon, Icon } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
@@ -18,15 +18,15 @@ const defaultValues = { reinstallGlobalDeps: true };
 
 const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { installNodeFormValue, currentStep, nodeVersionsList, installStatus, installErrMsg, installResult } = state;
+  const { installNodeFormValue, currentStep, nodeVersions, installStatus } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
   useEffect(() => {
-    if (effectsErrors.getNodeVersionsList.error) {
-      Message.error(effectsErrors.getNodeVersionsList.error.message);
+    if (effectsErrors.getNodeVersions.error) {
+      Message.error(effectsErrors.getNodeVersions.error.message);
     }
-  }, [effectsErrors.getNodeVersionsList.error]);
+  }, [effectsErrors.getNodeVersions.error]);
 
   useEffect(() => {
     if (effectsErrors.getNodeInfo.error) {
@@ -101,23 +101,33 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
           field={field}
           fullWidth
           onChange={dispatchers.updateInstallNodeFormValue}
-          className={styles.form}
         >
           <Form.Item
             label="Node 版本"
             required
             requiredMessage="请选择一个 Node 版本"
           >
-            <Select name="nodeVersion" placeholder="请选择一个 Node 版本">
+            <Select
+              name="nodeVersion"
+              placeholder="请选择一个 Node 版本"
+              showSearch
+            >
               {
-                nodeVersionsList.map((nodeVersion: string) => (
-                  <Select.Option key={nodeVersion} value={nodeVersion}>{nodeVersion}</Select.Option>
+                nodeVersions.majors.map(({ version, title }) => (
+                  <Select.Option key={version} value={version}>{title}</Select.Option>
                 ))
               }
             </Select>
           </Form.Item>
           <Form.Item
-            label="重装全局依赖"
+            label={
+              <span className={styles.label}>
+                重装全局依赖
+                <Balloon type="primary" trigger={<Icon type="help" size="medium" />} closable={false}>
+                  安装一个新版本的 Node.js 后，原来全局 npm 包可能会不可用。
+                  选择此选项会自动把原来的 npm 包适配到新版本的 Node.js 中。
+                </Balloon>
+              </span>}
             required
             requiredMessage="请选择是否重装全局依赖"
           >
@@ -159,14 +169,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     ),
   );
 
-  async function getNodeVersionsList() {
-    await dispatchers.getNodeVersionsList(managerName);
-  }
-
   useEffect(() => {
-    if (!nodeVersionsList.length) {
-      getNodeVersionsList();
-    }
+    dispatchers.getNodeVersions();
   }, []);
 
   useEffect(() => {
@@ -205,7 +209,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       <Step current={currentStep} className={styles.step} shape="dot">
         {stepComponents}
       </Step>
-      <Loading visible={effectsLoading.getNodeVersionsList} className={styles.loading} tip="获取 Node.js 版本中...">
+      <Loading visible={effectsLoading.getNodeVersions} className={styles.loading} tip="获取 Node.js 版本中...">
         {mainbody}
       </Loading>
     </div>

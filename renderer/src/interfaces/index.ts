@@ -22,7 +22,7 @@ export interface IBasePackage {
 
 export type Platform = 'win32' | 'darwin';
 
-export type PackageType = 'cli' | 'dmg' | 'exe'| 'vscodeExtension'| 'chromeExtension' | 'npm';
+export type PackageType = 'cli' | 'dmg' | 'exe' | 'vscodeExtension' | 'chromeExtension' | 'npm';
 
 export enum VersionStatus {
   'installed' = '已安装',
@@ -35,4 +35,9 @@ export interface IInstallResultData {
   title: string;
   duration: number;
   errMsg?: string;
+}
+
+export interface INodeVersions {
+  versions: string[];
+  majors: Array<{ version: string; title: string }>;
 }
