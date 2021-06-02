@@ -65,6 +65,7 @@ export default {
     },
 
     async getCaches({ processChannel, installChannel }) {
+      // TODO: handle install log cache
       const { processCaches } = await ipcRenderer.invoke(
         'get-node-install-cache',
         { processChannel, installChannel },
