@@ -17,6 +17,7 @@ const Node = () => {
 
   const INSTALL_NODE_CHANNEL = 'install-node';
   const INSTALL_PROCESS_STATUS_CHANNEL = 'install-node-process-status';
+
   const onSwitchVersionBtnClick = async () => {
     await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     dispatchers.initStep();
@@ -41,7 +42,7 @@ const Node = () => {
     await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     await ipcRenderer.invoke(
       'cancel-install-node',
-      { installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL },
+      INSTALL_NODE_CHANNEL,
     );
     goBack();
   };

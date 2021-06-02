@@ -5,6 +5,7 @@ import { IpcMainInvokeEvent } from 'electron/main';
 import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import nodeCache from '../utils/nodeCache';
+import log from '../utils/log';
 
 const childProcessMap = new Map();
 
@@ -25,11 +26,15 @@ export default () => {
       processChannel: string;
     },
   ) => {
+    let childProcess = childProcessMap.get(installChannel);
+    if (childProcess) {
+      log.info(`Channel ${installChannel} has an existed child process.`);
+      return;
+    }
     // first, clear the cache
     clearCache([installChannel, processChannel]);
 
-    const childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
-
+    childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
     childProcessMap.set(installChannel, childProcess);
 
     childProcess.send({
@@ -67,7 +72,7 @@ export default () => {
     });
   });
 
-  ipcMain.handle('cancel-install-node', (event: IpcMainInvokeEvent, { installChannel, processChannel }) => {
+  ipcMain.handle('cancel-install-node', (event: IpcMainInvokeEvent, installChannel: string) => {
     killChannelChildProcess(childProcessMap, installChannel);
   });
 

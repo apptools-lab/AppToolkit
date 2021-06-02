@@ -59,5 +59,27 @@ export default {
       });
       dispatch.dashboard.updateUninstalledPackagesList(packagesList);
     },
+
+    async clearCaches({ processChannel, installChannel }) {
+      await ipcRenderer.invoke('clear-base-packages-install-cache', { processChannel, installChannel });
+    },
+
+    async getCaches({ processChannel, installChannel }) {
+      const { processCaches } = await ipcRenderer.invoke(
+        'get-node-install-cache',
+        { processChannel, installChannel },
+      );
+
+      if (Array.isArray(processCaches)) {
+        processCaches.forEach(({ currentIndex, status, result }) => {
+          if (status === 'done') {
+            dispatch.dashboard.updateCurrentStep(2);
+            dispatch.dashboard.updateInstallResult(result);
+          } else {
+            dispatch.dashboard.updatePkgInstallStepStatus({ status, step: currentIndex });
+          }
+        });
+      }
+    },
   }),
 };
