@@ -1,5 +1,6 @@
 import { IBasePackage } from '@/interfaces';
 import { ipcRenderer } from 'electron';
+import { INodeVersions } from '../../interfaces';
 
 const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };
 const DEFAULT_INSTALL_NODE_FORM_VALUE = { reinstallGlobalDeps: true };
@@ -11,10 +12,15 @@ const DEFAULT_INSTALL_ERR_MSG = {
   installNode: '',
   reinstallPackages: '',
 };
+const DEFAULT_NODE_VERSIONS: INodeVersions = {
+  versions: [],
+  majors: [],
+};
+
 export default {
   state: {
     nodeInfo: {},
-    nodeVersionsList: [],
+    nodeVersions: DEFAULT_NODE_VERSIONS,
     currentStep: 0,
     installStatus: DEFAULT_INSTALL_STATUS,
     installErrMsg: DEFAULT_INSTALL_ERR_MSG,
@@ -26,8 +32,8 @@ export default {
       prevState.nodeInfo = payload;
     },
 
-    updateNodeVersionsList(prevState, payload: string[]) {
-      prevState.nodeVersionsList = payload;
+    updateNodeVersions(prevState, payload: INodeVersions) {
+      prevState.nodeVersions = payload;
     },
 
     updateStep(prevState, currentStep: number) {
@@ -67,9 +73,9 @@ export default {
       dispatch.node.updateNodeInfo(nodeInfo);
     },
 
-    async getNodeVersionsList(managerName: string) {
-      const nodeVersionsList: string[] = await ipcRenderer.invoke('get-node-versions-list', managerName);
-      dispatch.node.updateNodeVersionsList(nodeVersionsList);
+    async getNodeVersions() {
+      const nodeVersions: INodeVersions = await ipcRenderer.invoke('get-node-versions');
+      dispatch.node.updateNodeVersions(nodeVersions);
     },
   }),
 };

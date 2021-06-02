@@ -15,10 +15,9 @@ export default () => {
       // remove internal package when not in the ali internal
       return item.isInternal ? isAliInternal : true;
     });
-    const packagesData = basePackages.map((basePackageInfo: IBasePackageInfo) => {
+    const packagesData = await Promise.all(basePackages.map((basePackageInfo: IBasePackageInfo) => {
       return getPackageInfo(basePackageInfo);
-    });
-
+    }));
     return packagesData;
   });
 };
