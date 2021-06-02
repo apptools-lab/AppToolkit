@@ -11,14 +11,15 @@ import styles from './index.module.scss';
 interface IInstallStep {
   managerName: string;
   INSTALL_NODE_CHANNEL: string;
+  INSTALL_PROCESS_STATUS_CHANNEL: string;
   goBack: () => void;
 }
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
+const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus } = state;
+  const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus, nodeInstallVisible } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -35,7 +36,6 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   }, [effectsErrors.getNodeInfo.error]);
 
   const TERM_ID = 'node';
-  const INSTALL_PROCESS_STATUS_CHANNEL = 'install-node-process-status';
   const steps = [
     { title: '选择版本', name: 'selectedVersion' },
     { title: '安装 Node.js', name: 'installNode' },
@@ -173,6 +173,12 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
 
   useEffect(() => {
     dispatchers.getNodeVersions();
+  }, []);
+
+  useEffect(() => {
+    if (nodeInstallVisible) {
+      dispatchers.getCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    }
   }, []);
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import { checkAliInternal } from 'ice-npm-utils';
-const NodeCache = require('node-cache');
+import nodeCache from './nodeCache';
 
-const nodeCache = new NodeCache();
 const cacheId = 'isAliInternal';
 const cacheTimeoutSeconds = 60 * 60;
 

@@ -82,5 +82,42 @@ export default {
       const nodeVersions: INodeVersions = await ipcRenderer.invoke('get-node-versions');
       dispatch.node.updateNodeVersions(nodeVersions);
     },
+
+    async clearCaches({ processChannel, installChannel }) {
+      await ipcRenderer.invoke('clear-node-install-cache', { processChannel, installChannel });
+    },
+
+    async getCaches({ processChannel, installChannel }) {
+      const { processCaches } = await ipcRenderer.invoke(
+        'get-node-install-cache',
+        { processChannel, installChannel },
+      );
+
+      if (Array.isArray(processCaches)) {
+        processCaches.forEach(({ task, status, result, errMsg }) => {
+          dispatch.node.updateNodeInstallStatus({ status, stepName: task });
+
+          if (status === 'success') {
+            // update install result
+            if (result) {
+              dispatch.node.updateInstallResult(result);
+            }
+          } else if (status === 'error') {
+            dispatch.node.updateNodeInstallErrMsg({ errMsg, stepName: task });
+          }
+
+          if (status === 'success' || status === 'error') {
+            // update current step
+            if (task === 'installNode') {
+              dispatch.node.updateStep(2);
+            } else if (task === 'reinstallPackages') {
+              dispatch.node.updateStep(3);
+            }
+          } else if (status === 'done') {
+            dispatch.node.updateStep(3);
+          }
+        });
+      }
+    },
   }),
 };
