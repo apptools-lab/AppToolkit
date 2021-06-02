@@ -97,18 +97,16 @@ export default {
       if (Array.isArray(processCaches)) {
         processCaches.forEach(({ task, status, result, errMsg }) => {
           dispatch.node.updateNodeInstallStatus({ status, stepName: task });
-
+          // update install result or err
           if (status === 'success') {
-            // update install result
             if (result) {
               dispatch.node.updateInstallResult(result);
             }
           } else if (status === 'error') {
             dispatch.node.updateNodeInstallErrMsg({ errMsg, stepName: task });
           }
-
+          // update current step
           if (status === 'success' || status === 'error') {
-            // update current step
             if (task === 'installNode') {
               dispatch.node.updateStep(2);
             } else if (task === 'reinstallPackages') {

@@ -31,9 +31,7 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
-    // first, clear the cache
-    clearCache([installChannel, processChannel]);
-
+    // fork a child process to install node
     childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
     childProcessMap.set(installChannel, childProcess);
 
@@ -56,7 +54,7 @@ export default () => {
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
         }
-        // save data to cache
+        // save process data to cache
         const processCaches = nodeCache.get(channel) || [];
         const taskIndex = processCaches.findIndex((item) => item.task === data.task);
         if (taskIndex > -1) {

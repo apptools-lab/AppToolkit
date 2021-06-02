@@ -20,8 +20,6 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
-    // first, clear the cache
-    clearCache([installChannel, processChannel]);
     // fork a child process to install package
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
     childProcessMap.set(installChannel, childProcess);
@@ -29,20 +27,22 @@ export default () => {
     childProcess.send({ packagesList, installChannel, processChannel });
 
     childProcess.on('message', ({ channel, data }: any) => {
-      if (channel === processChannel && data.status === 'done') {
-        killChannelChildProcess(childProcessMap, installChannel);
+      if (channel === processChannel) {
+        if (data.status === 'done') {
+          killChannelChildProcess(childProcessMap, installChannel);
+        }
+        // save process data to cache
+        const processCaches = nodeCache.get(channel) || [];
+        const taskIndex = processCaches.findIndex((item) => item.currentIndex === data.currentIndex);
+        if (taskIndex > -1) {
+          // update the existed task process in cache
+          processCaches.splice(taskIndex, 1, data);
+        } else {
+          // add task process to cache
+          processCaches.push(data);
+        }
+        nodeCache.set(channel, processCaches);
       }
-      // save data to cache
-      const processCaches = nodeCache.get(channel) || [];
-      const taskIndex = processCaches.findIndex((item) => item.currentIndex === data.currentIndex);
-      if (taskIndex > -1) {
-        // update the existed task process in cache
-        processCaches.splice(taskIndex, 1, data);
-      } else {
-        // add task process to cache
-        processCaches.push(data);
-      }
-      nodeCache.set(channel, processCaches);
 
       sendMainWindow(channel, data);
     });
