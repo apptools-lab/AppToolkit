@@ -3,12 +3,9 @@ import * as execa from 'execa';
 import * as shell from 'shelljs';
 import { INodeManager } from '../types';
 import log from '../utils/log';
-import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import { NOT_REINSTALL_PACKAGES } from '../constants';
 import getNpmRegistry from '../utils/getNpmRegistry';
-// eslint-disable-next-line import/order
-import stripAnsi = require('strip-ansi');
 
 class NvmManager implements INodeManager {
   channel: string;
@@ -60,16 +57,6 @@ class NvmManager implements INodeManager {
       });
     });
   };
-
-  async getNodeVersionsList() {
-    const shFilePath = formatWhitespaceInPath(path.resolve(__dirname, '../data/shells', 'nvm-node-version.sh'));
-    const { stdout } = await execa.command(`sh ${shFilePath}`);
-
-    return stdout
-      .split('\n')
-      .reverse()
-      .map((version: string) => stripAnsi(version).trim());
-  }
 
   reinstallPackages = () => {
     return this.getGlobalNpmPackages()
