@@ -41,7 +41,9 @@ const { build: { productName }, version } = packageJSON;
     { ossObjectFile: packageWithVersionFile, localFile: packageWithVersionFile },
     { ossObjectFile: packageZipFile, localFile: packageZipFile },
   ];
-  Promise.all([
-    fileLists.map(({ ossObjectFile, localFile }) => uploadToOSS(`${OSSObjectDir}/${ossObjectFile}`, path.join(buildResourcesDir, localFile))),
-  ]);
+  Promise.all(
+    fileLists.map(({ ossObjectFile, localFile }) => {
+      return uploadToOSS(`${OSSObjectDir}/${ossObjectFile}`, path.join(buildResourcesDir, localFile));
+    }),
+  );
 })();
