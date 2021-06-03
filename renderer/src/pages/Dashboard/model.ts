@@ -5,7 +5,8 @@ export default {
   state: {
     basePackagesList: [],
     isInstalling: false,
-    installPackagesList: [],
+    uninstalledPackagesList: [],
+    selectedInstalledPackagesList: [],
     currentStep: 0,
     pkgInstallStep: 0,
     pkgInstallStatuses: [],
@@ -20,8 +21,8 @@ export default {
       prevState.isInstalling = isInstalling;
     },
 
-    updateInstallPackagesList(prevState, installPackagesList: IBasePackage[]) {
-      prevState.installPackagesList = installPackagesList;
+    updateUninstalledPackagesList(prevState, uninstalledPackagesList: IBasePackage[]) {
+      prevState.uninstalledPackagesList = uninstalledPackagesList;
     },
 
     updateCurrentStep(prevState, step: number) {
@@ -36,12 +37,12 @@ export default {
       prevState.pkgInstallStatuses[step].status = status;
     },
 
-    initStep(prevState, installPackagesList: IBasePackage[]) {
+    initStep(prevState, selectedInstalledPackagesList: IBasePackage[]) {
       // skip the start step
       prevState.currentStep = 1;
       prevState.pkgInstallStep = 0;
-      prevState.pkgInstallStatuses = installPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
-      prevState.installPackagesList = installPackagesList;
+      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
+      prevState.selectedInstalledPackagesList = selectedInstalledPackagesList;
       prevState.installResult = [];
     },
 
@@ -56,7 +57,30 @@ export default {
       const packagesList = data.filter((basePackage: IBasePackage) => {
         return basePackage.versionStatus !== 'installed';
       });
-      dispatch.dashboard.updateInstallPackagesList(packagesList);
+      dispatch.dashboard.updateUninstalledPackagesList(packagesList);
+    },
+
+    async clearCaches({ processChannel, installChannel }) {
+      await ipcRenderer.invoke('clear-base-packages-install-cache', { processChannel, installChannel });
+    },
+
+    async getCaches({ processChannel, installChannel }) {
+      // TODO: handle install log cache
+      const { processCaches } = await ipcRenderer.invoke(
+        'get-node-install-cache',
+        { processChannel, installChannel },
+      );
+
+      if (Array.isArray(processCaches)) {
+        processCaches.forEach(({ currentIndex, status, result }) => {
+          if (status === 'done') {
+            dispatch.dashboard.updateCurrentStep(2);
+            dispatch.dashboard.updateInstallResult(result);
+          } else {
+            dispatch.dashboard.updatePkgInstallStepStatus({ status, step: currentIndex });
+          }
+        });
+      }
     },
   }),
 };

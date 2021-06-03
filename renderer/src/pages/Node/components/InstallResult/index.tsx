@@ -1,46 +1,65 @@
-import { Button, Box, Icon, Typography } from '@alifd/next';
+import { Button, Box, Typography, Tag, List } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
 
-const InstallResult = ({ goBack }) => {
+const { Group: TagGroup } = Tag;
+
+const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
   const [state] = store.useModel('node');
-  const { installStatus, installResult, installErrMsg } = state;
+  const { nodeInstallStatus, installResult, nodeInstallErrMsg } = state;
+
+  const successTag = <Tag type="normal" color="green" size="medium">成功</Tag>;
+  const errorTag = <Tag type="normal" color="red" size="medium">失败</Tag>;
 
   return (
     <Box align="center">
-      {
-        (installErrMsg.installNode || installErrMsg.reinstallPackages) ? (
-          <>
-            <img src="https://img.alicdn.com/tfs/TB1VOSVoqL7gK0jSZFBXXXZZpXa-72-72.png" alt="img" />
-            <Typography.H1>安装失败</Typography.H1>
-            <Typography.H3>错误信息</Typography.H3>
-            {
-              Object.keys(installErrMsg).map((key: string) => {
-                return installErrMsg[key] ? <Typography.Text>{installErrMsg[key]}</Typography.Text> : null;
-              })
-            }
-          </>
-        ) : (
-          <>
-            <Icon type="success-filling" size={72} className={styles.successIcon} />
-            <Typography.H1>安装成功</Typography.H1>
-            {installStatus.installNode === 'success' && (
+      <Typography.H1>安装结果</Typography.H1>
+      <List size="medium">
+        {/* Node.js install result */}
+        <List.Item
+          title="安装 Node.js"
+          extra={<TagGroup>{nodeInstallStatus.installNode === 'success' ? successTag : errorTag}</TagGroup>}
+        >
+          {nodeInstallStatus.installNode === 'success' && (
+            <>
+              <div className={styles.text}>新建终端，输入以下命令，以验证 Node.js 是否安装成功：</div>
+              <code className={styles.code}>
+                $ node --version
+                <br />
+                {installResult.nodeVersion && <># {installResult.nodeVersion}</>}
+                <br />
+                $ npm --version
+                <br />
+                {installResult.npmVersion && <># {installResult.npmVersion}</>}
+              </code>
+            </>
+          )}
+          {nodeInstallStatus.installNode === 'error' && (
+            <>
+              <div className={styles.text}>错误信息：</div>
+              <code className={styles.code}>
+                {nodeInstallErrMsg.installNode}
+              </code>
+            </>
+          )}
+        </List.Item>
+        {/* npm package install result */}
+        {reinstallGlobalDeps && (
+          <List.Item
+            title="重装全局依赖"
+            extra={<TagGroup>{nodeInstallStatus.reinstallPackages === 'success' ? successTag : errorTag}</TagGroup>}
+          >
+            {nodeInstallStatus.reinstallPackages === 'error' && (
               <>
-                <Typography.Text className={styles.text}>新建终端，输入以下命令，以验证 Node.js 是否安装成功：</Typography.Text>
+                <div className={styles.text}>重装全局依赖失败，请自行安装依赖。详细日志如下：</div>
                 <code className={styles.code}>
-                  $ node --version
-                  <br />
-                  {installResult.nodeVersion && <># {installResult.nodeVersion}</>}
-                  <br />
-                  $ npm --version
-                  <br />
-                  {installResult.npmVersion && <># {installResult.npmVersion}</>}
+                  {nodeInstallErrMsg.reinstallPackages}
                 </code>
               </>
             )}
-          </>
-        )
-      }
+          </List.Item>
+        )}
+      </List>
       <Box margin={40} direction="row">
         <Button type="primary" style={{ marginRight: '5px' }} onClick={goBack}>
           返回

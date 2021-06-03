@@ -6,12 +6,12 @@ const processor = {
   VSCode: getVSCodeExtensionInfo,
 };
 
-export default (basePackageInfo: IBasePackageInfo) => {
+export default async (basePackageInfo: IBasePackageInfo) => {
   const { name, options: { IDEType } } = basePackageInfo;
 
   const getIDEExtensionInfoFunc = processor[IDEType];
   if (getIDEExtensionInfoFunc) {
-    return getVSCodeExtensionInfo(name);
+    return await getVSCodeExtensionInfo(name);
   }
   return DEFAULT_LOCAL_PACKAGE_INFO;
 };

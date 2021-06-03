@@ -2,6 +2,7 @@
   "name": "appworks-toolkit",
   "private": true,
   "version": "0.1.0",
+  "description": "The Frontend Developer Toolkit",
   "scripts": {
     "setup": "rm -rf node_modules renderer/node_modules && npm run install:main && npm run install:renderer",
     "install:main": "ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install --registry=http://registry.npm.taobao.org",
@@ -11,7 +12,7 @@
     "copy:static": "cp -R ./main/data ./dist",
     "watch": "rm -rf ./dist && npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
-    "watch:main": "tsc --build ./main/tsconfig.json -w",
+    "watch:main": "tsc --build ./main/tsconfig.dev.json -w",
     "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
@@ -39,6 +40,7 @@
       }
     ],
     "asar": false,
+    "afterSign": "scripts/notarize.js",
     "directories": {
       "buildResources": "resource",
       "output": "release"
@@ -49,7 +51,9 @@
         "dmg",
         "zip"
       ],
-      "icon": "resources/mac/icon.icns"
+      "icon": "resources/mac/icon.icns",
+      "entitlements": "resources/entitlements.mac.plist",
+      "entitlementsInherit": "resources/entitlements.mac.plist"
     },
     "dmg": {
       "window": {
@@ -75,6 +79,7 @@
   "dependencies": {
     "@shockpkg/hdi-mac": "^1.6.1",
     "adm-zip": "^0.5.5",
+    "all-node-versions": "^8.0.0",
     "compare-versions": "^3.6.0",
     "decompress": "^4.2.1",
     "electron-is-dev": "^2.0.0",
@@ -87,7 +92,6 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "shelljs": "^0.8.4",
-    "strip-ansi": "^6.0.0",
     "sudo-prompt": "^9.2.1",
     "tslib": "^2.2.0"
   },
@@ -101,6 +105,7 @@
     "concurrently": "^5.1.0",
     "electron": "^12.0.0",
     "electron-builder": "^22.10.5",
+    "electron-notarize": "^1.0.0",
     "eslint": "^6.8.0",
     "husky": "^6.0.0",
     "stylelint": "^13.2.0",

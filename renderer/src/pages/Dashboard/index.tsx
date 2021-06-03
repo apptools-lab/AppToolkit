@@ -23,7 +23,8 @@ const Dashboard = () => {
   const {
     basePackagesList,
     isInstalling,
-    installPackagesList,
+    uninstalledPackagesList,
+    selectedInstalledPackagesList,
     pkgInstallStatuses,
     pkgInstallStep,
     currentStep,
@@ -45,23 +46,24 @@ const Dashboard = () => {
     }
   };
 
-  function onDialogConfirm(packageNames: string[]) {
+  async function onDialogConfirm(packageNames: string[]) {
     onDialogClose();
     if (!packageNames.length) {
       return;
     }
-    const selectedInstallPackagesList = installPackagesList.filter((item) => {
+    const selectedPackagesList = uninstalledPackagesList.filter((item) => {
       return packageNames.includes(item.name);
     });
     const xterm = xtermManager.getTerm(TERM_ID);
     if (xterm) {
       xterm.clear(TERM_ID);
     }
+    await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStep(selectedInstallPackagesList);
+    dispatchers.initStep(selectedPackagesList);
     ipcRenderer
       .invoke('install-base-packages', {
-        packagesList: selectedInstallPackagesList,
+        packagesList: selectedPackagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       })
@@ -80,6 +82,7 @@ const Dashboard = () => {
   }
 
   async function handleCancelInstall() {
+    await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     await ipcRenderer.invoke(
       'cancel-install-base-packages',
       INSTALL_PACKAGE_CHANNEL,
@@ -88,7 +91,15 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    dispatchers.getBasePackages();
+    if (!isInstalling) {
+      dispatchers.getBasePackages();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isInstalling) {
+      dispatchers.getCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    }
   }, []);
 
   useEffect(() => {
@@ -134,7 +145,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {installPackagesList.map((item: IBasePackage, index: number) => {
+        {selectedInstalledPackagesList.map((item: IBasePackage, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item
@@ -156,7 +167,7 @@ const Dashboard = () => {
     <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
       <PageHeader
         title="前端开发必备"
-        button={installPackagesList.length ? installButton : null}
+        button={uninstalledPackagesList.length ? installButton : null}
       />
       <main>
         {isInstalling ? (
@@ -191,6 +202,7 @@ const Dashboard = () => {
                 <AppCard
                   name={item.title}
                   description={item.description}
+                  link={item.link}
                   icon={item.icon}
                   versionStatus={item.versionStatus}
                   recommended={item.recommended}
@@ -204,7 +216,7 @@ const Dashboard = () => {
       </main>
       {visible && (
         <InstallConfirmDialog
-          packages={installPackagesList}
+          packages={uninstalledPackagesList}
           onCancel={onDialogClose}
           onOk={onDialogConfirm}
         />

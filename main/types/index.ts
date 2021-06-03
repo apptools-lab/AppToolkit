@@ -37,8 +37,8 @@ export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
 
 export interface INodeManager {
   installNode: Function;
-  getNodeVersionsList: Function;
 }
+
 export interface IPackageInstaller {
   install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
 }
@@ -48,4 +48,9 @@ export interface IInstallResult {
   duration: number;
   status: 'finish' | 'error';
   errMsg?: string;
+}
+
+export interface INodeVersions {
+  versions: string[];
+  majors: Array<{ version: string; title: string }>;
 }
