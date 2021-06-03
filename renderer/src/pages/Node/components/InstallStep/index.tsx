@@ -11,14 +11,15 @@ import styles from './index.module.scss';
 interface IInstallStep {
   managerName: string;
   INSTALL_NODE_CHANNEL: string;
+  INSTALL_PROCESS_STATUS_CHANNEL: string;
   goBack: () => void;
 }
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBack }) => {
+const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { installNodeFormValue, currentStep, nodeVersions, installStatus } = state;
+  const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus, nodeInstallVisible } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -35,7 +36,6 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
   }, [effectsErrors.getNodeInfo.error]);
 
   const TERM_ID = 'node';
-  const INSTALL_PROCESS_STATUS_CHANNEL = 'install-node-process-status';
   const steps = [
     { title: '选择版本', name: 'selectedVersion' },
     { title: '安装 Node.js', name: 'installNode' },
@@ -78,7 +78,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     if (xterm) {
       xterm.clear(TERM_ID);
     }
-    dispatchers.updateInstallNodeFormValue(values);
+    dispatchers.updateNodeInstallFormValue(values);
     await ipcRenderer.invoke(
       'install-node',
       {
@@ -100,7 +100,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
           {...formItemLayout}
           field={field}
           fullWidth
-          onChange={dispatchers.updateInstallNodeFormValue}
+          onChange={dispatchers.updateNodeInstallFormValue}
         >
           <Form.Item
             label="Node 版本"
@@ -150,7 +150,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
       );
       break;
     case 3:
-      mainbody = <InstallResult goBack={goBack} />;
+      mainbody = <InstallResult goBack={goBack} reinstallGlobalDeps={nodeInstallFormValue.reinstallGlobalDeps} />;
       break;
     default:
       break;
@@ -163,14 +163,22 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
         aria-current={index === currentStep ? 'step' : null}
         key={item.name}
         title={item.title}
-        disabled={index === 2 && !installNodeFormValue.reinstallGlobalDeps}
-        icon={((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[installStatus[item.name]] : undefined}
+        disabled={index === 2 && !nodeInstallFormValue.reinstallGlobalDeps}
+        icon={
+          ((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
+        }
       />
     ),
   );
 
   useEffect(() => {
     dispatchers.getNodeVersions();
+  }, []);
+
+  useEffect(() => {
+    if (nodeInstallVisible) {
+      dispatchers.getCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    }
   }, []);
 
   useEffect(() => {
@@ -184,11 +192,11 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, goBa
     if (status === 'done') {
       return;
     }
-    dispatchers.updateInstallStatus({ status, stepName: task });
+    dispatchers.updateNodeInstallStatus({ status, stepName: task });
     if (status === 'process') {
       return;
     } else if (status === 'error') {
-      dispatchers.updateInstallErrMsg({ errMsg, stepName: task });
+      dispatchers.updateNodeInstallErrMsg({ errMsg, stepName: task });
     } else if (status === 'success' && result) {
       dispatchers.updateInstallResult(result);
     }

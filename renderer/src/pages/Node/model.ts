@@ -3,12 +3,12 @@ import { ipcRenderer } from 'electron';
 import { INodeVersions } from '../../interfaces';
 
 const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };
-const DEFAULT_INSTALL_NODE_FORM_VALUE = { reinstallGlobalDeps: true };
-const DEFAULT_INSTALL_STATUS = {
+const DEFAULT_NODE_INSTALL_FORM_VALUE = { reinstallGlobalDeps: true };
+const DEFAULT_NODE_INSTALL_STATUS = {
   installNode: 'wait',
   reinstallPackages: 'wait',
 };
-const DEFAULT_INSTALL_ERR_MSG = {
+const DEFAULT_NODE_INSTALL_ERR_MSG = {
   installNode: '',
   reinstallPackages: '',
 };
@@ -22,10 +22,11 @@ export default {
     nodeInfo: {},
     nodeVersions: DEFAULT_NODE_VERSIONS,
     currentStep: 0,
-    installStatus: DEFAULT_INSTALL_STATUS,
-    installErrMsg: DEFAULT_INSTALL_ERR_MSG,
+    nodeInstallStatus: DEFAULT_NODE_INSTALL_STATUS,
+    nodeInstallErrMsg: DEFAULT_NODE_INSTALL_ERR_MSG,
     installResult: DEFAULT_INSTALL_RESULT,
-    installNodeFormValue: DEFAULT_INSTALL_NODE_FORM_VALUE,
+    nodeInstallFormValue: DEFAULT_NODE_INSTALL_FORM_VALUE,
+    nodeInstallVisible: false,
   },
   reducers: {
     updateNodeInfo(prevState, payload: IBasePackage) {
@@ -44,27 +45,31 @@ export default {
       prevState.currentStep = 0;
     },
 
-    updateInstallStatus(prevState, { status, stepName }) {
-      prevState.installStatus[stepName] = status;
+    updateNodeInstallStatus(prevState, { status, stepName }) {
+      prevState.nodeInstallStatus[stepName] = status;
     },
 
-    updateInstallErrMsg(prevState, { errMsg, stepName }) {
-      prevState.installErrMsg[stepName] = errMsg;
+    updateNodeInstallErrMsg(prevState, { errMsg, stepName }) {
+      prevState.nodeInstallErrMsg[stepName] = errMsg;
     },
 
     initNodeInstall(prevState) {
-      prevState.installStatus = DEFAULT_INSTALL_STATUS;
-      prevState.installErrMsg = DEFAULT_INSTALL_ERR_MSG;
+      prevState.nodeInstallStatus = DEFAULT_NODE_INSTALL_STATUS;
+      prevState.nodeInstallErrMsg = DEFAULT_NODE_INSTALL_ERR_MSG;
       prevState.installResult = DEFAULT_INSTALL_RESULT;
-      prevState.installNodeFormValue = DEFAULT_INSTALL_NODE_FORM_VALUE;
+      prevState.installNodeFormValue = DEFAULT_NODE_INSTALL_FORM_VALUE;
     },
 
     updateInstallResult(prevState, installResult: object) {
       prevState.installResult = { ...prevState.installResult, ...installResult };
     },
 
-    updateInstallNodeFormValue(prevState, formValue: object) {
-      prevState.installNodeFormValue = formValue;
+    updateNodeInstallFormValue(prevState, formValue: object) {
+      prevState.nodeInstallFormValue = formValue;
+    },
+
+    setNodeInstallVisible(prevState, visible: boolean) {
+      prevState.nodeInstallVisible = visible;
     },
   },
   effects: (dispatch) => ({
@@ -76,6 +81,42 @@ export default {
     async getNodeVersions() {
       const nodeVersions: INodeVersions = await ipcRenderer.invoke('get-node-versions');
       dispatch.node.updateNodeVersions(nodeVersions);
+    },
+
+    async clearCaches({ processChannel, installChannel }) {
+      await ipcRenderer.invoke('clear-node-install-cache', { processChannel, installChannel });
+    },
+
+    async getCaches({ processChannel, installChannel }) {
+      // TODO: handle install log cache
+      const { processCaches } = await ipcRenderer.invoke(
+        'get-node-install-cache',
+        { processChannel, installChannel },
+      );
+
+      if (Array.isArray(processCaches)) {
+        processCaches.forEach(({ task, status, result, errMsg }) => {
+          dispatch.node.updateNodeInstallStatus({ status, stepName: task });
+          // update install result or err
+          if (status === 'success') {
+            if (result) {
+              dispatch.node.updateInstallResult(result);
+            }
+          } else if (status === 'error') {
+            dispatch.node.updateNodeInstallErrMsg({ errMsg, stepName: task });
+          }
+          // update current step
+          if (status === 'success' || status === 'error') {
+            if (task === 'installNode') {
+              dispatch.node.updateStep(2);
+            } else if (task === 'reinstallPackages') {
+              dispatch.node.updateStep(3);
+            }
+          } else if (status === 'done') {
+            dispatch.node.updateStep(3);
+          }
+        });
+      }
     },
   }),
 };

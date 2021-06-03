@@ -4,6 +4,8 @@ import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
+import nodeCache from '../utils/nodeCache';
+import log from '../utils/log';
 
 const childProcessMap = new Map();
 
@@ -24,7 +26,13 @@ export default () => {
       processChannel: string;
     },
   ) => {
-    const childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
+    let childProcess = childProcessMap.get(installChannel);
+    if (childProcess) {
+      log.info(`Channel ${installChannel} has an existed child process.`);
+      return;
+    }
+    // fork a child process to install node
+    childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
     childProcessMap.set(installChannel, childProcess);
 
     childProcess.send({
@@ -46,6 +54,17 @@ export default () => {
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
         }
+        // save process data to cache
+        const processCaches = nodeCache.get(channel) || [];
+        const taskIndex = processCaches.findIndex((item) => item.task === data.task);
+        if (taskIndex > -1) {
+          // update the existed task process in cache
+          processCaches.splice(taskIndex, 1, data);
+        } else {
+          // add task process to cache
+          processCaches.push(data);
+        }
+        nodeCache.set(channel, processCaches);
       }
       sendMainWindow(channel, data);
     });
@@ -54,4 +73,23 @@ export default () => {
   ipcMain.handle('cancel-install-node', (event: IpcMainInvokeEvent, installChannel: string) => {
     killChannelChildProcess(childProcessMap, installChannel);
   });
+
+  ipcMain.handle('get-node-install-cache', (event: IpcMainInvokeEvent, { installChannel, processChannel }) => {
+    const processCaches = nodeCache.get(processChannel);
+    const installLogCaches = nodeCache.get(installChannel);
+
+    return { processCaches, installLogCaches };
+  });
+
+  ipcMain.handle('clear-node-install-cache', (event: IpcMainInvokeEvent, { installChannel, processChannel }) => {
+    clearCache([installChannel, processChannel]);
+  });
 };
+
+function clearCache(cachesId: string[]) {
+  if (Array.isArray(cachesId)) {
+    cachesId.forEach((cacheId: string) => {
+      nodeCache.set(cacheId, undefined);
+    });
+  }
+}

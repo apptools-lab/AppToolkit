@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, Icon, Box, Typography, List, Tag, Balloon } from '@alifd/next';
+import { Button, Box, Typography, List, Tag, Balloon } from '@alifd/next';
 import { IInstallResultData } from '@/interfaces';
 import moment from 'moment';
 import styles from './index.module.scss';
@@ -22,9 +22,8 @@ const statusTag = {
 const InstallResult: FC<IInstallResult> = ({ goBack, result }) => {
   return (
     <Box align="center">
-      <Icon type="success-filling" size={72} className={styles.successIcon} />
-      <Typography.H1>安装完成</Typography.H1>
-      <List size="small" className={styles.list}>
+      <Typography.H1>安装结果</Typography.H1>
+      <List size="medium" className={styles.list}>
         {
           result.map((item) => (
             <List.Item key={item.title} extra={<TagGroup>{statusTag[item.status]}</TagGroup>} title={item.title}>

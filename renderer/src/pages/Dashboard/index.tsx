@@ -46,7 +46,7 @@ const Dashboard = () => {
     }
   };
 
-  function onDialogConfirm(packageNames: string[]) {
+  async function onDialogConfirm(packageNames: string[]) {
     onDialogClose();
     if (!packageNames.length) {
       return;
@@ -58,6 +58,7 @@ const Dashboard = () => {
     if (xterm) {
       xterm.clear(TERM_ID);
     }
+    await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     dispatchers.updateInstallStatus(true);
     dispatchers.initStep(selectedPackagesList);
     ipcRenderer
@@ -81,6 +82,7 @@ const Dashboard = () => {
   }
 
   async function handleCancelInstall() {
+    await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     await ipcRenderer.invoke(
       'cancel-install-base-packages',
       INSTALL_PACKAGE_CHANNEL,
@@ -89,7 +91,15 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    dispatchers.getBasePackages();
+    if (!isInstalling) {
+      dispatchers.getBasePackages();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isInstalling) {
+      dispatchers.getCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    }
   }, []);
 
   useEffect(() => {

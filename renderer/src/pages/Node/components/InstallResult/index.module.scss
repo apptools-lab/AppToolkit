@@ -1,7 +1,3 @@
-.successIcon {
-  color: $color-success-3;
-}
-
 .code {
   display: block;
   background: #f1f1f1;
@@ -9,9 +5,12 @@
   width: 400px;
   border: 1px solid #e1e1e1;
   border-radius: 4px;
+  font-weight: 400;
+  font-size: 12px;
 }
-  
+
 .text {
-  margin: 20px 0;
+  margin: 16px 0 10px;
+  font-size: 14px;
 }
   
