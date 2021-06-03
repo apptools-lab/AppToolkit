@@ -5,7 +5,6 @@
     "rootDir": "./",
     "outDir": "../dist",
     "target": "es5",
-    "moduleResolution": "node",
-    "sourceMap": true
+    "moduleResolution": "node"
   }
 }

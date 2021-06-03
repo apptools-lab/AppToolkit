@@ -12,7 +12,7 @@
     "copy:static": "cp -R ./main/data ./dist",
     "watch": "rm -rf ./dist && npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
-    "watch:main": "tsc --build ./main/tsconfig.json -w",
+    "watch:main": "tsc --build ./main/tsconfig.dev.json -w",
     "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
