@@ -36,7 +36,7 @@
       "link": "https://www.google.com/chrome/",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
-      "version": "89.0.4389.114",
+      "version": null,
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
