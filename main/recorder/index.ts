@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import checkIsAliInternal from '../utils/checkIsAliInternal';
 import store, { recordKey } from '../store';
 import log from '../utils/log';
 
@@ -19,18 +18,16 @@ const MAIN_KEY = 'main';
 
 const RECORD_MODULE_KEY = 'logger';
 
-const outside = '_outside';
 const logCode = 'toolkit';
 
-async function recordPV(originParam: IGoldlogParam, recordType?: RecordType) {
-  recordType = recordType || 'PV';
+async function record(originParam: IGoldlogParam, recordType: RecordType) {
   const param = {
     ...originParam,
     // eslint-disable-next-line
     record_type: recordType,
     cache: Math.random(),
   };
-
+  const { action = '' } = param;
   try {
     const dataKeyArray = Object.keys(param);
     const gokey = dataKeyArray.reduce((finalStr, currentKey, index) => {
@@ -38,14 +35,7 @@ async function recordPV(originParam: IGoldlogParam, recordType?: RecordType) {
       return `${finalStr}${currentKey}=${currentData}${dataKeyArray.length - 1 === index ? '' : '&'}`;
     }, '');
 
-    let isAliInternal = false;
-    try {
-      isAliInternal = await checkIsAliInternal();
-    } catch (error) {
-      log.error(error);
-    }
-
-    const url = `http://gm.mmstat.com/iceteam.iceworks.${logCode}${!isAliInternal ? outside : ''}`;
+    const url = `http://gm.mmstat.com/appworks.${logCode}.${action}?t=${(new Date()).valueOf()}`;
     const data = {
       gmkey: 'CLK',
       gokey: encodeURIComponent(gokey),
@@ -70,7 +60,11 @@ async function recordPV(originParam: IGoldlogParam, recordType?: RecordType) {
   }
 }
 
-async function recordUV(originParam: IGoldlogParam) {
+export async function recordPV(originParam: IGoldlogParam) {
+  await record(originParam, 'PV');
+}
+
+export async function recordUV(originParam: IGoldlogParam) {
   const nowDate = new Date().toDateString();
   const dauKey = `${JSON.stringify(originParam)}`;
   const records = store.get(recordKey);
@@ -78,7 +72,7 @@ async function recordUV(originParam: IGoldlogParam) {
   if (nowDate !== lastDate) {
     records[dauKey] = nowDate;
     store.set(recordKey, records);
-    return await recordPV(originParam, 'UV');
+    return await record(originParam, 'UV');
   }
 }
 
