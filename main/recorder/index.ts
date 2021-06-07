@@ -72,12 +72,12 @@ export async function recordUV(originParam: IGoldlogParam) {
   if (nowDate !== lastDate) {
     records[dauKey] = nowDate;
     store.set(recordKey, records);
-    return await record(originParam, 'UV');
+    await record(originParam, 'UV');
   }
 }
 
 export function recordDAU() {
-  return recordUV({
+  recordUV({
     namespace: MAIN_KEY,
     module: RECORD_MODULE_KEY,
     action: 'dau',
