@@ -270,11 +270,12 @@ nvm_detect_profile() {
   local DETECTED_PROFILE
   DETECTED_PROFILE=''
 
+  # execute order is: .bashrc_profile > .bash > .zshrc.
   if [ -n "${BASH_VERSION-}" ]; then
-    if [ -f "$HOME/.bashrc" ]; then
-      DETECTED_PROFILE="$HOME/.bashrc"
-    elif [ -f "$HOME/.bash_profile" ]; then
-      DETECTED_PROFILE="$HOME/.bash_profile"
+    if [ -f "$HOME/.bashrc_profile" ]; then
+      DETECTED_PROFILE="$HOME/.bashrc_profile"
+    elif [ -f "$HOME/.bash" ]; then
+      DETECTED_PROFILE="$HOME/.bash"
     fi
   elif [ -n "${ZSH_VERSION-}" ]; then
     DETECTED_PROFILE="$HOME/.zshrc"

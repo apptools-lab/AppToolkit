@@ -2,6 +2,7 @@ import * as execa from 'execa';
 import executeBashConfigFile from '../utils/executeBashConfigFile';
 import { IPackageInfo, IPackageInstaller } from '../types';
 import log from '../utils/log';
+import ensureBashConfigExists from '../utils/ensureBashConfigExists';
 import writeLog from '../utils/writeLog';
 
 class CliInstaller implements IPackageInstaller {
@@ -42,6 +43,8 @@ class CliInstaller implements IPackageInstaller {
   };
 
   private installNvm = ({ shPath }) => {
+    ensureBashConfigExists();
+
     return new Promise((resolve, reject) => {
       let installStdout = '';
       const listenFunc = (buffer: Buffer) => {

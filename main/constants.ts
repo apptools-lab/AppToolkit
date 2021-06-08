@@ -28,3 +28,5 @@ export const NOT_REINSTALL_PACKAGES = ['npm'];
 export const TAOBAO_NPM_REGISTRY = 'https://registry.npm.taobao.org';
 export const ALI_NPM_REGISTRY = 'https://registry.npm.alibaba-inc.com/';
 export const TAOBAO_NODE_MIRROR = 'https://npm.taobao.org/mirrors/node';
+
+export const BASH_CONFIG_FILES = ['.bashrc_profile', '.bash', '.zshrc'];
