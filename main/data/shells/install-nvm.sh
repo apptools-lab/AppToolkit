@@ -269,9 +269,8 @@ nvm_detect_profile() {
 
   local DETECTED_PROFILE
   DETECTED_PROFILE=''
-
-  # execute order is: .bash_profile > .bashrc
   if [ -n "${BASH_VERSION-}" ]; then
+    # execute order is: .bash_profile > .bashrc
     if [ -f "$HOME/.bash_profile" ]; then
       DETECTED_PROFILE="$HOME/.bash_profile"
     elif [ -f "$HOME/.bashrc" ]; then
