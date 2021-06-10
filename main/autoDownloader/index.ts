@@ -1,13 +1,12 @@
-import * as path from 'path';
-import * as fse from 'fs-extra';
 import { IBasePackageInfo } from '../types';
+import store, { packagesDataKey } from '../store';
 import getPackageFileName from '../utils/getPackageFileName';
 import AutoDownloader from './AutoDownloader';
 
 const packageTypes = ['bases'];
 
 export async function autoDownloadPackages() {
-  const data = await fse.readJSON(path.join(__dirname, '../data', 'data.json'));
+  const data = store.get(packagesDataKey);
   // the packages which should be checked for available downloading
   const packageDatas = [];
 
