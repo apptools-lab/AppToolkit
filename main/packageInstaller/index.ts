@@ -64,9 +64,11 @@ async function installPackages({
         const sourceFilePath = path.join(TOOLKIT_PACKAGES_DIR, packageFileName);
         const sourceFileExists = await fse.pathExists(sourceFilePath);
         if (sourceFileExists) {
+          // use local package
           writeLog(installChannel, `Use cache ${sourceFilePath} to install package.`);
           packagePath = sourceFilePath;
         } else {
+          // download package
           packagePath = await downloadFile(downloadUrl, TOOLKIT_PACKAGES_DIR, packageFileName, installChannel);
         }
       } else if (shellName) {

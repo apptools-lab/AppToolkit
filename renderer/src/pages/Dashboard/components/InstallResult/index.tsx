@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Button, Box, Typography, List, Tag, Balloon } from '@alifd/next';
 import { IInstallResultData } from '@/interfaces';
-import moment from 'moment';
 import styles from './index.module.scss';
 
 const { Group: TagGroup } = Tag;
@@ -28,7 +27,7 @@ const InstallResult: FC<IInstallResult> = ({ goBack, result }) => {
           result.map((item) => (
             <List.Item key={item.title} extra={<TagGroup>{statusTag[item.status]}</TagGroup>} title={item.title}>
               {item.status === 'finish' && (
-                <div className={styles.listDescription}>耗时：{moment(item.duration).format('ss秒')}</div>
+                <div className={styles.listDescription}>耗时：{Math.floor(item.duration)}秒</div>
               )}
               {item.status === 'error' && (
                 <Balloon
