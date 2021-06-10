@@ -2,7 +2,7 @@ import * as path from 'path';
 import downloadFile from '../utils/downloadFile';
 import { IInstallResult, IPackageInfo } from '../types';
 import log from '../utils/log';
-import { INSTALL_COMMAND_PACKAGES } from '../constants';
+import { INSTALL_COMMAND_PACKAGES, TOOLKIT_DIR } from '../constants';
 import installCommandToPath from '../utils/installCommandToPath';
 import DmgInstaller from './DmgInstaller';
 import CliInstaller from './CliInstaller';
@@ -56,7 +56,7 @@ async function installPackages({
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
       let packagePath: string;
       if (downloadUrl) {
-        packagePath = await downloadFile(downloadUrl, installChannel);
+        packagePath = await downloadFile(downloadUrl, TOOLKIT_DIR, installChannel);
       } else if (shellName) {
         packagePath = path.resolve(__dirname, '../data/shells', shellName);
       }

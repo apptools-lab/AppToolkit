@@ -3,17 +3,20 @@ import modifyProcessEnv from './utils/modifyProcessEnv';
 import { createWindow } from './window';
 import handleIPC from './ipc';
 import { checkForUpdates } from './utils/autoUpdater';
+import { autoDownloadPackages } from './autoDownloader';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
 app.whenReady().then(() => {
-  checkForUpdates();
-
   modifyProcessEnv();
 
   createWindow();
 
   handleIPC();
+
+  checkForUpdates();
+
+  autoDownloadPackages();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

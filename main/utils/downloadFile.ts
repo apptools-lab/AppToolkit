@@ -1,16 +1,15 @@
 import * as path from 'path';
 import fetch from 'node-fetch';
 import * as fse from 'fs-extra';
-import { TOOLKIT_TMP_DIR } from '../constants';
 import log from './log';
 
-function downloadFile(downloadUrl: string, channel: string, destination = TOOLKIT_TMP_DIR): Promise<string> {
+function downloadFile(downloadUrl: string, destination: string, channel?: string): Promise<string> {
   if (!fse.existsSync(destination)) {
     fse.mkdirSync(destination);
   }
 
   return new Promise((resolve, reject) => {
-    writeLog(channel, `Downloading ${downloadUrl} ...`);
+    writeLog(`Start to download ${downloadUrl} ...`, channel);
     fetch(downloadUrl).then((res) => {
       const splits = downloadUrl.split('/');
       const name = splits[splits.length - 1];
@@ -19,7 +18,7 @@ function downloadFile(downloadUrl: string, channel: string, destination = TOOLKI
       res.body
         .pipe(dest)
         .on('finish', () => {
-          writeLog(channel, `Download ${downloadUrl} to ${filePath} successfully.`);
+          writeLog(`Download ${downloadUrl} to ${filePath} successfully.`, channel);
           resolve(filePath);
         })
         .on('error', (err) => {
@@ -29,9 +28,12 @@ function downloadFile(downloadUrl: string, channel: string, destination = TOOLKI
   });
 }
 
-function writeLog(channel: string, chunk: string) {
+function writeLog(chunk: string, channel?: string) {
   log.info(chunk);
-  process.send({ channel, data: { chunk } });
+  if (channel) {
+    // write log to channel
+    process.send({ channel, data: { chunk } });
+  }
 }
 
 export default downloadFile;
