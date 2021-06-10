@@ -12,7 +12,8 @@ export default () => {
     const { bases = [] }: { bases: IBasePackageInfo[] } = data;
     const isAliInternal = await checkIsAliInternal();
     const basePackages = bases.filter(({ isInternal, platforms }) => {
-      // remove internal package when not in the ali internal
+      // 1. only return the package info in current platform
+      // 2. remove internal package when not in the ali internal
       return platforms.includes(process.platform) && isInternal ? isAliInternal : true;
     });
     const packagesData = await Promise.all(basePackages.map((basePackageInfo: IBasePackageInfo) => {

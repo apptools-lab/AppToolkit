@@ -30,9 +30,9 @@ class ZipInstaller implements IPackageInstaller {
   };
 
   unzipToApplication = async ({ zipPath }) => {
+    writeLog(this.channel, `Start to unzip ${zipPath}.`);
     await decompress(zipPath, APPLICATIONS_DIR_PATH);
-    const chunk = `Unzip ${zipPath} to ${APPLICATIONS_DIR_PATH} successfully.`;
-    writeLog(this.channel, chunk);
+    writeLog(this.channel, `Unzip ${zipPath} to ${APPLICATIONS_DIR_PATH} successfully.`);
   };
 }
 
