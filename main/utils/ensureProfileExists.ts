@@ -5,7 +5,7 @@ import { PROFILE_FILES, DEFAULT_PROFILE_FILE } from '../constants';
 import log from './log';
 
 /**
- * Ensure profile file exists. Otherwise,dcreate ~/.bash_profile file by default.
+ * Ensure profile file exists. Otherwise, create ~/.bash_profile file by default.
  */
 function ensureProfileExists() {
   const isProfileExists = PROFILE_FILES.some((bashConfigFile: string) => {
