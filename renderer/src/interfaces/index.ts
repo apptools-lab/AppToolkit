@@ -9,7 +9,7 @@ export interface IBasePackage {
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform?: Platform;
+  platforms?: Platform;
   version: string | null;
   path: string | null;
   versionStatus: keyof typeof VersionStatus;
@@ -20,7 +20,18 @@ export interface IBasePackage {
   [key: string]: any;
 }
 
-export type Platform = 'win32' | 'darwin';
+export type Platform = [
+  'aix',
+  'android',
+  'darwin',
+  'freebsd',
+  'linux',
+  'openbsd',
+  'sunos',
+  'win32',
+  'cygwin',
+  'netbsd'
+];
 
 export type PackageType = 'cli' | 'dmg' | 'exe' | 'vscodeExtension' | 'chromeExtension' | 'npm';
 

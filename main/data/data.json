@@ -11,7 +11,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "cli",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "Node.js (NVM)",
@@ -24,7 +24,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "cli",
-      "platform": "darwin",
+      "platforms": ["darwin"],
       "options": {
         "managerName": "nvm"
       }
@@ -40,7 +40,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "Visual Studio Code",
@@ -53,7 +53,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "AppWorks Pack",
@@ -67,7 +67,8 @@
       "type": "IDEExtension",
       "options": {
         "IDEType": "VSCode"
-      }
+      },
+      "platforms": ["darwin", "win32"]
     }
   ],
   "apps": [

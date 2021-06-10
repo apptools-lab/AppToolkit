@@ -11,9 +11,9 @@ export default () => {
     const data = await fse.readJSON(path.join(__dirname, '../data', 'data.json'));
     const { bases = [] }: { bases: IBasePackageInfo[] } = data;
     const isAliInternal = await checkIsAliInternal();
-    const basePackages = bases.filter((item) => {
+    const basePackages = bases.filter(({ isInternal, platforms }) => {
       // remove internal package when not in the ali internal
-      return item.isInternal ? isAliInternal : true;
+      return platforms.includes(process.platform) && isInternal ? isAliInternal : true;
     });
     const packagesData = await Promise.all(basePackages.map((basePackageInfo: IBasePackageInfo) => {
       return getPackageInfo(basePackageInfo);

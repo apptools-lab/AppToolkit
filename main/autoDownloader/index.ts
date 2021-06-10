@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
+import { IBasePackageInfo } from '../types';
+import getPackageFileName from '../utils/getPackageFileName';
 import AutoDownloader from './AutoDownloader';
 
 const packageTypes = ['bases'];
@@ -10,15 +12,14 @@ export async function autoDownloadPackages() {
   const packageDatas = [];
 
   packageTypes.forEach((packageType: string) => {
-    const packagesInfo = data[packageType] || [];
+    const packagesInfo: IBasePackageInfo[] = data[packageType] || [];
 
     for (const packageInfo of packagesInfo) {
-      const { downloadUrl, title, version } = packageInfo;
-      if (!downloadUrl) {
+      const { downloadUrl, platforms } = packageInfo;
+      if (!downloadUrl || platforms.includes(process.platform)) {
         continue;
       }
-      const extname = path.extname(downloadUrl);
-      const packageFileName = `${title}${version ? `-${version}` : ''}${extname}`;
+      const packageFileName = getPackageFileName(packageInfo);
       packageDatas.push({ sourceFileName: packageFileName, downloadUrl });
     }
   });
