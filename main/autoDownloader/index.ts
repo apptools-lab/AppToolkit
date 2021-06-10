@@ -16,7 +16,7 @@ export async function autoDownloadPackages() {
 
     for (const packageInfo of packagesInfo) {
       const { downloadUrl, platforms } = packageInfo;
-      if (!downloadUrl || platforms.includes(process.platform)) {
+      if (!downloadUrl || !platforms.includes(process.platform)) {
         continue;
       }
       const packageFileName = getPackageFileName(packageInfo);

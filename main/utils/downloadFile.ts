@@ -9,12 +9,12 @@ function downloadFile(downloadUrl: string, destination: string, filename?: strin
     fse.mkdirSync(destination);
   }
 
-  const dest = path.join(destination, filename);
-
   if (!filename) {
     const splits = downloadUrl.split('/');
     filename = splits[splits.length - 1];
   }
+
+  const dest = path.join(destination, filename);
 
   return new Promise((resolve, reject) => {
     writeLog(`Start to download ${downloadUrl} ...`, channel);
