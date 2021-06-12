@@ -27,7 +27,7 @@ const InstallResult: FC<IInstallResult> = ({ goBack, result }) => {
           result.map((item) => (
             <List.Item key={item.title} extra={<TagGroup>{statusTag[item.status]}</TagGroup>} title={item.title}>
               {item.status === 'finish' && (
-                <div className={styles.listDescription}>耗时：{Math.floor(item.duration)}秒</div>
+                <div className={styles.listDescription}>耗时：{Math.floor(item.duration / 1000)}秒</div>
               )}
               {item.status === 'error' && (
                 <Balloon
