@@ -1,4 +1,4 @@
-import { IBasePackageInfo } from '../types';
+import { IBasePackageInfo, Platform } from '../types';
 import store, { packagesDataKey } from '../store';
 import getPackageFileName from '../utils/getPackageFileName';
 import AutoDownloader from './AutoDownloader';
@@ -15,7 +15,8 @@ export async function autoDownloadPackages() {
 
     for (const packageInfo of packagesInfo) {
       const { downloadUrl, platforms } = packageInfo;
-      if (!downloadUrl || !platforms.includes(process.platform)) {
+      const currentPlatform = process.platform as Platform;
+      if (!downloadUrl || !platforms.includes(currentPlatform)) {
         continue;
       }
       const packageFileName = getPackageFileName(packageInfo);
