@@ -72,7 +72,20 @@
     }
   ],
   "apps": [
-   {
+    {
+      "title": "Google Chrome",
+      "name": "Google Chrome",
+      "description": "强大、快速的网页浏览器",
+      "link": "https://www.google.com/chrome/",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
+      "version": null,
+      "recommended": true,
+      "isInternal": false,
+      "type": "dmg",
+      "platforms": ["darwin"]
+    },
+    {
       "title": "Visual Studio Code",
       "name": "Visual Studio Code",
       "description": "跨平台、轻量的代码编辑器",
