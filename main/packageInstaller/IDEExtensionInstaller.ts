@@ -91,6 +91,7 @@ class IDEExtensionInstaller implements IPackageInstaller {
         const { commandRelativePath } = vscodeCommand;
         const source = path.join(localPath, commandRelativePath);
         await installCommandToPath(source, VSCODE_COMMAND_NAME);
+        writeLog(this.channel, `Install ${VSCODE_COMMAND_NAME} command to path successfully.`, true, 'info');
       }
     }
   };
