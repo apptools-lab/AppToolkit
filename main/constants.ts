@@ -15,12 +15,13 @@ export const DEFAULT_LOCAL_PACKAGE_INFO: ILocalPackageInfo = {
   versionStatus: 'uninstalled',
 };
 
-export const VSCODE_CLI_COMAMND_NAME = 'code';
+export const VSCODE_COMMAND_NAME = 'code';
+export const VSCODE_NAME = 'Visual Studio Code';
 
 export const INSTALL_COMMAND_PACKAGES = [
   {
-    name: 'Visual Studio Code',
-    command: 'code',
+    name: VSCODE_NAME,
+    command: VSCODE_COMMAND_NAME,
     commandRelativePath: './Contents/Resources/app/bin/code',
   },
 ];

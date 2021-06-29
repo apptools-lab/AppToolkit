@@ -1,6 +1,6 @@
 import * as execa from 'execa';
-import isCliInstalled from '../../utils/isCliInstalled';
-import { VSCODE_CLI_COMAMND_NAME } from '../../constants';
+import isCliInstalled from '../../utils/isCommandInstalled';
+import { VSCODE_COMMAND_NAME } from '../../constants';
 import { ILocalPackageInfo } from '../../types';
 
 async function getVSCodeExtensionInfo(name: string) {
@@ -8,9 +8,9 @@ async function getVSCodeExtensionInfo(name: string) {
     versionStatus: 'uninstalled',
     localVersion: null,
   };
-  if (isCliInstalled(VSCODE_CLI_COMAMND_NAME)) {
+  if (isCliInstalled(VSCODE_COMMAND_NAME)) {
     const { stdout } = await execa(
-      VSCODE_CLI_COMAMND_NAME,
+      VSCODE_COMMAND_NAME,
       ['--list-extensions', '--show-versions'],
     );
     if (stdout && typeof stdout === 'string') {

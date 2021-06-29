@@ -72,14 +72,18 @@
     }
   ],
   "apps": [
-    {
-      "name": "Google Chrome",
-      "description": "强大、快速的网页浏览器",
-      "icon": "https://img.alicdn.com/imgextra/i3/O1CN01cspie61ZOm8vgQfKl_!!6000000003185-55-tps-32-32.svg",
-      "downloadUrl": "",
-      "version": "89.0.4389.114",
+   {
+      "title": "Visual Studio Code",
+      "name": "Visual Studio Code",
+      "description": "跨平台、轻量的代码编辑器",
+      "link": "https://code.visualstudio.com/",
+      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
+      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
+      "version": null,
       "recommended": true,
-      "isInternal": false
+      "isInternal": false,
+      "type": "dmg",
+      "platforms": ["darwin"]
     }
   ],
   "npmPackages": [

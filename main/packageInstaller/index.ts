@@ -121,7 +121,10 @@ async function install({ channel, packagePath, packageInfo }: { channel: string;
   }
 }
 
-async function installPkgCommandToPath(name: string, localPath: string | null) {
+async function installPkgCommandToPath(name: string, localPath?: string) {
+  if (!localPath) {
+    return;
+  }
   const res = INSTALL_COMMAND_PACKAGES.find((pkg) => pkg.name === name);
   if (res) {
     const { command, commandRelativePath } = res;
