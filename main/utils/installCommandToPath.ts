@@ -4,7 +4,8 @@ import log from './log';
 
 /**
  * Install command to the path
- * @param target
+ * @param target the path of the command
+ * @param command the command executed in the shell
  */
 async function installCommandToPath(target: string, command: string) {
   const source = `/usr/local/bin/${command}`;
@@ -15,7 +16,7 @@ async function installCommandToPath(target: string, command: string) {
     return;
   }
 
-  // Different target, delete it first
+  // Different source, delete it first
   try {
     await fse.unlink(source);
   } catch (error) {
