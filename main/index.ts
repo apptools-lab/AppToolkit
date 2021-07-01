@@ -4,6 +4,7 @@ import { createWindow } from './window';
 import handleIPC from './ipc';
 import { checkForUpdates } from './utils/autoUpdater';
 import { recordDAU } from './recorder';
+import log from './utils/log';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
@@ -19,7 +20,10 @@ app.whenReady().then(() => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
 
-    recordDAU();
+    recordDAU()
+      .catch((err) => {
+        log.error(err);
+      });
   });
 });
 
