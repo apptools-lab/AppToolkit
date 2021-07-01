@@ -6,7 +6,7 @@
   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
     "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install --registry=http://registry.npm.taobao.org",
-    "install:renderer": "rm -rf renderer/node_modules && cd renderer && tnpm install --registry=http://registry.npm.taobao.org --no-package-lock",
+    "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install --registry=http://registry.npm.taobao.org --no-package-lock",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:electron": "npm run copy:static && electron ./dist",
     "copy:static": "cp -R ./main/data ./dist",
