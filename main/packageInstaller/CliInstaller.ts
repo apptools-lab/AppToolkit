@@ -29,8 +29,8 @@ class CliInstaller implements IPackageInstaller {
     if (installFunc) {
       await installFunc({ shPath, packageInfo });
     }
-    // TODO: return node local path
-    return { name, localPath: null };
+
+    return { name };
   };
 
   private installNode = async ({ shPath, packageInfo }) => {

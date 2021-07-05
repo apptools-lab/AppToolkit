@@ -41,7 +41,7 @@ export interface INodeManager {
 }
 
 export interface IPackageInstaller {
-  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
+  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
 }
 
 export interface IInstallResult {
