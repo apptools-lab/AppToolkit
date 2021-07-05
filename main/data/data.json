@@ -7,11 +7,11 @@
       "link": "https://git-scm.com/",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN012cOEYH1QgKmtKX8Ju_!!6000000002005-2-tps-200-200.png",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
-      "version": "2.29.2",
+      "version": "2.31.0",
       "recommended": true,
       "isInternal": false,
       "type": "cli",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "Node.js (NVM)",
@@ -24,7 +24,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "cli",
-      "platform": "darwin",
+      "platforms": ["darwin"],
       "options": {
         "managerName": "nvm"
       }
@@ -40,7 +40,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "Visual Studio Code",
@@ -53,7 +53,7 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platform": "darwin"
+      "platforms": ["darwin"]
     },
     {
       "title": "AppWorks Pack",
@@ -67,7 +67,8 @@
       "type": "IDEExtension",
       "options": {
         "IDEType": "VSCode"
-      }
+      },
+      "platforms": ["darwin", "win32"]
     }
   ],
   "apps": [

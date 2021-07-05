@@ -9,13 +9,15 @@ export interface IBasePackageInfo {
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform?: Platform;
+  platforms?: Platforms;
   options?: {
     [k: string]: any;
   };
 }
 
-export type Platform = 'win32' | 'darwin';
+export type Platform = 'darwin' | 'win32';
+
+export type Platforms = ['darwin', 'win32'];
 
 export type PackageType = 'cli' | 'dmg' | 'exe' | 'IDEExtension' | 'npm';
 

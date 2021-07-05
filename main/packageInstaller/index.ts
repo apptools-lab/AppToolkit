@@ -1,9 +1,12 @@
 import * as path from 'path';
+import * as fse from 'fs-extra';
 import downloadFile from '../utils/downloadFile';
 import { IInstallResult, IPackageInfo } from '../types';
 import log from '../utils/log';
-import { INSTALL_COMMAND_PACKAGES } from '../constants';
+import writeLog from '../utils/writeLog';
+import { INSTALL_COMMAND_PACKAGES, TOOLKIT_PACKAGES_DIR } from '../constants';
 import installCommandToPath from '../utils/installCommandToPath';
+import getPackageFileName from '../utils/getPackageFileName';
 import DmgInstaller from './DmgInstaller';
 import CliInstaller from './CliInstaller';
 import ZipInstaller from './ZipInstaller';
@@ -54,9 +57,20 @@ async function installPackages({
     let errMsg;
     try {
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
+
       let packagePath: string;
       if (downloadUrl) {
-        packagePath = await downloadFile(downloadUrl, installChannel);
+        const packageFileName = getPackageFileName(packageInfo);
+        const sourceFilePath = path.join(TOOLKIT_PACKAGES_DIR, packageFileName);
+        const sourceFileExists = await fse.pathExists(sourceFilePath);
+        if (sourceFileExists) {
+          // use local package
+          writeLog(installChannel, `Use cache ${sourceFilePath} to install package.`);
+          packagePath = sourceFilePath;
+        } else {
+          // download package
+          packagePath = await downloadFile(downloadUrl, TOOLKIT_PACKAGES_DIR, packageFileName, installChannel);
+        }
       } else if (shellName) {
         packagePath = path.resolve(__dirname, '../data/shells', shellName);
       }

@@ -7,6 +7,7 @@ module.exports = getESLintConfig('react-ts', {
     'react-hooks/exhaustive-deps': 0,
     '@iceworks/best-practices/recommend-polyfill': 0,
     'import/order': 1,
-    'no-param-reassign': 0
+    'no-param-reassign': 0,
+    '@typescript-eslint/no-require-imports': 0
   },
 });
