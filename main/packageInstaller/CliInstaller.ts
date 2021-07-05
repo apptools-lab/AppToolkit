@@ -64,7 +64,7 @@ class CliInstaller implements IPackageInstaller {
 
       cp.on('exit', () => {
         log.info(installStdout);
-        const matchRes = installStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
+        const matchRes = installStdout.match(/(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
         if (matchRes) {
           const nvmBashProfilePath = matchRes[1];
           executeBashConfigFile(nvmBashProfilePath);
