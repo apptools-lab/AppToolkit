@@ -29,8 +29,7 @@ export interface ILocalPackageInfo {
   [key: string]: any;
 }
 export interface INodeVersionManagerInfo {
-  managerPath: string | null;
-  managerVersion: string | null;
+  managerVersionStatus: VersionStatus;
 }
 
 export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
