@@ -6,6 +6,8 @@ import { checkForUpdates } from './utils/autoUpdater';
 import getPackagesData from './utils/getPackagesData';
 import { autoDownloadPackages } from './autoDownloader';
 import store, { packagesDataKey } from './store';
+import { recordDAU } from './recorder';
+import log from './utils/log';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
@@ -27,6 +29,11 @@ app.whenReady()
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
+
+      recordDAU()
+        .catch((err) => {
+          log.error(err);
+        });
     });
   });
 
