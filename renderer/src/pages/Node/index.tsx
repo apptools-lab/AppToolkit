@@ -12,7 +12,7 @@ const { Row, Col } = Grid;
 const Node = () => {
   const [state, dispatchers] = store.useModel('node');
   const { nodeInfo, currentStep, nodeInstallVisible } = state;
-  const { options = {}, localVersion, managerVersion } = nodeInfo as IBasePackage;
+  const { options = {}, localVersion, managerVersionStatus } = nodeInfo as IBasePackage;
   const { managerName } = options;
 
   const INSTALL_NODE_CHANNEL = 'install-node';
@@ -57,7 +57,7 @@ const Node = () => {
     <Button
       text
       type="primary"
-      disabled={!managerVersion}
+      disabled={managerVersionStatus === 'uninstalled'}
       className={styles.switchVersionBtn}
       onClick={onSwitchVersionBtnClick}
     >
@@ -82,7 +82,7 @@ const Node = () => {
             </Col>
             <Col span={12} className={styles.col}>
               {localVersion || 'Not Found'}
-              {!managerVersion ? (
+              {managerVersionStatus === 'uninstalled' ? (
                 <Balloon trigger={switchNodeVersionBtn}>
                   请在首页安装 NVM 以更好安装和管理 Node 版本。
                 </Balloon>
