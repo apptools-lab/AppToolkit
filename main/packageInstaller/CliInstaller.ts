@@ -67,7 +67,7 @@ class CliInstaller implements IPackageInstaller {
 
       cp.on('exit', () => {
         log.info(installStdout);
-        const nvmProfileMatchRes = installStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
+        const nvmProfileMatchRes = installStdout.match(/(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
         if (nvmProfileMatchRes) {
           const nvmProfilePath = nvmProfileMatchRes[1];
           // ensure nvm envs are in current shell environment
