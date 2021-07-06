@@ -9,13 +9,15 @@ export interface IBasePackageInfo {
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
-  platform?: Platform;
+  platforms?: Platforms;
   options?: {
     [k: string]: any;
   };
 }
 
-export type Platform = 'win32' | 'darwin';
+export type Platform = 'darwin' | 'win32';
+
+export type Platforms = ['darwin', 'win32'];
 
 export type PackageType = 'cli' | 'dmg' | 'exe' | 'IDEExtension' | 'npm';
 
@@ -29,8 +31,7 @@ export interface ILocalPackageInfo {
   [key: string]: any;
 }
 export interface INodeVersionManagerInfo {
-  managerPath: string | null;
-  managerVersion: string | null;
+  managerVersionStatus: VersionStatus;
 }
 
 export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
@@ -40,7 +41,7 @@ export interface INodeManager {
 }
 
 export interface IPackageInstaller {
-  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath: null | string }>;
+  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
 }
 
 export interface IInstallResult {
@@ -53,4 +54,10 @@ export interface IInstallResult {
 export interface INodeVersions {
   versions: string[];
   majors: Array<{ version: string; title: string }>;
+}
+
+export interface IPackagesData {
+  bases: IBasePackageInfo[];
+
+  apps: IBasePackageInfo[];
 }

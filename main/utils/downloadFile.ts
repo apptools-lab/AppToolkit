@@ -4,34 +4,49 @@ import * as fse from 'fs-extra';
 import { TOOLKIT_TMP_DIR } from '../constants';
 import log from './log';
 
-function downloadFile(downloadUrl: string, channel: string, destination = TOOLKIT_TMP_DIR): Promise<string> {
+function downloadFile(downloadUrl: string, destination: string, filename?: string, channel?: string): Promise<string> {
   if (!fse.existsSync(destination)) {
     fse.mkdirSync(destination);
   }
 
+  if (!filename) {
+    const splits = downloadUrl.split('/');
+    filename = splits[splits.length - 1];
+  }
+
+  const dest = path.join(destination, filename);
+
   return new Promise((resolve, reject) => {
-    writeLog(channel, `Downloading ${downloadUrl} ...`);
+    writeLog(`Start to download ${downloadUrl} ...`, channel);
+
     fetch(downloadUrl).then((res) => {
-      const splits = downloadUrl.split('/');
-      const name = splits[splits.length - 1];
-      const filePath = path.join(destination, name);
-      const dest = fse.createWriteStream(filePath);
+      const tmpFilePath = path.join(TOOLKIT_TMP_DIR, filename);
+      const tmpDest = fse.createWriteStream(tmpFilePath);
       res.body
-        .pipe(dest)
+        .pipe(tmpDest)
         .on('finish', () => {
-          writeLog(channel, `Download ${downloadUrl} to ${filePath} successfully.`);
-          resolve(filePath);
+          writeLog(`Download ${downloadUrl} to ${tmpFilePath} successfully.`, channel);
+          resolve(tmpFilePath);
         })
         .on('error', (err) => {
           reject(err);
         });
     });
+  }).then((tmpFilePath: string) => {
+    writeLog(`Start Copy ${tmpFilePath} to ${dest}.`, channel);
+    return fse.move(tmpFilePath, dest);
+  }).then(() => {
+    writeLog(`Copy to ${dest} successfully.`, channel);
+    return Promise.resolve(dest);
   });
 }
 
-function writeLog(channel: string, chunk: string) {
+function writeLog(chunk: string, channel?: string) {
   log.info(chunk);
-  process.send({ channel, data: { chunk } });
+  if (channel) {
+    // write log to channel
+    process.send({ channel, data: { chunk } });
+  }
 }
 
 export default downloadFile;

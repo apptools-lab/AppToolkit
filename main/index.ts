@@ -3,22 +3,35 @@ import modifyProcessEnv from './utils/modifyProcessEnv';
 import { createWindow } from './window';
 import handleIPC from './ipc';
 import { checkForUpdates } from './utils/autoUpdater';
+import getPackagesData from './utils/getPackagesData';
+import { autoDownloadPackages } from './autoDownloader';
+import store, { packagesDataKey } from './store';
+import { recordDAU } from './recorder';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
-app.whenReady().then(() => {
-  checkForUpdates();
+app.whenReady()
+  .then(() => getPackagesData())
+  .then((packagesData) => {
+    store.set(packagesDataKey, packagesData);
+  })
+  .finally(() => {
+    modifyProcessEnv();
 
-  modifyProcessEnv();
+    createWindow();
 
-  createWindow();
+    handleIPC();
 
-  handleIPC();
+    checkForUpdates();
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    autoDownloadPackages();
+
+    recordDAU();
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
   });
-});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

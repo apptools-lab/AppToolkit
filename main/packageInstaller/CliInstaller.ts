@@ -1,7 +1,8 @@
 import * as execa from 'execa';
-import executeBashConfigFile from '../utils/executeBashConfigFile';
+import executeProfile from '../utils/executeProfile';
 import { IPackageInfo, IPackageInstaller } from '../types';
 import log from '../utils/log';
+import ensureProfileExists from '../utils/ensureProfileExists';
 import writeLog from '../utils/writeLog';
 
 class CliInstaller implements IPackageInstaller {
@@ -28,8 +29,8 @@ class CliInstaller implements IPackageInstaller {
     if (installFunc) {
       await installFunc({ shPath, packageInfo });
     }
-    // TODO: return node local path
-    return { name, localPath: null };
+
+    return { name };
   };
 
   private installNode = async ({ shPath, packageInfo }) => {
@@ -42,6 +43,8 @@ class CliInstaller implements IPackageInstaller {
   };
 
   private installNvm = ({ shPath }) => {
+    ensureProfileExists();
+
     return new Promise((resolve, reject) => {
       let installStdout = '';
       const listenFunc = (buffer: Buffer) => {
@@ -64,10 +67,11 @@ class CliInstaller implements IPackageInstaller {
 
       cp.on('exit', () => {
         log.info(installStdout);
-        const matchRes = installStdout.match(/^(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
-        if (matchRes) {
-          const nvmBashProfilePath = matchRes[1];
-          executeBashConfigFile(nvmBashProfilePath);
+        const nvmProfileMatchRes = installStdout.match(/(?:=> Appending nvm source string to|=> nvm source string already in) (.*)/);
+        if (nvmProfileMatchRes) {
+          const nvmProfilePath = nvmProfileMatchRes[1];
+          // ensure nvm envs are in current shell environment
+          executeProfile(nvmProfilePath);
         }
         resolve(null);
       });

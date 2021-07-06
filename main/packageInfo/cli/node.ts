@@ -1,7 +1,7 @@
 import * as path from 'path';
-import * as fse from 'fs-extra';
+import * as execa from 'execa';
 import { INodeVersionManagerInfo } from '../../types';
-import { PACKAGE_JSON_FILE_NAME } from '../../constants';
+import log from '../../utils/log';
 import getLocalCliInfo from './cli';
 
 const nodeManagerInfoProcessor = {
@@ -16,13 +16,17 @@ async function getLocalNodeInfo(
   const { managerName } = options;
   let localNodeInfo = await getLocalCliInfo(name, latestVersion);
 
-  let nodeManagerInfo: INodeVersionManagerInfo = { managerPath: null, managerVersion: null };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  let nodeManagerInfo = {} as INodeVersionManagerInfo;
   const getNodeManagerInfoFunc = nodeManagerInfoProcessor[managerName];
   if (getNodeManagerInfoFunc) {
-    nodeManagerInfo = getNodeManagerInfoFunc();
+    nodeManagerInfo = await getNodeManagerInfoFunc();
   }
   localNodeInfo = Object.assign(localNodeInfo, nodeManagerInfo);
-  if (localNodeInfo.versionStatus !== 'uninstalled' && !(nodeManagerInfo.managerPath && nodeManagerInfo.managerVersion)) {
+  if (
+    localNodeInfo.versionStatus !== 'uninstalled' &&
+    nodeManagerInfo.managerVersionStatus === 'uninstalled'
+  ) {
     localNodeInfo.warningMessage =
       `检测到你已经安装了 Node.js，但未安装 ${managerName}。推荐安装 ${managerName} 以更好管理 Node.js 版本。`;
     localNodeInfo.versionStatus = 'uninstalled';
@@ -31,20 +35,18 @@ async function getLocalNodeInfo(
   return localNodeInfo;
 }
 
-function getNvmInfo(): INodeVersionManagerInfo {
+async function getNvmInfo(): Promise<INodeVersionManagerInfo> {
   const nvmInfo: INodeVersionManagerInfo = {
-    managerPath: null,
-    managerVersion: null,
+    managerVersionStatus: 'uninstalled',
   };
-  const nvmDir = process.env.NVM_DIR;
-  if (nvmDir) {
-    nvmInfo.managerPath = nvmDir;
-    const nvmPackageJsonPath = path.join(nvmDir, PACKAGE_JSON_FILE_NAME);
-    if (fse.pathExistsSync(nvmPackageJsonPath)) {
-      const nvmPkgJSON = fse.readJSONSync(nvmPackageJsonPath) || {};
-      const { version } = nvmPkgJSON;
-      nvmInfo.managerVersion = version;
+  const shFilePath = path.resolve(__dirname, '../../data/shells', 'is-nvm-installed.sh');
+  try {
+    const { stdout } = await execa('sh', [shFilePath]);
+    if (stdout === 'nvm') {
+      nvmInfo.managerVersionStatus = 'installed';
     }
+  } catch (error) {
+    log.error(error.message);
   }
 
   return nvmInfo;
