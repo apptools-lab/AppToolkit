@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import downloadFile from '../utils/downloadFile';
-import { IInstallResult, IPackageInfo } from '../types';
+import { IInstallResult, IPackageInfo, IPackagesData } from '../types';
 import log from '../utils/log';
 import writeLog from '../utils/writeLog';
 import { INSTALL_COMMAND_PACKAGES, TOOLKIT_PACKAGES_DIR } from '../constants';
@@ -28,22 +28,26 @@ process.on('message', processListener);
 
 function processListener({
   packagesList,
+  packagesData,
   installChannel,
   processChannel,
 }: {
   packagesList: IPackageInfo[];
+  packagesData: IPackagesData;
   installChannel: string;
   processChannel: string;
 }) {
-  installPackages({ packagesList, installChannel, processChannel });
+  installPackages({ packagesList, packagesData, installChannel, processChannel });
 }
 
 async function installPackages({
   packagesList,
+  packagesData,
   installChannel,
   processChannel,
 }: {
   packagesList: IPackageInfo[];
+  packagesData: IPackagesData;
   installChannel: string;
   processChannel: string;
 }) {
@@ -79,7 +83,7 @@ async function installPackages({
         throw new Error('No package was found.');
       }
       // install package
-      const { localPath } = await install({ packagePath, packageInfo, channel: installChannel });
+      const { localPath } = await install({ packagePath, packageInfo, channel: installChannel, packagesData });
       // install package command
       // e.g: VS Code cli command 'code'
       await installPkgCommandToPath(name, localPath);
@@ -107,7 +111,19 @@ async function installPackages({
   process.send({ channel: processChannel, data: { status: 'done', result } });
 }
 
-async function install({ channel, packagePath, packageInfo }: { channel: string; packagePath: string; packageInfo: IPackageInfo }) {
+async function install(
+  {
+    channel,
+    packagePath,
+    packageInfo,
+    packagesData,
+  }: {
+    channel: string;
+    packagePath: string;
+    packageInfo: IPackageInfo;
+    packagesData: IPackagesData;
+  },
+) {
   let processorKey;
   if (packagePath) {
     processorKey = path.extname(packagePath).replace('.', '');
@@ -116,7 +132,7 @@ async function install({ channel, packagePath, packageInfo }: { channel: string;
   }
   const Installer = packageProcessor[processorKey];
   if (Installer) {
-    const installer = new Installer(channel);
+    const installer = new Installer(channel, packagesData);
     return await installer.install(packageInfo, packagePath);
   }
 }
