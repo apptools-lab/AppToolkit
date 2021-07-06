@@ -7,6 +7,7 @@ import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 import nodeCache from '../utils/nodeCache';
+import store, { packagesDataKey } from '../store';
 
 const childProcessMap = new Map();
 
@@ -23,8 +24,10 @@ export default () => {
     // fork a child process to install package
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
     childProcessMap.set(installChannel, childProcess);
-
-    childProcess.send({ packagesList, installChannel, processChannel });
+    // After packing the Electron app, the electron module which the electron-store require, couldn't be found in childProcess.
+    // For more detail, see this PR: https://github.com/appworks-lab/toolkit/pull/41
+    const packagesData = store.get(packagesDataKey);
+    childProcess.send({ packagesList, packagesData, installChannel, processChannel });
 
     childProcess.on('message', ({ channel, data }: any) => {
       if (channel === processChannel) {

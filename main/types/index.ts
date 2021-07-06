@@ -55,3 +55,9 @@ export interface INodeVersions {
   versions: string[];
   majors: Array<{ version: string; title: string }>;
 }
+
+export interface IPackagesData {
+  bases: IBasePackageInfo[];
+
+  apps: IBasePackageInfo[];
+}
