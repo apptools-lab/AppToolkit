@@ -1,4 +1,4 @@
-import { IBasePackage } from '@/interfaces';
+import { IPackageInfo, INPMRegistry } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 import { INodeVersions } from '../../interfaces';
 
@@ -16,6 +16,7 @@ const DEFAULT_NODE_VERSIONS: INodeVersions = {
   versions: [],
   majors: [],
 };
+const DEFAULT_ALL_NPM_REGISTRIES = [];
 
 export default {
   state: {
@@ -27,9 +28,12 @@ export default {
     installResult: DEFAULT_INSTALL_RESULT,
     nodeInstallFormValue: DEFAULT_NODE_INSTALL_FORM_VALUE,
     nodeInstallVisible: false,
+    npmInstalled: false,
+    allNpmRegistries: DEFAULT_ALL_NPM_REGISTRIES,
+    currentNpmRegistry: '',
   },
   reducers: {
-    updateNodeInfo(prevState, payload: IBasePackage) {
+    updateNodeInfo(prevState, payload: IPackageInfo) {
       prevState.nodeInfo = payload;
     },
 
@@ -71,10 +75,18 @@ export default {
     setNodeInstallVisible(prevState, visible: boolean) {
       prevState.nodeInstallVisible = visible;
     },
+
+    updateAllNpmRegistries(prevState, payload: INPMRegistry[]) {
+      prevState.allNpmRegistries = payload;
+    },
+
+    updateCurrentNpmRegistry(prevState, payload: string) {
+      prevState.currentNpmRegistry = payload;
+    },
   },
   effects: (dispatch) => ({
     async getNodeInfo() {
-      const nodeInfo: IBasePackage = await ipcRenderer.invoke('get-node-info');
+      const nodeInfo: IPackageInfo = await ipcRenderer.invoke('get-node-info');
       dispatch.node.updateNodeInfo(nodeInfo);
     },
 
@@ -117,6 +129,28 @@ export default {
           }
         });
       }
+    },
+
+    async getAllNpmRegistries() {
+      const allNpmRegistries: INPMRegistry[] = await ipcRenderer.invoke('get-all-npm-registries');
+      const npmRegistries = allNpmRegistries
+        .map(({ registry }: INPMRegistry) => registry);
+      this.setState({ allNpmRegistries: npmRegistries });
+    },
+
+    async getCurrentNpmRegistry() {
+      const currentNpmRegistry: string = await ipcRenderer.invoke('get-current-npm-registry');
+      this.setState({ currentNpmRegistry });
+    },
+
+    async setCurrentNpmRegistry(registry: string) {
+      await ipcRenderer.invoke('set-current-npm-registry', registry);
+      this.setState({ currentNpmRegistry: registry });
+    },
+
+    async checkNpmInstalled() {
+      const npmInstalled = await ipcRenderer.invoke('check-npm-installed');
+      this.setState({ npmInstalled });
     },
   }),
 };

@@ -28,7 +28,8 @@
       "ice/*": [
         ".ice/pages/*"
       ]
-    }
+    },
+    "noImplicitThis": false
   },
   "include": [
     "src",

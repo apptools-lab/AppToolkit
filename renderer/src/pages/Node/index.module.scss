@@ -1,23 +1,7 @@
 .nodeContainer {
   margin: 0 38px;
 
-  .row {
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-
-    .subTitle {
-      font-size: 24px;
-      font-weight: 500;
-    }
-
-    .switchVersionBtn {
-      margin-left: 16px;
-    }
-
-    .col {
-      display: flex;
-      align-items: center;
-    }
+  main {
+    padding: 40px 30px 0;
   }
 }
