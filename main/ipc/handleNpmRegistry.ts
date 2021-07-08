@@ -7,12 +7,14 @@ export default () => {
     return checkNpmInstalled();
   });
 
-  ipcMain.handle('get-all-npm-registries', () => {
-    return getAllRegistries();
+  ipcMain.handle('get-all-npm-registries', async () => {
+    const allRegistries = await getAllRegistries();
+    return allRegistries;
   });
 
-  ipcMain.handle('get-current-npm-registry', () => {
-    return getCurrentRegistry();
+  ipcMain.handle('get-current-npm-registry', async () => {
+    const currentRegistry = await getCurrentRegistry();
+    return currentRegistry;
   });
 
   ipcMain.handle('set-current-npm-registry', async (e: IpcMainInvokeEvent, registry: string) => {
