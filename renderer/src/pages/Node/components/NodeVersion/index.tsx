@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 
-const NodeVersionManager = () => {
+const NodeVersion = () => {
   const [state, dispatchers] = store.useModel('node');
   const { nodeInstallVisible, nodeInfo, currentStep } = state;
   const { options = {}, localVersion, managerVersionStatus } = nodeInfo as IPackageInfo;
@@ -91,4 +91,4 @@ const NodeVersionManager = () => {
   );
 };
 
-export default NodeVersionManager;
+export default NodeVersion;

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import PageHeader from '@/components/PageHeader';
 import styles from './index.module.scss';
 import store from './store';
-import NodeVersionManager from './components/NodeVersionManager';
+import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
 
 const Node = () => {
@@ -16,7 +16,7 @@ const Node = () => {
     <div className={styles.nodeContainer}>
       <PageHeader title="Node 管理" />
       <main>
-        <NodeVersionManager />
+        <NodeVersion />
         <NpmRegistry />
       </main>
     </div>
