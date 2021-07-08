@@ -145,7 +145,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
     case 2:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 30 }} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 28 }} />
         </div>
       );
       break;

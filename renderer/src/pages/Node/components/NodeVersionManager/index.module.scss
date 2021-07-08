@@ -1,0 +1,30 @@
+.container {
+  padding: 16px 30px 0;
+
+  .cannelBtn {
+    margin-bottom: 20px;
+    float: right;
+  }
+}
+
+
+.row {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+
+  .subTitle {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .switchVersionBtn {
+    margin-left: 16px;
+  }
+
+  .col {
+    display: flex;
+    align-items: center;
+  }
+}
+

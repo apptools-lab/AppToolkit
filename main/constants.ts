@@ -34,3 +34,5 @@ export const TAOBAO_NODE_MIRROR = 'https://npm.taobao.org/mirrors/node';
 
 export const PROFILE_FILES = ['.bash_profile', '.bashrc', '.zshrc'];
 export const DEFAULT_PROFILE_FILE = '.bash_profile';
+// npm
+export const NPMRC = path.join(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'], '.npmrc');
