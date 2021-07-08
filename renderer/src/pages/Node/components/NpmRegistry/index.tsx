@@ -22,8 +22,9 @@ function NpmRegistry() {
     }
   }, [npmInstalled]);
 
-  const onChange = (registry: string) => {
-    dispatchers.setCurrentNpmRegistry(registry);
+  const onChange = async (registry: string) => {
+    await dispatchers.setCurrentNpmRegistry(registry);
+    Message.success(`设置镜像源地址 ${registry} 成功`);
   };
 
   useEffect(() => {
