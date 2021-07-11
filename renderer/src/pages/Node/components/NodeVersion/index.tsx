@@ -1,7 +1,7 @@
 import { Grid, Button, Balloon } from '@alifd/next';
 import { ipcRenderer } from 'electron';
 import { IPackageInfo } from '@/interfaces';
-import InstallStep from '../InstallStep';
+import NodeInstaller from '../NodeInstaller';
 import store from '../../store';
 import styles from './index.module.scss';
 
@@ -9,7 +9,7 @@ const { Row, Col } = Grid;
 
 const NodeVersion = () => {
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallVisible, nodeInfo, currentStep } = state;
+  const { nodeInstallVisible, nodeInfo } = state;
   const { options = {}, localVersion, managerVersionStatus } = nodeInfo as IPackageInfo;
   const { managerName } = options;
 
@@ -28,14 +28,6 @@ const NodeVersion = () => {
     dispatchers.setNodeInstallVisible(true);
   };
 
-  const cancelNodeInstall = async () => {
-    await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
-    await ipcRenderer.invoke(
-      'cancel-install-node',
-      INSTALL_NODE_CHANNEL,
-    );
-    goBack();
-  };
 
   const switchNodeVersionBtn = (
     <Button
@@ -49,27 +41,24 @@ const NodeVersion = () => {
     </Button>
   );
 
-  const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
-    <div className={styles.cannelBtn}>
-      <Button type="normal" onClick={cancelNodeInstall}>
-        取消安装
-      </Button>
-    </div>
-  ) : null;
+  // const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
+  //   <div className={styles.cannelBtn}>
+  //     <Button type="normal" onClick={cancelNodeInstall}>
+  //       取消安装
+  //     </Button>
+  //   </div>
+  // ) : null;
 
   return (
     <>
       {
         nodeInstallVisible ? (
-          <div className={styles.container}>
-            {cannelInstallBtn}
-            <InstallStep
-              managerName={managerName}
-              INSTALL_NODE_CHANNEL={INSTALL_NODE_CHANNEL}
-              INSTALL_PROCESS_STATUS_CHANNEL={INSTALL_PROCESS_STATUS_CHANNEL}
-              goBack={goBack}
-            />
-          </div>
+          <NodeInstaller
+            managerName={managerName}
+            INSTALL_NODE_CHANNEL={INSTALL_NODE_CHANNEL}
+            INSTALL_PROCESS_STATUS_CHANNEL={INSTALL_PROCESS_STATUS_CHANNEL}
+            goBack={goBack}
+          />
         ) : (
           <Row className={styles.row}>
             <Col span={12}>

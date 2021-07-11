@@ -6,7 +6,8 @@ import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
 
 const Node = () => {
-  const [, dispatchers] = store.useModel('node');
+  const [state, dispatchers] = store.useModel('node');
+  const { nodeInstallVisible } = state;
 
   useEffect(() => {
     dispatchers.getNodeInfo();
@@ -17,7 +18,7 @@ const Node = () => {
       <PageHeader title="Node 管理" />
       <main>
         <NodeVersion />
-        <NpmRegistry />
+        {!nodeInstallVisible && <NpmRegistry />}
       </main>
     </div>
   );

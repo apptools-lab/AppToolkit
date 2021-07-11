@@ -1,10 +1,4 @@
-.installStepContainer {
-  margin-top: 40px;
-}
-
 .step {
-  margin-bottom: 40px;
-
   .stepItem {
     :global {
       .next-step-item-container {
@@ -12,8 +6,11 @@
         display: inline-flex;
 
         .next-step-item-node-placeholder {
-          width: 20px;
-          height: 20px;
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           .next-step-item-node {
             .next-icon:before {
@@ -36,6 +33,22 @@
   text-align: right;
 }
 
+.cannelBtn {
+  margin-bottom: 30px;
+  align-self: flex-end;
+  margin-right: 5%;
+}
+
 .loading {
+  margin-top: 0;
   width: 100%;
+}
+
+.term {
+  width: 90%;
+  margin: 20px auto 0;
+}
+
+.form {
+  padding-top: 50px;
 }

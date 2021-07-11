@@ -1,5 +1,5 @@
 import { useEffect, FC } from 'react';
-import { Step, Field, Form, Switch, Select, Loading, Message, Balloon, Icon } from '@alifd/next';
+import { Step, Field, Form, Switch, Select, Loading, Button, Message, Balloon, Icon } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
@@ -8,7 +8,7 @@ import store from '../../store';
 import InstallResult from '../InstallResult';
 import styles from './index.module.scss';
 
-interface IInstallStep {
+interface INodeInstaller {
   managerName: string;
   INSTALL_NODE_CHANNEL: string;
   INSTALL_PROCESS_STATUS_CHANNEL: string;
@@ -17,7 +17,7 @@ interface IInstallStep {
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
+const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
   const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus, nodeInstallVisible } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
@@ -45,10 +45,10 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   const field = Field.useField({ values: defaultValues });
   const formItemLayout = {
     labelCol: {
-      fixedSpan: 10,
+      span: 6,
     },
     wrapperCol: {
-      span: 14,
+      span: 16,
     },
   };
 
@@ -91,6 +91,15 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
     goNext();
   };
 
+  const cancelNodeInstall = async () => {
+    await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    await ipcRenderer.invoke(
+      'cancel-install-node',
+      INSTALL_NODE_CHANNEL,
+    );
+    goBack();
+  };
+
   let mainbody: JSX.Element;
 
   switch (currentStep) {
@@ -100,6 +109,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
           {...formItemLayout}
           field={field}
           fullWidth
+          labelAlign="left"
+          className={styles.form}
           onChange={dispatchers.updateNodeInstallFormValue}
         >
           <Form.Item
@@ -170,7 +181,13 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
       />
     ),
   );
-
+  const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
+    <div className={styles.cannelBtn}>
+      <Button type="normal" onClick={cancelNodeInstall}>
+        取消安装
+      </Button>
+    </div>
+  ) : null;
   useEffect(() => {
     dispatchers.getNodeVersions();
   }, []);
@@ -213,8 +230,9 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
     };
   }, []);
   return (
-    <div className={styles.installStepContainer}>
-      <Step current={currentStep} className={styles.step} shape="dot">
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+      {cannelInstallBtn}
+      <Step current={currentStep} className={styles.step} shape="dot" stretch>
         {stepComponents}
       </Step>
       <Loading visible={effectsLoading.getNodeVersions} className={styles.loading} tip="获取 Node.js 版本中...">
@@ -224,4 +242,4 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   );
 };
 
-export default InstallStep;
+export default NodeInstaller;
