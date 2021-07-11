@@ -1,6 +1,6 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import checkNpmInstalled from '../npm/checkNpmInstalled';
-import { getAllRegistries, setCurrentRegistry, getCurrentRegistry } from '../npm/registryManager';
+import { getAllRegistries, setCurrentRegistry, getCurrentRegistry } from '../npm/registry';
 
 export default () => {
   ipcMain.handle('check-npm-installed', () => {
