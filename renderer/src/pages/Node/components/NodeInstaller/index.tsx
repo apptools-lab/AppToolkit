@@ -10,16 +10,22 @@ import styles from './index.module.scss';
 
 interface INodeInstaller {
   managerName: string;
-  INSTALL_NODE_CHANNEL: string;
-  INSTALL_PROCESS_STATUS_CHANNEL: string;
   goBack: () => void;
 }
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
+const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus, nodeInstallVisible } = state;
+  const {
+    nodeInstallChannel,
+    nodeInstallProcessStatusChannel,
+    nodeInstallFormValue,
+    currentStep,
+    nodeVersions,
+    nodeInstallStatus,
+    nodeInstallVisible,
+  } = state;
   const effectsLoading = store.useModelEffectsLoading('node');
   const effectsErrors = store.useModelEffectsError('node');
 
@@ -84,21 +90,13 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, 
       {
         managerName,
         ...values,
-        installChannel: INSTALL_NODE_CHANNEL,
-        processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
+        installChannel: nodeInstallChannel,
+        processChannel: nodeInstallProcessStatusChannel,
       },
     );
     goNext();
   };
 
-  const cancelNodeInstall = async () => {
-    await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
-    await ipcRenderer.invoke(
-      'cancel-install-node',
-      INSTALL_NODE_CHANNEL,
-    );
-    goBack();
-  };
 
   let mainbody: JSX.Element;
 
@@ -156,7 +154,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, 
     case 2:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 28 }} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
         </div>
       );
       break;
@@ -181,27 +179,21 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, 
       />
     ),
   );
-  const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
-    <div className={styles.cannelBtn}>
-      <Button type="normal" onClick={cancelNodeInstall}>
-        取消安装
-      </Button>
-    </div>
-  ) : null;
+
   useEffect(() => {
     dispatchers.getNodeVersions();
   }, []);
 
   useEffect(() => {
     if (nodeInstallVisible) {
-      dispatchers.getCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+      dispatchers.getCaches({ installChannel: nodeInstallChannel, processChannel: nodeInstallProcessStatusChannel });
     }
   }, []);
 
   useEffect(() => {
-    ipcRenderer.on(INSTALL_NODE_CHANNEL, writeChunk);
+    ipcRenderer.on(nodeInstallChannel, writeChunk);
     return () => {
-      ipcRenderer.removeListener(INSTALL_NODE_CHANNEL, writeChunk);
+      ipcRenderer.removeListener(nodeInstallChannel, writeChunk);
     };
   }, []);
 
@@ -221,17 +213,16 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, INSTALL_NODE_CHANNEL, 
   }
 
   useEffect(() => {
-    ipcRenderer.on(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+    ipcRenderer.on(nodeInstallProcessStatusChannel, handleUpdateInstallStatus);
     return () => {
       ipcRenderer.removeListener(
-        INSTALL_PROCESS_STATUS_CHANNEL,
+        nodeInstallProcessStatusChannel,
         handleUpdateInstallStatus,
       );
     };
   }, []);
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-      {cannelInstallBtn}
+    <div>
       <Step current={currentStep} className={styles.step} shape="dot" stretch>
         {stepComponents}
       </Step>

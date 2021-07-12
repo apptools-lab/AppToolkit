@@ -1,5 +1,4 @@
 import { Grid, Button, Balloon } from '@alifd/next';
-import { ipcRenderer } from 'electron';
 import { IPackageInfo } from '@/interfaces';
 import NodeInstaller from '../NodeInstaller';
 import store from '../../store';
@@ -7,22 +6,14 @@ import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 
-const NodeVersion = () => {
+const NodeVersion = ({ goBack }) => {
   const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallVisible, nodeInfo } = state;
+  const { nodeInstallVisible, nodeInfo, nodeInstallChannel, nodeInstallProcessStatusChannel } = state;
   const { options = {}, localVersion, managerVersionStatus } = nodeInfo as IPackageInfo;
   const { managerName } = options;
 
-  const INSTALL_NODE_CHANNEL = 'install-node';
-  const INSTALL_PROCESS_STATUS_CHANNEL = 'install-node-process-status';
-
-  const goBack = () => {
-    dispatchers.setNodeInstallVisible(false);
-    dispatchers.getNodeInfo();
-  };
-
   const onSwitchVersionBtnClick = async () => {
-    await dispatchers.clearCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+    await dispatchers.clearCaches({ installChannel: nodeInstallChannel, processChannel: nodeInstallProcessStatusChannel });
     dispatchers.initStep();
     dispatchers.initNodeInstall();
     dispatchers.setNodeInstallVisible(true);
@@ -55,8 +46,6 @@ const NodeVersion = () => {
         nodeInstallVisible ? (
           <NodeInstaller
             managerName={managerName}
-            INSTALL_NODE_CHANNEL={INSTALL_NODE_CHANNEL}
-            INSTALL_PROCESS_STATUS_CHANNEL={INSTALL_PROCESS_STATUS_CHANNEL}
             goBack={goBack}
           />
         ) : (

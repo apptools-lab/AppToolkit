@@ -28,6 +28,8 @@ export default {
     installResult: DEFAULT_INSTALL_RESULT,
     nodeInstallFormValue: DEFAULT_NODE_INSTALL_FORM_VALUE,
     nodeInstallVisible: false,
+    nodeInstallChannel: 'install-node',
+    nodeInstallProcessStatusChannel: 'install-node-process-status',
     npmInstalled: false,
     allNpmRegistries: DEFAULT_ALL_NPM_REGISTRIES,
     currentNpmRegistry: '',
