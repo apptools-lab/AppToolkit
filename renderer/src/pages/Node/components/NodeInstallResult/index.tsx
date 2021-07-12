@@ -47,13 +47,13 @@ const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
         {reinstallGlobalDeps && (
           <List.Item
             title="重装全局依赖"
-            extra={<TagGroup>{nodeInstallStatus.reinstallPackages === 'success' ? successTag : errorTag}</TagGroup>}
+            extra={<TagGroup>{nodeInstallStatus.reinstallDependencies === 'success' ? successTag : errorTag}</TagGroup>}
           >
-            {nodeInstallStatus.reinstallPackages === 'error' && (
+            {nodeInstallStatus.reinstallDependencies === 'error' && (
               <>
                 <div className={styles.text}>重装全局依赖失败，请自行安装依赖。详细日志如下：</div>
                 <code className={styles.code}>
-                  {nodeInstallErrMsg.reinstallPackages}
+                  {nodeInstallErrMsg.reinstallDependencies}
                 </code>
               </>
             )}

@@ -4,7 +4,7 @@ import * as shell from 'shelljs';
 import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
-import { NOT_REINSTALL_PACKAGES } from '../constants';
+import { NOT_REINSTALL_DEPENDENCIES } from '../constants';
 import getNpmRegistry from '../utils/getNpmRegistry';
 
 class NvmManager implements INodeManager {
@@ -14,7 +14,7 @@ class NvmManager implements INodeManager {
 
   previousNpmPath: string;
 
-  globalNpmPackages: string[];
+  globalNpmDependencies: string[];
 
   nodePath: string;
 
@@ -22,7 +22,7 @@ class NvmManager implements INodeManager {
     this.channel = channel;
     this.std = '';
     this.previousNpmPath = '';
-    this.globalNpmPackages = [];
+    this.globalNpmDependencies = [];
     this.nodePath = '';
   }
 
@@ -58,17 +58,17 @@ class NvmManager implements INodeManager {
     });
   };
 
-  reinstallPackages = () => {
-    return this.getGlobalNpmPackages()
+  reinstallDependencies = () => {
+    return this.getGlobalNpmDependencies()
       .then(() => getNpmRegistry())
       .then((npmRegistry) => {
         return new Promise((resolve, reject) => {
-          const args = ['i', '-g', ...this.globalNpmPackages, '--registry', npmRegistry];
+          const args = ['i', '-g', ...this.globalNpmDependencies, '--registry', npmRegistry];
           const cp = execa('npm', args, {
             // specify execPath to the node path which installed just now
             execPath: this.nodePath,
             preferLocal: true,
-            // Don't extend env because it will not use the current(new) npm to install package
+            // Don't extend env because it will not use the current(new) npm to install dependencies
             extendEnv: false,
           });
 
@@ -111,18 +111,18 @@ class NvmManager implements INodeManager {
     return undefined;
   }
 
-  private async getGlobalNpmPackages() {
+  private async getGlobalNpmDependencies() {
     if (!this.previousNpmPath) {
       throw new Error('Npm command was not Found.');
     }
     const { stdout } = await execa(this.previousNpmPath, ['list', '-g', '--depth=0', '--json']);
     if (stdout) {
       const { dependencies = {} } = JSON.parse(stdout);
-      const depNames = Object.keys(dependencies).filter((dep: string) => !NOT_REINSTALL_PACKAGES.includes(dep)) || [];
+      const depNames = Object.keys(dependencies).filter((dep: string) => !NOT_REINSTALL_DEPENDENCIES.includes(dep)) || [];
 
       depNames.forEach((dep: string) => {
         const { version: depVersion } = dependencies[dep];
-        this.globalNpmPackages.push(`${dep}@${depVersion}`);
+        this.globalNpmDependencies.push(`${dep}@${depVersion}`);
       });
     }
   }

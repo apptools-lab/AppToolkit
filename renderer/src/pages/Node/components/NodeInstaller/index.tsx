@@ -48,7 +48,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   const steps = [
     { title: '选择版本', name: 'selectedVersion' },
     { title: '安装 Node.js', name: 'installNode' },
-    { title: '重装全局依赖', name: 'reinstallPackages' },
+    { title: '重装全局依赖', name: 'reinstallDependencies' },
     { title: '完成', name: 'finish' },
   ];
   const field = Field.useField({ values: defaultValues });

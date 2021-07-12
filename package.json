@@ -82,6 +82,7 @@
     "adm-zip": "^0.5.5",
     "all-node-versions": "^8.0.0",
     "compare-versions": "^3.6.0",
+    "cross-spawn": "^7.0.3",
     "decompress": "^4.2.1",
     "electron-is-dev": "^2.0.0",
     "electron-log": "^4.3.4",
