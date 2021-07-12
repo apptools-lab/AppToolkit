@@ -6,10 +6,10 @@ import styles from './index.module.scss';
 const { Row, Col } = Grid;
 
 function NpmRegistry() {
-  const [state, dispatchers] = store.useModel('node');
+  const [state, dispatchers] = store.useModel('registry');
   const { npmInstalled, currentNpmRegistry, allNpmRegistries } = state;
-  const effectsState = store.useModelEffectsState('node');
-  const effectsErrors = store.useModelEffectsError('node');
+  const effectsState = store.useModelEffectsState('registry');
+  const effectsErrors = store.useModelEffectsError('registry');
 
   useEffect(() => {
     dispatchers.checkNpmInstalled();

@@ -1,11 +1,11 @@
 import { useEffect, FC } from 'react';
-import { Step, Field, Form, Switch, Select, Loading, Button, Message, Balloon, Icon } from '@alifd/next';
+import { Step, Field, Form, Switch, Select, Loading, Message, Balloon, Icon } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import store from '../../store';
-import InstallResult from '../InstallResult';
+import InstallResult from '../NodeInstallResult';
 import styles from './index.module.scss';
 
 interface INodeInstaller {
@@ -16,7 +16,7 @@ interface INodeInstaller {
 const defaultValues = { reinstallGlobalDeps: true };
 
 const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
-  const [state, dispatchers] = store.useModel('node');
+  const [state, dispatchers] = store.useModel('nodeVersion');
   const {
     nodeInstallChannel,
     nodeInstallProcessStatusChannel,
@@ -26,8 +26,8 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
     nodeInstallStatus,
     nodeInstallVisible,
   } = state;
-  const effectsLoading = store.useModelEffectsLoading('node');
-  const effectsErrors = store.useModelEffectsError('node');
+  const effectsLoading = store.useModelEffectsLoading('nodeVersion');
+  const effectsErrors = store.useModelEffectsError('nodeVersion');
 
   useEffect(() => {
     if (effectsErrors.getNodeVersions.error) {
@@ -70,8 +70,8 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
   };
 
   const goNext = () => {
-    const { node } = store.getState();
-    dispatchers.updateStep(node.currentStep + 1);
+    const { nodeVersion } = store.getState();
+    dispatchers.updateStep(nodeVersion.currentStep + 1);
   };
 
   const submit = async () => {

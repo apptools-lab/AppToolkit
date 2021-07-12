@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 const { Row, Col } = Grid;
 
 const NodeVersion = ({ goBack }) => {
-  const [state, dispatchers] = store.useModel('node');
+  const [state, dispatchers] = store.useModel('nodeVersion');
   const { nodeInstallVisible, nodeInfo, nodeInstallChannel, nodeInstallProcessStatusChannel } = state;
   const { options = {}, localVersion, managerVersionStatus } = nodeInfo as IPackageInfo;
   const { managerName } = options;
@@ -31,14 +31,6 @@ const NodeVersion = ({ goBack }) => {
       切换版本
     </Button>
   );
-
-  // const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
-  //   <div className={styles.cannelBtn}>
-  //     <Button type="normal" onClick={cancelNodeInstall}>
-  //       取消安装
-  //     </Button>
-  //   </div>
-  // ) : null;
 
   return (
     <>

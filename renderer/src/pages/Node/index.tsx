@@ -8,20 +8,23 @@ import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
 
 const Node = () => {
-  const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallVisible, nodeInstallChannel, nodeInstallProcessStatusChannel, currentStep } = state;
+  const [nodeVersionState, nodeVersionDispatchers] = store.useModel('nodeVersion');
+  const { nodeInstallVisible, nodeInstallChannel, nodeInstallProcessStatusChannel, currentStep } = nodeVersionState;
 
   useEffect(() => {
-    dispatchers.getNodeInfo();
+    nodeVersionDispatchers.getNodeInfo();
   }, []);
 
   const goBack = () => {
-    dispatchers.setNodeInstallVisible(false);
-    dispatchers.getNodeInfo();
+    nodeVersionDispatchers.setNodeInstallVisible(false);
+    nodeVersionDispatchers.getNodeInfo();
   };
 
   const cancelNodeInstall = async () => {
-    await dispatchers.clearCaches({ installChannel: nodeInstallChannel, processChannel: nodeInstallProcessStatusChannel });
+    await nodeVersionDispatchers.clearCaches({
+      installChannel: nodeInstallChannel,
+      processChannel: nodeInstallProcessStatusChannel,
+    });
     await ipcRenderer.invoke(
       'cancel-install-node',
       nodeInstallChannel,
