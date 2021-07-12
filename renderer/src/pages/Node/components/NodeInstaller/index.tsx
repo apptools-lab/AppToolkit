@@ -4,18 +4,18 @@ import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { IPackageInfo } from '@/interfaces';
 import store from '../../store';
 import InstallResult from '../NodeInstallResult';
 import styles from './index.module.scss';
 
 interface INodeInstaller {
-  managerName: string;
   goBack: () => void;
 }
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
+const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   const [state, dispatchers] = store.useModel('nodeVersion');
   const {
     nodeInstallChannel,
@@ -25,7 +25,10 @@ const NodeInstaller: FC<INodeInstaller> = ({ managerName, goBack }) => {
     nodeVersions,
     nodeInstallStatus,
     nodeInstallVisible,
+    nodeInfo,
   } = state;
+  const { options = {} } = nodeInfo as IPackageInfo;
+  const { managerName } = options;
   const effectsLoading = store.useModelEffectsLoading('nodeVersion');
   const effectsErrors = store.useModelEffectsError('nodeVersion');
 

@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import store from './store';
 import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
+import NodeInstaller from './components/NodeInstaller';
 
 const Node = () => {
   const [nodeVersionState, nodeVersionDispatchers] = store.useModel('nodeVersion');
@@ -43,8 +44,16 @@ const Node = () => {
     <div className={styles.nodeContainer}>
       <PageHeader title="Node 管理" button={nodeInstallVisible ? cannelInstallBtn : null} />
       <main>
-        <NodeVersion goBack={goBack} />
-        {!nodeInstallVisible && <NpmRegistry />}
+        {nodeInstallVisible ? (
+          <NodeInstaller
+            goBack={goBack}
+          />
+        ) : (
+          <>
+            <NodeVersion />
+            <NpmRegistry />
+          </>
+        )}
       </main>
     </div>
   );
