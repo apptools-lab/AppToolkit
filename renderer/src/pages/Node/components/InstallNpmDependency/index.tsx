@@ -1,5 +1,6 @@
 import { Input, Icon, Table, Button, Message } from '@alifd/next';
 import { ISearchNpmDependency } from '@/interfaces/npmDependency';
+import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';
 
@@ -13,7 +14,7 @@ function InstallNpmDependency() {
   };
 
   const repoRender = (value: string) => {
-    return <a href={value} target="__blank">查看仓库</a>;
+    return <>{value && <a href={value} target="__blank">查看仓库</a>}</>;
   };
 
   const onInstallGlobalDep = async (dependency: ISearchNpmDependency, index: number) => {
@@ -21,7 +22,8 @@ function InstallNpmDependency() {
     const { name, version } = dependency;
     await dispatcher.installGlobalNpmDependency({ dependency: name, version });
     dispatcher.removeCurDepIndex({ type: 'install', index });
-    Message.success(`安装依赖 ${name} 成功`);
+    Message.success(`安装依赖 ${name}@${version} 成功`);
+    await dispatcher.getGlobalNpmDependencies(true);
   };
 
   const operationRender = (value: any, index: number, record: ISearchNpmDependency) => {
@@ -29,14 +31,11 @@ function InstallNpmDependency() {
     return (
       <Button
         text
-        iconSize="xs"
         type="primary"
-        icons={{ loading: <Icon type="loading" /> }}
         onClick={async () => await onInstallGlobalDep(record, index)}
-        loading={isInstallGlobalDep}
         disabled={isInstallGlobalDep}
       >
-        安装
+        {isInstallGlobalDep ? <Icon type="loading" /> : <CustomIcon type="xiazai" />}
       </Button>
     );
   };
@@ -44,12 +43,13 @@ function InstallNpmDependency() {
   return (
     <div className={styles.container}>
       <Input
+        className={styles.searchInput}
         innerAfter={
           <Icon
             type="search"
             size="xs"
             onClick={onSearch}
-            style={{ margin: 4 }}
+            className={styles.searchIcon}
           />
           }
         placeholder="搜索"
@@ -57,7 +57,7 @@ function InstallNpmDependency() {
         aria-label="input with config of innerAfter"
         onChange={(value: string) => dispatcher.updateSearchValue(value)}
       />
-      <Table dataSource={queryNpmDependencies} className={styles.table}>
+      <Table dataSource={queryNpmDependencies} className={styles.table} loading={effectsState.searchNpmDependencies.isLoading}>
         <Table.Column title="npm 依赖" dataIndex="name" width={100} />
         <Table.Column title="版本" dataIndex="version" width={100} />
         <Table.Column title="仓库" dataIndex="repository" cell={repoRender} width={100} />

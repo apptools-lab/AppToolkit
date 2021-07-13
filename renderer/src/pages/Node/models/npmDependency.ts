@@ -30,8 +30,8 @@ export default {
     },
   },
   effects: () => ({
-    async getGlobalNpmDependencies() {
-      const npmDependencies = await ipcRenderer.invoke('get-global-npm-dependencies');
+    async getGlobalNpmDependencies(force = false) {
+      const npmDependencies = await ipcRenderer.invoke('get-global-npm-dependencies', force);
       this.setState({ npmDependencies });
     },
 

@@ -1,10 +1,12 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .title {
   font-size: 18px;
   font-weight: 500;
-}
-
-.addDepBtn {
-  margin-top: 20px;
 }
 
 .table {

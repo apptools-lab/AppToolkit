@@ -9,8 +9,8 @@ import {
 } from '../npm/dependency';
 
 export default () => {
-  ipcMain.handle('get-global-npm-dependencies', async () => {
-    const globalDependencies = await getGlobalDependencies();
+  ipcMain.handle('get-global-npm-dependencies', async (e: IpcMainInvokeEvent, force) => {
+    const globalDependencies = await getGlobalDependencies(force);
     return globalDependencies;
   });
 

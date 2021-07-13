@@ -1,10 +1,13 @@
-import { Table, Button, Message, Icon, Dropdown } from '@alifd/next';
+import { Table, Button, Message, Icon, Dropdown, Grid } from '@alifd/next';
 import BalloonConfirm from '@/components/BalloonConfirm';
+import CustomIcon from '@/components/Icon';
 import { useEffect } from 'react';
 import { INpmDependency } from '@/interfaces/npmDependency';
 import store from '../../store';
 import InstallNpmDependency from '../InstallNpmDependency';
 import styles from './index.module.scss';
+
+const { Row, Col } = Grid;
 
 function NpmDependency() {
   const [state, dispatcher] = store.useModel('npmDependency');
@@ -41,6 +44,7 @@ function NpmDependency() {
     await dispatcher.uninstallGlobalNpmDependency(name);
     dispatcher.removeCurDepIndex({ type: 'uninstall', index });
     Message.success(`卸载依赖 ${name} 成功`);
+    await dispatcher.getGlobalNpmDependencies(true);
   };
 
   const onUpdateGlobalDep = async (dependency: INpmDependency, index: number) => {
@@ -49,6 +53,7 @@ function NpmDependency() {
     await dispatcher.updateGlobalNpmDependency(dependency.name);
     dispatcher.removeCurDepIndex({ type: 'update', index });
     Message.success(`升级依赖 ${name} 成功`);
+    await dispatcher.getGlobalNpmDependencies(true);
   };
 
   const onReinstallGlobalDep = async (dependency: INpmDependency, index: number) => {
@@ -56,7 +61,8 @@ function NpmDependency() {
     const { name, currentVersion } = dependency;
     await dispatcher.reinstallGlobalNpmDependency({ dependency: name, version: currentVersion });
     dispatcher.removeCurDepIndex({ type: 'reinstall', index });
-    Message.success(`重装依赖 ${name} 成功`);
+    Message.success(`重装依赖 ${name}@${currentVersion} 成功`);
+    await dispatcher.getGlobalNpmDependencies(true);
   };
 
   const operationRender = (value: any, index: number, record: INpmDependency) => {
@@ -72,13 +78,10 @@ function NpmDependency() {
         >
           <Button
             text
-            iconSize="xs"
             type="primary"
-            icons={{ loading: <Icon type="loading" /> }}
-            loading={isReinstallCurrentDep}
             disabled={isReinstallCurrentDep}
           >
-            重装
+            {isReinstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="gongju" />}
           </Button>
         </BalloonConfirm>
         <BalloonConfirm
@@ -89,12 +92,10 @@ function NpmDependency() {
           <Button
             className={styles.button}
             text
-            iconSize="xs"
             type="primary"
-            icons={{ loading: <Icon type="loading" /> }}
-            loading={isUninstallCurrentDep}
             disabled={isUninstallCurrentDep}
-          >卸载
+          >
+            {isUninstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="trash" />}
           </Button>
         </BalloonConfirm>
       </div>
@@ -111,14 +112,11 @@ function NpmDependency() {
         <Button
           className={styles.button}
           text
-          iconSize="xs"
           type="primary"
-          icons={{ loading: <Icon type="loading" /> }}
           onClick={async () => await onUpdateGlobalDep(record, index)}
-          loading={isUpdateGlobalDep}
           disabled={isUpdateGlobalDep}
         >
-          升级
+          {isUpdateGlobalDep ? <Icon type="loading" /> : <CustomIcon type="jiantouarrow499" />}
         </Button>
         )}
       </div>
@@ -130,10 +128,12 @@ function NpmDependency() {
   }, []);
   return (
     <>
-      <div className={styles.title}>全局 npm 依赖管理</div>
-      <Dropdown trigger={<Button type="primary" className={styles.addDepBtn}>添加依赖</Button>} triggerType={['click']}>
-        <InstallNpmDependency />
-      </Dropdown>
+      <Row className={styles.header}>
+        <div className={styles.title}>全局 npm 依赖管理</div>
+        <Dropdown trigger={<Button type="primary">添加依赖</Button>} triggerType={['click']}>
+          <InstallNpmDependency />
+        </Dropdown>
+      </Row>
       <Table loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>
         <Table.Column title="npm 依赖" dataIndex="name" width={200} />
         <Table.Column title="当前版本" dataIndex="currentVersion" width={200} />

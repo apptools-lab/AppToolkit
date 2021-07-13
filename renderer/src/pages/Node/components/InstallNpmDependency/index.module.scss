@@ -12,3 +12,17 @@
 .table {
   margin-top: 10px;
 }
+
+.searchInput {
+  :global {
+    .next-input-inner {
+      background-color: #209bfa;
+    }
+  }
+
+  .searchIcon {
+    margin: 4px;
+    cursor: pointer;
+    color: white;
+  }
+}

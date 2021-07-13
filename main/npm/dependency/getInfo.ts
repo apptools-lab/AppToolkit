@@ -1,5 +1,6 @@
 import executeCommandJSON from '../../utils/executeCommandJSON';
 import log from '../../utils/log';
+import nodeCache from '../../utils/nodeCache';
 
 interface InstalledDependency {
   version: string;
@@ -18,20 +19,30 @@ interface InstalledDependencies {
   dependencies: {[key: string]: InstalledDependency};
 }
 
-export async function getGlobalDependencies() {
+const GLOBAL_DEPS_KEY = 'globalDependencies';
+const IGNORE_DEPENDENCIES = ['npm'];
+
+export async function getGlobalDependencies(force: boolean) {
   try {
+    const cache = nodeCache.get(GLOBAL_DEPS_KEY);
+    if (!force && cache) {
+      return cache;
+    }
     const { dependencies: installedDeps } = await executeCommandJSON<InstalledDependencies>('npm', ['list', '-g', '--depth=0', '--json']);
     const outdatedDeps = await executeCommandJSON('npm', ['outdated', '-g', '--json']);
 
-    const depsInfo = Object.keys(installedDeps).map((name: string) => {
-      return {
-        name,
-        type: 'global',
-        currentVersion: getCurrentVersion(installedDeps[name]),
-        latestVersion: getLatestVersion(outdatedDeps[name]),
-      };
-    });
+    const depsInfo = Object.keys(installedDeps)
+      .filter((name: string) => !IGNORE_DEPENDENCIES.includes(name))
+      .map((name: string) => {
+        return {
+          name,
+          type: 'global',
+          currentVersion: getCurrentVersion(installedDeps[name]),
+          latestVersion: getLatestVersion(outdatedDeps[name]),
+        };
+      });
     log.info('depsInfo: ', depsInfo);
+    nodeCache.set(GLOBAL_DEPS_KEY, depsInfo);
     return depsInfo;
   } catch (error) {
     log.error(error.message);
