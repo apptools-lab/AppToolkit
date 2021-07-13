@@ -4,3 +4,9 @@ export interface INpmDependency {
   currentVersion: string;
   latestVersion: string;
 }
+
+export interface ISearchNpmDependency {
+  name: string;
+  version: string;
+  repository: string;
+}

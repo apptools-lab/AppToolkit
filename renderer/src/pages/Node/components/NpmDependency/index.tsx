@@ -1,14 +1,15 @@
-import { Table, Button, Message, Icon } from '@alifd/next';
+import { Table, Button, Message, Icon, Dropdown } from '@alifd/next';
 import BalloonConfirm from '@/components/BalloonConfirm';
 import { useEffect } from 'react';
 import { INpmDependency } from '@/interfaces/npmDependency';
 import store from '../../store';
+import InstallNpmDependency from '../InstallNpmDependency';
 import styles from './index.module.scss';
 
 function NpmDependency() {
   const [state, dispatcher] = store.useModel('npmDependency');
   const effectsState = store.useModelEffectsState('npmDependency');
-  const { npmDependencies, currentDependency } = state;
+  const { npmDependencies, curUpdateDepIndex, curUninstallDepIndex, curReinstallDepIndex } = state;
 
   useEffect(() => {
     if (effectsState.getGlobalNpmDependencies.error) {
@@ -34,35 +35,38 @@ function NpmDependency() {
     }
   }, [effectsState.reinstallGlobalNpmDependency.error]);
 
-  const onUninstallGlobalDep = async (dependency: INpmDependency) => {
-    dispatcher.setCurrentDependency(dependency);
+  const onUninstallGlobalDep = async (dependency: INpmDependency, index: number) => {
+    dispatcher.addCurDepIndex({ type: 'uninstall', index });
     const { name } = dependency;
     await dispatcher.uninstallGlobalNpmDependency(name);
+    dispatcher.removeCurDepIndex({ type: 'uninstall', index });
     Message.success(`卸载依赖 ${name} 成功`);
   };
 
-  const onUpdateGlobalDep = async (dependency: INpmDependency) => {
-    dispatcher.setCurrentDependency(dependency);
+  const onUpdateGlobalDep = async (dependency: INpmDependency, index: number) => {
+    dispatcher.addCurDepIndex({ type: 'update', index });
     const { name } = dependency;
     await dispatcher.updateGlobalNpmDependency(dependency.name);
+    dispatcher.removeCurDepIndex({ type: 'update', index });
     Message.success(`升级依赖 ${name} 成功`);
   };
 
-  const onReinstallGlobalDep = async (dependency: INpmDependency) => {
-    dispatcher.setCurrentDependency(dependency);
+  const onReinstallGlobalDep = async (dependency: INpmDependency, index: number) => {
+    dispatcher.addCurDepIndex({ type: 'reinstall', index });
     const { name, currentVersion } = dependency;
     await dispatcher.reinstallGlobalNpmDependency({ dependency: name, version: currentVersion });
+    dispatcher.removeCurDepIndex({ type: 'reinstall', index });
     Message.success(`重装依赖 ${name} 成功`);
   };
 
   const operationRender = (value: any, index: number, record: INpmDependency) => {
-    const isReinstallCurrentDep = (currentDependency as INpmDependency).name === record.name && effectsState.reinstallGlobalNpmDependency.isLoading;
-    const isUninstallCurrentDep = (currentDependency as INpmDependency).name === record.name && effectsState.uninstallGlobalNpmDependency.isLoading;
+    const isReinstallCurrentDep = curReinstallDepIndex.includes(index) && effectsState.reinstallGlobalNpmDependency.isLoading;
+    const isUninstallCurrentDep = curUninstallDepIndex.includes(index) && effectsState.uninstallGlobalNpmDependency.isLoading;
 
     return (
       <div className={styles.columnCell}>
         <BalloonConfirm
-          onConfirm={async () => await onReinstallGlobalDep(record)}
+          onConfirm={async () => await onReinstallGlobalDep(record, index)}
           title="确定重装该依赖？"
           disable={isReinstallCurrentDep}
         >
@@ -78,7 +82,7 @@ function NpmDependency() {
           </Button>
         </BalloonConfirm>
         <BalloonConfirm
-          onConfirm={async () => await onUninstallGlobalDep(record)}
+          onConfirm={async () => await onUninstallGlobalDep(record, index)}
           title="确定卸载该依赖？"
           disable={isUninstallCurrentDep}
         >
@@ -98,7 +102,7 @@ function NpmDependency() {
   };
 
   const latestVersionRender = (value: string, index: number, record: INpmDependency) => {
-    const isUpdateGlobalDep = (currentDependency as INpmDependency).name === record.name && effectsState.updateGlobalNpmDependency.isLoading;
+    const isUpdateGlobalDep = curUpdateDepIndex.includes(index) && effectsState.updateGlobalNpmDependency.isLoading;
 
     return (
       <div className={styles.columnCell}>
@@ -110,7 +114,7 @@ function NpmDependency() {
           iconSize="xs"
           type="primary"
           icons={{ loading: <Icon type="loading" /> }}
-          onClick={async () => await onUpdateGlobalDep(record)}
+          onClick={async () => await onUpdateGlobalDep(record, index)}
           loading={isUpdateGlobalDep}
           disabled={isUpdateGlobalDep}
         >
@@ -127,6 +131,9 @@ function NpmDependency() {
   return (
     <>
       <div className={styles.title}>全局 npm 依赖管理</div>
+      <Dropdown trigger={<Button type="primary" className={styles.addDepBtn}>添加依赖</Button>} triggerType={['click']}>
+        <InstallNpmDependency />
+      </Dropdown>
       <Table loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>
         <Table.Column title="npm 依赖" dataIndex="name" width={200} />
         <Table.Column title="当前版本" dataIndex="currentVersion" width={200} />
