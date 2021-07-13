@@ -19,19 +19,24 @@ interface InstalledDependencies {
 }
 
 export async function getGlobalDependencies() {
-  const { dependencies: installedDeps } = await executeCommandJSON<InstalledDependencies>('npm', ['list', '-g', '--depth=0', '--json']);
-  const outdatedDeps = await executeCommandJSON('npm', ['outdated', '-g', '--json']);
+  try {
+    const { dependencies: installedDeps } = await executeCommandJSON<InstalledDependencies>('npm', ['list', '-g', '--depth=0', '--json']);
+    const outdatedDeps = await executeCommandJSON('npm', ['outdated', '-g', '--json']);
 
-  const depsInfo = Object.keys(installedDeps).map((name: string) => {
-    return {
-      name,
-      type: 'global',
-      currentVersion: getCurrentVersion(installedDeps[name]),
-      latestVersion: getLatestVersion(outdatedDeps[name]),
-    };
-  });
-  log.info('depsInfo:', depsInfo);
-  return depsInfo;
+    const depsInfo = Object.keys(installedDeps).map((name: string) => {
+      return {
+        name,
+        type: 'global',
+        currentVersion: getCurrentVersion(installedDeps[name]),
+        latestVersion: getLatestVersion(outdatedDeps[name]),
+      };
+    });
+    log.info('depsInfo: ', depsInfo);
+    return depsInfo;
+  } catch (error) {
+    log.error(error.message);
+    throw error;
+  }
 }
 
 function getCurrentVersion(installedDependency: InstalledDependency) {

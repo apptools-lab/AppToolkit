@@ -5,10 +5,15 @@
 
 .table {
   margin-top: 20px;
+
+  .columnCell {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .button {
-  margin-left: 6px;
+  margin-left: 10px;
 }
 
 .placeholder {
