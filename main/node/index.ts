@@ -34,7 +34,7 @@ function processListener({ managerName, nodeVersion, reinstallGlobalDeps, instal
         process.send({ channel: processChannel, data: { task, status: 'success', result } });
       } catch (error) {
         const errMsg = error instanceof Error ? error.message : error;
-        log.error(errMsg);
+        log.error(error);
         process.send({ channel: processChannel, data: { task, status: 'error', errMsg } });
       }
     }

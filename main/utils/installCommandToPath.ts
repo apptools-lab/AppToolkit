@@ -38,7 +38,7 @@ async function installCommandToPath(target: string, command: string) {
       const linkSourceCommand = `osascript -e "do shell script \\"mkdir -p /usr/local/bin && ln -sf \'${target}\' \'${source}\'\\" with administrator privileges"`;
       execSync(linkSourceCommand);
     } catch (err) {
-      log.error(`Error: Unable to link ${target} to ${source}.`);
+      log.error(new Error(`Error: Unable to link ${target} to ${source}.`));
       throw err;
     }
   }

@@ -1,12 +1,12 @@
-import { recordUV } from '@appworks/recorder';
+import { recordUV, IGoldlogParam, ILogParam } from '@appworks/recorder';
 import store, { recordKey } from '../store';
 
 const MAIN_KEY = 'main';
 
 const RECORD_MODULE_KEY = 'logger';
 
-function getRecordUrl(action: string) {
-  return `http://gm.mmstat.com/appworks.toolkit.${action}?t=${(new Date()).valueOf()}`;
+function getGoldlogUrl(goldlogKey: string) {
+  return `http://gm.mmstat.com/appworks.toolkit.${goldlogKey}?t=${(new Date()).valueOf()}`;
 }
 
 export function recordDAU() {
@@ -19,7 +19,21 @@ export function recordDAU() {
       platform: process.platform,
     },
   };
-  const url = getRecordUrl(action);
+  const url = getGoldlogUrl(action);
 
   return recordUV(goldlogParam, store, recordKey, url);
+}
+
+/**
+ * record action UV
+ */
+export async function record(originParam: ILogParam) {
+  const goldlogParam: IGoldlogParam = {
+    ...originParam,
+    namespace: MAIN_KEY,
+  };
+
+  const url = getGoldlogUrl(goldlogParam.module);
+
+  await recordUV(goldlogParam, store, recordKey, url);
 }

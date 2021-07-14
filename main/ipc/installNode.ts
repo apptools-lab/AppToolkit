@@ -6,6 +6,7 @@ import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import nodeCache from '../utils/nodeCache';
 import log from '../utils/log';
+import { record } from '../recorder';
 
 const childProcessMap = new Map();
 
@@ -66,6 +67,15 @@ export default () => {
         }
         nodeCache.set(channel, processCaches);
       }
+
+      record({
+        module: 'node',
+        action: 'installNode',
+        data: {
+          nodeVersion,
+        },
+      });
+
       sendMainWindow(channel, data);
     });
   });

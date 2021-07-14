@@ -45,7 +45,7 @@ class NvmManager implements INodeManager {
 
       cp.on('error', (buffer: Buffer) => {
         this.listenFunc(buffer);
-        log.error(buffer.toString());
+        log.error(new Error(buffer.toString()));
         reject(buffer.toString());
       });
 
@@ -78,7 +78,7 @@ class NvmManager implements INodeManager {
 
           cp.on('error', (buffer: Buffer) => {
             this.listenFunc(buffer);
-            log.error(buffer.toString());
+            log.error(new Error(buffer.toString()));
             reject(buffer.toString());
           });
 

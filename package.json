@@ -77,7 +77,7 @@
     }
   },
   "dependencies": {
-    "@appworks/recorder": "^1.0.0",
+    "@appworks/recorder": "1.0.1-0",
     "@shockpkg/hdi-mac": "^1.6.1",
     "adm-zip": "^0.5.5",
     "all-node-versions": "^8.0.0",
