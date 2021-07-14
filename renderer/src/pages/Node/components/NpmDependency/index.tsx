@@ -1,4 +1,4 @@
-import { Table, Button, Message, Icon, Dropdown, Grid } from '@alifd/next';
+import { Table, Button, Message, Icon, Dropdown } from '@alifd/next';
 import BalloonConfirm from '@/components/BalloonConfirm';
 import CustomIcon from '@/components/Icon';
 import { useEffect } from 'react';
@@ -7,7 +7,11 @@ import store from '../../store';
 import InstallNpmDependency from '../InstallNpmDependency';
 import styles from './index.module.scss';
 
-const { Row, Col } = Grid;
+const defaultTableColumnProps: any = {
+  align: 'center',
+  alignHeader: 'center',
+  width: 140,
+};
 
 function NpmDependency() {
   const [state, dispatcher] = store.useModel('npmDependency');
@@ -128,17 +132,17 @@ function NpmDependency() {
   }, []);
   return (
     <>
-      <Row className={styles.header}>
+      <div className={styles.header}>
         <div className={styles.title}>全局 npm 依赖管理</div>
         <Dropdown trigger={<Button type="primary">添加依赖</Button>} triggerType={['click']}>
           <InstallNpmDependency />
         </Dropdown>
-      </Row>
+      </div>
       <Table loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>
-        <Table.Column title="npm 依赖" dataIndex="name" width={200} />
-        <Table.Column title="当前版本" dataIndex="currentVersion" width={200} />
-        <Table.Column title="最新版本" dataIndex="latestVersion" cell={latestVersionRender} width={200} />
-        <Table.Column title="操作" cell={operationRender} width={200} />
+        <Table.Column {...defaultTableColumnProps} width={300} title="npm 依赖" dataIndex="name" />
+        <Table.Column {...defaultTableColumnProps} title="当前版本" dataIndex="currentVersion" />
+        <Table.Column {...defaultTableColumnProps} title="最新版本" dataIndex="latestVersion" cell={latestVersionRender} />
+        <Table.Column {...defaultTableColumnProps} title="操作" cell={operationRender} />
       </Table>
     </>
   );

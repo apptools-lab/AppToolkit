@@ -8,5 +8,6 @@ export interface INpmDependency {
 export interface ISearchNpmDependency {
   name: string;
   version: string;
-  repository: string;
+  homepage: string;
+  isInstalled: boolean;
 }
