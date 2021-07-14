@@ -1,8 +1,10 @@
-import { Input, Icon, Table, Button, Message } from '@alifd/next';
+import { Input, Icon, Table, Button, Message, Balloon } from '@alifd/next';
 import { ISearchNpmDependency } from '@/interfaces/npmDependency';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';
+
+const { Tooltip } = Balloon;
 
 const defaultTableColumnProps: any = {
   align: 'center',
@@ -41,14 +43,21 @@ function InstallNpmDependency() {
           record.isInstalled ? (
             <span style={{ color: 'gray' }}>已安装</span>
           ) : (
-            <Button
-              text
-              type="primary"
-              onClick={async () => await onInstallGlobalDep(record, index)}
-              disabled={isInstallGlobalDep}
+            <Tooltip
+              trigger={
+                <Button
+                  text
+                  type="primary"
+                  onClick={async () => await onInstallGlobalDep(record, index)}
+                  disabled={isInstallGlobalDep}
+                >
+                  {isInstallGlobalDep ? <Icon type="loading" /> : <CustomIcon type="xiazai" />}
+                </Button>
+            }
+              align="t"
             >
-              {isInstallGlobalDep ? <Icon type="loading" /> : <CustomIcon type="xiazai" />}
-            </Button>
+              安装
+            </Tooltip>
           )}
       </>
     );
@@ -58,6 +67,7 @@ function InstallNpmDependency() {
     <div className={styles.container}>
       <Input
         className={styles.searchInput}
+        onPressEnter={onSearch}
         innerAfter={
           <Icon
             type="search"

@@ -1,4 +1,4 @@
-import { Table, Button, Message, Icon, Dropdown } from '@alifd/next';
+import { Table, Button, Message, Icon, Dropdown, Balloon } from '@alifd/next';
 import BalloonConfirm from '@/components/BalloonConfirm';
 import CustomIcon from '@/components/Icon';
 import { useEffect } from 'react';
@@ -6,6 +6,8 @@ import { INpmDependency } from '@/interfaces/npmDependency';
 import store from '../../store';
 import InstallNpmDependency from '../InstallNpmDependency';
 import styles from './index.module.scss';
+
+const { Tooltip } = Balloon;
 
 const defaultTableColumnProps: any = {
   align: 'center',
@@ -80,27 +82,41 @@ function NpmDependency() {
           title="确定重装该依赖？"
           disable={isReinstallCurrentDep}
         >
-          <Button
-            text
-            type="primary"
-            disabled={isReinstallCurrentDep}
+          <Tooltip
+            trigger={
+              <Button
+                text
+                type="primary"
+                disabled={isReinstallCurrentDep}
+              >
+                {isReinstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="gongju" />}
+              </Button>
+            }
+            align="t"
           >
-            {isReinstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="gongju" />}
-          </Button>
+            重装
+          </Tooltip>
         </BalloonConfirm>
         <BalloonConfirm
           onConfirm={async () => await onUninstallGlobalDep(record, index)}
           title="确定卸载该依赖？"
           disable={isUninstallCurrentDep}
         >
-          <Button
-            className={styles.button}
-            text
-            type="primary"
-            disabled={isUninstallCurrentDep}
+          <Tooltip
+            trigger={
+              <Button
+                className={styles.button}
+                text
+                type="primary"
+                disabled={isUninstallCurrentDep}
+              >
+                {isUninstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="trash" />}
+              </Button>
+              }
+            align="t"
           >
-            {isUninstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="trash" />}
-          </Button>
+            卸载
+          </Tooltip>
         </BalloonConfirm>
       </div>
     );
@@ -113,15 +129,23 @@ function NpmDependency() {
       <div className={styles.columnCell}>
         <span>{value}</span>
         {value && (
-        <Button
-          className={styles.button}
-          text
-          type="primary"
-          onClick={async () => await onUpdateGlobalDep(record, index)}
-          disabled={isUpdateGlobalDep}
-        >
-          {isUpdateGlobalDep ? <Icon type="loading" /> : <CustomIcon type="jiantouarrow499" />}
-        </Button>
+          <Tooltip
+            trigger={
+              <Button
+                className={styles.button}
+                text
+                type="primary"
+                onClick={async () => await onUpdateGlobalDep(record, index)}
+                disabled={isUpdateGlobalDep}
+              >
+                {isUpdateGlobalDep ? <Icon type="loading" /> : <CustomIcon type="jiantouarrow499" />}
+              </Button>
+            }
+            align="t"
+          >
+            更新
+          </Tooltip>
+
         )}
       </div>
     );
