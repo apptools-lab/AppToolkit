@@ -11,6 +11,11 @@ const asideMenuConfig = [
     path: '/node',
     icon: 'nodejs',
   },
+  {
+    name: 'Git 管理',
+    path: '/git',
+    icon: 'git',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };
