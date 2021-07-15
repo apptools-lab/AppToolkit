@@ -4,11 +4,11 @@ import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 
-interface IBaseConfig {
+interface IBaseGitConfig {
   field: Field;
 }
 
-const BaseConfig: FC<IBaseConfig> = ({ field }) => {
+const BaseGitConfig: FC<IBaseGitConfig> = ({ field }) => {
   const { init } = field;
 
   return (
@@ -28,11 +28,11 @@ const BaseConfig: FC<IBaseConfig> = ({ field }) => {
       <Row align="center" className={styles.row}>
         <Col span={12} className={styles.label}>忽略文件名大小写</Col>
         <Col span={12}>
-          <Switch {...init('core.ignoreCase')} />
+          <Switch {...init('core.ignoreCase', { valueName: 'checked' })} />
         </Col>
       </Row>
     </>
   );
 };
 
-export default BaseConfig;
+export default BaseGitConfig;

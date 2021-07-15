@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 import { Field, Message } from '@alifd/next';
 import debounce from 'lodash.debounce';
-import BaseConfig from '../BaseConfig';
+import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
 import styles from './index.module.scss';
 
-const GlobalConfig: FC<{}> = () => {
+const GlobalGitConfig: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
@@ -14,13 +14,17 @@ const GlobalConfig: FC<{}> = () => {
   const onFieldChange = debounce(async () => {
     const values: any = field.getValues();
     await dispatcher.setGlobalGitConfig(values);
-    Message.success('设置全局 Git 配置成功');
+    Message.success('更新全局 Git 配置成功');
   }, 800);
 
   const field = Field.useField({
     parseName: true,
     onChange: onFieldChange,
   });
+
+  useEffect(() => {
+    dispatcher.getGlobalGitConfig();
+  }, []);
 
   useEffect(() => {
     if (effectsState.getGlobalGitConfig.error) {
@@ -34,20 +38,15 @@ const GlobalConfig: FC<{}> = () => {
     }
   }, [effectsState.setGlobalGitConfig.error]);
 
-
-  useEffect(() => {
-    dispatcher.getGlobalGitConfig();
-  }, []);
-
   useEffect(() => {
     field.setValues(globalGitConfig);
   }, [globalGitConfig]);
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.title}>全局配置</div>
-      <BaseConfig field={field} />
-    </div>
+      <BaseGitConfig field={field} />
+    </>
   );
 };
 
-export default GlobalConfig;
+export default GlobalGitConfig;

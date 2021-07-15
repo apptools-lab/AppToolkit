@@ -8,6 +8,7 @@ module.exports = getESLintConfig('react-ts', {
     '@iceworks/best-practices/recommend-polyfill': 0,
     'import/order': 1,
     'no-param-reassign': 0,
-    '@typescript-eslint/no-require-imports': 0
+    '@typescript-eslint/no-require-imports': 0,
+    'no-await-in-loop': 0
   },
 });

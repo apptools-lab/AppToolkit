@@ -1,15 +1,19 @@
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import {
-  getGitConfig,
+  getGlobalGitConfig,
   setGitConfig,
+  getUserGitConfigs,
 } from '../git';
 
 export default () => {
-  ipcMain.handle('get-git-config', async (e: IpcMainInvokeEvent, configWorkspaceDir?: string) => {
-    return await getGitConfig(configWorkspaceDir);
+  ipcMain.handle('get-global-git-config', async () => {
+    return await getGlobalGitConfig();
   });
-  ipcMain.handle('set-git-config', async (e: IpcMainInvokeEvent, args: { gitConfig: any; configWorkspaceDir?: string }) => {
-    return await setGitConfig(args);
+  ipcMain.handle('get-user-git-configs', async () => {
+    return await getUserGitConfigs();
+  });
+  ipcMain.handle('set-git-config', async (e: IpcMainInvokeEvent, gitConfig: any, gitConfigPath?: string) => {
+    return await setGitConfig(gitConfig, gitConfigPath);
   });
 };

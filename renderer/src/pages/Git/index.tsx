@@ -1,7 +1,8 @@
 import { Button } from '@alifd/next';
 import PageHeader from '@/components/PageHeader';
 import styles from './index.module.scss';
-import GlobalConfig from './components/GlobalConfig';
+import GlobalGitConfig from './components/GlobalGitConfig';
+import UserGitConfigs from './components/UserGitConfigs';
 
 function Git() {
   const addConfigBtn = <Button type="primary">新增配置</Button>;
@@ -10,7 +11,8 @@ function Git() {
     <div className={styles.container}>
       <PageHeader title="Git 管理" button={addConfigBtn} />
       <div className={styles.content}>
-        <GlobalConfig />
+        <GlobalGitConfig />
+        <UserGitConfigs />
       </div>
     </div>
   );
