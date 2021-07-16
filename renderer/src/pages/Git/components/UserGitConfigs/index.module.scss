@@ -1,5 +1,33 @@
-.title {
-  font-size: 24px;
-  font-weight: 600;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .operation {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      font-size: 22px;
+      cursor: pointer;
+    }
+  }
+}
+
+.label {
+  font-size: 14px;
+}
+
+.row {
   margin-bottom: 20px;
+}
+
+.input {
+  min-width: 100%;
 }

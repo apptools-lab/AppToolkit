@@ -10,7 +10,6 @@ interface IBaseGitConfig {
 
 const BaseGitConfig: FC<IBaseGitConfig> = ({ field }) => {
   const { init } = field;
-
   return (
     <>
       <Row align="center" className={styles.row}>
@@ -28,7 +27,8 @@ const BaseGitConfig: FC<IBaseGitConfig> = ({ field }) => {
       <Row align="center" className={styles.row}>
         <Col span={12} className={styles.label}>忽略文件名大小写</Col>
         <Col span={12}>
-          <Switch {...init('core.ignoreCase', { valueName: 'checked' })} />
+          {/* Must set the initValue to avoid the error: Cannot delete property 'ignoreCase' of #<Object> */}
+          <Switch {...init('core.ignoreCase', { valueName: 'checked', initValue: false })} />
         </Col>
       </Row>
     </>

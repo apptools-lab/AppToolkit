@@ -92,7 +92,6 @@
     "globby": "^11.0.3",
     "ice-npm-utils": "^2.1.1",
     "ini": "^2.0.0",
-    "lodash.set": "^4.3.2",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "shelljs": "^0.8.4",

@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Field, Message } from '@alifd/next';
 import debounce from 'lodash.debounce';
+import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
 import styles from './index.module.scss';
@@ -13,7 +14,7 @@ const GlobalGitConfig: FC<{}> = () => {
 
   const onFieldChange = debounce(async () => {
     const values: any = field.getValues();
-    await dispatcher.setGlobalGitConfig(values);
+    await dispatcher.setGlobalGitConfig(removeObjEmptyValue(values));
     Message.success('更新全局 Git 配置成功');
   }, 800);
 
