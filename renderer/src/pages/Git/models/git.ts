@@ -43,5 +43,8 @@ export default {
       await ipcRenderer.invoke('remove-user-git-config', gitDir, gitConfigPath);
       return true;
     },
+    async getFolderPath() {
+      return await ipcRenderer.invoke('get-folder-path');
+    },
   }),
 };

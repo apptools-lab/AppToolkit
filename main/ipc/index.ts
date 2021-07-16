@@ -3,6 +3,7 @@ import installBasePackages from './installBasePackages';
 import getNodeInfo from './getNodeInfo';
 import installNode from './installNode';
 import handleGitConfig from './handleGitConfig';
+import getFolderPath from './getFolderPath';
 
 export default () => {
   getBasePackagesInfo();
@@ -14,4 +15,6 @@ export default () => {
   installNode();
 
   handleGitConfig();
+
+  getFolderPath();
 };

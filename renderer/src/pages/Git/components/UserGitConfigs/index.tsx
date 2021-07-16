@@ -68,7 +68,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
     field.setValues(props);
   }, [props.length]);
 
-  const onRemoveUserGitConfig = async () => {
+  const onRemoveUserGitConfig = () => {
     Dialog.confirm({
       title: '提示',
       content: `是否删除 ${name} 配置？`,
@@ -76,7 +76,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
         const res = await dispatcher.removeUserGitConfig({ gitConfigPath, gitDir });
         if (res) {
           Message.success(`删除 ${name} Git 配置成功`);
-          await dispatcher.getUserGitConfigs();
+          dispatcher.getUserGitConfigs();
         }
       },
     });

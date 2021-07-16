@@ -15,13 +15,13 @@ const BaseGitConfig: FC<IBaseGitConfig> = ({ field }) => {
       <Row align="center" className={styles.row}>
         <Col span={12} className={styles.label}>用户名</Col>
         <Col span={12}>
-          <Input {...init('user.name')} className={styles.input} />
+          <Input {...init('user.name', { initValue: '' })} className={styles.input} />
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
         <Col span={12} className={styles.label}>邮箱</Col>
         <Col span={12}>
-          <Input {...init('user.email')} className={styles.input} />
+          <Input {...init('user.email', { initValue: '' })} className={styles.input} />
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
