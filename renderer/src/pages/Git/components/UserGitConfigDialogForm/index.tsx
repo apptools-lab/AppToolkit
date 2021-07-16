@@ -39,13 +39,11 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
       res = await onSubmit(values);
     } else if (type === 'edit') {
       res = await onSubmit({ originGitConfig: dataSource, currentGitConfig: values });
-    } else {
-      return;
     }
     if (res) {
       Message.success(`${type === 'add' ? '新增' : '更新'} ${values.name} 配置成功`);
-      await dispatcher.getUserGitConfigs();
       onVisibleChange(false);
+      dispatcher.getUserGitConfigs();
     }
   };
 

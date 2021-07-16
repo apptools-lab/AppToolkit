@@ -114,4 +114,5 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
     </>
   );
 };
+
 export default UserGitConfigs;
