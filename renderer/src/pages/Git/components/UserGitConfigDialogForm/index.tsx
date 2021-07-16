@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Dialog, Form, Field, Input, Message } from '@alifd/next';
-import Icon from '@/components/Icon';
+import CustomIcon from '@/components/Icon';
+import GitDirFormItemLabel from '../GitDirFormItemLabel';
 import store from '../../store';
 import styles from './index.module.scss';
 
@@ -57,6 +58,7 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
     const folderPath = await dispatcher.getFolderPath();
     field.setValue('gitDir', folderPath);
   };
+
   return (
     <Dialog
       visible={visible}
@@ -76,12 +78,12 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
         >
           <Input name="name" placeholder="请输入配置名称，仅支持字母和数字的组合，以字母开头，如 Github" />
         </Form.Item>
-        <Form.Item label="使用此配置的目录" required requiredMessage="请选择目录">
+        <Form.Item label={<GitDirFormItemLabel />} required requiredMessage="请选择目录">
           <Input
             name="gitDir"
             placeholder="请选择目录"
             readOnly
-            innerAfter={<Icon type="wenjianjia" className={styles.folderIcon} onClick={onOpenFolderDialog} />}
+            innerAfter={<CustomIcon type="wenjianjia" className={styles.folderIcon} onClick={onOpenFolderDialog} />}
           />
         </Form.Item>
       </Form>

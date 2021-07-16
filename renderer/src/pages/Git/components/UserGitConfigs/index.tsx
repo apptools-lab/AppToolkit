@@ -6,6 +6,7 @@ import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
 import UserGitConfigDialogForm from '../UserGitConfigDialogForm';
+import GitDirFormItemLabel from '../GitDirFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
@@ -96,7 +97,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
         </div>
       </div>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>使用此配置的目录</Col>
+        <Col span={12} className={styles.label}><GitDirFormItemLabel /></Col>
         <Col span={12}>
           <Input className={styles.input} value={gitDir} readOnly />
         </Col>
