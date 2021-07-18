@@ -4,7 +4,7 @@ const { Tooltip } = Balloon;
 
 export default () => {
   return (
-    <span style={{ display: 'flex', alignItems: 'center' }}>
+    <span>
       使用此配置的目录
       <Tooltip
         trigger={<Icon type="prompt" />}

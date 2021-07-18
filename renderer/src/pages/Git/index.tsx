@@ -11,14 +11,13 @@ function Git() {
   const [state, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
-  const { userGitConfigFormVisible, userGitConfigFormType } = state;
+  const { userGitConfigFormVisible } = state;
 
   const addConfigBtn = (
     <Button
       type="primary"
       onClick={() => {
         dispatcher.setUserGitConfigFormVisible(true);
-        dispatcher.setUserGitConfigFormType('add');
       }}
     >
       新增配置
@@ -38,14 +37,12 @@ function Git() {
         <GlobalGitConfig />
         <UserGitConfigs />
       </div>
-      {userGitConfigFormType === 'add' && (
-        <UserGitConfigDialogForm
-          type="add"
-          visible={userGitConfigFormVisible}
-          onSubmit={dispatcher.addUserGitConfig}
-          onVisibleChange={dispatcher.setUserGitConfigFormVisible}
-        />
-      )}
+      <UserGitConfigDialogForm
+        type="add"
+        visible={userGitConfigFormVisible}
+        onSubmit={dispatcher.addUserGitConfig}
+        onVisibleChange={dispatcher.setUserGitConfigFormVisible}
+      />
     </div>
   );
 }

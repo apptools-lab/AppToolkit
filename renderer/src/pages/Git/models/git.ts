@@ -5,14 +5,10 @@ export default {
     globalGitConfig: {},
     userGitConfigs: [],
     userGitConfigFormVisible: false,
-    userGitConfigFormType: '',
   },
   reducers: {
     setUserGitConfigFormVisible(prevState, visible: boolean) {
       prevState.userGitConfigFormVisible = visible;
-    },
-    setUserGitConfigFormType(prevState, userGitConfigFormType: string) {
-      prevState.userGitConfigFormType = userGitConfigFormType;
     },
   },
   effects: () => ({
@@ -35,8 +31,9 @@ export default {
       await ipcRenderer.invoke('set-git-config', gitConfig, gitConfigPath);
       return true;
     },
-    async updateUserGitConfig({ originGitConfig, currentGitConfig }) {
-      await ipcRenderer.invoke('update-user-git-config', originGitConfig, currentGitConfig);
+    // TODO: rename to updateUserGitDir
+    async updateUserGitDir({ originGitDir, currentGitDir }) {
+      await ipcRenderer.invoke('update-user-git-dir', originGitDir, currentGitDir);
       return true;
     },
     async removeUserGitConfig({ gitConfigPath, gitDir }: { gitDir: string; gitConfigPath: string }) {

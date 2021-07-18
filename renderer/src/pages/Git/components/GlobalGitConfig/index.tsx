@@ -21,6 +21,7 @@ const GlobalGitConfig: FC<{}> = () => {
   const field = Field.useField({
     parseName: true,
     onChange: onFieldChange,
+    autoUnmount: false,
   });
 
   useEffect(() => {

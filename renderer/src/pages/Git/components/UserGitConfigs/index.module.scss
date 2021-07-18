@@ -31,3 +31,27 @@
 .input {
   min-width: 100%;
 }
+
+.folderIcon {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.sshPublicKey {
+  width: 100%;
+  background-color: #eee;
+  padding: 10px 20px 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+
+  code {
+    word-wrap: break-word; 
+    word-break: break-all;
+    font-size: 12px;
+  }
+
+  .copyToClipboard {
+    align-self: flex-end;
+  }
+}

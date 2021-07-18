@@ -56,6 +56,9 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
 
   const onOpenFolderDialog = async () => {
     const folderPath = await dispatcher.getFolderPath();
+    if (!folderPath) {
+      return;
+    }
     field.setValue('gitDir', folderPath);
   };
 

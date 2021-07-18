@@ -1,12 +1,11 @@
 import { FC, useEffect } from 'react';
 import debounce from 'lodash.debounce';
-import { Field, Message, Grid, Input, Dialog } from '@alifd/next';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Field, Message, Grid, Input, Dialog, Button } from '@alifd/next';
 import Icon from '@/components/Icon';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
-import UserGitConfigDialogForm from '../UserGitConfigDialogForm';
-import GitDirFormItemLabel from '../GitDirFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
@@ -14,6 +13,7 @@ const { Row, Col } = Grid;
 interface IUserGitConfig {
   gitDir: string;
   name: string;
+  sshPublicKey?: string;
   [k: string]: any;
 }
 
@@ -33,18 +33,15 @@ const UserGitConfigs: FC<{}> = () => {
   }, []);
   return (
     <div>
-      {
-        userGitConfigs.map((userGitConfig: IUserGitConfig) => (
-          <UserGitConfig key={userGitConfig.name} {...userGitConfig} />
-        ))
-      }
+      {userGitConfigs.map((userGitConfig: IUserGitConfig) => (
+        <UserGitConfig key={userGitConfig.name} {...userGitConfig} />
+      ))}
     </div>
   );
 };
 
-const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...props }) => {
-  const [state, dispatcher] = store.useModel('git');
-  const { userGitConfigFormVisible, userGitConfigFormType } = state;
+const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPublicKey, ...props }) => {
+  const [, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
   const onFieldChange = debounce(async () => {
@@ -57,17 +54,19 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
   const field = Field.useField({
     parseName: true,
     onChange: onFieldChange,
+    autoUnmount: false,
+    values: { ...props, gitDir },
   });
+
+  useEffect(() => {
+    field.setValues({ ...props, gitDir });
+  }, [props.length]);
 
   useEffect(() => {
     if (effectsState.setUserGitConfig.error) {
       Message.error(effectsState.setUserGitConfig.error.message);
     }
   }, [effectsState.setUserGitConfig.error]);
-
-  useEffect(() => {
-    field.setValues(props);
-  }, [props.length]);
 
   const onRemoveUserGitConfig = () => {
     Dialog.confirm({
@@ -83,35 +82,51 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, ...pro
     });
   };
 
-  const onEditUserGitConfig = async () => {
-    dispatcher.setUserGitConfigFormType('edit');
-    dispatcher.setUserGitConfigFormVisible(true);
+  const onOpenFolderDialog = async () => {
+    const folderPath = await dispatcher.getFolderPath();
+    if (!folderPath) {
+      return;
+    }
+    field.setValue('gitDir', folderPath);
+    const res = await dispatcher.updateUserGitDir({ originGitDir: gitDir, currentGitDir: folderPath });
+    if (res) {
+      Message.success(`更新 ${name} Git 配置成功`);
+      dispatcher.getUserGitConfigs();
+    }
   };
   return (
     <>
       <div className={styles.header}>
         <div className={styles.title}>{name} 配置</div>
         <div className={styles.operation}>
-          <Icon type="bianji" className={styles.icon} onClick={onEditUserGitConfig} />
-          <Icon type="trash" className={styles.icon} style={{ fontSize: 20 }} onClick={onRemoveUserGitConfig} />
+          <Icon type="trash" className={styles.icon} onClick={onRemoveUserGitConfig} />
         </div>
       </div>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}><GitDirFormItemLabel /></Col>
+        <Col span={12} className={styles.label}>用户名</Col>
         <Col span={12}>
-          <Input className={styles.input} value={gitDir} readOnly />
+          <Input
+            {...field.init('gitDir')}
+            className={styles.input}
+            readOnly
+            innerAfter={<Icon type="wenjianjia" className={styles.folderIcon} onClick={onOpenFolderDialog} />}
+          />
         </Col>
       </Row>
       <BaseGitConfig field={field} />
-      {userGitConfigFormType === 'edit' && (
-        <UserGitConfigDialogForm
-          type="edit"
-          dataSource={{ name, gitDir }}
-          visible={userGitConfigFormVisible}
-          onSubmit={dispatcher.updateUserGitConfig}
-          onVisibleChange={dispatcher.setUserGitConfigFormVisible}
-        />
-      )}
+      <Row>
+        <Col span={12} className={styles.label}>SSH 公钥</Col>
+        <Col span={12} className={styles.sshPublicKey}>
+          <CopyToClipboard
+            text={sshPublicKey || ''}
+            onCopy={() => Message.success('复制成功')}
+            className={styles.copyToClipboard}
+          >
+            <Button text type="primary">一键复制</Button>
+          </CopyToClipboard>
+          <code >{sshPublicKey}</code>
+        </Col>
+      </Row>
     </>
   );
 };
