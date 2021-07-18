@@ -3,14 +3,28 @@ import ini = require('ini');
 import * as fse from 'fs-extra';
 import { GLOBAL_GITCONFIG_PATH } from '../constants';
 import log from '../utils/log';
-import { getSSHPublicKey } from './ssh';
+import {
+  getSSHPublicKey,
+  updateSSHConfig,
+  getSSHConfigs,
+  sshConfigDir,
+  rsaFileSuffix,
+  removeSSHConfig,
+} from './ssh';
 
-const GIT_CONFIG_DIR = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+const HOME_DIR = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+const IGNORE_CONFIG_KEYS = ['gitDir', 'hostName'];
 
 export async function getGlobalGitConfig() {
   const globalGitConfig = await parseGitConfig(GLOBAL_GITCONFIG_PATH);
+
   log.info('Global git config: ', globalGitConfig);
+
   return globalGitConfig;
+}
+
+export async function updateGlobalGitConfig(gitConfig: object) {
+  await writeGitConfig(GLOBAL_GITCONFIG_PATH, gitConfig);
 }
 
 export async function getUserGitConfigs() {
@@ -21,10 +35,10 @@ export async function getUserGitConfigs() {
   for (const key of globalGitConfigKeys) {
     if (/^includeIf "gitdir:/.test(key)) {
       const gitConfigPath = globalGitConfig[key].path || '';
-      let userGitConfigPath = gitConfigPath.replace('~', GIT_CONFIG_DIR);
+      let userGitConfigPath = gitConfigPath.replace('~', HOME_DIR);
       if (!path.isAbsolute(userGitConfigPath)) {
         // .gitconfig-gitlab -> /Users/xx/.gitconfig-gitlab
-        userGitConfigPath = path.join(GIT_CONFIG_DIR, userGitConfigPath);
+        userGitConfigPath = path.join(HOME_DIR, userGitConfigPath);
       }
       const userGitConfigPathExists = await fse.pathExists(userGitConfigPath);
       if (!userGitConfigPathExists) {
@@ -40,12 +54,31 @@ export async function getUserGitConfigs() {
         // e.g.: /Users/workspace/gitlab/
         userGitDir = userGitDirMatchRes[1];
       }
-      const sshPublicKey = await getSSHPublicKey(userGitConfigName);
+
+      let sshPublicKey = '';
+      let hostName = '';
+      const privateKeyPath = path.join(sshConfigDir, `${userGitConfigName}${rsaFileSuffix}`);
+      const sshConfigs = await getSSHConfigs();
+      // eslint-disable-next-line no-labels
+      loopLabel:
+      for (const sshConfig of sshConfigs) {
+        const { config = [], value: HostName } = sshConfig;
+        for (const { param, value } of config) {
+          if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
+            hostName = HostName;
+            sshPublicKey = await getSSHPublicKey(privateKeyPath);
+            // eslint-disable-next-line no-labels
+            break loopLabel;
+          }
+        }
+      }
+
       userGitConfigs.push({
         ...userGitConfig,
-        name: userGitConfigName,
+        configName: userGitConfigName,
         gitDir: userGitDir,
         gitConfigPath: userGitConfigPath,
+        hostName,
         sshPublicKey,
       });
     }
@@ -55,29 +88,33 @@ export async function getUserGitConfigs() {
   return userGitConfigs;
 }
 
-export async function setGitConfig(gitConfig: any, gitConfigPath?: string) {
-  // TODO: get user git config path
-  gitConfigPath = gitConfigPath || GLOBAL_GITCONFIG_PATH;
-  // const gitConfig = parseGitConfig(gitConfigPath);
-  // set(gitConfig, key, value);
-  log.info('Set git config: ', gitConfig);
-  await writeGitConfig(gitConfigPath, gitConfig);
+export async function updateUserGitConfig(currentGitConfig: object, configName: string, gitConfigPath: string) {
+  await updateSSHConfig(currentGitConfig, configName);
+
+  IGNORE_CONFIG_KEYS.forEach((key) => {
+    delete currentGitConfig[key];
+  });
+  await writeGitConfig(gitConfigPath, currentGitConfig);
 }
 
-export async function addUserGitConfig(name: string, gitDir: string) {
+export async function addUserGitConfig(configName: string, gitDir: string) {
   const globalGitConfig = await parseGitConfig(GLOBAL_GITCONFIG_PATH);
   const includeIfKey = `includeIf "gitdir:${gitDir}"`;
+
   if (globalGitConfig[includeIfKey]) {
     const err = new Error(`目录 ${gitDir} 已被设置，请使用其他目录`);
     log.error(err);
     throw err;
   }
-  const gitConfigPath = `${path.join(GIT_CONFIG_DIR, `.gitconfig-${name}`)}`;
+
+  const gitConfigPath = `${path.join(HOME_DIR, `.gitconfig-${configName}`)}`;
   globalGitConfig[includeIfKey] = {
     path: gitConfigPath,
   };
+
   // append git config to ~/.gitconfig
   await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
+
   // create ~/.gitconfig-gitlab
   await fse.createFile(gitConfigPath);
 }
@@ -96,25 +133,10 @@ export async function updateUserGitDir(
   globalGitConfig[currentIncludeIfKey] = includeIfValue;
 
   await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
-
-  // const originIncludeIfKey = `includeIf "gitdir:${originConfig.gitDir}"`;
-  // const currentIncludeIfKey = `includeIf "gitdir:${currentConfig.gitDir}"`;
-  // const currentGitConfigPath = `${path.join(GIT_CONFIG_DIR, `.gitconfig-${currentConfig.name}`)}`;
-
-  // delete globalGitConfig[originIncludeIfKey];
-  // globalGitConfig[currentIncludeIfKey] = {
-  //   path: currentGitConfigPath,
-  // };
-  // await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
-
-  // if (originConfig.name !== currentConfig.name) { // avoid too many file operations
-  //   const originGitConfigPath = `${path.join(GIT_CONFIG_DIR, `.gitconfig-${originConfig.name}`)}`;
-  //   await fse.copyFile(originGitConfigPath, currentGitConfigPath);
-  //   await fse.remove(originGitConfigPath);
-  // }
 }
 
-export async function removeUserGitConfig(gitDir: string, gitConfigPath: string) {
+export async function removeUserGitConfig(configName: string, gitDir: string, gitConfigPath: string, gitConfig: any) {
+  await removeSSHConfig(gitConfig, configName);
   const globalGitConfig = await parseGitConfig(GLOBAL_GITCONFIG_PATH);
   const globalGitConfigKeys = Object.keys(globalGitConfig);
   for (const key of globalGitConfigKeys) {
@@ -123,8 +145,10 @@ export async function removeUserGitConfig(gitDir: string, gitConfigPath: string)
       break;
     }
   }
+
   // update gitConfig to ~/.gitconfig
   await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
+
   // remove the gitconfig file
   await fse.remove(gitConfigPath);
 }
@@ -136,4 +160,5 @@ async function parseGitConfig(gitConfigPath: string) {
 
 async function writeGitConfig(gitConfigPath: string, config: object) {
   await fse.writeFile(gitConfigPath, ini.stringify(config, { whitespace: true }));
+  log.info('Set git config: ', config);
 }

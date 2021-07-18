@@ -14,7 +14,7 @@ const GlobalGitConfig: FC<{}> = () => {
 
   const onFieldChange = debounce(async () => {
     const values: any = field.getValues();
-    await dispatcher.setGlobalGitConfig(removeObjEmptyValue(values));
+    await dispatcher.updateGlobalGitConfig(removeObjEmptyValue(values));
     Message.success('更新全局 Git 配置成功');
   }, 800);
 
@@ -35,10 +35,10 @@ const GlobalGitConfig: FC<{}> = () => {
   }, [effectsState.getGlobalGitConfig.error]);
 
   useEffect(() => {
-    if (effectsState.setGlobalGitConfig.error) {
-      Message.error(effectsState.setGlobalGitConfig.error.message);
+    if (effectsState.updateGlobalGitConfig.error) {
+      Message.error(effectsState.updateGlobalGitConfig.error.message);
     }
-  }, [effectsState.setGlobalGitConfig.error]);
+  }, [effectsState.updateGlobalGitConfig.error]);
 
   useEffect(() => {
     field.setValues(globalGitConfig);

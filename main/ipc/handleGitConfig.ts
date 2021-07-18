@@ -2,12 +2,14 @@ import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import {
   getGlobalGitConfig,
-  setGitConfig,
+  updateGlobalGitConfig,
   getUserGitConfigs,
+  updateUserGitConfig,
   addUserGitConfig,
   removeUserGitConfig,
   generateSSHKey,
   updateUserGitDir,
+  addSSHConfig,
 } from '../git';
 
 export default () => {
@@ -15,30 +17,59 @@ export default () => {
     return await getGlobalGitConfig();
   });
 
+  ipcMain.handle('update-global-git-config', async (e: IpcMainInvokeEvent, gitConfig: object) => {
+    await updateGlobalGitConfig(gitConfig);
+  });
+
   ipcMain.handle('get-user-git-configs', async () => {
     return await getUserGitConfigs();
   });
 
-  ipcMain.handle('set-git-config', async (e: IpcMainInvokeEvent, gitConfig: any, gitConfigPath?: string) => {
-    await setGitConfig(gitConfig, gitConfigPath);
+  ipcMain.handle('update-user-git-config', async (
+    e: IpcMainInvokeEvent,
+    currentGitConfig: object,
+    configName: string,
+    gitConfigPath: string,
+  ) => {
+    await updateUserGitConfig(currentGitConfig, configName, gitConfigPath);
   });
 
-  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, name: string, gitDir: string) => {
-    await addUserGitConfig(name, gitDir);
+  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, configName: string, gitDir: string) => {
+    await addUserGitConfig(configName, gitDir);
   });
 
   ipcMain.handle('update-user-git-dir', async (
     e: IpcMainInvokeEvent,
     originGitDir: string,
-    currentGitDir: string) => {
+    currentGitDir: string,
+  ) => {
     await updateUserGitDir(originGitDir, currentGitDir);
   });
 
-  ipcMain.handle('remove-user-git-config', async (e: IpcMainInvokeEvent, gitDir: string, gitConfigPath: string) => {
-    await removeUserGitConfig(gitDir, gitConfigPath);
+  ipcMain.handle('remove-user-git-config', async (
+    e: IpcMainInvokeEvent,
+    configName: string,
+    gitDir: string,
+    gitConfigPath: string,
+    gitConfig: any,
+  ) => {
+    await removeUserGitConfig(configName, gitDir, gitConfigPath, gitConfig);
   });
 
-  ipcMain.handle('generate-ssh-key', async (e: IpcMainInvokeEvent, userEmail: string, configName: string) => {
+  ipcMain.handle('generate-ssh-key', async (
+    e: IpcMainInvokeEvent,
+    {
+      userEmail,
+      configName,
+      hostName,
+      userName,
+    }: {
+      userEmail: string;
+      configName: string;
+      hostName: string;
+      userName: string;
+    }) => {
     await generateSSHKey(userEmail, configName);
+    await addSSHConfig({ hostName, configName, userName });
   });
 };

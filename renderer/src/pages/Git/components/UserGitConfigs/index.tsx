@@ -6,13 +6,15 @@ import Icon from '@/components/Icon';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
+import GitDirFormItemLabel from '../GitDirFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 
 interface IUserGitConfig {
   gitDir: string;
-  name: string;
+  configName: string;
+  gitConfigPath: string;
   sshPublicKey?: string;
   [k: string]: any;
 }
@@ -32,22 +34,30 @@ const UserGitConfigs: FC<{}> = () => {
     dispatcher.getUserGitConfigs();
   }, []);
   return (
-    <div>
-      {userGitConfigs.map((userGitConfig: IUserGitConfig) => (
-        <UserGitConfig key={userGitConfig.name} {...userGitConfig} />
-      ))}
-    </div>
+    <>
+      {userGitConfigs.map((userGitConfig: IUserGitConfig) => {
+        return (
+          <UserGitConfig key={userGitConfig.configName} {...userGitConfig} />
+        );
+      })}
+    </>
   );
 };
 
-const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPublicKey, ...props }) => {
+const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, sshPublicKey, ...props }) => {
   const [, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
+  const initValues = { ...props, gitDir };
+
   const onFieldChange = debounce(async () => {
     const values: any = field.getValues();
-    await dispatcher.setUserGitConfig({ gitConfigPath, gitConfig: removeObjEmptyValue(values) });
-    Message.success(`更新 ${name} Git 配置成功`);
+    await dispatcher.updateUserGitConfig({
+      gitConfigPath,
+      configName,
+      currentGitConfig: removeObjEmptyValue(values),
+    });
+    Message.success(`更新 ${configName} Git 配置成功`);
     dispatcher.getUserGitConfigs();
   }, 1000);
 
@@ -55,7 +65,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPub
     parseName: true,
     onChange: onFieldChange,
     autoUnmount: false,
-    values: { ...props, gitDir },
+    values: initValues,
   });
 
   useEffect(() => {
@@ -63,19 +73,20 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPub
   }, [props.length]);
 
   useEffect(() => {
-    if (effectsState.setUserGitConfig.error) {
-      Message.error(effectsState.setUserGitConfig.error.message);
+    if (effectsState.updateUserGitConfig.error) {
+      Message.error(effectsState.updateUserGitConfig.error.message);
     }
-  }, [effectsState.setUserGitConfig.error]);
+  }, [effectsState.updateUserGitConfig.error]);
 
   const onRemoveUserGitConfig = () => {
+    const values: any = field.getValues();
     Dialog.confirm({
       title: '提示',
-      content: `是否删除 ${name} 配置？`,
+      content: `是否删除 ${configName} 配置？`,
       onOk: async () => {
-        const res = await dispatcher.removeUserGitConfig({ gitConfigPath, gitDir });
+        const res = await dispatcher.removeUserGitConfig({ configName, gitConfigPath, gitDir, gitConfig: values });
         if (res) {
-          Message.success(`删除 ${name} Git 配置成功`);
+          Message.success(`删除 ${configName} Git 配置成功`);
           dispatcher.getUserGitConfigs();
         }
       },
@@ -90,20 +101,35 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPub
     field.setValue('gitDir', folderPath);
     const res = await dispatcher.updateUserGitDir({ originGitDir: gitDir, currentGitDir: folderPath });
     if (res) {
-      Message.success(`更新 ${name} Git 配置成功`);
+      Message.success(`更新 ${configName} Git 配置成功`);
       dispatcher.getUserGitConfigs();
     }
+  };
+
+  const onGenerateSSHKeyClick = async () => {
+    const { user: { name: userName, email: userEmail }, hostName } = field.getValues();
+    const res = await dispatcher.generateSSHKey({ configName, hostName, userEmail, userName });
+    if (res) {
+      Message.success(`生成 ${configName} SSH 密钥成功`);
+      dispatcher.getUserGitConfigs();
+    }
+  };
+
+  const isGenerateSSHKeyBtnDisabled = () => {
+    const { user = {}, hostName } = field.getValues();
+    const { name: userName, email: userEmail } = user as any;
+    return !(userName && userEmail && hostName);
   };
   return (
     <>
       <div className={styles.header}>
-        <div className={styles.title}>{name} 配置</div>
+        <div className={styles.title}>{configName} 配置</div>
         <div className={styles.operation}>
           <Icon type="trash" className={styles.icon} onClick={onRemoveUserGitConfig} />
         </div>
       </div>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>用户名</Col>
+        <Col span={12} className={styles.label}><GitDirFormItemLabel /></Col>
         <Col span={12}>
           <Input
             {...field.init('gitDir')}
@@ -113,18 +139,44 @@ const UserGitConfig: FC<IUserGitConfig> = ({ name, gitDir, gitConfigPath, sshPub
           />
         </Col>
       </Row>
+      <Row align="center" className={styles.row}>
+        <Col span={12} className={styles.label}>Git 服务器域名</Col>
+        <Col span={12}>
+          <Input
+            {...field.init('hostName')}
+            className={styles.input}
+            placeholder="如 github.com、gitlab.com"
+          />
+        </Col>
+      </Row>
       <BaseGitConfig field={field} />
       <Row>
         <Col span={12} className={styles.label}>SSH 公钥</Col>
-        <Col span={12} className={styles.sshPublicKey}>
-          <CopyToClipboard
-            text={sshPublicKey || ''}
-            onCopy={() => Message.success('复制成功')}
-            className={styles.copyToClipboard}
-          >
-            <Button text type="primary">一键复制</Button>
-          </CopyToClipboard>
-          <code >{sshPublicKey}</code>
+        <Col span={12}>
+          {
+            sshPublicKey ? (
+              <div className={styles.sshPublicKey}>
+                <CopyToClipboard
+                  text={sshPublicKey}
+                  onCopy={() => Message.success('复制成功')}
+                  className={styles.copyToClipboard}
+                >
+                  <Button text type="primary">一键复制</Button>
+                </CopyToClipboard>
+                <code>{sshPublicKey}</code>
+              </div>
+            ) : (
+              <Button
+                type="primary"
+                text
+                onClick={onGenerateSSHKeyClick}
+                disabled={isGenerateSSHKeyBtnDisabled()}
+                loading={effectsState.generateSSHKey.isLoading}
+              >
+                一键生成
+              </Button>
+            )
+          }
         </Col>
       </Row>
     </>

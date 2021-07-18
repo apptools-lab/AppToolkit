@@ -16,8 +16,8 @@ export default {
       const globalGitConfig = await ipcRenderer.invoke('get-global-git-config');
       this.setState({ globalGitConfig });
     },
-    async setGlobalGitConfig(gitConfig: any) {
-      await ipcRenderer.invoke('set-git-config', gitConfig);
+    async updateGlobalGitConfig(gitConfig: any) {
+      await ipcRenderer.invoke('update-global-git-config', gitConfig);
     },
     async getUserGitConfigs() {
       const userGitConfigs = await ipcRenderer.invoke('get-user-git-configs');
@@ -27,21 +27,46 @@ export default {
       await ipcRenderer.invoke('add-user-git-config', name, gitDir);
       return true;
     },
-    async setUserGitConfig({ gitConfigPath, gitConfig }: { gitConfigPath: string; gitConfig: any }) {
-      await ipcRenderer.invoke('set-git-config', gitConfig, gitConfigPath);
+    async updateUserGitConfig(
+      {
+        gitConfigPath,
+        currentGitConfig,
+        configName,
+      }: {
+        gitConfigPath: string;
+        configName: string;
+        currentGitConfig: any;
+      },
+    ) {
+      await ipcRenderer.invoke('update-user-git-config', currentGitConfig, configName, gitConfigPath);
       return true;
     },
-    // TODO: rename to updateUserGitDir
     async updateUserGitDir({ originGitDir, currentGitDir }) {
       await ipcRenderer.invoke('update-user-git-dir', originGitDir, currentGitDir);
       return true;
     },
-    async removeUserGitConfig({ gitConfigPath, gitDir }: { gitDir: string; gitConfigPath: string }) {
-      await ipcRenderer.invoke('remove-user-git-config', gitDir, gitConfigPath);
+    async removeUserGitConfig(
+      { configName, gitConfigPath, gitDir, gitConfig }: { configName: string; gitDir: string; gitConfigPath: string; gitConfig: any },
+    ) {
+      await ipcRenderer.invoke('remove-user-git-config', configName, gitDir, gitConfigPath, gitConfig);
       return true;
     },
     async getFolderPath() {
       return await ipcRenderer.invoke('get-folder-path');
+    },
+    async generateSSHKey({
+      userEmail,
+      configName,
+      hostName,
+      userName,
+    }: {
+      userEmail: string;
+      configName: string;
+      hostName: string;
+      userName: string;
+    }) {
+      await ipcRenderer.invoke('generate-ssh-key', { userEmail, configName, hostName, userName });
+      return true;
     },
   }),
 };

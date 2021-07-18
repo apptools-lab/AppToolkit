@@ -28,7 +28,7 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
   } = props;
   const [, dispatcher] = store.useModel('git');
 
-  const field = Field.useField({ values: dataSource, autoUnmount: false });
+  const field = Field.useField({ values: dataSource });
 
   const submit = async () => {
     const { errors } = await field.validatePromise();
