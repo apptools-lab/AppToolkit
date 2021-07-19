@@ -143,16 +143,6 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
       <BaseGitConfig field={field} />
       <Row>
         <Col span={10} className={styles.label}>
-          {/* <span>
-            SSH 公钥
-            <Tooltip
-              trigger={<Icon type="prompt" style={{ marginLeft: 4 }} />}
-              align="t"
-              delay={200}
-            >
-              关于如何添加 SSH 公钥，请查看<a href="https://appworks.site/pack/basic/toolkit.html" target="__blank">文档</a>
-            </Tooltip>
-          </span> */}
           <SSHKeyFormItemLabel />
         </Col>
         <Col span={14}>
