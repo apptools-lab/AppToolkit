@@ -33,6 +33,7 @@ export async function getUserGitConfigs() {
 
   for (const key of globalGitConfigKeys) {
     if (/^includeIf "gitdir:/.test(key)) {
+      // get user git directory and gitconfig path(e.g.: ~/.gitconfig-github) from global git config(~/.gitconfig)
       const gitConfigPath = globalGitConfig[key].path || '';
       let userGitConfigPath = gitConfigPath.replace('~', HOME_DIR);
       if (!path.isAbsolute(userGitConfigPath)) {
@@ -45,32 +46,15 @@ export async function getUserGitConfigs() {
       }
 
       const userGitConfig = await parseGitConfig(userGitConfigPath);
-      // e.g.: gitlab
-      const userGitConfigName = path.basename(userGitConfigPath).replace('.gitconfig-', '');
+      const userGitConfigName = path.basename(userGitConfigPath).replace('.gitconfig-', ''); // e.g.: gitlab
+
       let userGitDir = '';
       const userGitDirMatchRes = key.match(/^includeIf "gitdir:(.*)"/);
       if (userGitDirMatchRes) {
-        // e.g.: /Users/workspace/gitlab/
-        userGitDir = userGitDirMatchRes[1];
+        userGitDir = userGitDirMatchRes[1]; // e.g.: /Users/workspace/gitlab/
       }
 
-      let SSHPublicKey = '';
-      let hostName = '';
-      const privateKeyPath = path.join(SSHDir, `${userGitConfigName}${rsaFileSuffix}`);
-      const SSHConfigSections = await getSSHConfigs();
-      // eslint-disable-next-line no-labels
-      loopLabel:
-      for (const section of SSHConfigSections) {
-        const { config = [], value: HostName } = section;
-        for (const { param, value } of config) {
-          if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
-            hostName = HostName;
-            SSHPublicKey = await getSSHPublicKey(privateKeyPath);
-            // eslint-disable-next-line no-labels
-            break loopLabel;
-          }
-        }
-      }
+      const { hostName, SSHPublicKey } = await getUserSSHConfig(userGitConfigName);
 
       userGitConfigs.push({
         ...userGitConfig,
@@ -85,6 +69,31 @@ export async function getUserGitConfigs() {
 
   log.info('get-user-git-configs', userGitConfigs);
   return userGitConfigs;
+}
+
+/**
+ * get HostName and public SSH Key from ~/.ssh
+ */
+async function getUserSSHConfig(userGitConfigName: string) {
+  let SSHPublicKey = '';
+  let hostName = '';
+  const privateKeyPath = path.join(SSHDir, `${userGitConfigName}${rsaFileSuffix}`);
+  const SSHConfigSections = await getSSHConfigs();
+  /* eslint-disable no-labels */
+  loopLabel:
+  for (const section of SSHConfigSections) {
+    const { config = [], value: HostName } = section;
+    for (const { param, value } of config) {
+      if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
+        hostName = HostName;
+        SSHPublicKey = await getSSHPublicKey(privateKeyPath);
+        /* eslint-disable no-labels */
+        break loopLabel;
+      }
+    }
+  }
+
+  return { hostName, SSHPublicKey };
 }
 
 export async function addUserGitConfig(configName: string, gitDir: string) {

@@ -3,7 +3,7 @@ import { Button, Message } from '@alifd/next';
 import PageHeader from '@/components/PageHeader';
 import styles from './index.module.scss';
 import GlobalGitConfig from './components/GlobalGitConfig';
-import UserGitConfigs from './components/UserGitConfigs';
+import UserGitConfigList from './components/UserGitConfigList';
 import UserGitConfigDialogForm from './components/UserGitConfigDialogForm';
 import store from './store';
 
@@ -35,7 +35,7 @@ function Git() {
       <PageHeader title="Git 管理" button={addConfigBtn} />
       <div className={styles.content}>
         <GlobalGitConfig />
-        <UserGitConfigs />
+        <UserGitConfigList />
       </div>
       <UserGitConfigDialogForm
         visible={userGitConfigFormVisible}

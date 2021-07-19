@@ -7,12 +7,13 @@ import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
 import store from '../../store';
 import GitDirFormItemLabel from '../GitDirFormItemLabel';
+import SSHKeyFormItemLabel from '../SSHKeyFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 const { Tooltip } = Balloon;
 
-interface IUserGitConfig {
+export interface IUserGitConfig {
   gitDir: string;
   configName: string;
   gitConfigPath: string;
@@ -20,30 +21,6 @@ interface IUserGitConfig {
   [k: string]: any;
 }
 
-const UserGitConfigs: FC<{}> = () => {
-  const [state, dispatcher] = store.useModel('git');
-  const effectsState = store.useModelEffectsState('git');
-  const { userGitConfigs } = state;
-
-  useEffect(() => {
-    if (effectsState.getUserGitConfigs.error) {
-      Message.error(effectsState.getUserGitConfigs.error.message);
-    }
-  }, [effectsState.getUserGitConfigs.error]);
-
-  useEffect(() => {
-    dispatcher.getUserGitConfigs();
-  }, []);
-  return (
-    <>
-      {userGitConfigs.map((userGitConfig: IUserGitConfig) => {
-        return (
-          <UserGitConfig key={userGitConfig.configName} {...userGitConfig} />
-        );
-      })}
-    </>
-  );
-};
 
 const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, SSHPublicKey, ...props }) => {
   const [, dispatcher] = store.useModel('git');
@@ -137,7 +114,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
   return (
     <>
       <div className={styles.header}>
-        <div className={styles.title}>{configName} 配置</div>
+        <div className={styles.title}>配置 - {configName}</div>
         <div className={styles.operation}>
           <Icon type="trash" className={styles.icon} onClick={onRemoveUserGitConfig} />
         </div>
@@ -165,7 +142,19 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
       </Row>
       <BaseGitConfig field={field} />
       <Row>
-        <Col span={10} className={styles.label}>SSH 公钥</Col>
+        <Col span={10} className={styles.label}>
+          {/* <span>
+            SSH 公钥
+            <Tooltip
+              trigger={<Icon type="prompt" style={{ marginLeft: 4 }} />}
+              align="t"
+              delay={200}
+            >
+              关于如何添加 SSH 公钥，请查看<a href="https://appworks.site/pack/basic/toolkit.html" target="__blank">文档</a>
+            </Tooltip>
+          </span> */}
+          <SSHKeyFormItemLabel />
+        </Col>
         <Col span={14}>
           {
             SSHPublicKey ? (
@@ -203,4 +192,4 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
   );
 };
 
-export default UserGitConfigs;
+export default UserGitConfig;

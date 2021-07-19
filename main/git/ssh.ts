@@ -137,25 +137,16 @@ export async function removeSSHConfig(configName: string) {
 }
 
 /**
- * find the SSH config index in ssh config array by the configName(id)
+ * find the SSH config index in ssh config array by the configName
  */
 function findSSHConfigSectionIndex(SSHConfigSections: any[], configName: string) {
   const privateKeyPath = path.join(SSHDir, `${configName}${rsaFileSuffix}`);
 
-  let currentSSHConfigIndex = -1;
-  // eslint-disable-next-line no-labels
-  loopLabel:
-  for (let index = 0; index < SSHConfigSections.length; index++) {
-    const section = SSHConfigSections[index];
-    const { config = [] } = section;
-    for (const { param, value } of config) {
-      if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
-        currentSSHConfigIndex = index;
-        // eslint-disable-next-line no-labels
-        break loopLabel;
-      }
-    }
-  }
+  const currentSSHConfigIndex = SSHConfigSections.findIndex(({ config = [] }) => {
+    return config.some(({ param, value }) => {
+      return param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath;
+    });
+  });
 
   return currentSSHConfigIndex;
 }
