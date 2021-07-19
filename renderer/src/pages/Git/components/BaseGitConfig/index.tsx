@@ -13,20 +13,20 @@ const BaseGitConfig: FC<IBaseGitConfig> = ({ field }) => {
   return (
     <>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>用户名</Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}>用户名</Col>
+        <Col span={14}>
           <Input {...init('user.name', { initValue: '' })} className={styles.input} />
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>邮箱</Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}>邮箱</Col>
+        <Col span={14}>
           <Input {...init('user.email', { initValue: '' })} className={styles.input} />
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>忽略文件名大小写</Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}>忽略文件名大小写</Col>
+        <Col span={14}>
           <Switch {...init('core.ignoreCase', { valueName: 'checked', initValue: false })} />
         </Col>
       </Row>

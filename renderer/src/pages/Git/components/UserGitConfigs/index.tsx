@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Field, Message, Grid, Input, Dialog, Button } from '@alifd/next';
+import { Field, Message, Grid, Input, Dialog, Button, Balloon } from '@alifd/next';
 import Icon from '@/components/Icon';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
@@ -10,12 +10,13 @@ import GitDirFormItemLabel from '../GitDirFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
+const { Tooltip } = Balloon;
 
 interface IUserGitConfig {
   gitDir: string;
   configName: string;
   gitConfigPath: string;
-  sshPublicKey?: string;
+  SSHPublicKey?: string;
   [k: string]: any;
 }
 
@@ -44,7 +45,7 @@ const UserGitConfigs: FC<{}> = () => {
   );
 };
 
-const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, sshPublicKey, ...props }) => {
+const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, SSHPublicKey, ...props }) => {
   const [, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
@@ -79,12 +80,11 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
   }, [effectsState.updateUserGitConfig.error]);
 
   const onRemoveUserGitConfig = () => {
-    const values: any = field.getValues();
     Dialog.confirm({
       title: '提示',
       content: `是否删除 ${configName} 配置？`,
       onOk: async () => {
-        const res = await dispatcher.removeUserGitConfig({ configName, gitConfigPath, gitDir, gitConfig: values });
+        const res = await dispatcher.removeUserGitConfig({ configName, gitConfigPath, gitDir });
         if (res) {
           Message.success(`删除 ${configName} Git 配置成功`);
           dispatcher.getUserGitConfigs();
@@ -115,11 +115,25 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
     }
   };
 
-  const isGenerateSSHKeyBtnDisabled = () => {
+  const checkIsGenerateSSHKeyBtnDisabled = () => {
     const { user = {}, hostName } = field.getValues();
     const { name: userName, email: userEmail } = user as any;
     return !(userName && userEmail && hostName);
   };
+
+  const isGenerateSSHKeyBtnDisabled = checkIsGenerateSSHKeyBtnDisabled();
+
+  const generateSSHKeyBtn = (
+    <Button
+      type="primary"
+      text
+      onClick={onGenerateSSHKeyClick}
+      disabled={isGenerateSSHKeyBtnDisabled}
+      loading={effectsState.generateSSHKey.isLoading}
+    >
+      一键生成
+    </Button>
+  );
   return (
     <>
       <div className={styles.header}>
@@ -129,8 +143,8 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
         </div>
       </div>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}><GitDirFormItemLabel /></Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}><GitDirFormItemLabel /></Col>
+        <Col span={14}>
           <Input
             {...field.init('gitDir')}
             className={styles.input}
@@ -140,8 +154,8 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
-        <Col span={12} className={styles.label}>Git 服务器域名</Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}>Git 服务器域名</Col>
+        <Col span={14}>
           <Input
             {...field.init('hostName')}
             className={styles.input}
@@ -151,30 +165,36 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
       </Row>
       <BaseGitConfig field={field} />
       <Row>
-        <Col span={12} className={styles.label}>SSH 公钥</Col>
-        <Col span={12}>
+        <Col span={10} className={styles.label}>SSH 公钥</Col>
+        <Col span={14}>
           {
-            sshPublicKey ? (
+            SSHPublicKey ? (
               <div className={styles.sshPublicKey}>
                 <CopyToClipboard
-                  text={sshPublicKey}
+                  text={SSHPublicKey}
                   onCopy={() => Message.success('复制成功')}
                   className={styles.copyToClipboard}
                 >
                   <Button text type="primary">一键复制</Button>
                 </CopyToClipboard>
-                <code>{sshPublicKey}</code>
+                <code>{SSHPublicKey}</code>
               </div>
             ) : (
-              <Button
-                type="primary"
-                text
-                onClick={onGenerateSSHKeyClick}
-                disabled={isGenerateSSHKeyBtnDisabled()}
-                loading={effectsState.generateSSHKey.isLoading}
-              >
-                一键生成
-              </Button>
+              <>
+                {
+                  isGenerateSSHKeyBtnDisabled ? (
+                    <Tooltip
+                      trigger={generateSSHKeyBtn}
+                      align="t"
+                      delay={200}
+                    >
+                      请输入『Git 服务器域名』、『用户名』和『邮箱』后，再生成 SSH 公钥。
+                    </Tooltip>
+                  ) : (
+                    <>{generateSSHKeyBtn}</>
+                  )
+                }
+              </>
             )
           }
         </Col>

@@ -46,9 +46,9 @@ export default {
       return true;
     },
     async removeUserGitConfig(
-      { configName, gitConfigPath, gitDir, gitConfig }: { configName: string; gitDir: string; gitConfigPath: string; gitConfig: any },
+      { configName, gitConfigPath, gitDir }: { configName: string; gitDir: string; gitConfigPath: string },
     ) {
-      await ipcRenderer.invoke('remove-user-git-config', configName, gitDir, gitConfigPath, gitConfig);
+      await ipcRenderer.invoke('remove-user-git-config', configName, gitDir, gitConfigPath);
       return true;
     },
     async getFolderPath() {
