@@ -115,6 +115,11 @@
       "isInternal": false
     },
     {
+      "name": "yarn",
+      "registry": "https://registry.yarnpkg.com/",
+      "isInternal": false
+    },
+    {
       "name": "taobao",
       "registry": "https://registry.npm.taobao.org/",
       "isInternal": false
