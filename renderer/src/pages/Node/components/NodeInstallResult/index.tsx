@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 const { Group: TagGroup } = Tag;
 
 const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
-  const [state] = store.useModel('node');
+  const [state] = store.useModel('nodeVersion');
   const { nodeInstallStatus, installResult, nodeInstallErrMsg } = state;
 
   const successTag = <Tag type="normal" color="green" size="medium">成功</Tag>;

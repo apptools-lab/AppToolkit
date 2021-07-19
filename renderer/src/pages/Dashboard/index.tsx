@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import PageHeader from '@/components/PageHeader';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
-import { IBasePackage } from '@/interfaces';
+import { IPackageInfo } from '@/interfaces';
 import { STEP_STATUS_ICON } from '@/constants';
 import AppCard from './components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {selectedInstalledPackagesList.map((item: IBasePackage, index: number) => {
+        {selectedInstalledPackagesList.map((item: IPackageInfo, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item
@@ -197,7 +197,7 @@ const Dashboard = () => {
           </div>
         ) : (
           <Row wrap gutter={8}>
-            {basePackagesList.map((item: IBasePackage, index: number) => (
+            {basePackagesList.map((item: IPackageInfo, index: number) => (
               <Col s={12} l={8} key={item.name}>
                 <AppCard
                   name={item.title}

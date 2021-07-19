@@ -185,6 +185,6 @@ async function parseGitConfig(gitConfigPath: string) {
 }
 
 async function writeGitConfig(gitConfigPath: string, config: object) {
-  await fse.writeFile(gitConfigPath, ini.stringify(config, { whitespace: true }));
+  await fse.writeFile(gitConfigPath, ini.stringify(config));
   log.info('write-git-config', config);
 }
