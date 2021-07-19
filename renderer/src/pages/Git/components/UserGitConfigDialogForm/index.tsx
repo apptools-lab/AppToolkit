@@ -12,15 +12,13 @@ export interface DataSource {
 
 export interface DialogFormProps {
   visible: boolean;
-  type: 'add' | 'edit';
   dataSource?: DataSource;
-  onSubmit: any;
+  onSubmit: (values: DataSource) => Promise<boolean>;
   onVisibleChange: (visible: boolean) => void;
 }
 
 const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
   const {
-    type,
     visible,
     dataSource = { name: '', gitDir: '' },
     onSubmit = () => {},
@@ -37,14 +35,10 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
     }
 
     const values = field.getValues() as DataSource;
-    let res;
-    if (type === 'add') {
-      res = await onSubmit(values);
-    } else if (type === 'edit') {
-      res = await onSubmit({ originGitConfig: dataSource, currentGitConfig: values });
-    }
+    const res = await onSubmit(values);
+
     if (res) {
-      Message.success(`${type === 'add' ? '新增' : '更新'} ${values.name} 配置成功`);
+      Message.success(`新增 ${values.name} 配置成功`);
       onVisibleChange(false);
       dispatcher.getUserGitConfigs();
     }
@@ -65,7 +59,7 @@ const UserGitConfigDialogForm: FC<DialogFormProps> = (props) => {
   return (
     <Dialog
       visible={visible}
-      title={`${type === 'add' ? '新增' : '更新'} Git 配置`}
+      title={'新增 Git 配置'}
       style={{ width: 600 }}
       onOk={submit}
       onCancel={close}

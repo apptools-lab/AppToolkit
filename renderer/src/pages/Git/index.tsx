@@ -38,7 +38,6 @@ function Git() {
         <UserGitConfigs />
       </div>
       <UserGitConfigDialogForm
-        type="add"
         visible={userGitConfigFormVisible}
         onSubmit={dispatcher.addUserGitConfig}
         onVisibleChange={dispatcher.setUserGitConfigFormVisible}

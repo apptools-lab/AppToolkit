@@ -54,7 +54,7 @@ export default {
     async getFolderPath() {
       return await ipcRenderer.invoke('get-folder-path');
     },
-    async generateSSHKey({
+    async generateSSHKeyAndConfig({
       userEmail,
       configName,
       hostName,
@@ -65,7 +65,7 @@ export default {
       hostName: string;
       userName: string;
     }) {
-      await ipcRenderer.invoke('generate-ssh-key', { userEmail, configName, hostName, userName });
+      await ipcRenderer.invoke('generate-ssh-key-and-config', { userEmail, configName, hostName, userName });
       return true;
     },
   }),

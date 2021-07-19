@@ -21,13 +21,11 @@ const SSHConfigPath = path.join(SSHDir, 'config');
 export async function generateSSHKey(userEmail: string, configName: string) {
   const location = path.join(SSHDir, `${configName}${rsaFileSuffix}`);
 
-  const res = await SSHKeyGenAsync({
+  await SSHKeyGenAsync({
     comment: userEmail,
     location,
     read: true,
   });
-
-  log.info('generate-SSH-key', res);
 }
 
 export async function getSSHPublicKey(SSHPrivateKeyPath: string) {
@@ -61,6 +59,7 @@ export async function addSSHConfig(
 ) {
   const SSHConfigExists = await fse.pathExists(SSHConfigPath);
   if (!SSHConfigExists) {
+    log.info('add-ssh-config', 'create ssh config file:', SSHConfigPath);
     await fse.createFile(SSHConfigPath);
   }
   const SSHConfigContent = await fse.readFile(SSHConfigPath, 'utf-8');
@@ -79,9 +78,12 @@ export async function addSSHConfig(
   log.info('add-SSH-config', newSSHConfigSection);
 }
 
-export async function updateSSHConfig(gitConfig: any, configName: string) {
+export async function updateSSHConfig(configName: string, hostName = '', userName = '') {
   const SSHConfigExists = await fse.pathExists(SSHConfigPath);
   if (!SSHConfigExists) {
+    const error = new Error(`The SSH config path: ${SSHConfigPath} does not exist.`);
+    error.name = 'update-ssh-config';
+    log.error(error);
     return;
   }
   const SSHConfigContent = await fse.readFile(SSHConfigPath, 'utf-8');
@@ -92,9 +94,9 @@ export async function updateSSHConfig(gitConfig: any, configName: string) {
   if (SSHConfigSectionIndex > -1) {
     SSHConfigSections.splice(SSHConfigSectionIndex, 1);
     const newSSHConfigSection = {
-      Host: gitConfig.hostName || '',
-      HostName: gitConfig.hostName || '',
-      User: gitConfig?.user?.name || '',
+      Host: hostName,
+      HostName: hostName,
+      User: userName,
       PreferredAuthentications: 'publickey',
       IdentityFile: path.join(SSHDir, `${configName}${rsaFileSuffix}`),
     };
@@ -110,7 +112,10 @@ export async function updateSSHConfig(gitConfig: any, configName: string) {
 export async function removeSSHConfig(configName: string) {
   const SSHConfigExists = await fse.pathExists(SSHConfigPath);
   if (!SSHConfigExists) {
-    return;
+    const error = new Error(`The SSH config path: ${SSHConfigPath} does not exist.`);
+    error.name = 'remove-ssh-config';
+    log.error(error);
+    throw error;
   }
   const SSHConfigContent = await fse.readFile(SSHConfigPath, 'utf-8');
   const SSHConfigSections = SSHConfig.parse(SSHConfigContent);

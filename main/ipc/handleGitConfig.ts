@@ -55,7 +55,7 @@ export default () => {
     await removeUserGitConfig(configName, gitDir, gitConfigPath);
   });
 
-  ipcMain.handle('generate-ssh-key', async (
+  ipcMain.handle('generate-ssh-key-and-config', async (
     e: IpcMainInvokeEvent,
     {
       userEmail,

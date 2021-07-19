@@ -118,15 +118,17 @@ export async function addUserGitConfig(configName: string, gitDir: string) {
   log.info('add-user-git-config', includeIfKey, globalGitConfig[includeIfKey]);
 }
 
-export async function updateUserGitConfig(currentGitConfig: object, configName: string, gitConfigPath: string) {
-  await updateSSHConfig(currentGitConfig, configName);
+export async function updateUserGitConfig(gitConfig: any, configName: string, gitConfigPath: string) {
+  const { hostName = '', user = {} } = gitConfig;
+  const { name: userName = '' } = user;
+  await updateSSHConfig(configName, hostName, userName);
 
   IGNORE_CONFIG_KEYS.forEach((key) => {
-    delete currentGitConfig[key];
+    delete gitConfig[key];
   });
 
-  await writeGitConfig(gitConfigPath, currentGitConfig);
-  log.info('update-user-git-config', gitConfigPath, currentGitConfig);
+  await writeGitConfig(gitConfigPath, gitConfig);
+  log.info('update-user-git-config', gitConfigPath, gitConfig);
 }
 
 export async function updateUserGitDir(

@@ -108,7 +108,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
 
   const onGenerateSSHKeyClick = async () => {
     const { user: { name: userName, email: userEmail }, hostName } = field.getValues();
-    const res = await dispatcher.generateSSHKey({ configName, hostName, userEmail, userName });
+    const res = await dispatcher.generateSSHKeyAndConfig({ configName, hostName, userEmail, userName });
     if (res) {
       Message.success(`生成 ${configName} SSH 密钥成功`);
       dispatcher.getUserGitConfigs();
@@ -129,7 +129,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
       text
       onClick={onGenerateSSHKeyClick}
       disabled={isGenerateSSHKeyBtnDisabled}
-      loading={effectsState.generateSSHKey.isLoading}
+      loading={effectsState.generateSSHKeyAndConfig.isLoading}
     >
       一键生成
     </Button>
