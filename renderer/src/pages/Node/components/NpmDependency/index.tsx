@@ -89,7 +89,7 @@ function NpmDependency() {
                 type="primary"
                 disabled={isReinstallCurrentDep}
               >
-                {isReinstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="gongju" />}
+                {isReinstallCurrentDep ? <Icon type="loading" style={{ fontSize: 18 }} /> : <CustomIcon type="shuaxin" style={{ fontSize: 18 }} />}
               </Button>
             }
             align="t"
@@ -110,7 +110,7 @@ function NpmDependency() {
                 type="primary"
                 disabled={isUninstallCurrentDep}
               >
-                {isUninstallCurrentDep ? <Icon type="loading" /> : <CustomIcon type="trash" />}
+                {isUninstallCurrentDep ? <Icon type="loading" style={{ fontSize: 18 }} /> : <CustomIcon type="trash" style={{ fontSize: 18 }} />}
               </Button>
               }
             align="t"
@@ -138,7 +138,7 @@ function NpmDependency() {
                 onClick={async () => await onUpdateGlobalDep(record, index)}
                 disabled={isUpdateGlobalDep}
               >
-                {isUpdateGlobalDep ? <Icon type="loading" /> : <CustomIcon type="jiantouarrow499" />}
+                {isUpdateGlobalDep ? <Icon type="loading" style={{ fontSize: 18 }} /> : <CustomIcon type="jiantou" />}
               </Button>
             }
             align="t"

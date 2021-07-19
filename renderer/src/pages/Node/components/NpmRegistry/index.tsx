@@ -52,10 +52,10 @@ function NpmRegistry() {
   }, [effectsErrors.setCurrentNpmRegistry.error]);
   return (
     <Row className={styles.row}>
-      <Col span={12}>
+      <Col span={10}>
         <div className={styles.subTitle}>npm 镜像源</div>
       </Col>
-      <Col span={12}>
+      <Col span={14}>
         <Select
           disabled={!npmInstalled}
           className={styles.select}

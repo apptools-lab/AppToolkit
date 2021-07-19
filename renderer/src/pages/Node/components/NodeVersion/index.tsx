@@ -32,10 +32,10 @@ const NodeVersion = () => {
 
   return (
     <Row className={styles.row}>
-      <Col span={12}>
+      <Col span={10}>
         <div className={styles.subTitle}>Node 版本</div>
       </Col>
-      <Col span={12} className={styles.col}>
+      <Col span={14} className={styles.col}>
         {localVersion || 'Not Found'}
         {managerVersionStatus === 'uninstalled' ? (
           <Balloon trigger={switchNodeVersionBtn}>

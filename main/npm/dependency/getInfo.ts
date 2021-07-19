@@ -32,7 +32,7 @@ export async function getGlobalDependencies(force: boolean) {
     const outdatedDeps = await executeCommandJSON('npm', ['outdated', '-g', '--json']);
 
     const depsInfo = Object.keys(installedDeps)
-      .filter((name: string) => !IGNORE_DEPENDENCIES.includes(name))
+      .filter((name: string) => !IGNORE_DEPENDENCIES.includes(name) && installedDeps[name].version)
       .map((name: string) => {
         return {
           name,
