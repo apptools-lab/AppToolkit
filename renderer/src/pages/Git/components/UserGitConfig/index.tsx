@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Field, Message, Grid, Input, Dialog, Button, Balloon } from '@alifd/next';
+import { Field, Message, Grid, Input, Dialog, Button, Balloon, Collapse } from '@alifd/next';
 import Icon from '@/components/Icon';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
@@ -12,6 +12,7 @@ import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
 const { Tooltip } = Balloon;
+const { Panel } = Collapse;
 
 export interface IUserGitConfig {
   gitDir: string;
@@ -31,9 +32,8 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
   const onFieldChange = debounce(async () => {
     const values: any = field.getValues();
     await dispatcher.updateUserGitConfig({
-      gitConfigPath,
       configName,
-      currentGitConfig: removeObjEmptyValue(values),
+      gitConfig: removeObjEmptyValue(values),
     });
     Message.success(`更新 ${configName} Git 配置成功`);
     dispatcher.getUserGitConfigs();
@@ -56,19 +56,6 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
     }
   }, [effectsState.updateUserGitConfig.error]);
 
-  const onRemoveUserGitConfig = () => {
-    Dialog.confirm({
-      title: '提示',
-      content: `是否删除 ${configName} 配置？`,
-      onOk: async () => {
-        const res = await dispatcher.removeUserGitConfig({ configName, gitConfigPath, gitDir });
-        if (res) {
-          Message.success(`删除 ${configName} Git 配置成功`);
-          dispatcher.getUserGitConfigs();
-        }
-      },
-    });
-  };
 
   const onOpenFolderDialog = async () => {
     const folderPath = await dispatcher.getFolderPath();
@@ -83,43 +70,15 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
     }
   };
 
-  const onGenerateSSHKeyClick = async () => {
-    const { user: { name: userName, email: userEmail }, hostName } = field.getValues();
-    const res = await dispatcher.generateSSHKeyAndConfig({ configName, hostName, userEmail, userName });
-    if (res) {
-      Message.success(`生成 ${configName} SSH 密钥成功`);
-      dispatcher.getUserGitConfigs();
-    }
-  };
-
-  const checkIsGenerateSSHKeyBtnDisabled = () => {
-    const { user = {}, hostName } = field.getValues();
-    const { name: userName, email: userEmail } = user as any;
-    return !(userName && userEmail && hostName);
-  };
-
-  const isGenerateSSHKeyBtnDisabled = checkIsGenerateSSHKeyBtnDisabled();
-
-  const generateSSHKeyBtn = (
-    <Button
-      type="primary"
-      text
-      onClick={onGenerateSSHKeyClick}
-      disabled={isGenerateSSHKeyBtnDisabled}
-      loading={effectsState.generateSSHKeyAndConfig.isLoading}
-    >
-      一键生成
-    </Button>
-  );
   return (
-    <>
-      <div className={styles.header}>
+    <div className={styles.userGitConfig}>
+      {/* <div className={styles.header}>
         <div className={styles.title}>配置 - {configName}</div>
         <div className={styles.operation}>
           <Icon type="trash" className={styles.icon} onClick={onRemoveUserGitConfig} />
         </div>
-      </div>
-      <Row align="center" className={styles.row}>
+      </div> */}
+      {/* <Row align="center" className={styles.row}>
         <Col span={10} className={styles.label}><GitDirFormItemLabel /></Col>
         <Col span={14}>
           <Input
@@ -129,7 +88,7 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
             innerAfter={<Icon type="wenjianjia" className={styles.folderIcon} onClick={onOpenFolderDialog} />}
           />
         </Col>
-      </Row>
+      </Row> */}
       <Row align="center" className={styles.row}>
         <Col span={10} className={styles.label}>Git 服务器域名</Col>
         <Col span={14}>
@@ -140,45 +99,36 @@ const UserGitConfig: FC<IUserGitConfig> = ({ configName, gitDir, gitConfigPath, 
           />
         </Col>
       </Row>
-      <BaseGitConfig field={field} />
+      <Row align="center" className={styles.row}>
+        <Col span={10} className={styles.label}>用户名</Col>
+        <Col span={14}>
+          <Input {...field.init('user.name')} className={styles.input} />
+        </Col>
+      </Row>
+      <Row align="center" className={styles.row}>
+        <Col span={10} className={styles.label}>邮箱</Col>
+        <Col span={14}>
+          <Input {...field.init('user.email')} className={styles.input} />
+        </Col>
+      </Row>
       <Row>
         <Col span={10} className={styles.label}>
           <SSHKeyFormItemLabel />
         </Col>
         <Col span={14}>
-          {
-            SSHPublicKey ? (
-              <div className={styles.sshPublicKey}>
-                <CopyToClipboard
-                  text={SSHPublicKey}
-                  onCopy={() => Message.success('复制成功')}
-                  className={styles.copyToClipboard}
-                >
-                  <Button text type="primary">一键复制</Button>
-                </CopyToClipboard>
-                <code>{SSHPublicKey}</code>
-              </div>
-            ) : (
-              <>
-                {
-                  isGenerateSSHKeyBtnDisabled ? (
-                    <Tooltip
-                      trigger={generateSSHKeyBtn}
-                      align="t"
-                      delay={200}
-                    >
-                      请输入『Git 服务器域名』、『用户名』和『邮箱』后，再生成 SSH 公钥。
-                    </Tooltip>
-                  ) : (
-                    <>{generateSSHKeyBtn}</>
-                  )
-                }
-              </>
-            )
-          }
+          <div className={styles.sshPublicKey}>
+            <CopyToClipboard
+              text={SSHPublicKey}
+              onCopy={() => Message.success('复制成功')}
+              className={styles.copyToClipboard}
+            >
+              <Button text type="primary">一键复制</Button>
+            </CopyToClipboard>
+            <code>{SSHPublicKey}</code>
+          </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 

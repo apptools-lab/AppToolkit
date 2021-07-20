@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
+import { IAddUserConfig } from 'types/git';
 import {
   getGlobalGitConfig,
   updateGlobalGitConfig,
@@ -9,7 +10,8 @@ import {
   removeUserGitConfig,
   generateSSHKey,
   updateUserGitDir,
-  addSSHConfig,
+  getExistedUserGitConfigNames,
+  // addSSHConfig,
 } from '../git';
 
 export default () => {
@@ -29,13 +31,16 @@ export default () => {
     e: IpcMainInvokeEvent,
     currentGitConfig: object,
     configName: string,
-    gitConfigPath: string,
   ) => {
-    await updateUserGitConfig(currentGitConfig, configName, gitConfigPath);
+    await updateUserGitConfig(currentGitConfig, configName);
   });
 
-  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, configName: string, gitDir: string) => {
-    await addUserGitConfig(configName, gitDir);
+  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, gitConfig: IAddUserConfig) => {
+    await addUserGitConfig(gitConfig);
+  });
+
+  ipcMain.handle('get-existed-user-git-config-names', async () => {
+    return await getExistedUserGitConfigNames();
   });
 
   ipcMain.handle('update-user-git-dir', async (
@@ -50,25 +55,16 @@ export default () => {
     e: IpcMainInvokeEvent,
     configName: string,
     gitDir: string,
-    gitConfigPath: string,
   ) => {
-    await removeUserGitConfig(configName, gitDir, gitConfigPath);
+    await removeUserGitConfig(configName, gitDir);
   });
 
-  ipcMain.handle('generate-ssh-key-and-config', async (
+  ipcMain.handle('generate-ssh-key', async (
     e: IpcMainInvokeEvent,
-    {
-      userEmail,
-      configName,
-      hostName,
-      userName,
-    }: {
-      userEmail: string;
-      configName: string;
-      hostName: string;
-      userName: string;
-    }) => {
-    await generateSSHKey(userEmail, configName);
-    await addSSHConfig({ hostName, configName, userName });
+    configName: string,
+    userEmail: string,
+  ) => {
+    return await generateSSHKey(configName, userEmail);
+    // await addSSHConfig({ hostName, configName, userName });
   });
 };

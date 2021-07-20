@@ -8,6 +8,7 @@ export const PACKAGE_JSON_FILE_NAME = 'package.json';
 export const TOOLKIT_DIR = path.join(process.env.HOME, '.toolkit');
 export const TOOLKIT_TMP_DIR = path.join(TOOLKIT_DIR, 'tmp');
 export const TOOLKIT_PACKAGES_DIR = path.join(TOOLKIT_DIR, 'packages');
+export const TOOLKIT_USER_GIT_CONFIG_DIR = path.join(TOOLKIT_DIR, 'git');
 
 export const DEFAULT_LOCAL_PACKAGE_INFO: ILocalPackageInfo = {
   localVersion: null,

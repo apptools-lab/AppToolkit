@@ -9,23 +9,14 @@ const SSHKeyGenAsync = util.promisify(SSHKeyGen);
 
 const HOME_DIR = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
 export const SSHDir = path.join(HOME_DIR, '.ssh');
-export const rsaFileSuffix = '_id_rsa';
-// ~/.ssh/config
 const SSHConfigPath = path.join(SSHDir, 'config');
 
 /**
  * generate SSH public key and private key
- * @param userEmail current user email of this git config
- * @param configName SSH config name
  */
-export async function generateSSHKey(userEmail: string, configName: string) {
-  const location = path.join(SSHDir, `${configName}${rsaFileSuffix}`);
-
-  await SSHKeyGenAsync({
-    comment: userEmail,
-    location,
-    read: true,
-  });
+export async function generateSSHKey(configName: string, userEmail: string) {
+  const location = path.join(SSHDir, configName);
+  return await SSHKeyGenAsync({ comment: userEmail, location, read: true });
 }
 
 export async function getSSHPublicKey(SSHPrivateKeyPath: string) {
@@ -51,6 +42,31 @@ export async function getSSHConfigs() {
   return SSHConfigSections;
 }
 
+
+/**
+ * get HostName and public SSH Key from ~/.ssh
+ */
+export async function getSSHConfig(configName: string) {
+  let SSHPublicKey = '';
+  let hostName = '';
+  const privateKeyPath = path.join(SSHDir, `${configName}`);
+  const SSHConfigSections = await getSSHConfigs();
+  /* eslint-disable no-labels */
+  loopLabel:
+  for (const section of SSHConfigSections) {
+    const { config = [], value: HostName } = section;
+    for (const { param, value } of config) {
+      if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
+        hostName = HostName;
+        SSHPublicKey = await getSSHPublicKey(privateKeyPath);
+        /* eslint-disable no-labels */
+        break loopLabel;
+      }
+    }
+  }
+
+  return { hostName, SSHPublicKey };
+}
 /**
  * add SSH config to ~/.ssh/config
  */
@@ -69,7 +85,7 @@ export async function addSSHConfig(
     HostName: hostName,
     User: userName,
     PreferredAuthentications: 'publickey',
-    IdentityFile: path.join(SSHDir, `${configName}${rsaFileSuffix}`),
+    IdentityFile: path.join(SSHDir, `${configName}`),
   };
   SSHConfigSections.append(newSSHConfigSection);
 
@@ -78,13 +94,16 @@ export async function addSSHConfig(
   log.info('add-SSH-config', newSSHConfigSection);
 }
 
+/**
+ * save SSH Config to ~/.ssh/config
+ */
 export async function updateSSHConfig(configName: string, hostName = '', userName = '') {
   const SSHConfigExists = await fse.pathExists(SSHConfigPath);
   if (!SSHConfigExists) {
     const error = new Error(`The SSH config path: ${SSHConfigPath} does not exist.`);
     error.name = 'update-ssh-config';
     log.error(error);
-    return;
+    throw error;
   }
   const SSHConfigContent = await fse.readFile(SSHConfigPath, 'utf-8');
   const SSHConfigSections = SSHConfig.parse(SSHConfigContent);
@@ -98,11 +117,9 @@ export async function updateSSHConfig(configName: string, hostName = '', userNam
       HostName: hostName,
       User: userName,
       PreferredAuthentications: 'publickey',
-      IdentityFile: path.join(SSHDir, `${configName}${rsaFileSuffix}`),
+      IdentityFile: path.join(SSHDir, `${configName}`),
     };
-
     SSHConfigSections.append(newSSHConfigSection);
-
     await fse.writeFile(SSHConfigPath, SSHConfig.stringify(SSHConfigSections));
 
     log.info('update-SSH-config', newSSHConfigSection);
@@ -125,22 +142,22 @@ export async function removeSSHConfig(configName: string) {
     return;
   }
   // remove SSH config
-  log.info('remove-SSH-config', SSHConfigSections[currentSSHConfigIndex]);
-  SSHConfigSections.splice(currentSSHConfigIndex, 1);
+  const removeSection = SSHConfigSections.splice(currentSSHConfigIndex, 1);
   await fse.writeFile(SSHConfigPath, SSHConfig.stringify(SSHConfigSections));
-
   // remove SSH private key and public key
-  const privateSSHKeyPath = path.join(SSHDir, `${configName}${rsaFileSuffix}`);
-  const publicSSHKeyPath = path.join(SSHDir, `${configName}${rsaFileSuffix}.pub`);
+  const privateSSHKeyPath = path.join(SSHDir, `${configName}`);
+  const publicSSHKeyPath = path.join(SSHDir, `${configName}.pub`);
   await fse.remove(privateSSHKeyPath);
   await fse.remove(publicSSHKeyPath);
+
+  log.info('remove-SSH-config', removeSection);
 }
 
 /**
  * find the SSH config index in ssh config array by the configName
  */
 function findSSHConfigSectionIndex(SSHConfigSections: any[], configName: string) {
-  const privateKeyPath = path.join(SSHDir, `${configName}${rsaFileSuffix}`);
+  const privateKeyPath = path.join(SSHDir, `${configName}`);
 
   const currentSSHConfigIndex = SSHConfigSections.findIndex(({ config = [] }) => {
     return config.some(({ param, value }) => {
