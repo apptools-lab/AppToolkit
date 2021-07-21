@@ -2,7 +2,7 @@ import * as path from 'path';
 import ini = require('ini');
 import * as fse from 'fs-extra';
 import * as globby from 'globby';
-import { IAddUserConfig } from '../types/git';
+import { IAddUserConfig, IUserConfig } from '../types/git';
 import { GLOBAL_GITCONFIG_PATH, TOOLKIT_USER_GIT_CONFIG_DIR } from '../constants';
 import log from '../utils/log';
 import {
@@ -31,7 +31,10 @@ export async function getExistedUserGitConfigNames() {
   return filenames.map((filename: string) => filename.replace(USER_GIT_CONFIG_FILENAME_PREFIX, ''));
 }
 
-export async function getUserGitConfigs() {
+/**
+ * get user git config list
+ */
+export async function getUserGitConfigs(): Promise<IUserConfig[]> {
   const gitConfigFilenames = await getUserGitConfigFilenames();
   const userGitDirs = await getUserGitDirs();
 
