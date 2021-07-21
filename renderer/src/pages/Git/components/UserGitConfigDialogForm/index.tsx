@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
-import { Dialog, Form, Field, Input, Message, Button } from '@alifd/next';
+import { Dialog, Form, Field, Input, Message, Icon, Button } from '@alifd/next';
 import store from '../../store';
+import styles from './index.module.scss';
 
 interface UserGitConfigDialogFormProps {
   refresh: () => Promise<void>;
@@ -63,6 +64,18 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
   //   }
   //   return callback();
   // };
+  const dialogFooter = (
+    <div className={styles.dialogFooter}>
+      <div className={styles.tip}>
+        <Icon type="prompt" className={styles.promptIcon} />
+        点击『确定』按钮将默认生成 SSH 公钥
+      </div>
+      <div>
+        <Button type="primary" onClick={submit}>确定</Button>
+        <Button onClick={close} className={styles.button}>取消</Button>
+      </div>
+    </div>
+  );
   return (
     <Dialog
       visible={userGitConfigFormVisible}
@@ -71,6 +84,7 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
       onOk={submit}
       onCancel={close}
       closeable={false}
+      footer={dialogFooter}
       okProps={{ loading: effectsState.generateSSHKey.isLoading || effectsState.addUserGitConfig.isLoading }}
     >
       <Form {...formItemLayout} field={field} labelAlign="left" style={{ paddingLeft: 40, paddingRight: 40 }}>
@@ -107,7 +121,6 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
         >
           <Input name="user.email" placeholder="请输入邮箱" />
         </Form.Item>
-        <div>点击确认后将默认生成 SSH 公钥</div>
       </Form>
     </Dialog>
   );
