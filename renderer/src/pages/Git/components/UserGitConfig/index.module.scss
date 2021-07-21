@@ -1,27 +1,3 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0;
-  height: 50px;
-  border-top: 1px solid #e6e6e6;
-
-  .title {
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  .operation {
-    display: flex;
-    align-items: center;
-
-    .icon {
-      font-size: 22px;
-      cursor: pointer;
-    }
-  }
-}
-
 .userGitConfig {
   padding: 20px;
 }
@@ -36,29 +12,10 @@
 
 .input {
   min-width: 100%;
-}
 
-.folderIcon {
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.sshPublicKey {
-  width: 100%;
-  background-color: #eee;
-  padding: 20px 22px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-
-  code {
-    margin-top: 14px;
-    word-wrap: break-word; 
-    word-break: break-all;
-    font-size: 12px;
-  }
-
-  .copyToClipboard {
-    align-self: flex-end;
+  .copyIcon {
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 16px;
   }
 }

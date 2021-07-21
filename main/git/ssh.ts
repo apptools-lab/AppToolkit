@@ -42,22 +42,19 @@ export async function getSSHConfigs() {
   return SSHConfigSections;
 }
 
-
 /**
  * get HostName and public SSH Key from ~/.ssh
  */
 export async function getSSHConfig(configName: string) {
   let SSHPublicKey = '';
-  let hostName = '';
   const privateKeyPath = path.join(SSHDir, `${configName}`);
   const SSHConfigSections = await getSSHConfigs();
   /* eslint-disable no-labels */
   loopLabel:
   for (const section of SSHConfigSections) {
-    const { config = [], value: HostName } = section;
+    const { config = [] } = section;
     for (const { param, value } of config) {
       if (param === 'IdentityFile' && value.replace('~', HOME_DIR) === privateKeyPath) {
-        hostName = HostName;
         SSHPublicKey = await getSSHPublicKey(privateKeyPath);
         /* eslint-disable no-labels */
         break loopLabel;
@@ -65,8 +62,9 @@ export async function getSSHConfig(configName: string) {
     }
   }
 
-  return { hostName, SSHPublicKey };
+  return { SSHPublicKey };
 }
+
 /**
  * add SSH config to ~/.ssh/config
  */
@@ -126,6 +124,9 @@ export async function updateSSHConfig(configName: string, hostName = '', userNam
   }
 }
 
+/**
+ * Remove SSH config section
+ */
 export async function removeSSHConfig(configName: string) {
   const SSHConfigExists = await fse.pathExists(SSHConfigPath);
   if (!SSHConfigExists) {

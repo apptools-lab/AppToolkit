@@ -45,15 +45,20 @@ export default {
       return true;
     },
 
-    async updateUserGitDir({ originGitDir, currentGitDir }) {
-      await ipcRenderer.invoke('update-user-git-dir', originGitDir, currentGitDir);
+    async updateUserGitDir({ originGitDir, currentGitDir, configName }) {
+      await ipcRenderer.invoke('update-user-git-dir', originGitDir, currentGitDir, configName);
+      return true;
+    },
+
+    async removeUserGitDir({ gitDir, configName }) {
+      await ipcRenderer.invoke('remove-user-git-dir', gitDir, configName);
       return true;
     },
 
     async removeUserGitConfig(
-      { configName, gitDir }: { configName: string; gitDir: string },
+      { configName, gitDirs }: { configName: string; gitDirs: string[] },
     ) {
-      await ipcRenderer.invoke('remove-user-git-config', configName, gitDir);
+      await ipcRenderer.invoke('remove-user-git-config', configName, gitDirs);
       return true;
     },
 

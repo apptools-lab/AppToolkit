@@ -11,7 +11,7 @@ import {
   generateSSHKey,
   updateUserGitDir,
   getExistedUserGitConfigNames,
-  // addSSHConfig,
+  removeUserGitDir,
 } from '../git';
 
 export default () => {
@@ -47,16 +47,25 @@ export default () => {
     e: IpcMainInvokeEvent,
     originGitDir: string,
     currentGitDir: string,
+    configName: string,
   ) => {
-    await updateUserGitDir(originGitDir, currentGitDir);
+    await updateUserGitDir(originGitDir, currentGitDir, configName);
+  });
+
+  ipcMain.handle('remove-user-git-dir', async (
+    e: IpcMainInvokeEvent,
+    gitDir: string,
+    configName: string,
+  ) => {
+    await removeUserGitDir(gitDir, configName);
   });
 
   ipcMain.handle('remove-user-git-config', async (
     e: IpcMainInvokeEvent,
     configName: string,
-    gitDir: string,
+    gitDirs: string[],
   ) => {
-    await removeUserGitConfig(configName, gitDir);
+    await removeUserGitConfig(configName, gitDirs);
   });
 
   ipcMain.handle('generate-ssh-key', async (
@@ -65,6 +74,5 @@ export default () => {
     userEmail: string,
   ) => {
     return await generateSSHKey(configName, userEmail);
-    // await addSSHConfig({ hostName, configName, userName });
   });
 };

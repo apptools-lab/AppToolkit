@@ -1,17 +1,19 @@
 import { FC, useEffect } from 'react';
-import { Dialog, Form, Field, Input, Message, Button, Balloon } from '@alifd/next';
-import CustomIcon from '@/components/Icon';
-import GitDirFormItemLabel from '../GitDirFormItemLabel';
+import { Dialog, Form, Field, Input, Message, Button } from '@alifd/next';
 import store from '../../store';
-import styles from './index.module.scss';
 
-const { Tooltip } = Balloon;
+interface UserGitConfigDialogFormProps {
+  refresh: () => Promise<void>;
+}
 
-const UserGitConfigDialogForm: FC<{}> = () => {
+const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) => {
   const [state, dispatcher] = store.useModel('git');
   const effectsState = store.useModelEffectsState('git');
 
-  const { userGitConfigFormVisible, existedUserGitConfigNames } = state;
+  const {
+    userGitConfigFormVisible,
+    // existedUserGitConfigNames
+  } = state;
 
   const field = Field.useField({ parseName: true });
 
@@ -27,11 +29,17 @@ const UserGitConfigDialogForm: FC<{}> = () => {
     }
 
     const values = field.getValues() as any;
+    const { user: { email: userEmail }, configName } = values;
+    const pubKey = await dispatcher.generateSSHKey({ configName, userEmail });
+    if (!pubKey) {
+      return;
+    }
+    Message.success(`生成 ${configName} SSH 公钥成功`);
     const res = await dispatcher.addUserGitConfig(values);
     if (res) {
       Message.success(`新增 ${values.configName} 配置成功`);
+      await refresh();
       close();
-      dispatcher.getUserGitConfigs();
     }
   };
 
@@ -49,44 +57,12 @@ const UserGitConfigDialogForm: FC<{}> = () => {
     dispatcher.getExistedUserGitConfigs();
   }, []);
 
-  const onGenerateSSHKeyClick = async () => {
-    const { user: { email: userEmail }, configName } = field.getValues();
-    const pubKey = await dispatcher.generateSSHKey({ configName, userEmail });
-    if (pubKey) {
-      Message.success(`生成 ${configName} SSH 公钥成功`);
-      field.setValue('SSHPublicKey', pubKey);
-    }
-  };
-
   // const validateGitConfigName = (rule: any, setValue: string, callback: (error?: string) => void) => {
   //   if (existedUserGitConfigNames.includes(setValue)) {
   //     return callback('配置名已存在，请重新输入');
   //   }
   //   return callback();
   // };
-
-  const checkIsGenerateSSHKeyBtnDisabled = () => {
-    const { user = {}, configName } = field.getValues();
-    const { email: userEmail } = user as any;
-    if (existedUserGitConfigNames.includes(configName)) {
-      return true;
-    }
-    return !(userEmail && configName);
-  };
-
-  const isGenerateSSHKeyBtnDisabled = checkIsGenerateSSHKeyBtnDisabled();
-
-  const generateSSHKeyBtn = (
-    <Button
-      type="primary"
-      text
-      onClick={onGenerateSSHKeyClick}
-      disabled={isGenerateSSHKeyBtnDisabled}
-      loading={effectsState.generateSSHKey.isLoading}
-    >
-      一键生成
-    </Button>
-  );
   return (
     <Dialog
       visible={userGitConfigFormVisible}
@@ -95,6 +71,7 @@ const UserGitConfigDialogForm: FC<{}> = () => {
       onOk={submit}
       onCancel={close}
       closeable={false}
+      okProps={{ loading: effectsState.generateSSHKey.isLoading || effectsState.addUserGitConfig.isLoading }}
     >
       <Form {...formItemLayout} field={field} labelAlign="left" style={{ paddingLeft: 40, paddingRight: 40 }}>
         <Form.Item
@@ -112,7 +89,7 @@ const UserGitConfigDialogForm: FC<{}> = () => {
           required
           requiredMessage="请输入 Git 服务器域名，如 github.com"
         >
-          <Input name="hostName" placeholder="请输入 Git 服务器域名" />
+          <Input name="user.hostName" placeholder="请输入 Git 服务器域名" />
         </Form.Item>
         <Form.Item
           label="用户名"
@@ -130,34 +107,7 @@ const UserGitConfigDialogForm: FC<{}> = () => {
         >
           <Input name="user.email" placeholder="请输入邮箱" />
         </Form.Item>
-        <Form.Item
-          label="SSH 公钥"
-          required
-          requiredMessage="请生成点击『一键生成』以生成 SSH 公钥"
-          style={{ display: 'flex', alignItems: 'center' }}
-        >
-          {
-            field.getValue('SSHPublicKey') ? (
-              <Input.TextArea name="SSHPublicKey" readOnly />
-            ) : (
-              <>
-                {
-                  isGenerateSSHKeyBtnDisabled ? (
-                    <Tooltip
-                      trigger={generateSSHKeyBtn}
-                      align="t"
-                      delay={200}
-                    >
-                      请输入『配置名称』和『邮箱』后，再生成 SSH 公钥。
-                    </Tooltip>
-                  ) : (
-                    <>{generateSSHKeyBtn}</>
-                  )
-                }
-              </>
-            )
-          }
-        </Form.Item>
+        <div>点击确认后将默认生成 SSH 公钥</div>
       </Form>
     </Dialog>
   );
