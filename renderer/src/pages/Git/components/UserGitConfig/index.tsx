@@ -29,6 +29,10 @@ const UserGitConfig: FC<UserGitConfigProps> = ({ configName, gitDirs, SSHPublicK
   const field = Field.useField({
     parseName: true,
     onChange: debounce(async () => {
+      const { errors } = await field.validatePromise();
+      if (errors) {
+        return;
+      }
       const values: any = field.getValues();
       await dispatcher.updateUserGitConfig({
         configName,
@@ -53,10 +57,26 @@ const UserGitConfig: FC<UserGitConfigProps> = ({ configName, gitDirs, SSHPublicK
         <Col span={10} className={styles.label}><HostNameFormItemLabel /></Col>
         <Col span={14}>
           <Input
-            {...field.init('user.hostName')}
+            {...field.init('user.hostName', {
+              rules: [
+                {
+                  required: true,
+                  pattern: /^(?!http:\/\/|https:\/\/).*/i,
+                  message: 'Git 服务器域名不需要带 http(s)://，如 github.com',
+                  trigger: 'onChange',
+                },
+              ],
+            })}
             className={styles.input}
             placeholder="如 github.com"
           />
+          {field.getError('user.hostName') ? (
+            <span style={{ color: 'red', marginTop: 4 }}>
+              {field.getError('user.hostName').join(',')}
+            </span>
+          ) : (
+            ''
+          )}
         </Col>
       </Row>
       <Row align="center" className={styles.row}>

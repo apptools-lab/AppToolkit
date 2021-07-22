@@ -103,6 +103,8 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
           label={<HostNameFormItemLabel />}
           required
           requiredMessage="请输入 Git 服务器域名，如 github.com"
+          pattern={/^(?!http:\/\/|https:\/\/).*/i}
+          patternMessage="Git 服务器域名不需要带 http(s)://，如 github.com"
         >
           <Input name="user.hostName" placeholder="请输入 Git 服务器域名，如 github.com" />
         </Form.Item>
