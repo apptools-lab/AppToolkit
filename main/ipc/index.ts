@@ -3,6 +3,7 @@ import installBasePackages from './installBasePackages';
 import getNodeInfo from './getNodeInfo';
 import installNode from './installNode';
 import handleNpmRegistry from './handleNpmRegistry';
+import handleNpmDependency from './handleNpmDependency';
 
 export default () => {
   getBasePackagesInfo();
@@ -14,4 +15,6 @@ export default () => {
   installNode();
 
   handleNpmRegistry();
+
+  handleNpmDependency();
 };

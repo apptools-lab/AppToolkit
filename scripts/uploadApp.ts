@@ -28,7 +28,7 @@ const { build: { productName }, version } = packageJSON;
   // upload app resource
   // record latest version for the auto-updater to work. e.g: latest-mac.yml
   const channelFile = `${channel}${channelExt}`;
-  // package installer file with version. e.g: AppWorks Toolkit.dmg
+  // package installer file without version. e.g: AppWorks Toolkit.dmg
   const packageWithoutVersionFile = `${productName}${distFileExt}`;
   // package installer file with version. e.g: AppWorks Toolkit-0.1.0.dmg
   const packageWithVersionFile = `${distFileName}${distFileExt}`;
