@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Dialog, Form, Field, Input, Message, Icon, Button } from '@alifd/next';
 import store from '../../store';
+import HostNameFormItemLabel from '../HostNameFormItemLabel';
 import styles from './index.module.scss';
 
 interface UserGitConfigDialogFormProps {
@@ -80,7 +81,7 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
     <Dialog
       visible={userGitConfigFormVisible}
       title={'新增用户配置'}
-      style={{ width: 600 }}
+      style={{ width: 700 }}
       onOk={submit}
       onCancel={close}
       closeable={false}
@@ -99,11 +100,11 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
           <Input name="configName" placeholder="请输入配置名称，仅支持字母和数字的组合，如 Github" />
         </Form.Item>
         <Form.Item
-          label="Git 服务器域名"
+          label={<HostNameFormItemLabel />}
           required
           requiredMessage="请输入 Git 服务器域名，如 github.com"
         >
-          <Input name="user.hostName" placeholder="请输入 Git 服务器域名" />
+          <Input name="user.hostName" placeholder="请输入 Git 服务器域名，如 github.com" />
         </Form.Item>
         <Form.Item
           label="用户名"

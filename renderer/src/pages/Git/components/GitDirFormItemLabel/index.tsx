@@ -11,7 +11,7 @@ export default () => {
         align="t"
         delay={200}
       >
-        该目录下的 Git 项目都将使用此配置，详细说明查看<a href="https://git-scm.com/docs/git-config#_conditional_includes" target="__blank">文档</a>
+        该目录下的 Git 项目都将使用此配置，详细说明参考<a href="https://git-scm.com/docs/git-config#_conditional_includes" target="__blank">文档</a>
       </Tooltip>
     </span>
   );

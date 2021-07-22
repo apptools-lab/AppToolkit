@@ -5,13 +5,13 @@ const { Tooltip } = Balloon;
 export default () => {
   return (
     <span>
-      SSH 公钥
+      Git 服务器域名
       <Tooltip
         trigger={<Icon type="prompt" style={{ marginLeft: 4 }} />}
         align="t"
         delay={200}
       >
-        添加 SSH 公钥教程，请参考<a href="https://appworks.site/pack/basic/toolkit.html" target="__blank">文档</a>
+        如何查看 Git 服务器域名，请参考<a href="https://appworks.site/pack/basic/toolkit.html" target="__blank">文档</a>
       </Tooltip>
     </span>
   );
