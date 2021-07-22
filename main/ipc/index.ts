@@ -5,6 +5,7 @@ import installNode from './installNode';
 import handleGitConfig from './handleGitConfig';
 import getFolderPath from './getFolderPath';
 import handleNpmRegistry from './handleNpmRegistry';
+import handleNpmDependency from './handleNpmDependency';
 
 export default () => {
   getBasePackagesInfo();
@@ -20,4 +21,6 @@ export default () => {
   getFolderPath();
 
   handleNpmRegistry();
+
+  handleNpmDependency();
 };

@@ -26,7 +26,7 @@ export const INSTALL_COMMAND_PACKAGES = [
     commandRelativePath: './Contents/Resources/app/bin/code',
   },
 ];
-export const NOT_REINSTALL_PACKAGES = ['npm'];
+export const NOT_REINSTALL_DEPENDENCIES = ['npm'];
 // bash profile
 export const PROFILE_FILES = ['.bash_profile', '.bashrc', '.zshrc'];
 export const DEFAULT_PROFILE_FILE = '.bash_profile';
