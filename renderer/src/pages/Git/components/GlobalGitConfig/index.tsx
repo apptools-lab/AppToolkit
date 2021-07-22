@@ -13,6 +13,10 @@ const GlobalGitConfig: FC<{}> = () => {
   const { globalGitConfig } = state;
 
   const onFieldChange = debounce(async () => {
+    const { errors } = await field.validatePromise();
+    if (errors) {
+      return;
+    }
     const values: any = field.getValues();
     await dispatcher.updateGlobalGitConfig(removeObjEmptyValue(values));
     Message.success('更新全局 Git 配置成功');

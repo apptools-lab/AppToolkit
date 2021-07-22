@@ -7,6 +7,7 @@ import Icon from '@/components/Icon';
 import store from '../../store';
 import SSHKeyFormItemLabel from '../SSHKeyFormItemLabel';
 import GitDirsForm from '../GitDirsForm';
+import HostNameFormItemLabel from '../HostNameFormItemLabel';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
@@ -28,6 +29,10 @@ const UserGitConfig: FC<UserGitConfigProps> = ({ configName, gitDirs, SSHPublicK
   const field = Field.useField({
     parseName: true,
     onChange: debounce(async () => {
+      const { errors } = await field.validatePromise();
+      if (errors) {
+        return;
+      }
       const values: any = field.getValues();
       await dispatcher.updateUserGitConfig({
         configName,
@@ -49,13 +54,29 @@ const UserGitConfig: FC<UserGitConfigProps> = ({ configName, gitDirs, SSHPublicK
   return (
     <div className={styles.userGitConfig}>
       <Row align="center" className={styles.row}>
-        <Col span={10} className={styles.label}>Git 服务器域名</Col>
+        <Col span={10} className={styles.label}><HostNameFormItemLabel /></Col>
         <Col span={14}>
           <Input
-            {...field.init('user.hostName')}
+            {...field.init('user.hostName', {
+              rules: [
+                {
+                  required: true,
+                  pattern: /^(?!http:\/\/|https:\/\/).*/i,
+                  message: 'Git 服务器域名不需要带 http(s)://，如 github.com',
+                  trigger: 'onChange',
+                },
+              ],
+            })}
             className={styles.input}
-            placeholder="如 github.com、gitlab.com"
+            placeholder="如 github.com"
           />
+          {field.getError('user.hostName') ? (
+            <div style={{ color: 'red', marginTop: 4 }}>
+              {field.getError('user.hostName').join(',')}
+            </div>
+          ) : (
+            ''
+          )}
         </Col>
       </Row>
       <Row align="center" className={styles.row}>
