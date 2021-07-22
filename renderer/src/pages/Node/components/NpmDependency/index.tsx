@@ -4,7 +4,7 @@ import { INpmDependency } from '@/interfaces/npmDependency';
 import store from '../../store';
 import InstallNpmDependency from '../InstallNpmDependency';
 import OperationTableCell from '../OperationTableCell';
-import LatestVersionTableCell from '../LatestVersionTabelCell';
+import LatestVersionTableCell from '../LatestVersionTableCell';
 import styles from './index.module.scss';
 
 const defaultTableColumnProps: any = {

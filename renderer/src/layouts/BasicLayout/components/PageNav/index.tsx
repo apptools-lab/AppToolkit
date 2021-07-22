@@ -19,6 +19,7 @@ export interface IMenuItem {
   name: string;
   path: string;
   icon?: string;
+  iconStyle?: object;
   children?: IMenuItem[];
 }
 
@@ -50,7 +51,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
       const subNav = (
         <SubNav
           key={item.name}
-          icon={<Icon className={styles.icon} type={item.icon} />}
+          icon={<Icon className={styles.icon} type={item.icon} style={item.iconStyle} />}
           label={item.name}
         >
           {childrenItems}
@@ -62,7 +63,7 @@ function getSubMenuOrItem(item: IMenuItem, index?: number | string, auth?: any) 
     return null;
   }
   const navItem = (
-    <NavItem key={item.path} icon={<Icon className={styles.icon} type={item.icon} />}>
+    <NavItem key={item.path} icon={<Icon className={styles.icon} type={item.icon} style={item.iconStyle} />}>
       <Link to={item.path} className={styles.link}>
         {item.name}
       </Link>
