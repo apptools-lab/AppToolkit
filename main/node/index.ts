@@ -17,7 +17,7 @@ export default function getNodeManager(managerName: string, channel?: string) {
 function processListener({ managerName, nodeVersion, reinstallGlobalDeps, installChannel, processChannel }) {
   const nodeManager = getNodeManager(managerName, installChannel);
 
-  const tasks = ['installNode', 'reinstallPackages'];
+  const tasks = ['installNode', 'reinstallDependencies'];
 
   install();
 

@@ -4,24 +4,33 @@ import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { IPackageInfo } from '@/interfaces';
 import store from '../../store';
-import InstallResult from '../InstallResult';
+import InstallResult from '../NodeInstallResult';
 import styles from './index.module.scss';
 
-interface IInstallStep {
-  managerName: string;
-  INSTALL_NODE_CHANNEL: string;
-  INSTALL_PROCESS_STATUS_CHANNEL: string;
+interface INodeInstaller {
   goBack: () => void;
 }
 
 const defaultValues = { reinstallGlobalDeps: true };
 
-const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INSTALL_PROCESS_STATUS_CHANNEL, goBack }) => {
-  const [state, dispatchers] = store.useModel('node');
-  const { nodeInstallFormValue, currentStep, nodeVersions, nodeInstallStatus, nodeInstallVisible } = state;
-  const effectsLoading = store.useModelEffectsLoading('node');
-  const effectsErrors = store.useModelEffectsError('node');
+const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
+  const [state, dispatchers] = store.useModel('nodeVersion');
+  const {
+    nodeInstallChannel,
+    nodeInstallProcessStatusChannel,
+    nodeInstallFormValue,
+    currentStep,
+    nodeVersions,
+    nodeInstallStatus,
+    nodeInstallVisible,
+    nodeInfo,
+  } = state;
+  const { options = {} } = nodeInfo as IPackageInfo;
+  const { managerName } = options;
+  const effectsLoading = store.useModelEffectsLoading('nodeVersion');
+  const effectsErrors = store.useModelEffectsError('nodeVersion');
 
   useEffect(() => {
     if (effectsErrors.getNodeVersions.error) {
@@ -39,16 +48,16 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   const steps = [
     { title: '选择版本', name: 'selectedVersion' },
     { title: '安装 Node.js', name: 'installNode' },
-    { title: '重装全局依赖', name: 'reinstallPackages' },
+    { title: '重装全局依赖', name: 'reinstallDependencies' },
     { title: '完成', name: 'finish' },
   ];
   const field = Field.useField({ values: defaultValues });
   const formItemLayout = {
     labelCol: {
-      fixedSpan: 10,
+      span: 6,
     },
     wrapperCol: {
-      span: 14,
+      span: 16,
     },
   };
 
@@ -64,8 +73,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   };
 
   const goNext = () => {
-    const { node } = store.getState();
-    dispatchers.updateStep(node.currentStep + 1);
+    const { nodeVersion } = store.getState();
+    dispatchers.updateStep(nodeVersion.currentStep + 1);
   };
 
   const submit = async () => {
@@ -84,12 +93,13 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
       {
         managerName,
         ...values,
-        installChannel: INSTALL_NODE_CHANNEL,
-        processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
+        installChannel: nodeInstallChannel,
+        processChannel: nodeInstallProcessStatusChannel,
       },
     );
     goNext();
   };
+
 
   let mainbody: JSX.Element;
 
@@ -100,6 +110,8 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
           {...formItemLayout}
           field={field}
           fullWidth
+          labelAlign="left"
+          className={styles.form}
           onChange={dispatchers.updateNodeInstallFormValue}
         >
           <Form.Item
@@ -145,7 +157,7 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
     case 2:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 30 }} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
         </div>
       );
       break;
@@ -177,14 +189,14 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
 
   useEffect(() => {
     if (nodeInstallVisible) {
-      dispatchers.getCaches({ installChannel: INSTALL_NODE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
+      dispatchers.getCaches({ installChannel: nodeInstallChannel, processChannel: nodeInstallProcessStatusChannel });
     }
   }, []);
 
   useEffect(() => {
-    ipcRenderer.on(INSTALL_NODE_CHANNEL, writeChunk);
+    ipcRenderer.on(nodeInstallChannel, writeChunk);
     return () => {
-      ipcRenderer.removeListener(INSTALL_NODE_CHANNEL, writeChunk);
+      ipcRenderer.removeListener(nodeInstallChannel, writeChunk);
     };
   }, []);
 
@@ -204,17 +216,17 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   }
 
   useEffect(() => {
-    ipcRenderer.on(INSTALL_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+    ipcRenderer.on(nodeInstallProcessStatusChannel, handleUpdateInstallStatus);
     return () => {
       ipcRenderer.removeListener(
-        INSTALL_PROCESS_STATUS_CHANNEL,
+        nodeInstallProcessStatusChannel,
         handleUpdateInstallStatus,
       );
     };
   }, []);
   return (
-    <div className={styles.installStepContainer}>
-      <Step current={currentStep} className={styles.step} shape="dot">
+    <div>
+      <Step current={currentStep} className={styles.step} shape="dot" stretch>
         {stepComponents}
       </Step>
       <Loading visible={effectsLoading.getNodeVersions} className={styles.loading} tip="获取 Node.js 版本中...">
@@ -224,4 +236,4 @@ const InstallStep: FC<IInstallStep> = ({ managerName, INSTALL_NODE_CHANNEL, INST
   );
 };
 
-export default InstallStep;
+export default NodeInstaller;

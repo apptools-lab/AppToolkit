@@ -1,4 +1,4 @@
-import { IBasePackage, IInstallResultData } from '@/interfaces';
+import { IPackageInfo, IInstallResultData } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -13,7 +13,7 @@ export default {
     installResult: [],
   },
   reducers: {
-    updateBasePackagesList(prevState, basePackagesList: IBasePackage[]) {
+    updateBasePackagesList(prevState, basePackagesList: IPackageInfo[]) {
       prevState.basePackagesList = basePackagesList;
     },
 
@@ -21,7 +21,7 @@ export default {
       prevState.isInstalling = isInstalling;
     },
 
-    updateUninstalledPackagesList(prevState, uninstalledPackagesList: IBasePackage[]) {
+    updateUninstalledPackagesList(prevState, uninstalledPackagesList: IPackageInfo[]) {
       prevState.uninstalledPackagesList = uninstalledPackagesList;
     },
 
@@ -37,11 +37,11 @@ export default {
       prevState.pkgInstallStatuses[step].status = status;
     },
 
-    initStep(prevState, selectedInstalledPackagesList: IBasePackage[]) {
+    initStep(prevState, selectedInstalledPackagesList: IPackageInfo[]) {
       // skip the start step
       prevState.currentStep = 1;
       prevState.pkgInstallStep = 0;
-      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: IBasePackage) => ({ name: item.name, status: 'wait' }));
+      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: IPackageInfo) => ({ name: item.name, status: 'wait' }));
       prevState.selectedInstalledPackagesList = selectedInstalledPackagesList;
       prevState.installResult = [];
     },
@@ -54,7 +54,7 @@ export default {
     async getBasePackages() {
       const data = await ipcRenderer.invoke('get-base-packages-info');
       dispatch.dashboard.updateBasePackagesList(data);
-      const packagesList = data.filter((basePackage: IBasePackage) => {
+      const packagesList = data.filter((basePackage: IPackageInfo) => {
         return basePackage.versionStatus !== 'installed';
       });
       dispatch.dashboard.updateUninstalledPackagesList(packagesList);
