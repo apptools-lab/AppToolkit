@@ -95,6 +95,7 @@
     "ini": "^2.0.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
+    "package-json": "^7.0.0",
     "shelljs": "^0.8.4",
     "sudo-prompt": "^9.2.1",
     "tslib": "^2.2.0",
