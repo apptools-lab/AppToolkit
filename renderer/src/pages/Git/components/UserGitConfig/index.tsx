@@ -71,9 +71,9 @@ const UserGitConfig: FC<UserGitConfigProps> = ({ configName, gitDirs, SSHPublicK
             placeholder="如 github.com"
           />
           {field.getError('user.hostName') ? (
-            <span style={{ color: 'red', marginTop: 4 }}>
+            <div style={{ color: 'red', marginTop: 4 }}>
               {field.getError('user.hostName').join(',')}
-            </span>
+            </div>
           ) : (
             ''
           )}
