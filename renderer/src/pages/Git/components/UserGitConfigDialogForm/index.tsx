@@ -14,7 +14,7 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
 
   const {
     userGitConfigFormVisible,
-    // existedUserGitConfigNames
+    existedUserGitConfigNames,
   } = state;
 
   const field = Field.useField({ parseName: true });
@@ -59,12 +59,16 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
     dispatcher.getExistedUserGitConfigs();
   }, []);
 
-  // const validateGitConfigName = (rule: any, setValue: string, callback: (error?: string) => void) => {
-  //   if (existedUserGitConfigNames.includes(setValue)) {
-  //     return callback('配置名已存在，请重新输入');
-  //   }
-  //   return callback();
-  // };
+  const validateGitConfigName = (rule: any, setValue: string, callback: (error?: string) => void) => {
+    if (!/^[a-z]([-_a-z0-9]*)$/i.test(setValue)) {
+      return callback('请输入字母和数字的组合，以字母开头，如 Github');
+    }
+    if (existedUserGitConfigNames.includes(setValue)) {
+      return callback('配置名已存在，请重新输入');
+    }
+    return callback();
+  };
+
   const dialogFooter = (
     <div className={styles.dialogFooter}>
       <div className={styles.tip}>
@@ -93,9 +97,7 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
           label="配置名称"
           required
           requiredMessage="请输入配置名称"
-          pattern={/^[a-z]([-_a-z0-9]*)$/i}
-          patternMessage="请输入字母和数字的组合，以字母开头，如 Github"
-          // validator={validateGitConfigName}
+          validator={validateGitConfigName}
         >
           <Input name="configName" placeholder="请输入配置名称，仅支持字母和数字的组合，如 Github" />
         </Form.Item>
