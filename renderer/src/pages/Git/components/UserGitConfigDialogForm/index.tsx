@@ -66,7 +66,6 @@ const UserGitConfigDialogForm: FC<UserGitConfigDialogFormProps> = ({ refresh }) 
     if (existedUserGitConfigNames.includes(setValue)) {
       return callback('配置名已存在，请重新输入');
     }
-    return callback();
   };
 
   const dialogFooter = (
