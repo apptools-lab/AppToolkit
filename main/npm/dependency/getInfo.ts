@@ -32,6 +32,8 @@ export async function getGlobalDependencies(force: boolean) {
     const depsInfo = [];
     for (const dep of deps) {
       let latestVersion = '';
+      // avoid failing to get the latest version of one package
+      // so that other packages can't get the latest versions
       try {
         latestVersion = await getLatestVersion(dep);
       } catch (err) {
@@ -60,6 +62,7 @@ export async function getGlobalDependencies(force: boolean) {
 function getCurrentVersion(installedDependency: InstalledDependency) {
   return installedDependency.version;
 }
+
 interface PackageJSON extends AbbreviatedMetadata {
   version: string;
 }
