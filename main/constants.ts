@@ -34,7 +34,6 @@ export const DEFAULT_PROFILE_FILE = '.bash_profile';
 export const NPMRC_PATH = path.join(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'], '.npmrc');
 export const NPM_REGISTRY = 'https://registry.npmjs.org/';
 export const TAOBAO_NPM_REGISTRY = 'https://registry.npm.taobao.org';
-export const ALI_NPM_REGISTRY = 'https://registry.npm.alibaba-inc.com/';
 export const TAOBAO_NODE_MIRROR = 'https://npm.taobao.org/mirrors/node';
 // git
 export const GLOBAL_GITCONFIG_PATH = path.join(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'], '.gitconfig');
