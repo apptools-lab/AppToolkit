@@ -50,6 +50,19 @@ function NpmRegistry() {
       Message.error(effectsErrors.setCurrentNpmRegistry.error.message);
     }
   }, [effectsErrors.setCurrentNpmRegistry.error]);
+
+  const selectItemRender = (item) => {
+    return (
+      <div className={styles.selectItemRender}>
+        <span>{item.label}</span>
+        <>
+          {item.recommended &&
+            <img src="https://img.alicdn.com/imgextra/i1/O1CN016h0vOh1W0YLcwNuAf_!!6000000002726-55-tps-32-32.svg" alt="recommendIcon" />
+          }
+        </>
+      </div>
+    );
+  };
   return (
     <Row className={styles.row}>
       <Col span={10}>
@@ -62,6 +75,7 @@ function NpmRegistry() {
           value={currentNpmRegistry}
           onChange={onChange}
           dataSource={allNpmRegistries}
+          itemRender={selectItemRender}
           state={effectsState.setCurrentNpmRegistry.isLoading ? 'loading' : undefined}
         />
       </Col>

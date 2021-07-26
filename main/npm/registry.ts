@@ -1,9 +1,11 @@
 import * as ini from 'ini';
 import * as fse from 'fs-extra';
+import { ALI_NPM_REGISTRY } from '@appworks/constant';
 import store, { packagesDataKey } from '../store';
 import { INPMRegistry } from '../types';
-import { NPMRC_PATH, NPM_REGISTRY } from '../constants';
+import { NPMRC_PATH, NPM_REGISTRY, TAOBAO_NPM_REGISTRY } from '../constants';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
+import log from '../utils/log';
 
 const REGISTRY_FIELD = 'registry';
 
@@ -16,15 +18,26 @@ export async function setCurrentRegistry(registry: string) {
   const npmrc = await getNpmInfo();
   npmrc[REGISTRY_FIELD] = registry;
   await fse.writeFile(NPMRC_PATH, ini.stringify(npmrc));
+
+  log.info('Write to', NPMRC_PATH, npmrc);
 }
 
 export async function getAllRegistries() {
   const isAliInternal = await checkIsAliInternal();
   const data = store.get(packagesDataKey);
-  const { npmRegistries = [] }: { npmRegistries: INPMRegistry[] } = data;
-  return npmRegistries.filter((npmRegistry) => {
+  const { npmRegistries: originNpmRegistries = [] }: { npmRegistries: INPMRegistry[] } = data;
+  const npmRegistries = originNpmRegistries.filter((npmRegistry) => {
     return isAliInternal ? true : !npmRegistry.isInternal;
   });
+  log.debug('ALI_NPM_REGISTRY', ALI_NPM_REGISTRY);
+  const recommendedNpmRegistryIndex = npmRegistries.findIndex((item: INPMRegistry) => {
+    return isAliInternal ? item.registry === ALI_NPM_REGISTRY : item.registry === TAOBAO_NPM_REGISTRY;
+  });
+  if (recommendedNpmRegistryIndex > -1) {
+    npmRegistries[recommendedNpmRegistryIndex].recommended = true;
+  }
+
+  return npmRegistries;
 }
 
 async function getNpmInfo() {

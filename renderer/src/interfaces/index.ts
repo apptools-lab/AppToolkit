@@ -46,4 +46,5 @@ export interface INPMRegistry {
   name: string;
   registry: string;
   isInternal: boolean;
+  recommended?: boolean;
 }

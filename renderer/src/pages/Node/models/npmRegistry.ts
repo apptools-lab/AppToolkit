@@ -11,7 +11,7 @@ export default {
     async getAllNpmRegistries() {
       const allNpmRegistries: INPMRegistry[] = await ipcRenderer.invoke('get-all-npm-registries');
       const npmRegistries = allNpmRegistries
-        .map(({ registry }: INPMRegistry) => registry);
+        .map(({ registry, recommended = false }: INPMRegistry) => ({ value: registry, label: registry, recommended }));
       this.setState({ allNpmRegistries: npmRegistries });
     },
 
