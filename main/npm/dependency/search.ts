@@ -6,7 +6,7 @@ import { getGlobalDependencies } from './getInfo';
 
 export async function searchNpmDependencies(query: string) {
   if (!query) {
-    const errorMsg = 'The search content is empty. Please provide it.';
+    const errorMsg = '请输入 npm 依赖名称';
     log.error(errorMsg);
     throw new Error(errorMsg);
   }

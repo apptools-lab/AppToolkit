@@ -29,13 +29,10 @@ export async function getAllRegistries() {
   const npmRegistries = originNpmRegistries.filter((npmRegistry) => {
     return isAliInternal ? true : !npmRegistry.isInternal;
   });
-  log.debug('ALI_NPM_REGISTRY', ALI_NPM_REGISTRY);
-  const recommendedNpmRegistryIndex = npmRegistries.findIndex((item: INPMRegistry) => {
-    return isAliInternal ? item.registry === ALI_NPM_REGISTRY : item.registry === TAOBAO_NPM_REGISTRY;
+
+  npmRegistries.forEach((item: INPMRegistry) => {
+    item.recommended = isAliInternal ? item.registry === ALI_NPM_REGISTRY : item.registry === TAOBAO_NPM_REGISTRY;
   });
-  if (recommendedNpmRegistryIndex > -1) {
-    npmRegistries[recommendedNpmRegistryIndex].recommended = true;
-  }
 
   return npmRegistries;
 }
