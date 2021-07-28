@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import urljoin = require('url-join');
 import log from '../../utils/log';
-import { getCurrentRegistry } from '../registry';
+import getNpmRegistry from '../../utils/getNpmRegistry';
 import { getGlobalDependencies } from './getInfo';
 
 export async function searchNpmDependencies(query: string) {
@@ -11,8 +11,8 @@ export async function searchNpmDependencies(query: string) {
     throw new Error(errorMsg);
   }
   try {
-    const currentRegistry: string = await getCurrentRegistry();
-    const url = urljoin(currentRegistry, query);
+    const npmRegistry: string = await getNpmRegistry();
+    const url = urljoin(npmRegistry, query);
     const res = await fetch(url);
     const content = await res.json();
 

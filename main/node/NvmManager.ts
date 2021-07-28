@@ -1,11 +1,11 @@
 import * as path from 'path';
 import * as execa from 'execa';
 import * as shell from 'shelljs';
+import getNpmRegistry from '../utils/getNpmRegistry';
 import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import { NOT_REINSTALL_DEPENDENCIES } from '../constants';
-import getNpmRegistry from '../utils/getNpmRegistry';
 
 class NvmManager implements INodeManager {
   channel: string;

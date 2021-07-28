@@ -122,12 +122,8 @@
     {
       "name": "taobao",
       "registry": "https://registry.npm.taobao.org/",
-      "isInternal": false
-    },
-    {
-      "name": "tnpm",
-      "registry": "https://registry.npm.alibaba-inc.com/",
-      "isInternal": true
+      "isInternal": false,
+      "recommended": true
     }
   ],
   "browserExtensions": [

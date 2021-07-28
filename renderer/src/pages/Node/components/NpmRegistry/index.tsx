@@ -1,15 +1,20 @@
 import { useEffect } from 'react';
-import { Grid, Select, Message } from '@alifd/next';
+import { Grid, Select, Message, Icon, Balloon } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;
+const { Tooltip } = Balloon;
 
 function NpmRegistry() {
   const [state, dispatchers] = store.useModel('npmRegistry');
-  const { npmInstalled, currentNpmRegistry, allNpmRegistries } = state;
+  const { npmInstalled, currentNpmRegistry, allNpmRegistries, isAliInternal } = state;
   const effectsState = store.useModelEffectsState('npmRegistry');
   const effectsErrors = store.useModelEffectsError('npmRegistry');
+
+  useEffect(() => {
+    dispatchers.checkIsAliInternal();
+  }, []);
 
   useEffect(() => {
     dispatchers.checkNpmInstalled();
@@ -63,10 +68,24 @@ function NpmRegistry() {
       </div>
     );
   };
+
+  if (isAliInternal) {
+    return null;
+  }
+
   return (
     <Row className={styles.row}>
       <Col span={10}>
-        <div className={styles.subTitle}>npm 镜像源</div>
+        <div className={styles.subTitle}>
+          全局 npm 镜像源
+          <Tooltip
+            trigger={<Icon type="prompt" className={styles.promptIcon} />}
+            align="t"
+            delay={200}
+          >
+            如果有发 npm 包的需求，请先切换至 npm 官方镜像源。
+          </Tooltip>
+        </div>
       </Col>
       <Col span={14}>
         <Select

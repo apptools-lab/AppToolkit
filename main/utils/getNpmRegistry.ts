@@ -1,10 +1,10 @@
 import { ALI_NPM_REGISTRY } from '@appworks/constant';
-import { TAOBAO_NPM_REGISTRY } from '../constants';
+import { getCurrentRegistry } from '../npm/registry';
 import checkIsAliInternal from './checkIsAliInternal';
 
 async function getNpmRegistry() {
   const isAliInternal = await checkIsAliInternal();
-  return isAliInternal ? ALI_NPM_REGISTRY : TAOBAO_NPM_REGISTRY;
+  return isAliInternal ? ALI_NPM_REGISTRY : await getCurrentRegistry();
 }
 
 export default getNpmRegistry;
