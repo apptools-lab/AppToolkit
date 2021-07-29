@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 
 const { Group: TagGroup } = Tag;
 
-const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
+const InstallResult = ({ goBack }) => {
   const [state] = store.useModel('nodeVersion');
   const { nodeInstallStatus, installResult, nodeInstallErrMsg } = state;
 
@@ -15,7 +15,6 @@ const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
     <Box align="center">
       <Typography.H1>安装结果</Typography.H1>
       <List size="medium">
-        {/* Node.js install result */}
         <List.Item
           title="安装 Node.js"
           extra={<TagGroup>{nodeInstallStatus.installNode === 'success' ? successTag : errorTag}</TagGroup>}
@@ -43,22 +42,6 @@ const InstallResult = ({ goBack, reinstallGlobalDeps }) => {
             </>
           )}
         </List.Item>
-        {/* npm package install result */}
-        {reinstallGlobalDeps && (
-          <List.Item
-            title="重装全局依赖"
-            extra={<TagGroup>{nodeInstallStatus.reinstallDependencies === 'success' ? successTag : errorTag}</TagGroup>}
-          >
-            {nodeInstallStatus.reinstallDependencies === 'error' && (
-              <>
-                <div className={styles.text}>重装全局依赖失败，请自行安装依赖。详细日志如下：</div>
-                <code className={styles.code}>
-                  {nodeInstallErrMsg.reinstallDependencies}
-                </code>
-              </>
-            )}
-          </List.Item>
-        )}
       </List>
       <Box margin={40} direction="row">
         <Button type="primary" style={{ marginRight: '5px' }} onClick={goBack}>

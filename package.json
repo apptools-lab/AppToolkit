@@ -98,6 +98,7 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "package-json": "^7.0.0",
+    "shell-profile": "^1.0.3",
     "shelljs": "^0.8.4",
     "ssh-config": "^4.0.6",
     "ssh-keygen": "^0.5.0",

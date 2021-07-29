@@ -8,7 +8,6 @@ import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
 import NodeInstaller from './components/NodeInstaller';
 import NpmDependency from './components/NpmDependency';
-import CustomGlobalDependencies from './components/CustomGlobalDependencies';
 
 const Node = () => {
   const [nodeVersionState, nodeVersionDispatchers] = store.useModel('nodeVersion');
@@ -53,7 +52,6 @@ const Node = () => {
         ) : (
           <>
             <NodeVersion />
-            <CustomGlobalDependencies />
             <NpmRegistry />
             <NpmDependency />
           </>

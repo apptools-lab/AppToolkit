@@ -10,6 +10,7 @@ const curDepIndexMap = {
 const defaultProcess = {
   percent: 0,
   message: '',
+  status: '',
 };
 
 export default {
@@ -46,6 +47,9 @@ export default {
     setCustomGlobalDepsProcess(prevState, data) {
       prevState.customGlobalDepsProcess = data;
     },
+    initCustomGlobalDepsProcess(prevState) {
+      prevState.customGlobalDepsProcess = defaultProcess;
+    },
   },
   effects: () => ({
     async getGlobalNpmDependencies(force = false) {
@@ -74,7 +78,7 @@ export default {
       this.setState({ queryNpmDependencies });
     },
 
-    async getGlobalDependenciesPath() {
+    async getGlobalDependenciesInfo() {
       const globalDependenciesInfo = await ipcRenderer.invoke('get-global-dependencies-info');
       this.setState({
         globalDependenciesInfo,

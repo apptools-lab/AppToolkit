@@ -12,6 +12,9 @@ import {
   getGlobalDependenciesInfo,
 } from '../npm/dependency';
 import log from '../utils/log';
+import killChannelChildProcess from '../utils/killChannelChildProcess';
+
+const childProcessMap = new Map();
 
 export default () => {
   ipcMain.handle('get-global-npm-dependencies', async (e: IpcMainInvokeEvent, force) => {
@@ -44,13 +47,25 @@ export default () => {
   });
 
   ipcMain.handle('create-custom-global-dependencies-dir', async (e: IpcMainInvokeEvent, channel: string, currentGlobalDepsPath: string) => {
-    const childProcess = child_process.fork(path.join(__dirname, '..', 'npm/dependency/createCustomGlobalDepsDir'));
+    let childProcess = childProcessMap.get(channel);
+    if (childProcess) {
+      log.info(`Channel ${channel} has an existed child process.`);
+      return;
+    }
+
+    childProcess = child_process.fork(path.join(__dirname, '..', 'npm/dependency/createCustomGlobalDepsDir'));
+    childProcessMap.set(channel, childProcess);
 
     childProcess.send({ currentGlobalDepsPath, channel });
 
+    childProcessMap.set(channel, childProcess);
+
     childProcess.on('message', ({ data }: any) => {
-      log.info('data===>', data);
       sendMainWindow(channel, data);
     });
+  });
+
+  ipcMain.handle('cancel-create-custom-global-dependencies-dir', async (e: IpcMainInvokeEvent, channel: string) => {
+    killChannelChildProcess(childProcessMap, channel);
   });
 };

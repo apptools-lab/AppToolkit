@@ -1,8 +1,7 @@
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { Dialog, Form, Input, Button, Progress } from '@alifd/next';
+import { Dialog, Form, Input, Progress } from '@alifd/next';
 import { useEffect } from 'react';
 import store from '../../store';
-import styles from './index.module.scss';
 
 const CustomGlobalDepsDialog = () => {
   const formItemLayout = {
@@ -15,17 +14,31 @@ const CustomGlobalDepsDialog = () => {
 
   const channel = 'create-custom-global-deps-dir';
 
-  const onClick = async () => {
+  const onOk = async () => {
     await dispatcher.createCustomGlobalDepsDir({ channel, currentGlobalDepsPath: currentPath });
+  };
+
+  const onCancel = async () => {
+    await ipcRenderer.invoke(
+      'cancel-create-custom-global-dependencies-dir',
+      channel,
+    );
+    onClose();
   };
 
   const onClose = () => {
     dispatcher.setCustomGlobalDepsDialogVisible(false);
+    dispatcher.getGlobalDependenciesInfo();
+    dispatcher.initCustomGlobalDepsProcess();
   };
 
   useEffect(() => {
     function handleUpdateStatus(e: IpcRendererEvent, data) {
+      console.log('data==>', data);
       dispatcher.setCustomGlobalDepsProcess(data);
+      if (data.status === 'done') {
+        onClose();
+      }
     }
     ipcRenderer.on(channel, handleUpdateStatus);
     return () => {
@@ -42,8 +55,13 @@ const CustomGlobalDepsDialog = () => {
       visible={customGlobalDepsDialogVisible}
       title="设置全局 npm 依赖路径"
       style={{ width: 600 }}
-      footer={false}
-      onClose={onClose}
+      closeable={false}
+      okProps={{
+        children: '确定',
+        loading: customGlobalDepsProcess.status === 'process',
+      }}
+      onOk={onOk}
+      onCancel={onCancel}
     >
       <Form
         value={value}
@@ -61,11 +79,16 @@ const CustomGlobalDepsDialog = () => {
           <Input name="recommendedPath" readOnly />
         </Form.Item>
       </Form>
-      <div className={styles.footer}>
-        <Button onClick={onClick}>转换</Button>
-        <span>{customGlobalDepsProcess.message}</span>
-        <Progress percent={customGlobalDepsProcess.percent} size="medium" />
-      </div>
+      {customGlobalDepsProcess.status && (
+        <>
+          <Progress percent={customGlobalDepsProcess.percent} size="medium" />
+          <div
+            style={{ marginTop: 4, color: customGlobalDepsProcess.status === 'error' ? 'red' : 'black' }}
+          >
+            {customGlobalDepsProcess.message}
+          </div>
+        </>
+      )}
     </Dialog>
   );
 };
