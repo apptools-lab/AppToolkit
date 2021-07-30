@@ -34,7 +34,6 @@ const CustomGlobalDepsDialog = () => {
 
   useEffect(() => {
     function handleUpdateStatus(e: IpcRendererEvent, data) {
-      console.log('data==>', data);
       dispatcher.setCustomGlobalDepsProcess(data);
       if (data.status === 'done') {
         onClose();
@@ -83,7 +82,7 @@ const CustomGlobalDepsDialog = () => {
         <>
           <Progress percent={customGlobalDepsProcess.percent} size="medium" />
           <div
-            style={{ marginTop: 4, color: customGlobalDepsProcess.status === 'error' ? 'red' : 'black' }}
+            style={{ marginTop: 4, color: customGlobalDepsProcess.status === 'error' ? 'red' : '#666666' }}
           >
             {customGlobalDepsProcess.message}
           </div>

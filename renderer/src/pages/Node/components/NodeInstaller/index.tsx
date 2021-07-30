@@ -245,6 +245,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
       );
     };
   }, []);
+
   return (
     <div>
       <Step current={currentStep} className={styles.step} shape="dot" stretch>
