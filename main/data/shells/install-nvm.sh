@@ -68,7 +68,7 @@ nvm_source() {
     elif [ "_$NVM_METHOD" = "_git" ] || [ -z "$NVM_METHOD" ]; then
       # NVM_SOURCE_URL="https://github.com/${NVM_GITHUB_REPO}.git"
       # use China mirror
-      NVM_SOURCE_URL="https://gitee.com/mirrors/nvm.git"
+      NVM_SOURCE_URL="https://gitee.com/luhengchang/nvm.git"
     else
       nvm_echo >&2 "Unexpected value \"$NVM_METHOD\" for \$NVM_METHOD"
       return 1
