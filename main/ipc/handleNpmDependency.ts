@@ -11,7 +11,6 @@ import {
   installGlobalDependency,
   getGlobalDependenciesInfo,
 } from '../npm/dependency';
-import log from '../utils/log';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 
 const childProcessMap = new Map();
