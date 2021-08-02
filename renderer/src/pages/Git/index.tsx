@@ -11,11 +11,6 @@ function Git() {
         <GlobalGitConfig />
         <UserGitConfigList />
       </div>
-      {/* <UserGitConfigDialogForm
-        visible={userGitConfigFormVisible}
-        onSubmit={dispatcher.addUserGitConfig}
-        onVisibleChange={dispatcher.setUserGitConfigFormVisible}
-      /> */}
     </div>
   );
 }
