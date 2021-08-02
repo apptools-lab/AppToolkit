@@ -77,7 +77,7 @@ async function writePathToProfile(profilePath: string, channel: string) {
   process.send({ channel, data: { percent: 90, message: `写入配置信息至 ${profilePath}`, status: 'process' } });
   const profile = await fse.readFile(profilePath, 'utf-8');
   const exportPathStr = `export PATH=${GLOBAL_DEPENDENCIES_PATH}/bin:$PATH`;
-  const newProfile = `${profile}\n${exportPathStr}`;
+  const newProfile = `${exportPathStr}\n${profile}`;
   await fse.writeFile(profilePath, newProfile);
 }
 
