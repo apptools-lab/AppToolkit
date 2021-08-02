@@ -16,15 +16,12 @@ interface INodeInstaller {
   goBack: () => void;
 }
 
-const defaultValues = { reinstallGlobalDeps: true };
-
 const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   const [state, dispatchers] = store.useModel('nodeVersion');
   const [npmDependencyState, npmDependencyDispatchers] = store.useModel('npmDependency');
   const {
     nodeInstallChannel,
     nodeInstallProcessStatusChannel,
-    nodeInstallFormValue,
     currentStep,
     nodeVersions,
     nodeInstallStatus,
@@ -56,7 +53,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
     { title: '安装 Node.js', name: 'installNode' },
     { title: '完成', name: 'finish' },
   ];
-  const field = Field.useField({ values: defaultValues });
+  const field = Field.useField();
   const formItemLayout = {
     labelCol: {
       span: 6,
@@ -165,14 +162,13 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
       );
       break;
     case 1:
-    case 2:
       mainbody = (
         <div className={styles.term}>
           <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
         </div>
       );
       break;
-    case 3:
+    case 2:
       mainbody = <InstallResult goBack={goBack} />;
       break;
     default:
@@ -186,9 +182,8 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
         aria-current={index === currentStep ? 'step' : null}
         key={item.name}
         title={item.title}
-        disabled={index === 2 && !nodeInstallFormValue.reinstallGlobalDeps}
         icon={
-          ((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
+          (index === 1 && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
         }
       />
     ),

@@ -15,13 +15,11 @@ export default () => {
     {
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     }: {
       managerName: string;
       nodeVersion: string;
-      reinstallGlobalDeps: boolean;
       installChannel: string;
       processChannel: string;
     },
@@ -38,7 +36,6 @@ export default () => {
     childProcess.send({
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     });
