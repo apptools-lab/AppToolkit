@@ -33,7 +33,7 @@ async function copyGlobalDependencies(currentGlobalDepsPath: string, channel: st
   const libDestPath = path.join(GLOBAL_DEPENDENCIES_PATH, 'lib');
 
   return new Promise((resolve, reject) => {
-    process.send({ channel, data: { percent: 5, message: '压缩全局依赖中', status: 'process' } });
+    process.send({ channel, data: { percent: 5, message: '压缩全局依赖中...', status: 'process' } });
     // 0. compress dependencies
     gulp
       .src(path.join(currentGlobalDepsPath, 'lib', '**'))
@@ -48,7 +48,7 @@ async function copyGlobalDependencies(currentGlobalDepsPath: string, channel: st
   })
     .then((zipPath: string) => {
       // 1. decompress dependencies to the target path
-      process.send({ channel, data: { percent: 30, message: '解压全局 npm 依赖中', status: 'process' } });
+      process.send({ channel, data: { percent: 30, message: '解压全局 npm 依赖中...', status: 'process' } });
       const zip = new AdmZip(zipPath);
       zip.extractAllTo(libDestPath, true);
       return Promise.resolve();
@@ -58,7 +58,7 @@ async function copyGlobalDependencies(currentGlobalDepsPath: string, channel: st
     })
     .then(() => {
       // 2. copy symlink
-      process.send({ channel, data: { percent: 60, message: '复制 bin 目录软链接中', status: 'process' } });
+      process.send({ channel, data: { percent: 60, message: '复制 bin 目录软链接中...', status: 'process' } });
       return fse.copy(path.join(currentGlobalDepsPath, 'bin'), path.join(GLOBAL_DEPENDENCIES_PATH, 'bin'));
     })
     .catch((err) => {
@@ -67,14 +67,14 @@ async function copyGlobalDependencies(currentGlobalDepsPath: string, channel: st
 }
 
 async function writePrefixToNpmrc(channel: string) {
-  process.send({ channel, data: { percent: 80, message: '写入配置信息至 npmrc', status: 'process' } });
+  process.send({ channel, data: { percent: 80, message: '写入配置信息至 npmrc...', status: 'process' } });
   const npmInfo = await getNpmInfo();
   npmInfo.prefix = GLOBAL_DEPENDENCIES_PATH;
   await setNpmInfo(npmInfo);
 }
 
 async function writePathToProfile(profilePath: string, channel: string) {
-  process.send({ channel, data: { percent: 90, message: `写入配置信息至 ${profilePath}`, status: 'process' } });
+  process.send({ channel, data: { percent: 90, message: `写入配置信息至 ${profilePath}...`, status: 'process' } });
   const profile = await fse.readFile(profilePath, 'utf-8');
   const exportPathStr = `export PATH=${GLOBAL_DEPENDENCIES_PATH}/bin:$PATH`;
   const newProfile = `${exportPathStr}\n${profile}`;
