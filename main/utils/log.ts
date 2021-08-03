@@ -8,7 +8,7 @@ const { version } = require('../../package.json');
 log.transports.console.format = '{y}-{m}-{d} {h}:{i}:{s} {text}';
 log.transports.file.maxSize = 30 * 1024 * 1024;
 
-// @ts-ignore
+// @ts-ignore ignore the level type is not found
 log.transports.sls = ({ data, level }) => {
   // SLS config 通过 HTTP GET 请求上传日志
   // 配置参照: https://help.aliyun.com/document_detail/31752.html

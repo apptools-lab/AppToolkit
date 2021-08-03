@@ -25,7 +25,7 @@ export function recordDAU() {
 }
 
 /**
- * record action UV
+ * UV 记录，上传至黄金令箭
  */
 export async function record(originParam: ILogParam) {
   const goldlogParam: IGoldlogParam = {
