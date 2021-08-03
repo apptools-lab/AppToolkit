@@ -56,8 +56,17 @@ export interface INodeVersions {
   majors: Array<{ version: string; title: string }>;
 }
 
+export interface INPMRegistry {
+  name: string;
+  registry: string;
+  recommended?: boolean;
+  isInternal: boolean;
+}
+
 export interface IPackagesData {
   bases: IBasePackageInfo[];
 
   apps: IBasePackageInfo[];
+
+  npmRegistries: INPMRegistry[];
 }

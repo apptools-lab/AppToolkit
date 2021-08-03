@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as execa from 'execa';
-import isCommandInstalled from '../utils/isCommandInstalled';
+import checkCommandInstalled from '../utils/checkCommandInstalled';
 import { IPackageInfo, IPackageInstaller, IPackagesData, Platform } from '../types';
 import { INSTALL_COMMAND_PACKAGES, VSCODE_COMMAND_NAME, VSCODE_NAME } from '../constants';
 import writeLog from '../utils/writeLog';
@@ -61,7 +61,7 @@ class IDEExtensionInstaller implements IPackageInstaller {
   };
 
   private ensureVSCodeCommandInstalled = async () => {
-    if (!isCommandInstalled(VSCODE_COMMAND_NAME)) {
+    if (!checkCommandInstalled(VSCODE_COMMAND_NAME)) {
       writeLog(this.channel, `VS Code command '${VSCODE_COMMAND_NAME}' was not installed.`, true, 'error');
 
       // try to install code command to the path

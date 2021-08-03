@@ -1,43 +1,30 @@
 import * as path from 'path';
 import * as execa from 'execa';
-import * as shell from 'shelljs';
 import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
-import { NOT_REINSTALL_PACKAGES } from '../constants';
-import getNpmRegistry from '../utils/getNpmRegistry';
+import getShellName from '../utils/getShellName';
 
 class NvmManager implements INodeManager {
   channel: string;
 
   std: string;
 
-  previousNpmPath: string;
-
-  globalNpmPackages: string[];
-
   nodePath: string;
 
   constructor(channel = '') {
     this.channel = channel;
     this.std = '';
-    this.previousNpmPath = '';
-    this.globalNpmPackages = [];
     this.nodePath = '';
   }
 
-  installNode = (version: string, reinstallGlobalDeps = true) => {
-    if (reinstallGlobalDeps) {
-      // get the previous npm path
-      const { stdout } = shell.which('npm');
-      this.previousNpmPath = stdout;
-    }
+  installNode = (version: string) => {
     const formattedVersion = formatNodeVersion(version);
     const shFilePath = path.resolve(__dirname, '../data/shells', 'nvm-install-node.sh');
 
     return new Promise((resolve, reject) => {
       const args: string[] = [shFilePath, formattedVersion];
-      const cp = execa('sh', args);
+      const cp = execa(getShellName(), args);
 
       cp.stdout.on('data', this.listenFunc);
 
@@ -56,37 +43,6 @@ class NvmManager implements INodeManager {
         resolve({ nodeVersion: formattedVersion, npmVersion, nodePath });
       });
     });
-  };
-
-  reinstallPackages = () => {
-    return this.getGlobalNpmPackages()
-      .then(() => getNpmRegistry())
-      .then((npmRegistry) => {
-        return new Promise((resolve, reject) => {
-          const args = ['i', '-g', ...this.globalNpmPackages, '--registry', npmRegistry];
-          const cp = execa('npm', args, {
-            // specify execPath to the node path which installed just now
-            execPath: this.nodePath,
-            preferLocal: true,
-            // Don't extend env because it will not use the current(new) npm to install package
-            extendEnv: false,
-          });
-
-          cp.stdout.on('data', this.listenFunc);
-
-          cp.stderr.on('data', this.listenFunc);
-
-          cp.on('error', (buffer: Buffer) => {
-            this.listenFunc(buffer);
-            log.error(new Error(buffer.toString()));
-            reject(buffer.toString());
-          });
-
-          cp.on('exit', () => {
-            resolve(null);
-          });
-        });
-      });
   };
 
   private listenFunc = (buffer: Buffer) => {
@@ -109,22 +65,6 @@ class NvmManager implements INodeManager {
       return matchResult[1];
     }
     return undefined;
-  }
-
-  private async getGlobalNpmPackages() {
-    if (!this.previousNpmPath) {
-      throw new Error('Npm command was not Found.');
-    }
-    const { stdout } = await execa(this.previousNpmPath, ['list', '-g', '--depth=0', '--json']);
-    if (stdout) {
-      const { dependencies = {} } = JSON.parse(stdout);
-      const depNames = Object.keys(dependencies).filter((dep: string) => !NOT_REINSTALL_PACKAGES.includes(dep)) || [];
-
-      depNames.forEach((dep: string) => {
-        const { version: depVersion } = dependencies[dep];
-        this.globalNpmPackages.push(`${dep}@${depVersion}`);
-      });
-    }
   }
 }
 

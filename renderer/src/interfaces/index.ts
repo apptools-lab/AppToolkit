@@ -1,4 +1,4 @@
-export interface IBasePackage {
+export interface IPackageInfo {
   name: string;
   title: string;
   description: string;
@@ -40,4 +40,11 @@ export interface IInstallResultData {
 export interface INodeVersions {
   versions: string[];
   majors: Array<{ version: string; title: string }>;
+}
+
+export interface INPMRegistry {
+  name: string;
+  registry: string;
+  isInternal: boolean;
+  recommended?: boolean;
 }

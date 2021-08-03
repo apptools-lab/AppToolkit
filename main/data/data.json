@@ -115,14 +115,15 @@
       "isInternal": false
     },
     {
-      "name": "taobao",
-      "registry": "https://registry.npm.taobao.org/",
+      "name": "yarn",
+      "registry": "https://registry.yarnpkg.com/",
       "isInternal": false
     },
     {
-      "name": "tnpm",
-      "registry": " https://registry.npm.alibaba-inc.com/",
-      "isInternal": true
+      "name": "taobao",
+      "registry": "https://registry.npm.taobao.org/",
+      "isInternal": false,
+      "recommended": true
     }
   ],
   "browserExtensions": [

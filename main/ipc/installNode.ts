@@ -16,13 +16,11 @@ export default () => {
     {
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     }: {
       managerName: string;
       nodeVersion: string;
-      reinstallGlobalDeps: boolean;
       installChannel: string;
       processChannel: string;
     },
@@ -39,7 +37,6 @@ export default () => {
     childProcess.send({
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     });
@@ -50,7 +47,7 @@ export default () => {
         if (status === 'done') {
           killChannelChildProcess(childProcessMap, installChannel);
         } else if (status === 'success' && result && result.nodePath) {
-          // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/path -> Users/xxx/.nvm/versions/node/v14.15.0/bin
+          // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/node -> Users/xxx/.nvm/versions/node/v14.15.0/bin
           const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;

@@ -1,12 +1,18 @@
 import { createStore, IStoreModels } from 'ice';
-import model from './model';
+import nodeVersionModel from './models/nodeVersion';
+import npmRegistryModel from './models/npmRegistry';
+import npmDependencyModel from './models/npmDependency';
 
-interface IAppStoreModels extends IStoreModels {
-  node: typeof model;
+interface IModels extends IStoreModels {
+  nodeVersion: typeof nodeVersionModel;
+  npmRegistry: typeof npmRegistryModel;
+  npmDependency: typeof npmDependencyModel;
 }
 
-const appModels: IAppStoreModels = {
-  node: model,
+const models: IModels = {
+  nodeVersion: nodeVersionModel,
+  npmRegistry: npmRegistryModel,
+  npmDependency: npmDependencyModel,
 };
 
-export default createStore(appModels);
+export default createStore(models);

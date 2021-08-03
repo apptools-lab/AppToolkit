@@ -1,8 +1,9 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import * as shell from 'shelljs';
-import { PROFILE_FILES, DEFAULT_PROFILE_FILE } from '../constants';
+import { PROFILE_FILES, BASH_PROFILE_FILE_NAME, ZSHRC_FILE_NAME } from '../constants';
 import log from './log';
+import getShellName from './getShellName';
 
 /**
  * Ensure profile file exists. Otherwise, create ~/.bash_profile file by default.
@@ -12,9 +13,10 @@ function ensureProfileExists() {
     return fse.pathExistsSync(path.join(process.env.HOME, bashConfigFile));
   });
   if (!isProfileExists) {
-    const defaultBashConfigFilePath = path.join(process.env.HOME, DEFAULT_PROFILE_FILE);
-    log.info(`${PROFILE_FILES.join(',')} were not found. Create ${defaultBashConfigFilePath}.`);
-    shell.touch(defaultBashConfigFilePath);
+    const shellName = getShellName();
+    const profilePath = path.join(process.env.HOME, shellName === 'zsh' ? ZSHRC_FILE_NAME : BASH_PROFILE_FILE_NAME);
+    log.info(`${PROFILE_FILES.join(',')} were not found. Create ${profilePath}.`);
+    shell.touch(profilePath);
   }
 }
 
