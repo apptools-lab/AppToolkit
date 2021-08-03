@@ -7,6 +7,12 @@ const curDepIndexMap = {
   uninstall: 'curUninstallDepIndex',
 };
 
+const defaultProcess = {
+  percent: 0,
+  message: '',
+  status: '',
+};
+
 export default {
   state: {
     npmDependencies: [],
@@ -16,6 +22,13 @@ export default {
     curUninstallDepIndex: [],
     searchValue: '',
     queryNpmDependencies: [],
+    globalDependenciesInfo: {
+      recommendedPath: '',
+      currentPath: '',
+      exists: false,
+    },
+    customGlobalDepsDialogVisible: false,
+    customGlobalDepsProcess: defaultProcess,
   },
   reducers: {
     addCurDepIndex(prevState, { type, index }: { type: string; index: number }) {
@@ -27,6 +40,15 @@ export default {
     },
     updateSearchValue(prevState, searchValue: string) {
       prevState.searchValue = searchValue;
+    },
+    setCustomGlobalDepsDialogVisible(prevState, visible: boolean) {
+      prevState.customGlobalDepsDialogVisible = visible;
+    },
+    setCustomGlobalDepsProcess(prevState, data) {
+      prevState.customGlobalDepsProcess = data;
+    },
+    initCustomGlobalDepsProcess(prevState) {
+      prevState.customGlobalDepsProcess = defaultProcess;
     },
   },
   effects: () => ({
@@ -54,6 +76,17 @@ export default {
     async searchNpmDependencies(query: string) {
       const queryNpmDependencies = await ipcRenderer.invoke('search-npm-dependencies', query);
       this.setState({ queryNpmDependencies });
+    },
+
+    async getGlobalDependenciesInfo() {
+      const globalDependenciesInfo = await ipcRenderer.invoke('get-global-dependencies-info');
+      this.setState({
+        globalDependenciesInfo,
+      });
+    },
+
+    async createCustomGlobalDepsDir({ channel, currentGlobalDepsPath }: { channel: string; currentGlobalDepsPath: string }) {
+      await ipcRenderer.invoke('create-custom-global-dependencies-dir', channel, currentGlobalDepsPath);
     },
   }),
 };
