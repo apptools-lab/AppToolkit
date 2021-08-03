@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as execa from 'execa';
-import log from '../utils/log';
 import { INodeManager } from '../types';
+import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import getShellName from '../utils/getShellName';
 
