@@ -1,5 +1,6 @@
 import * as path from 'path';
 import uploadToOSS from './uploadToOSS';
+
 const packageJSON = require('../package.json');
 
 const isMac = process.platform === 'darwin';

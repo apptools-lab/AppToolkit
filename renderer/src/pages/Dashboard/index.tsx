@@ -113,7 +113,7 @@ const Dashboard = () => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result }) {
       const { dashboard } = store.getState();
       if (status === 'done') {
-        dispatchers.updateCurrentStep(dashboard.currentStep + 1);
+        dispatchers.updateCurrentStep((dashboard.currentStep as number) + 1);
         dispatchers.updateInstallResult(result);
         return;
       }

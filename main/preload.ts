@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
   ['chrome', 'node', 'electron'].forEach((type) => {
+    // eslint-disable-next-line no-console
     console.log(`${type}-version`, process.versions[type]);
   });
 

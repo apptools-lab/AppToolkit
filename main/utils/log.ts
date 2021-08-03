@@ -2,6 +2,7 @@ import * as util from 'util';
 import { app } from 'electron';
 import * as log from 'electron-log';
 import fetch from 'node-fetch';
+
 const { version } = require('../../package.json');
 
 log.transports.console.format = '{y}-{m}-{d} {h}:{i}:{s} {text}';
@@ -43,6 +44,7 @@ log.transports.sls = ({ data, level }) => {
   url += paramsStr;
 
   fetch(url, { timeout: 2000, method: 'GET' })
+    // eslint-disable-next-line no-console
     .catch((e: Error) => console.error(e.message));
 };
 

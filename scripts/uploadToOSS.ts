@@ -10,14 +10,17 @@ const ossClient = oss({
 
 function uploadToOSS(ossObjectName: string, localPath: string) {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-console
     console.log(`[UPLOAD] start to upload ${localPath}.`);
     ossClient
       .put(ossObjectName, localPath)
       .then(() => {
+        // eslint-disable-next-line no-console
         console.log(`[UPLOAD] ${localPath} upload success.`);
         resolve(0);
       })
       .catch((e: Error) => {
+        // eslint-disable-next-line no-console
         console.log(`[ERROR] ${localPath} upload failed.`);
         reject(e.message);
       });
