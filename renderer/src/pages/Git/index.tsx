@@ -5,13 +5,13 @@ import UserGitConfigList from './components/UserGitConfigList';
 
 function Git() {
   return (
-    <div className={styles.container}>
+    <>
       <PageHeader title="Git 管理" />
       <div className={styles.content}>
         <GlobalGitConfig />
         <UserGitConfigList />
       </div>
-    </div>
+    </>
   );
 }
 
