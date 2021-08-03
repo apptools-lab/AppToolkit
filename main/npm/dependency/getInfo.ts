@@ -1,8 +1,9 @@
 import packageJSON, { AbbreviatedMetadata } from 'package-json';
+import getNpmRegistry from '../../utils/getNpmRegistry';
+import getVersionStatus from '../../utils/getVersionStatus';
 import executeCommandJSON from '../../utils/executeCommandJSON';
 import log from '../../utils/log';
 import nodeCache from '../../utils/nodeCache';
-import { getCurrentRegistry } from '../registry';
 
 interface InstalledDependency {
   version: string;
@@ -30,7 +31,14 @@ export async function getGlobalDependencies(force: boolean) {
 
     const depsInfo = [];
     for (const dep of deps) {
-      const latestVersion = await getLatestVersion(dep);
+      let latestVersion = '';
+      // avoid failing to get the latest version of one package
+      // so that other packages can't get the latest versions
+      try {
+        latestVersion = await getLatestVersion(dep);
+      } catch (err) {
+        log.error(err);
+      }
       const currentVersion = getCurrentVersion(installedDeps[dep]);
 
       depsInfo.push({
@@ -38,7 +46,7 @@ export async function getGlobalDependencies(force: boolean) {
         type: 'global',
         currentVersion,
         latestVersion,
-        isOutdated: latestVersion !== currentVersion,
+        isOutdated: getVersionStatus(currentVersion, latestVersion) === 'upgradeable',
       });
     }
 
@@ -54,12 +62,13 @@ export async function getGlobalDependencies(force: boolean) {
 function getCurrentVersion(installedDependency: InstalledDependency) {
   return installedDependency.version;
 }
+
 interface PackageJSON extends AbbreviatedMetadata {
   version: string;
 }
 
 async function getLatestVersion(name: string) {
-  const registryUrl = await getCurrentRegistry();
+  const registryUrl = await getNpmRegistry();
   const { version: latest } = await packageJSON(
     name,
     { registryUrl },
