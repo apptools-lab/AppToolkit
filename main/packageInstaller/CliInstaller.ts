@@ -4,6 +4,7 @@ import { IPackageInfo, IPackageInstaller } from '../types';
 import log from '../utils/log';
 import ensureProfileExists from '../utils/ensureProfileExists';
 import writeLog from '../utils/writeLog';
+import getShellName from '../utils/getShellName';
 
 class CliInstaller implements IPackageInstaller {
   channel: string;
@@ -53,7 +54,7 @@ class CliInstaller implements IPackageInstaller {
         process.send({ channel: this.channel, data: { chunk, ln: false } });
       };
 
-      const cp = execa('sh', [shPath]);
+      const cp = execa(getShellName(), [shPath]);
 
       cp.stdout.on('data', listenFunc);
 

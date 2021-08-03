@@ -6,6 +6,7 @@ import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import { NOT_REINSTALL_DEPENDENCIES } from '../constants';
 import getNpmRegistry from '../utils/getNpmRegistry';
+import getShellName from '../utils/getShellName';
 
 class NvmManager implements INodeManager {
   channel: string;
@@ -37,7 +38,7 @@ class NvmManager implements INodeManager {
 
     return new Promise((resolve, reject) => {
       const args: string[] = [shFilePath, formattedVersion];
-      const cp = execa('sh', args);
+      const cp = execa(getShellName(), args);
 
       cp.stdout.on('data', this.listenFunc);
 
