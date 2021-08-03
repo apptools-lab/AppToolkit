@@ -1,18 +1,18 @@
 import fetch from 'node-fetch';
 import urljoin = require('url-join');
 import log from '../../utils/log';
-import { getCurrentRegistry } from '../registry';
+import getNpmRegistry from '../../utils/getNpmRegistry';
 import { getGlobalDependencies } from './getInfo';
 
 export async function searchNpmDependencies(query: string) {
   if (!query) {
-    const errorMsg = 'The search content is empty. Please provide it.';
+    const errorMsg = '请输入 npm 依赖名称';
     log.error(errorMsg);
     throw new Error(errorMsg);
   }
   try {
-    const currentRegistry: string = await getCurrentRegistry();
-    const url = urljoin(currentRegistry, query);
+    const npmRegistry: string = await getNpmRegistry();
+    const url = urljoin(npmRegistry, query);
     const res = await fetch(url);
     const content = await res.json();
 

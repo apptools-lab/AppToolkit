@@ -20,8 +20,10 @@ export async function setCurrentRegistry(registry: string) {
 export async function getAllRegistries() {
   const isAliInternal = await checkIsAliInternal();
   const data = store.get(packagesDataKey);
-  const { npmRegistries = [] }: { npmRegistries: INPMRegistry[] } = data;
-  return npmRegistries.filter((npmRegistry) => {
+  const { npmRegistries: originNpmRegistries = [] }: { npmRegistries: INPMRegistry[] } = data;
+  const npmRegistries = originNpmRegistries.filter((npmRegistry) => {
     return isAliInternal ? true : !npmRegistry.isInternal;
   });
+
+  return npmRegistries;
 }

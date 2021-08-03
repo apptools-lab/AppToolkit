@@ -59,6 +59,7 @@ export interface INodeVersions {
 export interface INPMRegistry {
   name: string;
   registry: string;
+  recommended?: boolean;
   isInternal: boolean;
 }
 
