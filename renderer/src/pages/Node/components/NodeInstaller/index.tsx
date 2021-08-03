@@ -1,5 +1,5 @@
 import { useEffect, FC } from 'react';
-import { Step, Field, Form, Switch, Select, Loading, Message, Balloon, Icon } from '@alifd/next';
+import { Step, Field, Button, Form, Select, Loading, Message, Icon, Input, Balloon } from '@alifd/next';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
@@ -7,30 +7,33 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { IPackageInfo } from '@/interfaces';
 import store from '../../store';
 import InstallResult from '../NodeInstallResult';
+import CustomGlobalDepsPathDialog from '../CustomGlobalDepsPathDialog';
 import styles from './index.module.scss';
+
+const { Tooltip } = Balloon;
 
 interface INodeInstaller {
   goBack: () => void;
 }
 
-const defaultValues = { reinstallGlobalDeps: true };
-
 const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   const [state, dispatchers] = store.useModel('nodeVersion');
+  const [npmDependencyState, npmDependencyDispatchers] = store.useModel('npmDependency');
   const {
     nodeInstallChannel,
     nodeInstallProcessStatusChannel,
-    nodeInstallFormValue,
     currentStep,
     nodeVersions,
     nodeInstallStatus,
     nodeInstallVisible,
     nodeInfo,
   } = state;
+  const { globalDependenciesInfo } = npmDependencyState;
   const { options = {} } = nodeInfo as IPackageInfo;
   const { managerName } = options;
   const effectsLoading = store.useModelEffectsLoading('nodeVersion');
   const effectsErrors = store.useModelEffectsError('nodeVersion');
+  const npmDependencyEffectsState = store.useModelEffectsState('npmDependency');
 
   useEffect(() => {
     if (effectsErrors.getNodeVersions.error) {
@@ -48,10 +51,9 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   const steps = [
     { title: '选择版本', name: 'selectedVersion' },
     { title: '安装 Node.js', name: 'installNode' },
-    { title: '重装全局依赖', name: 'reinstallDependencies' },
     { title: '完成', name: 'finish' },
   ];
-  const field = Field.useField({ values: defaultValues });
+  const field = Field.useField();
   const formItemLayout = {
     labelCol: {
       span: 6,
@@ -100,6 +102,16 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
     goNext();
   };
 
+  const onDialogShow = () => {
+    npmDependencyDispatchers.setCustomGlobalDepsDialogVisible(true);
+  };
+
+  const setCustomGlobalDepsTooltip = (
+    <Tooltip trigger={<Icon type="prompt" className={styles.warningIcon} />} align="lt" delay={200} className={styles.tooltip}>
+      切换到其他 Node 版本后全局依赖可能不可用，建议在 {globalDependenciesInfo.recommendedPath} 存放全局依赖，这样在新的 Node 版本中依赖仍然可用。
+      <Button text onClick={onDialogShow} type="primary">点击设置</Button>
+    </Tooltip>
+  );
 
   let mainbody: JSX.Element;
 
@@ -131,20 +143,16 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
               }
             </Select>
           </Form.Item>
-          <Form.Item
-            label={
-              <span className={styles.label}>
-                重装全局依赖
-                <Balloon type="primary" trigger={<Icon type="help" size="medium" />} closable={false}>
-                  安装一个新版本的 Node.js 后，原来全局 npm 包可能会不可用。
-                  选择此选项会自动把原来的 npm 包适配到新版本的 Node.js 中。
-                </Balloon>
-              </span>}
-            required
-            requiredMessage="请选择是否重装全局依赖"
-          >
-            <Switch name="reinstallGlobalDeps" />
-          </Form.Item>
+          {!globalDependenciesInfo.exists && (
+            <Form.Item label="全局 npm 依赖路径">
+              <Input
+                className={styles.input}
+                readOnly
+                value={globalDependenciesInfo.currentPath}
+                innerAfter={setCustomGlobalDepsTooltip}
+              />
+            </Form.Item>
+          )}
           <Form.Item label=" " className={styles.submitBtn}>
             <Form.Submit type="primary" onClick={submit} validate>
               下一步
@@ -154,15 +162,14 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
       );
       break;
     case 1:
-    case 2:
       mainbody = (
         <div className={styles.term}>
           <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
         </div>
       );
       break;
-    case 3:
-      mainbody = <InstallResult goBack={goBack} reinstallGlobalDeps={nodeInstallFormValue.reinstallGlobalDeps} />;
+    case 2:
+      mainbody = <InstallResult goBack={goBack} />;
       break;
     default:
       break;
@@ -175,9 +182,8 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
         aria-current={index === currentStep ? 'step' : null}
         key={item.name}
         title={item.title}
-        disabled={index === 2 && !nodeInstallFormValue.reinstallGlobalDeps}
         icon={
-          ((index === 1 || index === 2) && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
+          (index === 1 && currentStep === index) ? STEP_STATUS_ICON[nodeInstallStatus[item.name]] : undefined
         }
       />
     ),
@@ -216,6 +222,16 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
   }
 
   useEffect(() => {
+    npmDependencyDispatchers.getGlobalDependenciesInfo();
+  }, []);
+
+  useEffect(() => {
+    if (npmDependencyEffectsState.getGlobalDependenciesInfo.error) {
+      Message.error(npmDependencyEffectsState.getGlobalDependenciesInfo.error.message);
+    }
+  }, [npmDependencyEffectsState.getGlobalDependenciesInfo.error]);
+
+  useEffect(() => {
     ipcRenderer.on(nodeInstallProcessStatusChannel, handleUpdateInstallStatus);
     return () => {
       ipcRenderer.removeListener(
@@ -224,6 +240,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
       );
     };
   }, []);
+
   return (
     <div>
       <Step current={currentStep} className={styles.step} shape="dot" stretch>
@@ -232,6 +249,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
       <Loading visible={effectsLoading.getNodeVersions} className={styles.loading} tip="获取 Node.js 版本中...">
         {mainbody}
       </Loading>
+      <CustomGlobalDepsPathDialog />
     </div>
   );
 };

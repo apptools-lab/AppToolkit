@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as execa from 'execa';
 import { INodeVersionManagerInfo } from '../../types';
 import log from '../../utils/log';
+import getShellName from '../../utils/getShellName';
 import getLocalCliInfo from './cli';
 
 const nodeManagerInfoProcessor = {
@@ -41,7 +42,7 @@ async function getNvmInfo(): Promise<INodeVersionManagerInfo> {
   };
   const shFilePath = path.resolve(__dirname, '../../data/shells', 'is-nvm-installed.sh');
   try {
-    const { stdout } = await execa('sh', [shFilePath]);
+    const { stdout } = await execa(getShellName(), [shFilePath]);
     if (stdout === 'nvm') {
       nvmInfo.managerVersionStatus = 'installed';
     }
