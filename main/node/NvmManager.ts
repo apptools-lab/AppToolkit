@@ -3,6 +3,7 @@ import * as execa from 'execa';
 import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
+import getShellName from '../utils/getShellName';
 
 class NvmManager implements INodeManager {
   channel: string;
@@ -23,7 +24,7 @@ class NvmManager implements INodeManager {
 
     return new Promise((resolve, reject) => {
       const args: string[] = [shFilePath, formattedVersion];
-      const cp = execa('sh', args);
+      const cp = execa(getShellName(), args);
 
       cp.stdout.on('data', this.listenFunc);
 
