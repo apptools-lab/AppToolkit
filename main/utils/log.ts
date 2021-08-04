@@ -1,5 +1,4 @@
 import * as util from 'util';
-import { app } from 'electron';
 import * as log from 'electron-log';
 import fetch from 'node-fetch';
 
@@ -29,7 +28,6 @@ log.transports.sls = ({ data, level }) => {
     __topic__: level, // log level
     APIVersion: '0.6.0', // sls param
     platform: `${process.platform}_${process.arch}`,
-    electron_version: app.getVersion(),
     toolkit_version: version,
   };
 
