@@ -1,6 +1,7 @@
 import * as execa from 'execa';
 import log from '../../utils/log';
 import getNpmRegistry from '../../utils/getNpmRegistry';
+import { record } from '../../recorder';
 
 export async function installGlobalDependency(dependency: string, version: string) {
   if (!dependency) {
@@ -15,6 +16,14 @@ export async function installGlobalDependency(dependency: string, version: strin
     log.info('Command: ', command);
     await execa.command(command);
     log.info(`Install ${dependency} successfully.`);
+    record({
+      module: 'node',
+      action: 'installGlobalDependency',
+      data: {
+        dependency,
+        version,
+      },
+    });
   } catch (err) {
     log.error(err.message);
     throw new Error(err.message);

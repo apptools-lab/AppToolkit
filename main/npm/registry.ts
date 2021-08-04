@@ -1,4 +1,5 @@
 import store, { packagesDataKey } from '../store';
+import { record } from '../recorder';
 import { INPMRegistry } from '../types';
 import { NPM_REGISTRY } from '../constants';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
@@ -15,6 +16,10 @@ export async function setCurrentRegistry(registry: string) {
   const npmrc = await getNpmInfo();
   npmrc[REGISTRY_FIELD] = registry;
   await setNpmInfo(npmrc);
+  record({
+    module: 'node',
+    action: 'setNpmRegistry',
+  });
 }
 
 export async function getAllRegistries() {

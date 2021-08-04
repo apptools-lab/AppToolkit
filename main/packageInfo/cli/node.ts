@@ -47,7 +47,7 @@ async function getNvmInfo(): Promise<INodeVersionManagerInfo> {
       nvmInfo.managerVersionStatus = 'installed';
     }
   } catch (error) {
-    log.error(error.message);
+    log.error(error);
   }
 
   return nvmInfo;

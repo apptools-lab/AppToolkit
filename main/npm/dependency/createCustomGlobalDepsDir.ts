@@ -7,6 +7,7 @@ import * as AdmZip from 'adm-zip';
 import { getNpmInfo, setNpmInfo } from '../npmInfo';
 import log from '../../utils/log';
 import { GLOBAL_DEPENDENCIES_PATH } from './globalDependenciesPath';
+import { record } from '../../recorder';
 
 async function createCustomGlobalDependenciesDir(channel: string, currentGlobalDepsPath: string) {
   if (!path.relative(GLOBAL_DEPENDENCIES_PATH, currentGlobalDepsPath)) {
@@ -22,6 +23,11 @@ async function createCustomGlobalDependenciesDir(channel: string, currentGlobalD
     await writePathToProfile(profilePath, channel);
 
     process.send({ channel, data: { percent: 100, status: 'done' } });
+
+    record({
+      module: 'node',
+      action: 'createCustomGlobalDependenciesDir',
+    });
   } catch (error) {
     log.error(error);
     process.send({ channel, data: { status: 'error', message: error.message } });

@@ -1,3 +1,4 @@
+import { record } from '../../recorder';
 import log from '../../utils/log';
 import { installGlobalDependency } from './install';
 import { uninstallGlobalDependency } from './uninstall';
@@ -12,6 +13,14 @@ export async function reinstallGlobalDependency(dependency: string, version: str
   try {
     await uninstallGlobalDependency(dependency);
     await installGlobalDependency(dependency, version);
+    record({
+      module: 'node',
+      action: 'reinstallGlobalDependency',
+      data: {
+        dependency,
+        version,
+      },
+    });
   } catch (err) {
     log.error(err.message);
     throw new Error(err.message);

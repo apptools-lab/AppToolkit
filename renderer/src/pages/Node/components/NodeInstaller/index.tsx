@@ -76,7 +76,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
 
   const goNext = () => {
     const { nodeVersion } = store.getState();
-    dispatchers.updateStep(nodeVersion.currentStep + 1);
+    dispatchers.updateStep((nodeVersion.currentStep as number) + 1);
   };
 
   const submit = async () => {

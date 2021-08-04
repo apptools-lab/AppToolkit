@@ -21,7 +21,7 @@ export async function getPackageInfo(basePackageInfo: IBasePackageInfo): Promise
       const localPackageInfo: ILocalPackageInfo = await getLocalInfoFunc(basePackageInfo);
       return { ...ret, ...localPackageInfo };
     } catch (error) {
-      log.error(error.message);
+      log.error(error);
     }
   }
 

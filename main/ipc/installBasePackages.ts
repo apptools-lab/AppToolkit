@@ -8,6 +8,7 @@ import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 import nodeCache from '../utils/nodeCache';
 import store, { packagesDataKey } from '../store';
+import { record } from '../recorder';
 
 const childProcessMap = new Map();
 
@@ -46,6 +47,11 @@ export default () => {
         }
         nodeCache.set(channel, processCaches);
       }
+
+      record({
+        module: 'base',
+        action: 'installPackages',
+      });
 
       sendMainWindow(channel, data);
     });
