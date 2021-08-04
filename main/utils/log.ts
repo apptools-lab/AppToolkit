@@ -50,4 +50,9 @@ log.transports.sls = ({ data, level }) => {
 
 log.transports.sls.level = 'info';
 
+// handle the uncaught error
+process.on('uncaughtException', (error: Error) => {
+  log.error('uncaughtException', error);
+});
+
 export default log;
