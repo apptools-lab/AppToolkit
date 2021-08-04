@@ -54,5 +54,9 @@ log.transports.sls.level = 'info';
 process.on('uncaughtException', (error: Error) => {
   log.error('uncaughtException', error);
 });
+// handle the uncaught promise error
+process.on('unhandledRejection', (error: Error) => {
+  log.error('unhandledRejection', error);
+});
 
 export default log;
