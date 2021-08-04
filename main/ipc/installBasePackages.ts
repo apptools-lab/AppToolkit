@@ -34,6 +34,10 @@ export default () => {
       if (channel === processChannel) {
         if (data.status === 'done') {
           killChannelChildProcess(childProcessMap, installChannel);
+          record({
+            module: 'base',
+            action: 'installPackages',
+          });
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];
@@ -47,11 +51,6 @@ export default () => {
         }
         nodeCache.set(channel, processCaches);
       }
-
-      record({
-        module: 'base',
-        action: 'installPackages',
-      });
 
       sendMainWindow(channel, data);
     });

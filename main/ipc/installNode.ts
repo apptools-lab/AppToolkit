@@ -46,6 +46,13 @@ export default () => {
         const { status, result } = data;
         if (status === 'done') {
           killChannelChildProcess(childProcessMap, installChannel);
+          record({
+            module: 'node',
+            action: 'installNode',
+            data: {
+              nodeVersion,
+            },
+          });
         } else if (status === 'success' && result && result.nodePath) {
           // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/node -> Users/xxx/.nvm/versions/node/v14.15.0/bin
           const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
@@ -64,14 +71,6 @@ export default () => {
         }
         nodeCache.set(channel, processCaches);
       }
-
-      record({
-        module: 'node',
-        action: 'installNode',
-        data: {
-          nodeVersion,
-        },
-      });
 
       sendMainWindow(channel, data);
     });

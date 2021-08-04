@@ -12,6 +12,7 @@ import {
   getGlobalDependenciesInfo,
 } from '../npm/dependency';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
+import { record } from '../recorder';
 
 const childProcessMap = new Map();
 
@@ -54,6 +55,12 @@ export default () => {
     childProcessMap.set(channel, childProcess);
 
     childProcess.on('message', ({ data }: any) => {
+      if (data.status === 'done') {
+        record({
+          module: 'node',
+          action: 'createCustomGlobalDependenciesDir',
+        });
+      }
       sendMainWindow(channel, data);
     });
   });

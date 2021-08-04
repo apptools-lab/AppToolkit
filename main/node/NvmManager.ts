@@ -4,7 +4,6 @@ import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import getShellName from '../utils/getShellName';
-import { record } from '../recorder';
 
 class NvmManager implements INodeManager {
   channel: string;
@@ -42,14 +41,6 @@ class NvmManager implements INodeManager {
         const npmVersion = this.getCurrentNpmVersion(this.std);
         this.nodePath = nodePath;
         resolve({ nodeVersion: formattedVersion, npmVersion, nodePath });
-        record({
-          module: 'node',
-          action: 'installNode',
-          data: {
-            version,
-            nodeManager: 'nvm',
-          },
-        });
       });
     });
   };
