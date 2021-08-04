@@ -50,7 +50,8 @@ export default () => {
             module: 'node',
             action: 'installNode',
             data: {
-              nodeVersion,
+              version: nodeVersion,
+              nodeManager: managerName,
             },
           });
         } else if (status === 'success' && result && result.nodePath) {
