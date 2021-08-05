@@ -4,10 +4,10 @@ import * as fse from 'fs-extra';
 import SSHKeyGen = require('ssh-keygen');
 import SSHConfig = require('ssh-config');
 import log from '../utils/log';
+import { HOME_DIR } from '../constants';
 
 const SSHKeyGenAsync = util.promisify(SSHKeyGen);
 
-const HOME_DIR = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
 export const SSHDir = path.join(HOME_DIR, '.ssh');
 const SSHConfigPath = path.join(SSHDir, 'config');
 

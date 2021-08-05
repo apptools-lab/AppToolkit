@@ -92,7 +92,7 @@ async function installPackages({
       process.send({ channel: processChannel, data: { currentIndex: i, status } });
     } catch (error) {
       errMsg = error instanceof Error ? error.message : error;
-      log.error(errMsg);
+      log.error(error);
       status = 'error';
       process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
     } finally {

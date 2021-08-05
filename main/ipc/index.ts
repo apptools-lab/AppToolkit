@@ -6,6 +6,7 @@ import handleGitConfig from './handleGitConfig';
 import getFolderPath from './getFolderPath';
 import handleNpmRegistry from './handleNpmRegistry';
 import handleNpmDependency from './handleNpmDependency';
+import checkIsAliInternal from './checkIsAliInternal';
 
 export default () => {
   getBasePackagesInfo();
@@ -23,4 +24,6 @@ export default () => {
   handleNpmRegistry();
 
   handleNpmDependency();
+
+  checkIsAliInternal();
 };

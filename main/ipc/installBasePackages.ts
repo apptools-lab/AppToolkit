@@ -8,6 +8,7 @@ import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 import nodeCache from '../utils/nodeCache';
 import store, { packagesDataKey } from '../store';
+import { record } from '../recorder';
 
 const childProcessMap = new Map();
 
@@ -33,6 +34,10 @@ export default () => {
       if (channel === processChannel) {
         if (data.status === 'done') {
           killChannelChildProcess(childProcessMap, installChannel);
+          record({
+            module: 'base',
+            action: 'installPackages',
+          });
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];

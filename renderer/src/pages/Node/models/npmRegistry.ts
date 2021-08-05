@@ -6,12 +6,13 @@ export default {
     npmInstalled: false,
     allNpmRegistries: [],
     currentNpmRegistry: '',
+    isAliInternal: false,
   },
   effects: () => ({
     async getAllNpmRegistries() {
       const allNpmRegistries: INPMRegistry[] = await ipcRenderer.invoke('get-all-npm-registries');
       const npmRegistries = allNpmRegistries
-        .map(({ registry }: INPMRegistry) => registry);
+        .map(({ registry, recommended = false }: INPMRegistry) => ({ value: registry, label: registry, recommended }));
       this.setState({ allNpmRegistries: npmRegistries });
     },
 
@@ -28,6 +29,11 @@ export default {
     async checkNpmInstalled() {
       const npmInstalled = await ipcRenderer.invoke('check-npm-installed');
       this.setState({ npmInstalled });
+    },
+
+    async checkIsAliInternal() {
+      const isAliInternal = await ipcRenderer.invoke('check-is-ali-internal');
+      this.setState({ isAliInternal });
     },
   }),
 };

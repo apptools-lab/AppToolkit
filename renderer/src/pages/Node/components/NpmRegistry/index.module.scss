@@ -12,3 +12,18 @@
     min-width: 100%;
   }
 }
+
+.selectItemRender {
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-left: 20px;
+  }
+}
+
+
+.promptIcon {
+  color: #f9ca24;
+  margin-left: 4px;
+}

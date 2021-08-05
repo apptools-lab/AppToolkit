@@ -15,7 +15,7 @@ async function getLocalCliInfo(name: string, latestVersion: string | null) {
     }
     localCliInfo.localPath = cliPath;
   } catch (error) {
-    log.error(error.message);
+    log.error(error);
     return localCliInfo;
   }
   // get cli version
@@ -28,7 +28,7 @@ async function getLocalCliInfo(name: string, latestVersion: string | null) {
     const cliVersionMatch = cliVersion.match(/(\d+(\.\d+)*)/);
     localCliInfo.localVersion = cliVersionMatch ? cliVersionMatch[1] : cliVersion;
   } catch (error) {
-    log.error(`Tool ${name} version is not found. Error: ${error.message}`);
+    log.error(error);
   }
   // get cli version status
   localCliInfo.versionStatus = getVersionStatus(localCliInfo.localVersion, latestVersion);

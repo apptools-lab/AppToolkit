@@ -6,6 +6,7 @@ import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import nodeCache from '../utils/nodeCache';
 import log from '../utils/log';
+import { record } from '../recorder';
 
 const childProcessMap = new Map();
 
@@ -15,13 +16,11 @@ export default () => {
     {
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     }: {
       managerName: string;
       nodeVersion: string;
-      reinstallGlobalDeps: boolean;
       installChannel: string;
       processChannel: string;
     },
@@ -38,7 +37,6 @@ export default () => {
     childProcess.send({
       managerName,
       nodeVersion,
-      reinstallGlobalDeps,
       installChannel,
       processChannel,
     });
@@ -48,8 +46,16 @@ export default () => {
         const { status, result } = data;
         if (status === 'done') {
           killChannelChildProcess(childProcessMap, installChannel);
+          record({
+            module: 'node',
+            action: 'installNode',
+            data: {
+              version: nodeVersion,
+              nodeManager: managerName,
+            },
+          });
         } else if (status === 'success' && result && result.nodePath) {
-          // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/path -> Users/xxx/.nvm/versions/node/v14.15.0/bin
+          // nodeEnvPath e.g: /Users/xxx/.nvm/versions/node/v14.15.0/bin/node -> Users/xxx/.nvm/versions/node/v14.15.0/bin
           const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
@@ -66,6 +72,7 @@ export default () => {
         }
         nodeCache.set(channel, processCaches);
       }
+
       sendMainWindow(channel, data);
     });
   });

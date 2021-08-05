@@ -42,13 +42,11 @@ const Node = () => {
     </div>
   ) : null;
   return (
-    <div className={styles.nodeContainer}>
+    <>
       <PageHeader title="Node 管理" button={nodeInstallVisible ? cannelInstallBtn : null} />
-      <main>
+      <main className={styles.main}>
         {nodeInstallVisible ? (
-          <NodeInstaller
-            goBack={goBack}
-          />
+          <NodeInstaller goBack={goBack} />
         ) : (
           <>
             <NodeVersion />
@@ -57,7 +55,7 @@ const Node = () => {
           </>
         )}
       </main>
-    </div>
+    </>
   );
 };
 

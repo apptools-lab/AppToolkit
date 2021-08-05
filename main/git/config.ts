@@ -11,6 +11,7 @@ import {
   removeSSHConfig,
   addSSHConfig,
 } from './ssh';
+import { record } from '../recorder';
 
 const USER_GIT_CONFIG_FILENAME_PREFIX = '.gitconfig-';
 const IGNORE_CONFIG_KEYS = ['gitDir'];
@@ -24,6 +25,10 @@ export async function getGlobalGitConfig() {
 export async function updateGlobalGitConfig(gitConfig: object) {
   log.info('update-global-git-config', gitConfig);
   await writeGitConfig(GLOBAL_GITCONFIG_PATH, gitConfig);
+  record({
+    module: 'git',
+    action: 'updateGlobalGitConfig',
+  });
 }
 
 export async function getExistedUserGitConfigNames() {
@@ -70,6 +75,10 @@ export async function addUserGitConfig(userGitConfig: IAddUserConfig) {
   delete userGitConfig.configName;
   await writeGitConfig(gitConfigPath, userGitConfig);
   await addSSHConfig({ hostName, configName, userName });
+  record({
+    module: 'git',
+    action: 'addUserGitConfig',
+  });
 }
 
 export async function updateUserGitConfig(gitConfig: any, configName: string) {
@@ -85,6 +94,10 @@ export async function updateUserGitConfig(gitConfig: any, configName: string) {
   await writeGitConfig(gitConfigPath, gitConfig);
 
   log.info('update-user-git-config', configName, gitConfig);
+  record({
+    module: 'git',
+    action: 'updateUserGitConfig',
+  });
 }
 
 async function getUserGitDirs() {
@@ -125,6 +138,10 @@ export async function updateUserGitDir(
   await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
 
   log.info('update-user-git-dir: ', currentIncludeIfKey, globalGitConfig[currentIncludeIfKey]);
+  record({
+    module: 'git',
+    action: 'updateUserGitDir',
+  });
 }
 
 export async function removeUserGitDir(gitDir: string, configName: string) {
@@ -137,6 +154,10 @@ export async function removeUserGitDir(gitDir: string, configName: string) {
     delete globalGitConfig[includeIfKey];
     await writeGitConfig(GLOBAL_GITCONFIG_PATH, globalGitConfig);
     log.info('remove-user-git-dir: ', includeIfKey, gitConfigPath);
+    record({
+      module: 'git',
+      action: 'removeUserGitDir',
+    });
   } else {
     const error = new Error(`Can not remove ${gitDir}. The ${includeIfValue} is not found.`);
     log.error(error);
@@ -154,6 +175,11 @@ export async function removeUserGitConfig(configName: string, gitDirs = []) {
   // remove the gitconfig file
   const gitConfigPath = getGitConfigPath(configName);
   await fse.remove(gitConfigPath);
+
+  record({
+    module: 'git',
+    action: 'removeUserGitConfig',
+  });
 }
 
 async function parseGitConfig(gitConfigPath: string) {

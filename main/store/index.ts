@@ -1,8 +1,8 @@
 import { TOOLKIT_TMP_DIR } from '../constants';
+
 const Store = require('electron-store');
 
 export const packagesDataKey = 'packagesData';
-
 export const recordKey = 'records';
 
 const schema = {

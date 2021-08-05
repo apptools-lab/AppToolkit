@@ -14,31 +14,26 @@ export default function getNodeManager(managerName: string, channel?: string) {
   return nodeManager;
 }
 
-function processListener({ managerName, nodeVersion, reinstallGlobalDeps, installChannel, processChannel }) {
+function processListener({ managerName, nodeVersion, installChannel, processChannel }) {
   const nodeManager = getNodeManager(managerName, installChannel);
 
-  const tasks = ['installNode', 'reinstallDependencies'];
+  const task = 'installNode';
 
   install();
 
   async function install() {
-    for (let i = 0; i < tasks.length; i++) {
-      const task = tasks[i];
-      try {
-        let result;
+    try {
+      process.send({ channel: processChannel, data: { task, status: 'process' } });
 
-        if (task === tasks[0] || (task === tasks[1] && reinstallGlobalDeps)) {
-          process.send({ channel: processChannel, data: { task, status: 'process' } });
-          result = await nodeManager[task](nodeVersion, reinstallGlobalDeps);
-        }
-        process.send({ channel: processChannel, data: { task, status: 'success', result } });
-      } catch (error) {
-        const errMsg = error instanceof Error ? error.message : error;
-        log.error(errMsg);
-        process.send({ channel: processChannel, data: { task, status: 'error', errMsg } });
-      }
+      const result = await nodeManager.installNode(nodeVersion);
+      process.send({ channel: processChannel, data: { task, status: 'success', result } });
+
+      process.send({ channel: processChannel, data: { status: 'done' } });
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : error;
+      log.error(errMsg);
+      process.send({ channel: processChannel, data: { task, status: 'error', errMsg } });
     }
-    process.send({ channel: processChannel, data: { status: 'done' } });
   }
 }
 

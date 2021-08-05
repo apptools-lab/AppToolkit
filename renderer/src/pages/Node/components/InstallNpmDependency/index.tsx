@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Input, Icon, Table, Button, Message, Balloon } from '@alifd/next';
 import { ISearchNpmDependency } from '@/interfaces/npmDependency';
 import CustomIcon from '@/components/Icon';
@@ -18,6 +19,10 @@ function InstallNpmDependency() {
   const effectsState = store.useModelEffectsState('npmDependency');
 
   const onSearch = () => {
+    if (!searchValue) {
+      Message.error('请输入 npm 依赖名称');
+      return;
+    }
     dispatcher.searchNpmDependencies(searchValue);
   };
 
@@ -53,7 +58,7 @@ function InstallNpmDependency() {
                 >
                   {isInstallGlobalDep ? <Icon type="loading" /> : <CustomIcon type="xiazai" />}
                 </Button>
-            }
+              }
               align="t"
             >
               安装
@@ -63,6 +68,17 @@ function InstallNpmDependency() {
     );
   };
 
+  useEffect(() => {
+    if (effectsState.searchNpmDependencies.error) {
+      Message.error(effectsState.searchNpmDependencies.error.message);
+    }
+  }, [effectsState.searchNpmDependencies.error]);
+
+  useEffect(() => {
+    if (effectsState.installGlobalNpmDependency.error) {
+      Message.error(effectsState.installGlobalNpmDependency.error.message);
+    }
+  }, [effectsState.installGlobalNpmDependency.error]);
   return (
     <div className={styles.container}>
       <Input

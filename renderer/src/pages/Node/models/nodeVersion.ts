@@ -2,7 +2,7 @@ import { IPackageInfo, INodeVersions } from '@/interfaces';
 import { ipcRenderer } from 'electron';
 
 const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };
-const DEFAULT_NODE_INSTALL_FORM_VALUE = { reinstallGlobalDeps: true };
+const DEFAULT_NODE_INSTALL_FORM_VALUE = {};
 const DEFAULT_NODE_INSTALL_STATUS = {
   installNode: 'wait',
   reinstallPackages: 'wait',
