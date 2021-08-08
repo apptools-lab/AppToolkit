@@ -76,7 +76,7 @@ async function installPackages({
           packagePath = await downloadFile(downloadUrl, TOOLKIT_PACKAGES_DIR, packageFileName, installChannel);
         }
       } else if (shellName) {
-        packagePath = path.resolve(__dirname, '../data/shells', shellName);
+        packagePath = path.resolve(process.resourcesPath, 'data/shells', shellName);
       }
 
       if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {

@@ -20,7 +20,7 @@ class NvmManager implements INodeManager {
 
   installNode = (version: string) => {
     const formattedVersion = formatNodeVersion(version);
-    const shFilePath = path.resolve(__dirname, '../data/shells', 'nvm-install-node.sh');
+    const shFilePath = path.resolve(process.resourcesPath, 'data/shells', 'nvm-install-node.sh');
 
     return new Promise((resolve, reject) => {
       const args: string[] = [shFilePath, formattedVersion];

@@ -16,8 +16,8 @@
     "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
-    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build",
-    "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app && npm run upload:app",
+    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --x64",
+    "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app",
     "upload:app": "ts-node ./scripts/uploadApp",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",
@@ -33,13 +33,16 @@
       "dist/**/*",
       "package.json"
     ],
+    "extraResources": {
+      "from": "./main/data",
+      "to": "data"
+    },
     "publish": [
       {
         "provider": "generic",
         "url": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/${os}"
       }
     ],
-    "asar": false,
     "afterSign": "scripts/notarize.js",
     "directories": {
       "buildResources": "resource",

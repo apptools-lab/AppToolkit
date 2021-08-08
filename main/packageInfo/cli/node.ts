@@ -40,7 +40,7 @@ async function getNvmInfo(): Promise<INodeVersionManagerInfo> {
   const nvmInfo: INodeVersionManagerInfo = {
     managerVersionStatus: 'uninstalled',
   };
-  const shFilePath = path.resolve(__dirname, '../../data/shells', 'is-nvm-installed.sh');
+  const shFilePath = path.resolve(process.resourcesPath, 'data/shells', 'is-nvm-installed.sh');
   try {
     const { stdout } = await execa(getShellName(), [shFilePath]);
     if (stdout === 'nvm') {
