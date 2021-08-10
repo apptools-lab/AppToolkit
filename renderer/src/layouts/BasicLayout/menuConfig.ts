@@ -16,6 +16,11 @@ const asideMenuConfig = [
     path: '/git',
     icon: 'git',
   },
+  {
+    name: '桌面客户端',
+    path: '/application',
+    icon: 'application',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

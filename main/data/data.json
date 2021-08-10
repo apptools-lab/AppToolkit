@@ -83,7 +83,8 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platforms": ["darwin"]
+      "platforms": ["darwin"],
+      "category": "browser"
     },
     {
       "title": "Visual Studio Code",
@@ -96,7 +97,8 @@
       "recommended": true,
       "isInternal": false,
       "type": "dmg",
-      "platforms": ["darwin"]
+      "platforms": ["darwin"],
+      "category": "IDE"
     }
   ],
   "npmPackages": [
