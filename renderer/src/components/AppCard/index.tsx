@@ -1,6 +1,4 @@
 import classnames from 'classnames';
-import { Icon, Balloon } from '@alifd/next';
-import { VersionStatus } from '@/interfaces';
 import styles from './index.module.scss';
 
 interface IAppCard {
@@ -9,9 +7,8 @@ interface IAppCard {
   icon: string;
   link: string;
   recommended?: boolean;
-  versionStatus: keyof typeof VersionStatus;
   showSplitLine?: boolean;
-  warningMessage?: string;
+  operation?: React.ReactNode | null;
 }
 
 const AppCard: React.FC<IAppCard> = ({
@@ -20,9 +17,8 @@ const AppCard: React.FC<IAppCard> = ({
   icon,
   link,
   recommended,
-  versionStatus,
+  operation = null,
   showSplitLine = true,
-  warningMessage = '',
 }) => {
   return (
     <div className={styles.card}>
@@ -39,15 +35,8 @@ const AppCard: React.FC<IAppCard> = ({
           }
         </div>
         <div className={styles.desc}>{description}</div>
-        <div
-          className={classnames(styles.status, { [styles.availableStatus]: versionStatus !== 'installed' })}
-        >
-          {VersionStatus[versionStatus]}
-          {warningMessage && (
-            <Balloon trigger={<Icon type="warning" />} closable={false}>
-              {warningMessage}
-            </Balloon>
-          )}
+        <div className={styles.operation}>
+          {operation}
         </div>
       </div>
     </div>

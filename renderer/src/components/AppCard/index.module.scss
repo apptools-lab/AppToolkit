@@ -48,24 +48,13 @@
       white-space: nowrap;
     }
 
-    .status {
+    .operation {
       margin-top: 20px;
-      margin-bottom: 22px;
-      font-size: 14px;
-      color: rgb(128, 128, 128);
-
-      i {
-        margin-left: 10px;
-        color: #ffa801;
-      }
-    }
-
-    .availableStatus {
-      color: $color-brand1-6;
     }
   }
 
   .splitLine {
+    padding-bottom: 22px;
     border-bottom: 1px solid #e6e6e6;
   }
 }

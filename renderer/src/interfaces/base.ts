@@ -1,4 +1,4 @@
-export interface IPackageInfo {
+export interface PackageInfo {
   name: string;
   title: string;
   description: string;
@@ -42,7 +42,7 @@ export interface INodeVersions {
   majors: Array<{ version: string; title: string }>;
 }
 
-export interface INPMRegistry {
+export interface NPMRegistry {
   name: string;
   registry: string;
   isInternal: boolean;

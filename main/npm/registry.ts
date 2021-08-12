@@ -1,6 +1,6 @@
 import store, { packagesDataKey } from '../store';
 import { record } from '../recorder';
-import { INPMRegistry } from '../types';
+import { NPMRegistry } from '../types';
 import { NPM_REGISTRY } from '../constants';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
 import { getNpmInfo, setNpmInfo } from './npmInfo';
@@ -25,7 +25,7 @@ export async function setCurrentRegistry(registry: string) {
 export async function getAllRegistries() {
   const isAliInternal = await checkIsAliInternal();
   const data = store.get(packagesDataKey);
-  const { npmRegistries: originNpmRegistries = [] }: { npmRegistries: INPMRegistry[] } = data;
+  const { npmRegistries: originNpmRegistries = [] }: { npmRegistries: NPMRegistry[] } = data;
   const npmRegistries = originNpmRegistries.filter((npmRegistry) => {
     return isAliInternal ? true : !npmRegistry.isInternal;
   });

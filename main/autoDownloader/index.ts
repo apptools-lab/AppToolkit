@@ -1,4 +1,4 @@
-import { IBasePackageInfo, Platform } from '../types';
+import { PackageInfo, Platform } from '../types';
 import store, { packagesDataKey } from '../store';
 import getPackageFileName from '../utils/getPackageFileName';
 import AutoDownloader from './AutoDownloader';
@@ -11,7 +11,7 @@ export async function autoDownloadPackages() {
   const packageDatas = [];
 
   packageTypes.forEach((packageType: string) => {
-    const packagesInfo: IBasePackageInfo[] = data[packageType] || [];
+    const packagesInfo: PackageInfo[] = data[packageType] || [];
 
     for (const packageInfo of packagesInfo) {
       const { downloadUrl, platforms } = packageInfo;

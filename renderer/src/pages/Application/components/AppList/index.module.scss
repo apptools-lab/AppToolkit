@@ -1,0 +1,23 @@
+.appList {
+  width: 100%;
+
+  .appInfo {
+    margin: 0 38px;
+    border-bottom: 1px solid #e6e6e6;
+
+    .title {
+      font-size: 24px;
+      padding: 20px 0;
+      font-weight: bold;
+    }
+
+    .btn {
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #f2f2f7;
+      width: 64px;
+      height: 24px;
+      border-radius: 10px;
+    }
+  }
+}

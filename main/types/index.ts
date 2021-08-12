@@ -1,4 +1,4 @@
-export interface IBasePackageInfo {
+export interface PackageInfo {
   title: string;
   name: string;
   description: string;
@@ -34,7 +34,7 @@ export interface INodeVersionManagerInfo {
   managerVersionStatus: VersionStatus;
 }
 
-export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
+export interface IPackageInfo extends PackageInfo, ILocalPackageInfo { }
 
 export interface INodeManager {
   installNode: Function;
@@ -56,17 +56,23 @@ export interface INodeVersions {
   majors: Array<{ version: string; title: string }>;
 }
 
-export interface INPMRegistry {
+export interface NPMRegistry {
   name: string;
   registry: string;
   recommended?: boolean;
   isInternal: boolean;
 }
 
-export interface IPackagesData {
-  bases: IBasePackageInfo[];
+export interface AppInfo {
+  category: string;
+  title: string;
+  packages: PackageInfo[];
+}
 
-  apps: IBasePackageInfo[];
+export interface PackageData {
+  bases: PackageInfo[];
 
-  npmRegistries: INPMRegistry[];
+  apps: AppInfo[];
+
+  npmRegistries: NPMRegistry[];
 }

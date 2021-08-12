@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import downloadFile from '../utils/downloadFile';
-import { IInstallResult, IPackageInfo, IPackagesData } from '../types';
+import { IInstallResult, IPackageInfo, PackageData } from '../types';
 import log from '../utils/log';
 import writeLog from '../utils/writeLog';
 import { INSTALL_COMMAND_PACKAGES, TOOLKIT_PACKAGES_DIR } from '../constants';
@@ -33,7 +33,7 @@ function processListener({
   processChannel,
 }: {
   packagesList: IPackageInfo[];
-  packagesData: IPackagesData;
+  packagesData: PackageData;
   installChannel: string;
   processChannel: string;
 }) {
@@ -47,7 +47,7 @@ async function installPackages({
   processChannel,
 }: {
   packagesList: IPackageInfo[];
-  packagesData: IPackagesData;
+  packagesData: PackageData;
   installChannel: string;
   processChannel: string;
 }) {
@@ -121,7 +121,7 @@ async function install(
     channel: string;
     packagePath: string;
     packageInfo: IPackageInfo;
-    packagesData: IPackagesData;
+    packagesData: PackageData;
   },
 ) {
   let processorKey;

@@ -53,4 +53,18 @@
       }
     }
   }
+
+  .status {
+    font-size: 14px;
+    color: rgb(128, 128, 128);
+
+    i {
+      margin-left: 10px;
+      color: #ffa801;
+    }
+  }
+
+  .uninstalledStatus {
+    color: $color-brand1-6;
+  }
 }
