@@ -38,6 +38,8 @@ export default () => {
             module: 'base',
             action: 'installPackages',
           });
+        } else if (data.status === 'error') {
+          killChannelChildProcess(childProcessMap, installChannel);
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];

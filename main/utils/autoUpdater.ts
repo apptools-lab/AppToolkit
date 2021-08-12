@@ -1,5 +1,4 @@
 import { NsisUpdater, MacUpdater, AppImageUpdater } from 'electron-updater';
-import * as isDev from 'electron-is-dev';
 import log from './log';
 
 let AutoUpdater;
@@ -36,7 +35,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 export function checkForUpdates() {
-  if (isDev) {
+  if (process.env.NODE_ENV === 'development') {
     return;
   }
   autoUpdater.checkForUpdates();

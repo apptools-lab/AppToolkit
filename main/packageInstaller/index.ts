@@ -11,6 +11,7 @@ import DmgInstaller from './DmgInstaller';
 import CliInstaller from './CliInstaller';
 import ZipInstaller from './ZipInstaller';
 import IDEExtensionInstaller from './IDEExtensionInstaller';
+import getSourcePath from '../utils/getSourcePath';
 
 // avoid error: 'Invalid package /Applications/xxx.app/Contents/Resources/app.asar'
 process.noAsar = true;
@@ -76,7 +77,7 @@ async function installPackages({
           packagePath = await downloadFile(downloadUrl, TOOLKIT_PACKAGES_DIR, packageFileName, installChannel);
         }
       } else if (shellName) {
-        packagePath = path.resolve(process.resourcesPath, 'data/shells', shellName);
+        packagePath = getSourcePath(path.join(__dirname, '..'), 'data/shells', shellName);
       }
 
       if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {

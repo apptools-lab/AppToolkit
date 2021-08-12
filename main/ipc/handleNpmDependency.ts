@@ -56,11 +56,15 @@ export default () => {
 
     childProcess.on('message', ({ data }: any) => {
       if (data.status === 'done') {
+        killChannelChildProcess(childProcessMap, channel);
         record({
           module: 'node',
           action: 'createCustomGlobalDependenciesDir',
         });
+      } else if (data.status === 'error') {
+        killChannelChildProcess(childProcessMap, channel);
       }
+
       sendMainWindow(channel, data);
     });
   });

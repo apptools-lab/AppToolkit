@@ -4,6 +4,7 @@ import { INodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import getShellName from '../utils/getShellName';
+import getSourcePath from '../utils/getSourcePath';
 
 class NvmManager implements INodeManager {
   channel: string;
@@ -20,7 +21,7 @@ class NvmManager implements INodeManager {
 
   installNode = (version: string) => {
     const formattedVersion = formatNodeVersion(version);
-    const shFilePath = path.resolve(process.resourcesPath, 'data/shells', 'nvm-install-node.sh');
+    const shFilePath = getSourcePath(path.join(__dirname, '../'), 'data/shells', 'nvm-install-node.sh');
 
     return new Promise((resolve, reject) => {
       const args: string[] = [shFilePath, formattedVersion];
