@@ -69,7 +69,7 @@ export interface AppInfo {
   packages: PackageInfo[];
 }
 
-export interface PackageData {
+export interface PackagesData {
   bases: PackageInfo[];
 
   apps: AppInfo[];

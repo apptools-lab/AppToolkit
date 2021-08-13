@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as execa from 'execa';
 import checkCommandInstalled from '../utils/checkCommandInstalled';
-import { IPackageInfo, IPackageInstaller, PackageData, Platform } from '../types';
+import { IPackageInfo, IPackageInstaller, PackagesData, Platform } from '../types';
 import { INSTALL_COMMAND_PACKAGES, VSCODE_COMMAND_NAME, VSCODE_NAME } from '../constants';
 import writeLog from '../utils/writeLog';
 import getLocalDmgInfo from '../packageInfo/dmg';
@@ -10,7 +10,7 @@ import installCommandToPath from '../utils/installCommandToPath';
 class IDEExtensionInstaller implements IPackageInstaller {
   channel: string;
 
-  packagesData: PackageData;
+  packagesData: PackagesData;
 
   IDETypeProcessor: { [k: string]: Function };
 

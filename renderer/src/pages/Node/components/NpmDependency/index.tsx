@@ -2,9 +2,9 @@ import { Table, Button, Message, Dropdown } from '@alifd/next';
 import { useEffect } from 'react';
 import { INpmDependency } from '@/interfaces/node';
 import store from '../../store';
-import InstallNpmDependency from '../InstallNpmDependency';
+import NpmDependencyInstaller from '../NpmDependencyInstaller';
 import OperationTableCell from '../OperationTableCell';
-import LatestVersionTableCell from '../LatestVersionTabelCell';
+import LatestVersionTableCell from '../LatestVersionTableCell';
 import styles from './index.module.scss';
 
 const defaultTableColumnProps: any = {
@@ -41,7 +41,7 @@ function NpmDependency() {
       <div className={styles.header}>
         <div className={styles.title}>全局 npm 依赖管理</div>
         <Dropdown trigger={<Button type="primary">添加依赖</Button>} triggerType={['click']}>
-          <InstallNpmDependency />
+          <NpmDependencyInstaller />
         </Dropdown>
       </div>
       <Table loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>

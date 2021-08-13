@@ -36,15 +36,3 @@ export interface IInstallResultData {
   duration: number;
   errMsg?: string;
 }
-
-export interface INodeVersions {
-  versions: string[];
-  majors: Array<{ version: string; title: string }>;
-}
-
-export interface NPMRegistry {
-  name: string;
-  registry: string;
-  isInternal: boolean;
-  recommended?: boolean;
-}

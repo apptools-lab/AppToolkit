@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import downloadFile from '../utils/downloadFile';
-import { IInstallResult, IPackageInfo, PackageData } from '../types';
+import { IInstallResult, IPackageInfo, PackagesData } from '../types';
 import log from '../utils/log';
 import writeLog from '../utils/writeLog';
 import { INSTALL_COMMAND_PACKAGES, TOOLKIT_PACKAGES_DIR } from '../constants';
@@ -31,13 +31,21 @@ function processListener({
   packagesData,
   installChannel,
   processChannel,
+  uninstallChannel,
+  type = 'install',
 }: {
   packagesList: IPackageInfo[];
-  packagesData: PackageData;
-  installChannel: string;
+  packagesData: PackagesData;
   processChannel: string;
+  installChannel?: string;
+  uninstallChannel?: string;
+  type: 'install' | 'uninstall';
 }) {
-  installPackages({ packagesList, packagesData, installChannel, processChannel });
+  if (type === 'install') {
+    installPackages({ packagesList, packagesData, installChannel, processChannel });
+  } else if (type === 'uninstall') {
+    uninstallPackages({ packagesList, packagesData, uninstallChannel, processChannel });
+  }
 }
 
 async function installPackages({
@@ -47,7 +55,7 @@ async function installPackages({
   processChannel,
 }: {
   packagesList: IPackageInfo[];
-  packagesData: PackageData;
+  packagesData: PackagesData;
   installChannel: string;
   processChannel: string;
 }) {
@@ -60,7 +68,7 @@ async function installPackages({
     let status;
     let errMsg;
     try {
-      process.send({ channel: processChannel, data: { currentIndex: i, status: 'process' } });
+      process.send({ channel: processChannel, data: { currentIndex: i, name, status: 'process' } });
 
       let packagePath: string;
       if (downloadUrl) {
@@ -82,6 +90,9 @@ async function installPackages({
       if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {
         throw new Error('No package was found.');
       }
+
+      process.send({ channel: processChannel, data: { currentIndex: i, name, status: 'downloaded' } });
+
       // install package
       const { localPath } = await install({ packagePath, packageInfo, channel: installChannel, packagesData });
       // install package command
@@ -89,12 +100,12 @@ async function installPackages({
       await installPkgCommandToPath(name, localPath);
 
       status = 'finish';
-      process.send({ channel: processChannel, data: { currentIndex: i, status } });
+      process.send({ channel: processChannel, data: { currentIndex: i, status, name } });
     } catch (error) {
       errMsg = error instanceof Error ? error.message : error;
       log.error(error);
       status = 'error';
-      process.send({ channel: processChannel, data: { currentIndex: i, status: 'error', errMsg } });
+      process.send({ channel: processChannel, data: { currentIndex: i, status, errMsg, name } });
     } finally {
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -121,7 +132,7 @@ async function install(
     channel: string;
     packagePath: string;
     packageInfo: IPackageInfo;
-    packagesData: PackageData;
+    packagesData: PackagesData;
   },
 ) {
   let processorKey;
@@ -147,4 +158,38 @@ async function installPkgCommandToPath(name: string, localPath?: string) {
     const source = path.join(localPath, commandRelativePath);
     await installCommandToPath(source, command);
   }
+}
+
+async function uninstallPackages(
+  {
+    packagesList,
+    packagesData,
+    uninstallChannel,
+    processChannel,
+  }: {
+    packagesList: IPackageInfo[];
+    packagesData: PackagesData;
+    processChannel: string;
+    uninstallChannel: string;
+  },
+) {
+  for (const packageInfo of packagesList) {
+    const { localPath, type, name } = packageInfo;
+    if (localPath && fse.pathExistsSync(localPath)) {
+      const Installer = packageProcessor[type];
+      if (Installer) {
+        process.send({ channel: processChannel, data: { name, status: 'process' } });
+
+        const installer = new Installer(uninstallChannel, packagesData);
+        try {
+          await installer.uninstall(packageInfo);
+          process.send({ channel: processChannel, data: { name, status: 'finish' } });
+        } catch (error) {
+          process.send({ channel: processChannel, data: { name, status: 'error', errMsg: error.message } });
+        }
+      }
+    }
+  }
+
+  process.send({ channel: processChannel, data: { status: 'done' } });
 }

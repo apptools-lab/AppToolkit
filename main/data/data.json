@@ -87,8 +87,7 @@
           "recommended": true,
           "isInternal": false,
           "type": "dmg",
-          "platforms": ["darwin"],
-          "category": "browser"
+          "platforms": ["darwin"]
         }
       ]
     },
@@ -107,8 +106,7 @@
           "recommended": true,
           "isInternal": false,
           "type": "dmg",
-          "platforms": ["darwin"],
-          "category": "IDE"
+          "platforms": ["darwin"]
         }
       ]
     },
@@ -117,8 +115,8 @@
       "title": "调试",
       "packages": [
         {
-          "title": "iHost",
-          "name": "iHost",
+          "title": "iHosts",
+          "name": "iHosts",
           "description": "Hosts 环境管理工具",
           "isInternal": true,
           "link": "http://ihosts.alibaba-inc.com/",
@@ -127,8 +125,7 @@
           "version": null,
           "recommended": true,
           "type": "dmg",
-          "platforms": ["darwin"],
-          "category": "debug"
+          "platforms": ["darwin"]
         },
         {
           "title": "Postman",
@@ -136,13 +133,12 @@
           "description": "简单易用的接口调试工具",
           "isInternal": false,
           "link": "https://www.postman.com/",
-          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01N4iRSQ1a5N0ApHdb6_!!6000000003278-0-tps-1708-1044.jpg",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01nvbd3u1oZy5Ioi53h_!!6000000005240-2-tps-512-512.png",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Postman-osx-8.10.0.zip",
           "version": null,
           "recommended": true,
           "type": "dmg",
-          "platforms": ["darwin"],
-          "category": "debug"
+          "platforms": ["darwin"]
         },
         {
           "title": "Charles",
@@ -150,13 +146,12 @@
           "description": "HTTP 代理工具",
           "isInternal": false,
           "link": "www.charlesproxy.com",
-          "icon": "https://gw.alicdn.com/tfs/TB1dj._PFXXXXXGaXXXXXXXXXXX-256-256.png",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01CqzQcF1u5B9VgUgN3_!!6000000005985-55-tps-512-512.svg",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/charles-proxy-4.6.2.dmg",
           "version": null,
           "recommended": true,
           "type": "dmg",
-          "platforms": ["darwin"],
-          "category": "debug"
+          "platforms": ["darwin"]
         }
       ]
     }

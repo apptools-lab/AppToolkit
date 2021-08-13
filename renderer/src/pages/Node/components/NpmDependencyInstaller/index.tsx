@@ -13,7 +13,7 @@ const defaultTableColumnProps: any = {
   width: 80,
 };
 
-function InstallNpmDependency() {
+function NpmDependencyInstaller() {
   const [state, dispatcher] = store.useModel('npmDependency');
   const { searchValue, queryNpmDependencies, curInstallDepIndex } = state;
   const effectsState = store.useModelEffectsState('npmDependency');
@@ -107,4 +107,4 @@ function InstallNpmDependency() {
   );
 }
 
-export default InstallNpmDependency;
+export default NpmDependencyInstaller;

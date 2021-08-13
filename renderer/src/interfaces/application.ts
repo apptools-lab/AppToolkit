@@ -5,3 +5,11 @@ export interface AppInfo {
   title: string;
   packages: PackageInfo[];
 }
+
+export interface ProcessStatus {
+  status: string;
+  name: string;
+  currentIndex?: number;
+  result?: any;
+  errMsg?: string;
+}

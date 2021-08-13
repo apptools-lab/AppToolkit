@@ -1,8 +1,10 @@
+import { lazy } from 'ice';
 import BasicLayout from '@/layouts/BasicLayout';
-import Dashboard from '@/pages/Dashboard';
-import Node from '@/pages/Node';
-import Git from '@/pages/Git';
-import Application from '@/pages/Application';
+
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const Node = lazy(() => import('@/pages/Node'));
+const Git = lazy(() => import('@/pages/Git'));
+const Application = lazy(() => import('@/pages/Application'));
 
 const routerConfig = [
   {

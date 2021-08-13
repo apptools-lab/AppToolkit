@@ -93,6 +93,13 @@ class DmgInstaller implements IPackageInstaller {
       );
     });
   };
+
+  async uninstall(packageInfo: IPackageInfo) {
+    const { localPath } = packageInfo;
+    if (localPath && await fse.pathExists(localPath)) {
+      await fse.remove(localPath);
+    }
+  }
 }
 
 export default DmgInstaller;
