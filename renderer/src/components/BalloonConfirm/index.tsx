@@ -29,8 +29,8 @@ const BallonConfirm: FC<IBallonConfirm> = ({
 
   return (
     <Balloon closable={false} trigger={<div onClick={onClick}>{children}</div>} style={style} visible={disable ? false : visible}>
-      <div><Icon type="prompt" style={{ color: '#f9ca24' }} />{title}</div>
-      <div style={{ marginTop: 5 }}>
+      <div><Icon type="prompt" style={{ color: '#f9ca24', marginRight: 5 }} />{title}</div>
+      <div style={{ marginTop: 5, display: 'flex', justifyContent: 'flex-end' }}>
         <Button
           size="small"
           type="primary"
