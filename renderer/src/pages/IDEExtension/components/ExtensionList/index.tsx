@@ -136,6 +136,12 @@ const ExtensionList: FC<{}> = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (effectsState.getIDEExtensionsInfo.error) {
+      Message.error(effectsState.getIDEExtensionsInfo.error.message);
+    }
+  }, [effectsState.getIDEExtensionsInfo.error]);
+
   return (
     <Loading className={styles.extensionsList} visible={effectsState.getIDEExtensionsInfo.isLoading}>
       {
