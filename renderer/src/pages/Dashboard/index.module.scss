@@ -1,70 +1,67 @@
 .dashboard {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 176px);
+  margin-top: 40px;
+  padding: 0 38px;
 
-  main {
-    margin-top: 40px;
-    padding: 0 38px;
+  .install {
+    :global {
+      .next-step-vertical {
+        height: 100%;
+      }
 
-    .install {
-      :global {
-        .next-step-vertical {
-          height: 100%;
+      .next-step-vertical > .next-step-item > div {
+        &:nth-child(2) {
+          width: 120px !important;
         }
+      }
+    }
 
-        .next-step-vertical > .next-step-item > div {
-          &:nth-child(2) {
-            width: 120px !important;
+    .installStep {
+      margin-top: 40px;
+
+      .installStepItem {
+        :global {
+          .next-step-item-node-placeholder {
+            width: 18px;
+            height: 18px;
+          }
+          .next-icon:before {
+            width: 18px;
+            font-size: 18px;
           }
         }
       }
 
-      .installStep {
-        margin-top: 40px;
-
-        .installStepItem {
-          :global {
-            .next-step-item-node-placeholder {
-              width: 18px;
-              height: 18px;
-            }
-            .next-icon:before {
-              width: 18px;
-              font-size: 18px;
-            }
+      .installSuccess {
+        :global {
+          .next-step-item-node {
+            color: rgb(103, 194, 58);
           }
         }
+      }
 
-        .installSuccess {
-          :global {
-            .next-step-item-node {
-              color: rgb(103, 194, 58);
-            }
-          }
-        }
-
-        .installError {
-          :global {
-            .next-step-item-node {
-              color: red;
-            }
+      .installError {
+        :global {
+          .next-step-item-node {
+            color: red;
           }
         }
       }
     }
   }
+}
 
-  .status {
-    font-size: 14px;
-    color: rgb(128, 128, 128);
+.status {
+  font-size: 14px;
+  color: rgb(128, 128, 128);
 
-    i {
-      margin-left: 10px;
-      color: #ffa801;
-    }
+  i {
+    margin-left: 10px;
+    color: #ffa801;
   }
+}
 
-  .uninstalledStatus {
-    color: $color-brand1-6;
-  }
+.uninstalledStatus {
+  color: $color-brand1-6;
 }

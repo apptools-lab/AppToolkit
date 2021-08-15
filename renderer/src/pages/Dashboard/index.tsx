@@ -164,12 +164,12 @@ const Dashboard = () => {
   );
 
   return (
-    <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
+    <>
       <PageHeader
         title="前端开发必备"
         button={uninstalledPackagesList.length ? installButton : null}
       />
-      <main>
+      <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
         {isInstalling ? (
           <div className={styles.install}>
             <Row wrap>
@@ -224,7 +224,7 @@ const Dashboard = () => {
             ))}
           </Row>
         )}
-      </main>
+      </Loading>
       {visible && (
         <InstallConfirmDialog
           packages={uninstalledPackagesList}
@@ -232,7 +232,7 @@ const Dashboard = () => {
           onOk={onDialogConfirm}
         />
       )}
-    </Loading>
+    </>
   );
 };
 
