@@ -174,19 +174,17 @@ async function uninstallPackages(
   },
 ) {
   for (const packageInfo of packagesList) {
-    const { localPath, type, name } = packageInfo;
-    if (localPath && fse.pathExistsSync(localPath)) {
-      const PackageManager = packageProcessor[type];
-      if (PackageManager) {
-        process.send({ channel: processChannel, data: { name, status: 'process' } });
+    const { type, name } = packageInfo;
+    const PackageManager = packageProcessor[type];
+    if (PackageManager) {
+      process.send({ channel: processChannel, data: { name, status: 'process' } });
 
-        const packageManager = new PackageManager(uninstallChannel, packagesData);
-        try {
-          await packageManager.uninstall(packageInfo);
-          process.send({ channel: processChannel, data: { name, status: 'finish' } });
-        } catch (error) {
-          process.send({ channel: processChannel, data: { name, status: 'error', errMsg: error.message } });
-        }
+      const packageManager = new PackageManager(uninstallChannel, packagesData);
+      try {
+        await packageManager.uninstall(packageInfo);
+        process.send({ channel: processChannel, data: { name, status: 'finish' } });
+      } catch (error) {
+        process.send({ channel: processChannel, data: { name, status: 'error', errMsg: error.message } });
       }
     }
   }

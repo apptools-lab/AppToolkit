@@ -1,7 +1,7 @@
 import { PackageInfo } from './base';
 
-export interface AppInfo {
+export interface IDEExtensionsInfo {
   category: string;
   title: string;
-  packages: PackageInfo[];
+  extensions: PackageInfo[];
 }

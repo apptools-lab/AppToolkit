@@ -8,6 +8,7 @@ import handleNpmRegistry from './handleNpmRegistry';
 import handleNpmDependency from './handleNpmDependency';
 import checkIsAliInternal from './checkIsAliInternal';
 import handleApp from './handleApp';
+import handleIDEExtension from './handleIDEExtension';
 
 export default () => {
   getBasePackagesInfo();
@@ -29,4 +30,6 @@ export default () => {
   checkIsAliInternal();
 
   handleApp();
+
+  handleIDEExtension();
 };

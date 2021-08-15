@@ -56,7 +56,7 @@
       "platforms": ["darwin"]
     },
     {
-      "title": "AppWorks Pack",
+      "title": "AppWorks",
       "name": "iceworks-team.iceworks",
       "description": "基于 VS Code 的多端研发套件",
       "link": "https://marketplace.visualstudio.com/items?itemName=iceworks-team.iceworks",
@@ -194,19 +194,42 @@
       "isInternal": false
     }
   ],
-  "IdeExtensions": [
+  "IDEExtensions": [
     {
-      "title": "AppWorks Pack",
-      "name": "iceworks-team.iceworks",
-      "description": "基于 VS Code 的多端研发套件",
-      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01PkaZpW1K3xuisg58t_!!6000000001109-2-tps-512-512.png",
-      "version": "0.19.0",
-      "recommended": true,
-      "isInternal": false,
-      "type": "IDEExtension",
-      "options": {
-        "IDEType": "VSCode"
-      }
+      "category": "VS Code",
+      "title": "VS Code",
+      "extensions": [
+        {
+          "title": "AppWorks",
+          "name": "iceworks-team.iceworks",
+          "description": "基于 VS Code 的多端研发套件",
+          "link": "https://marketplace.visualstudio.com/items?itemName=iceworks-team.iceworks",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01fpoIOY26SKXzOtTrR_!!6000000007660-2-tps-500-500.png",
+          "version": "1.0.0",
+          "recommended": true,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "imgcook",
+          "name": "imgcook.imgcook",
+          "description": "将设计转换为代码的智能工具。",
+          "link": "https://marketplace.visualstudio.com/items?itemName=imgcook.imgcook",
+          "icon": "//img.alicdn.com/tfs/TB1bbwkzY2pK1RjSZFsXXaNlXXa-128-128.png",
+          "version": "1.0.0",
+          "recommended": false,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        }
+      ]
     }
   ]
 }

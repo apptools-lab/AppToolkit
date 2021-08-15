@@ -1,47 +1,49 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { Grid, Button, Message, Icon } from '@alifd/next';
+import { Grid, Button, Message, Icon, Loading } from '@alifd/next';
 import AppCard from '@/components/AppCard';
 import store from '../../store';
 import styles from './index.module.scss';
 import { PackageInfo, ProcessStatus } from '@/interfaces/base';
-import { AppInfo } from '@/interfaces/application';
+import { IDEExtensionsInfo } from '@/interfaces/IDEExtension';
 import BallonConfirm from '@/components/BalloonConfirm';
 
 const { Row, Col } = Grid;
 
-const AppList: FC<{}> = () => {
-  const [state, dispatcher] = store.useModel('application');
-  const { appsInfo, installStatuses, uninstallStatuses } = state;
+const ExtensionList: FC<{}> = () => {
+  const [state, dispatcher] = store.useModel('IDEExtension');
+  const effectsState = store.useModelEffectsState('IDEExtension');
 
-  const INSTALL_APP_CHANNEL = 'install-app';
-  const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
+  const { extensionsInfo, installStatuses, uninstallStatuses } = state;
 
-  const UNINSTALL_APP_CHANNEL = 'uninstall-app';
-  const UNINSTALL_APP_PROCESS_STATUS_CHANNEL = 'uninstall-app-process-status';
+  const INSTALL_EXTENSION_CHANNEL = 'install-IDE-extension';
+  const INSTALL_EXTENSION_STATUS_CHANNEL = 'install-IDE-extension-process-status';
+
+  const UNINSTALL_EXTENSION_CHANNEL = 'uninstall-IDE-extension';
+  const UNINSTALL_EXTENSION_PROCESS_STATUS_CHANNEL = 'uninstall-IDE-extension-process-status';
 
   useEffect(() => {
-    dispatcher.getAppsInfo();
+    dispatcher.getIDEExtensionsInfo();
   }, []);
 
-  const installApp = (packageInfo: PackageInfo) => {
+  const installIDEExtension = (packageInfo: PackageInfo) => {
     ipcRenderer
-      .invoke('install-app', {
+      .invoke('install-IDE-extension', {
         packageInfo,
-        installChannel: INSTALL_APP_CHANNEL,
-        processChannel: INSTALL_APP_PROCESS_STATUS_CHANNEL,
+        installChannel: INSTALL_EXTENSION_CHANNEL,
+        processChannel: INSTALL_EXTENSION_STATUS_CHANNEL,
       })
       .catch((error) => {
         Message.error(error.message);
       });
   };
 
-  const uninstallApp = async (packageInfo) => {
+  const uninstallIDEExtension = async (packageInfo) => {
     ipcRenderer
-      .invoke('uninstall-app', {
+      .invoke('uninstall-IDE-extension', {
         packageInfo,
-        uninstallChannel: UNINSTALL_APP_CHANNEL,
-        processChannel: UNINSTALL_APP_PROCESS_STATUS_CHANNEL,
+        uninstallChannel: UNINSTALL_EXTENSION_CHANNEL,
+        processChannel: UNINSTALL_EXTENSION_PROCESS_STATUS_CHANNEL,
       })
       .catch((error) => {
         Message.error(error.message);
@@ -65,13 +67,13 @@ const AppList: FC<{}> = () => {
     return (
       <>
         {versionStatus === 'uninstalled' ? (
-          <Button text type="primary" className={styles.btn} onClick={() => installApp(packageInfo)}>
+          <Button text type="primary" className={styles.btn} onClick={() => installIDEExtension(packageInfo)}>
             {!installStatus ? '安装' : <Icon type="loading" />}
           </Button>
         ) : (
           <BallonConfirm
-            onConfirm={async () => await uninstallApp(packageInfo)}
-            title={`确定卸载 ${packageInfo.name}？`}
+            onConfirm={async () => await uninstallIDEExtension(packageInfo)}
+            title={`确定卸载 ${packageInfo.title}？`}
           >
             <Button text type="primary" className={styles.btn}>
               {!uninstallStatus ? '卸载' : <Icon type="loading" />}
@@ -87,7 +89,7 @@ const AppList: FC<{}> = () => {
       const { status, errMsg } = installStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeInstallStatus(installStatus);
-        dispatcher.getAppsInfo();
+        dispatcher.getIDEExtensionsInfo();
         return;
       }
       if (status === 'error') {
@@ -98,21 +100,22 @@ const AppList: FC<{}> = () => {
       dispatcher.updateInstallStatus(installStatus);
     }
 
-    ipcRenderer.on(INSTALL_APP_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
+    ipcRenderer.on(INSTALL_EXTENSION_STATUS_CHANNEL, handleUpdateInstallStatus);
 
     return () => {
       ipcRenderer.removeListener(
-        INSTALL_APP_PROCESS_STATUS_CHANNEL,
+        INSTALL_EXTENSION_STATUS_CHANNEL,
         handleUpdateInstallStatus,
       );
     };
   }, []);
+
   useEffect(() => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
       const { status, errMsg } = uninstallStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeUninstallStatus(uninstallStatus);
-        dispatcher.getAppsInfo();
+        dispatcher.getIDEExtensionsInfo();
         return;
       }
       if (status === 'error') {
@@ -123,30 +126,31 @@ const AppList: FC<{}> = () => {
       dispatcher.updateUninstallStatus(uninstallStatus);
     }
 
-    ipcRenderer.on(UNINSTALL_APP_PROCESS_STATUS_CHANNEL, handleUpdateUninstallStatus);
+    ipcRenderer.on(UNINSTALL_EXTENSION_PROCESS_STATUS_CHANNEL, handleUpdateUninstallStatus);
 
     return () => {
       ipcRenderer.removeListener(
-        UNINSTALL_APP_PROCESS_STATUS_CHANNEL,
+        UNINSTALL_EXTENSION_PROCESS_STATUS_CHANNEL,
         handleUpdateUninstallStatus,
       );
     };
   }, []);
 
   return (
-    <div className={styles.appList}>
+    <Loading className={styles.extensionsList} visible={effectsState.getIDEExtensionsInfo.isLoading}>
       {
-        appsInfo.map((appInfo: AppInfo) => (
-          <div className={styles.appInfo} key={appInfo.category}>
-            <div className={styles.title}>{appInfo.title}</div>
+        extensionsInfo.map((extensionInfo: IDEExtensionsInfo) => (
+          <div className={styles.extensionInfo} key={extensionInfo.category}>
+            <div className={styles.title}>{extensionInfo.title}</div>
             <Row wrap gutter={8}>
               {
-                appInfo.packages.map((packageInfo: PackageInfo, index: number) => (
+                extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
                   <Col s={12} l={8} key={packageInfo.name}>
                     <AppCard
                       {...packageInfo}
+                      name={packageInfo.title}
                       operation={<Operation packageInfo={packageInfo} />}
-                      showSplitLine={appInfo.packages.length - (appInfo.packages.length % 2 ? 1 : 2) > index}
+                      showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
                     />
                   </Col>
                 ))
@@ -155,8 +159,9 @@ const AppList: FC<{}> = () => {
           </div>
         ))
       }
-    </div>
+    </Loading>
   );
 };
 
-export default AppList;
+export default ExtensionList;
+

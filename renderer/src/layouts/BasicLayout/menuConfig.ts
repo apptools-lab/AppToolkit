@@ -21,6 +21,11 @@ const asideMenuConfig = [
     path: '/application',
     icon: 'application',
   },
+  {
+    name: '编辑器插件',
+    path: '/ide-extension',
+    icon: 'daima',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

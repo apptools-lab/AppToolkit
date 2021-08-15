@@ -70,10 +70,18 @@ export interface AppInfo {
   packages: BasePackageInfo[];
 }
 
+export interface IDEExtension {
+  category: string;
+  title: string;
+  extensions: BasePackageInfo[];
+}
+
 export interface PackagesData {
   bases: BasePackageInfo[];
 
   apps: AppInfo[];
 
   npmRegistries: NPMRegistry[];
+
+  IDEExtensions: IDEExtension[];
 }

@@ -7,6 +7,8 @@ import writeLog from '../utils/writeLog';
 import getLocalDmgInfo from '../packageInfo/dmg';
 import installCommandToPath from '../utils/installCommandToPath';
 
+type ExtensionProcessor = (extensionId: string, operation: 'install' | 'uninstall') => Promise<string | number>;
+
 class IDEExtensionManager implements IPackageManager {
   channel: string;
 
@@ -20,29 +22,39 @@ class IDEExtensionManager implements IPackageManager {
     this.packagesData = packagesData;
 
     this.IDETypeProcessor = {
-      VSCode: this.installVSCodeExtension,
+      VSCode: this.processVSCodeExtension,
     };
   }
 
   install = async (packageInfo: PackageInfo) => {
     const { name, options: { IDEType } } = packageInfo;
     const ret = { name };
-    const installFunc = this.IDETypeProcessor[IDEType];
-    if (installFunc) {
-      await installFunc(name);
+    const processFunc = this.IDETypeProcessor[IDEType] as ExtensionProcessor;
+    if (processFunc) {
+      await processFunc(name, 'install');
     }
     return ret;
   };
 
-  private installVSCodeExtension = async (extensionId: string) => {
+  uninstall = async (packageInfo: PackageInfo) => {
+    const { name, options: { IDEType } } = packageInfo;
+    const processFunc = this.IDETypeProcessor[IDEType] as ExtensionProcessor;
+    if (processFunc) {
+      await processFunc(name, 'uninstall');
+    }
+  };
+
+  private processVSCodeExtension: ExtensionProcessor = async (extensionId, operation) => {
     await this.ensureVSCodeCommandInstalled();
+
+    const VSCODE_COMMAND = `--${operation}-extension`;
 
     return new Promise((resolve, reject) => {
       const listenFunc = (buffer: Buffer) => {
         writeLog(this.channel, buffer.toString(), false);
       };
 
-      const cp = execa(VSCODE_COMMAND_NAME, ['--install-extension', extensionId]);
+      const cp = execa(VSCODE_COMMAND_NAME, [VSCODE_COMMAND, extensionId]);
 
       cp.stdout.on('data', listenFunc);
 

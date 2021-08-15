@@ -1,0 +1,24 @@
+.extensionsList {
+  width: 100%;
+  min-height: calc(100vh - 176px);
+
+  .extensionInfo {
+    margin: 0 38px;
+    border-bottom: 1px solid #e6e6e6;
+
+    .title {
+      font-size: 20px;
+      padding: 20px 0;
+      font-weight: bold;
+    }
+
+    .btn {
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #f2f2f7;
+      width: 64px;
+      height: 24px;
+      border-radius: 10px;
+    }
+  }
+}

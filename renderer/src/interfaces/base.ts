@@ -36,3 +36,11 @@ export interface IInstallResultData {
   duration: number;
   errMsg?: string;
 }
+
+export interface ProcessStatus {
+  status: string;
+  name: string;
+  currentIndex?: number;
+  result?: any;
+  errMsg?: string;
+}

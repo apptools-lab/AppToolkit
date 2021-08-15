@@ -2,14 +2,14 @@ import { PackageInfo, ProcessStatus } from '@/interfaces/base';
 import { ipcRenderer } from 'electron';
 
 interface State {
-  appsInfo: PackageInfo[];
+  extensionsInfo: PackageInfo[];
   installStatuses: ProcessStatus[];
   uninstallStatuses: ProcessStatus[];
 }
 
 export default {
   state: {
-    appsInfo: [],
+    extensionsInfo: [],
     installStatuses: [],
     uninstallStatuses: [],
   },
@@ -44,9 +44,9 @@ export default {
     },
   },
   effects: () => ({
-    async getAppsInfo() {
-      const appsInfo = await ipcRenderer.invoke('get-apps-info');
-      this.setState({ appsInfo });
+    async getIDEExtensionsInfo() {
+      const extensionsInfo = await ipcRenderer.invoke('get-IDE-extensions-info');
+      this.setState({ extensionsInfo });
     },
   }),
 };
