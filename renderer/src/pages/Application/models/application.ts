@@ -32,15 +32,15 @@ export default {
     updateUninstallStatus(prevState: State, uninstallStatus: ProcessStatus) {
       const statusIndex = prevState.uninstallStatuses.findIndex(({ name }) => uninstallStatus.name === name);
       if (statusIndex > -1) {
-        prevState.installStatuses.splice(statusIndex, 1, uninstallStatus);
+        prevState.uninstallStatuses.splice(statusIndex, 1, uninstallStatus);
       } else {
-        prevState.installStatuses.push(uninstallStatus);
+        prevState.uninstallStatuses.push(uninstallStatus);
       }
     },
     removeUninstallStatus(prevState: State, uninstallStatus: ProcessStatus) {
       const statusIndex = prevState.uninstallStatuses.findIndex(({ name }) => uninstallStatus.name === name);
       if (statusIndex > -1) {
-        prevState.installStatuses.splice(statusIndex, 1);
+        prevState.uninstallStatuses.splice(statusIndex, 1);
       }
     },
   },

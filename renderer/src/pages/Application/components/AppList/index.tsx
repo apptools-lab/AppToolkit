@@ -60,7 +60,7 @@ const AppList: FC<{}> = () => {
 
     const uninstallStatusIndex = uninstallStatuses.findIndex(({ name }) => name === packageInfo.name);
     if (uninstallStatusIndex > -1) {
-      uninstallStatus = installStatuses[uninstallStatusIndex].status;
+      uninstallStatus = uninstallStatuses[uninstallStatusIndex].status;
     }
     return (
       <>
@@ -71,8 +71,7 @@ const AppList: FC<{}> = () => {
         ) : (
           <BallonConfirm
             onConfirm={async () => await uninstallApp(packageInfo)}
-            title="确定卸载？"
-            // disable={isReinstallCurrentDep}
+            title={`确定卸载 ${packageInfo.name}？`}
           >
             <Button text type="primary" className={styles.btn}>
               {!uninstallStatus ? '卸载' : <Icon type="loading" />}
@@ -112,7 +111,7 @@ const AppList: FC<{}> = () => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
       const { status, errMsg } = uninstallStatus;
       if (status === 'finish' || status === 'error') {
-        dispatcher.removeInstallStatus(uninstallStatus);
+        dispatcher.removeUninstallStatus(uninstallStatus);
         dispatcher.getAppsInfo();
         return;
       }
@@ -121,7 +120,7 @@ const AppList: FC<{}> = () => {
         return;
       }
 
-      dispatcher.updateInstallStatus(uninstallStatus);
+      dispatcher.updateUninstallStatus(uninstallStatus);
     }
 
     ipcRenderer.on(UNINSTALL_APP_PROCESS_STATUS_CHANNEL, handleUpdateUninstallStatus);

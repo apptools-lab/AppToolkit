@@ -6,9 +6,9 @@ import * as sudo from 'sudo-prompt';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from '../utils/writeLog';
 import formatWhitespaceInPath from '../utils/formatWhitespaceInPath';
-import { IPackageInstaller, IPackageInfo } from '../types';
+import { IPackageManager, PackageInfo } from '../types';
 
-class DmgInstaller implements IPackageInstaller {
+class DmgManager implements IPackageManager {
   channel: string;
 
   dmgProcessor: { [k: string]: Function };
@@ -21,7 +21,7 @@ class DmgInstaller implements IPackageInstaller {
     };
   }
 
-  async install(packageInfo: IPackageInfo, dmgPath: string) {
+  async install(packageInfo: PackageInfo, dmgPath: string) {
     const { name } = packageInfo;
     // mount app to the disk
     const mounter = new Mounter();
@@ -94,7 +94,7 @@ class DmgInstaller implements IPackageInstaller {
     });
   };
 
-  async uninstall(packageInfo: IPackageInfo) {
+  async uninstall(packageInfo: PackageInfo) {
     const { localPath } = packageInfo;
     if (localPath && await fse.pathExists(localPath)) {
       await fse.remove(localPath);
@@ -102,4 +102,4 @@ class DmgInstaller implements IPackageInstaller {
   }
 }
 
-export default DmgInstaller;
+export default DmgManager;

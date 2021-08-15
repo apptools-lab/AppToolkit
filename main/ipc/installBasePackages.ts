@@ -2,7 +2,7 @@ import * as child_process from 'child_process';
 import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { IPackageInfo } from '../types';
+import { PackageInfo } from '../types';
 import { send as sendMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
@@ -15,7 +15,7 @@ const childProcessMap = new Map();
 export default () => {
   ipcMain.handle('install-base-packages', (
     event: IpcMainInvokeEvent,
-    { packagesList, installChannel, processChannel }: { packagesList: IPackageInfo[]; installChannel: string; processChannel: string },
+    { packagesList, installChannel, processChannel }: { packagesList: PackageInfo[]; installChannel: string; processChannel: string },
   ) => {
     let childProcess = childProcessMap.get(installChannel);
     if (childProcess) {
@@ -23,7 +23,7 @@ export default () => {
       return;
     }
     // fork a child process to install package
-    childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
+    childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(installChannel, childProcess);
     // After packing the Electron app, the electron module which the electron-store require, couldn't be found in childProcess.
     // For more detail, see this PR: https://github.com/appworks-lab/toolkit/pull/41

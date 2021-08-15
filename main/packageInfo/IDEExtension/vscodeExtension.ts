@@ -1,10 +1,10 @@
 import * as execa from 'execa';
 import checkCommandInstalled from '../../utils/checkCommandInstalled';
 import { VSCODE_COMMAND_NAME } from '../../constants';
-import { ILocalPackageInfo } from '../../types';
+import { LocalPackageInfo } from '../../types';
 
 async function getVSCodeExtensionInfo(name: string) {
-  const extensionInfo: ILocalPackageInfo = {
+  const extensionInfo: LocalPackageInfo = {
     versionStatus: 'uninstalled',
     localVersion: null,
   };

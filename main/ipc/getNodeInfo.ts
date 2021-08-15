@@ -1,14 +1,14 @@
 import { ipcMain } from 'electron';
 import getNodeVersions from '../utils/getNodeVersions';
 import { getPackageInfo } from '../packageInfo';
-import { PackageInfo } from '../types';
+import { BasePackageInfo } from '../types';
 import store, { packagesDataKey } from '../store';
 
 export default () => {
   ipcMain.handle('get-node-info', () => {
     const data = store.get(packagesDataKey);
-    const { bases = [] }: { bases: PackageInfo[] } = data;
-    const nodeBasicInfo = bases.find((base: PackageInfo) => base.name === 'node');
+    const { bases = [] }: { bases: BasePackageInfo[] } = data;
+    const nodeBasicInfo = bases.find((base: BasePackageInfo) => base.name === 'node');
     const nodeInfo = getPackageInfo(nodeBasicInfo);
 
     return nodeInfo;

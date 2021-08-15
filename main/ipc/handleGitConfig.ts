@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { IAddUserConfig } from 'types/git';
+import { AddUserConfig } from 'types/git';
 import {
   getGlobalGitConfig,
   updateGlobalGitConfig,
@@ -35,7 +35,7 @@ export default () => {
     await updateUserGitConfig(currentGitConfig, configName);
   });
 
-  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, gitConfig: IAddUserConfig) => {
+  ipcMain.handle('add-user-git-config', async (e: IpcMainInvokeEvent, gitConfig: AddUserConfig) => {
     await addUserGitConfig(gitConfig);
   });
 

@@ -4,7 +4,7 @@ import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { getPackageInfo } from '../packageInfo';
 import store, { packagesDataKey } from '../store';
-import { PackagesData, AppInfo, Platform, IPackageInfo } from '../types';
+import { PackagesData, AppInfo, Platform, PackageInfo } from '../types';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
 import log from '../utils/log';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
@@ -46,7 +46,7 @@ export default () => {
 
   ipcMain.handle('uninstall-app', (
     e: IpcMainInvokeEvent,
-    { packageInfo, uninstallChannel, processChannel }: { packageInfo: IPackageInfo; uninstallChannel: string; processChannel: string },
+    { packageInfo, uninstallChannel, processChannel }: { packageInfo: PackageInfo; uninstallChannel: string; processChannel: string },
   ) => {
     const childProcessName = `${uninstallChannel}-${packageInfo.name}`;
     let childProcess = childProcessMap.get(childProcessName);
@@ -55,7 +55,7 @@ export default () => {
       return;
     }
     // fork a child process to install package
-    childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
+    childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(childProcessName, childProcess);
     const packagesData = store.get(packagesDataKey);
     childProcess.send({ packagesList: [packageInfo], packagesData, uninstallChannel, processChannel, type: 'uninstall' });
@@ -82,7 +82,7 @@ export default () => {
 
   ipcMain.handle('install-app', (
     e: IpcMainInvokeEvent,
-    { packageInfo, installChannel, processChannel }: { packageInfo: IPackageInfo; installChannel: string; processChannel: string },
+    { packageInfo, installChannel, processChannel }: { packageInfo: PackageInfo; installChannel: string; processChannel: string },
   ) => {
     const childProcessName = `${installChannel}-${packageInfo.name}`;
     let childProcess = childProcessMap.get(childProcessName);
@@ -91,7 +91,7 @@ export default () => {
       return;
     }
     // fork a child process to install package
-    childProcess = child_process.fork(path.join(__dirname, '..', 'packageInstaller/index'));
+    childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(childProcessName, childProcess);
     const packagesData = store.get(packagesDataKey);
     childProcess.send({ packagesList: [packageInfo], packagesData, installChannel, processChannel });
