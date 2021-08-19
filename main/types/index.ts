@@ -1,6 +1,7 @@
 export interface BasePackageInfo {
   title: string;
   name: string;
+  id?: string;
   description: string;
   icon: string;
   downloadUrl?: string;
@@ -70,10 +71,18 @@ export interface AppInfo {
   packages: BasePackageInfo[];
 }
 
+export interface BrowserExtensionInfo {
+  category: string;
+  title: string;
+  extensions: BasePackageInfo[];
+}
+
 export interface PackagesData {
   bases: BasePackageInfo[];
 
   apps: AppInfo[];
 
   npmRegistries: NPMRegistry[];
+
+  browserExtensions: BrowserExtensionInfo[];
 }

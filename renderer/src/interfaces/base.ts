@@ -15,6 +15,7 @@ export interface PackageInfo {
   versionStatus: keyof typeof VersionStatus;
   localVersion: string | null;
   localPath: string | null;
+  sourceFilePath?: string;
   warningMessage?: string;
   options?: { [key: string]: any };
   [key: string]: any;
@@ -34,5 +35,13 @@ export interface IInstallResultData {
   status: 'error' | 'finish';
   title: string;
   duration: number;
+  errMsg?: string;
+}
+
+export interface ProcessStatus {
+  status: string;
+  name: string;
+  currentIndex?: number;
+  result?: any;
   errMsg?: string;
 }

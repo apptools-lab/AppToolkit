@@ -1,12 +1,12 @@
 import { createStore, IStoreModels } from 'ice';
-import applicationModel from './models/application';
+import browserExtensionModel from './models/browserExtension';
 
 interface IModels extends IStoreModels {
-  application: typeof applicationModel;
+  browserExtension: typeof browserExtensionModel;
 }
 
 const models: IModels = {
-  application: applicationModel,
+  browserExtension: browserExtensionModel,
 
 };
 

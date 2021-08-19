@@ -185,13 +185,44 @@
   ],
   "browserExtensions": [
     {
-      "name": "React Developer Tools",
-      "description": "",
-      "icon": "",
-      "downloadUrl": "",
-      "version": "",
-      "recommended": true,
-      "isInternal": false
+      "category": "Chrome",
+      "title" : "Chrome",
+      "extensions": [
+        {
+          "title": "React Developer Tools",
+          "name": "React Developer Tools",
+          "id": "fmkadmapgofadopljbjfkapdkoienihi",
+          "description": "React 组件调试工具",
+          "link": "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
+          "icon": "https://img.alicdn.com/imgextra/i1/O1CN0194acAl1gfuI5v48lm_!!6000000004170-73-tps-16-16.ico",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/React-Developer-Tools_v4.16.0%20(8_16_2021).crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Redux DevTools",
+          "name": "Redux DevTools",
+          "id": "lmhkpmbekcpmknklioeibfkpmmfibljd",
+          "description": "Redux 调试工具",
+          "link": "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
+          "icon": "https://img.alicdn.com/imgextra/i1/O1CN0194acAl1gfuI5v48lm_!!6000000004170-73-tps-16-16.ico",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/Redux-DevTools_v2.17.2.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        }
+      ]
     }
   ],
   "IdeExtensions": [

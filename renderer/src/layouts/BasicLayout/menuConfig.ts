@@ -21,6 +21,11 @@ const asideMenuConfig = [
     path: '/application',
     icon: 'application',
   },
+  {
+    name: '浏览器插件',
+    path: '/browser-extension',
+    icon: 'liulanqi',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

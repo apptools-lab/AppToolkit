@@ -91,7 +91,7 @@ async function installPackages({
         throw new Error('No package was found.');
       }
 
-      process.send({ channel: processChannel, data: { currentIndex: i, name, status: 'downloaded' } });
+      process.send({ channel: processChannel, data: { currentIndex: i, name, packagePath, status: 'downloaded' } });
 
       // install package
       const { localPath } = await install({ packagePath, packageInfo, channel: installChannel, packagesData });
@@ -100,7 +100,7 @@ async function installPackages({
       await installPkgCommandToPath(name, localPath);
 
       status = 'finish';
-      process.send({ channel: processChannel, data: { currentIndex: i, status, name } });
+      process.send({ channel: processChannel, data: { currentIndex: i, status, name, packagePath } });
     } catch (error) {
       errMsg = error instanceof Error ? error.message : error;
       log.error(error);
@@ -146,6 +146,7 @@ async function install(
     const packageManager = new PackageManager(channel, packagesData);
     return await packageManager.install(packageInfo, packagePath);
   }
+  return {};
 }
 
 async function installPkgCommandToPath(name: string, localPath?: string) {
