@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { Grid, Button, Message, Icon } from '@alifd/next';
+import { Grid, Button, Message, Icon, Loading } from '@alifd/next';
 import AppCard from '@/components/AppCard';
 import store from '../../store';
 import styles from './index.module.scss';
@@ -12,6 +12,7 @@ const { Row, Col } = Grid;
 
 const AppList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('application');
+  const effectsState = store.useModelEffectsState('application');
   const { appsInfo, installStatuses, uninstallStatuses } = state;
 
   const INSTALL_APP_CHANNEL = 'install-app';
@@ -107,6 +108,7 @@ const AppList: FC<{}> = () => {
       );
     };
   }, []);
+
   useEffect(() => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
       const { status, errMsg } = uninstallStatus;
@@ -133,8 +135,13 @@ const AppList: FC<{}> = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (effectsState.getAppsInfo.error) {
+      Message.error(effectsState.getAppsInfo.error.message);
+    }
+  }, [effectsState.getAppsInfo.error]);
   return (
-    <div className={styles.appList}>
+    <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
       {
         appsInfo.map((appInfo: AppInfo) => (
           <div className={styles.appInfo} key={appInfo.category}>
@@ -155,7 +162,7 @@ const AppList: FC<{}> = () => {
           </div>
         ))
       }
-    </div>
+    </Loading>
   );
 };
 

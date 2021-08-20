@@ -88,7 +88,21 @@
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
+        },
+        {
+          "title": "Firefox",
+          "name": "Firefox",
+          "description": "Mozilla开发的自由及开放源代码的网页浏览器",
+          "link": "mozilla.org/en-US/firefox/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01mu0pmV1c7JvIgrE58_!!6000000003553-0-tps-220-229.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Firefox%2091.0.1.dmg",
+          "version": null,
+          "recommended": false,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
         }
+
       ]
     },
     {
@@ -104,6 +118,19 @@
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
           "version": null,
           "recommended": true,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        },
+        {
+          "title": "WebStorm",
+          "name": "WebStorm",
+          "description": "JetBrains 公司推出的智能 JavaScript IDE",
+          "link": "https://www.jetbrains.com/webstorm/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Hs6liW1N6f7MTGCI8_!!6000000001521-0-tps-256-256.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/WebStorm-2021.2.dmg",
+          "version": null,
+          "recommended": false,
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
@@ -124,6 +151,19 @@
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/iHosts-2.1.5.dmg",
           "version": null,
           "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        },
+         {
+          "title": "SwitchHosts",
+          "name": "SwitchHosts",
+          "description": "Hosts 快速切换工具",
+          "isInternal": true,
+          "link": "https://swh.app/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01LSkv2s21zhL9Fo5Nu_!!6000000007056-2-tps-225-225.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/SwitchHosts_4.0.2.6057.dmg",
+          "version": null,
+          "recommended": false,
           "type": "dmg",
           "platforms": ["darwin"]
         },
@@ -148,6 +188,51 @@
           "link": "www.charlesproxy.com",
           "icon": "https://img.alicdn.com/imgextra/i4/O1CN01CqzQcF1u5B9VgUgN3_!!6000000005985-55-tps-512-512.svg",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Charles.zip",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
+    },
+    {
+      "category": "utility",
+      "title": "实用工具",
+      "packages": [
+        {
+          "title": "Sourcetree",
+          "name": "Sourcetree",
+          "description": "Git 可视化管理工具",
+          "isInternal": false,
+          "link": "https://www.sourcetreeapp.com/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01WlQIbD21jfTlOGnK5_!!6000000007021-0-tps-211-239.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Sourcetree_4.1.2_238.zip",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        },
+        {
+          "title": "Typora",
+          "name": "Typora",
+          "description": "由Abner Lee开发的轻量级Markdown编辑器",
+          "isInternal": false,
+          "link": "https://www.postman.com/",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01BKOoel28gBmVEdkHU_!!6000000007961-0-tps-1024-1024.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Typora.dmg",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        },
+        {
+          "title": "iTerm",
+          "name": "iTerm",
+          "description": "MacOS 终端利器",
+          "isInternal": false,
+          "link": "https://iterm2.com/",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01pYnGui1ks3GGM2ZZe_!!6000000004738-2-tps-512-512.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/iTerm2-3_4_8.zip",
           "version": null,
           "recommended": true,
           "type": "dmg",
