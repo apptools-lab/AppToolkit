@@ -210,9 +210,111 @@
           "name": "Redux DevTools",
           "id": "lmhkpmbekcpmknklioeibfkpmmfibljd",
           "description": "Redux 调试工具",
-          "link": "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
-          "icon": "https://img.alicdn.com/imgextra/i1/O1CN0194acAl1gfuI5v48lm_!!6000000004170-73-tps-16-16.ico",
+          "link": "https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01VBHsOg1uOPn28XzVy_!!6000000006027-2-tps-128-128.png",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/Redux-DevTools_v2.17.2.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "山海关插件",
+          "name": "山海关插件",
+          "id": "jfalnandddhgfnmejfgjgfbfnnkhljog",
+          "description": "前端调试工具，包括：模块代理，资源代理，接口代理等。",
+          "link": "https://chrome.google.com/webstore/detail/%E5%B1%B1%E6%B5%B7%E5%85%B3%E6%8F%92%E4%BB%B6/jfalnandddhgfnmejfgjgfbfnnkhljog",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN012RsFje1LoyCYE2UjT_!!6000000001347-2-tps-84-84.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/%E5%B1%B1%E6%B5%B7%E5%85%B3%E6%8F%92%E4%BB%B6_v0.0.73.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": true,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "XSwitch",
+          "name": "XSwitch",
+          "id": "idkjhjggpffolpidfkikidcokdkdaogg",
+          "description": "一个用来做请求链接转发的 Chrome 浏览器插件",
+          "link": "https://chrome.google.com/webstore/detail/xswitch/idkjhjggpffolpidfkikidcokdkdaogg",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN01S8iNaB1WW9hjjI0cP_!!6000000002795-2-tps-148-148.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/XSwitch_v1.17.1.crx",
+          "version": null,
+          "recommended": false,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Ali Test Login",
+          "name": "Ali Test Login",
+          "id": "gcahogioaihmngflbjedigdlppmanmki",
+          "description": "显示用户的所有测试账号，点击测试账号即可快捷完成测试账号的登录操作",
+          "link": "https://chrome.google.com/webstore/detail/gcahogioaihmngflbjedigdlppmanmki",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01sprRsv2775ocvcByv_!!6000000007749-2-tps-128-128.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/AliTestLogin_v1.1.8.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": true,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "极速二维码-多场景解码工具",
+          "name": "极速二维码-多场景解码工具",
+          "id": "eefoinodjigoedmfjkbikmdhecggljgc",
+          "description": "全功能二维码扩展（The Quick QR Code）：二维码生成、摄像头解码、截屏解码、图片解码、长短链接相互转换、历史记录等诸多功能。",
+          "link": "https://chrome.google.com/webstore/detail/the-quick-qr-code-multi-s/eefoinodjigoedmfjkbikmdhecggljgc",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01WYv0r91xHUeQokfKl_!!6000000006418-2-tps-128-128.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/The-Quick-QR-Code-Multi-scene-decoding-tool_v3.5.1.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Octotree - GitHub code tree",
+          "name": "Octotree - GitHub code tree",
+          "id": "bkhaagjahfmjljalopjnoealnfndnagc",
+          "description": "用来显示 Github 项目的目录结构的 Chrome 插件",
+          "link": "https://chrome.google.com/webstore/detail/octotree-github-code-tree/bkhaagjahfmjljalopjnoealnfndnagc",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01z5X6661G0WUsozqTi_!!6000000000560-2-tps-128-128.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/Octotree-GitHub-code-tree_v7.0.7.crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "JSON Viewer",
+          "name": "JSON Viewer",
+          "id": "aimiinbnnkboelefkjlenlgimcabobli",
+          "description": "在 Chrome 中查看格式化的 JSON 数据",
+          "link": "https://chrome.google.com/webstore/detail/json-viewer/aimiinbnnkboelefkjlenlgimcabobli",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN01hCEc1J1YmlIPqAGmU_!!6000000003102-2-tps-128-128.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/JSON-Viewer_v0.8.17.crx",
           "version": null,
           "recommended": true,
           "isInternal": false,
