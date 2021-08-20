@@ -1,5 +1,6 @@
 .appList {
   width: 100%;
+  padding-bottom: 30px;
 
   .appInfo {
     margin: 0 40px;
@@ -7,7 +8,7 @@
 
     .title {
       font-size: 20px;
-      padding: 20px 0;
+      padding: 16px 0;
       font-weight: bold;
     }
 
@@ -18,6 +19,23 @@
       width: 64px;
       height: 24px;
       border-radius: 10px;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      margin-right: 14px;
+    }
+
+    .subTitle {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .description {
+      margin: 4px 0;
+      font-size: 12px;
     }
   }
 }
