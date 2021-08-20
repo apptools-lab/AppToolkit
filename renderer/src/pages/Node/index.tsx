@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Button } from '@alifd/next';
 import { ipcRenderer } from 'electron';
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import styles from './index.module.scss';
 import store from './store';
 import NodeVersion from './components/NodeVersion';
@@ -42,8 +42,7 @@ const Node = () => {
     </div>
   ) : null;
   return (
-    <>
-      <PageHeader title="Node 管理" button={nodeInstallVisible ? cannelInstallBtn : null} />
+    <PageContainer title="Node 管理" button={nodeInstallVisible ? cannelInstallBtn : null} >
       <main className={styles.main}>
         {nodeInstallVisible ? (
           <NodeInstaller goBack={goBack} />
@@ -55,7 +54,7 @@ const Node = () => {
           </>
         )}
       </main>
-    </>
+    </PageContainer>
   );
 };
 

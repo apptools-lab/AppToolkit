@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Grid, Step, Message, Loading, Balloon, Icon } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import classnames from 'classnames';
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { PackageInfo, VersionStatus } from '@/interfaces/base';
@@ -164,11 +164,10 @@ const Dashboard = () => {
   );
 
   return (
-    <>
-      <PageHeader
-        title="前端开发必备"
-        button={uninstalledPackagesList.length ? installButton : null}
-      />
+    <PageContainer
+      title="前端开发必备"
+      button={uninstalledPackagesList.length ? installButton : null}
+    >
       <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
         {isInstalling ? (
           <div className={styles.install}>
@@ -232,7 +231,7 @@ const Dashboard = () => {
           onOk={onDialogConfirm}
         />
       )}
-    </>
+    </PageContainer>
   );
 };
 

@@ -99,6 +99,7 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "package-json": "^7.0.0",
+    "react-intersection-observer": "^8.32.0",
     "shell-profile": "^1.0.3",
     "shelljs": "^0.8.4",
     "ssh-config": "^4.0.6",
