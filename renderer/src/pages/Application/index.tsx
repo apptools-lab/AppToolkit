@@ -1,12 +1,11 @@
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import AppList from './components/AppList';
 
 function Application() {
   return (
-    <div style={{ marginBottom: 60 }}>
-      <PageHeader title="桌面客户端" />
+    <PageContainer style={{ marginBottom: 60 }} title="桌面客户端">
       <AppList />
-    </div>
+    </PageContainer>
   );
 }
 

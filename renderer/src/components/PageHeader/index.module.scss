@@ -7,8 +7,7 @@
   padding: 60px 0 10px;
   margin: 0 40px;
   border-bottom: 1px solid rgb(230, 230, 230);
-  position: sticky;
-  top: -40px;
+
   background: white;
   z-index: 10;
 
@@ -21,6 +20,8 @@
 .sticky {
   margin: 0;
   background: #f9f9f9;
+  position: sticky;
+  top: -40px;
 
   .title {
     font-size: 14px;

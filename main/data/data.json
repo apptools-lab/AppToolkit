@@ -88,7 +88,21 @@
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
+        },
+        {
+          "title": "Firefox",
+          "name": "Firefox",
+          "description": "Mozilla开发的自由及开放源代码的网页浏览器",
+          "link": "mozilla.org/en-US/firefox/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01mu0pmV1c7JvIgrE58_!!6000000003553-0-tps-220-229.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Firefox%2091.0.1.dmg",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
         }
+
       ]
     },
     {
@@ -104,6 +118,19 @@
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
           "version": null,
           "recommended": true,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        },
+        {
+          "title": "WebStorm",
+          "name": "WebStorm",
+          "description": "JetBrains 公司推出的智能 JavaScript IDE",
+          "link": "https://www.jetbrains.com/webstorm/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Hs6liW1N6f7MTGCI8_!!6000000001521-0-tps-256-256.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/WebStorm-2021.2.dmg",
+          "version": null,
+          "recommended": false,
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
