@@ -281,16 +281,16 @@
   ],
   "IDEExtensions": [
     {
-      "category": "VS Code",
-      "title": "VS Code",
+      "category": "Visual Studio Code",
+      "title": "Visual Studio Code",
       "extensions": [
         {
           "title": "AppWorks",
           "name": "iceworks-team.iceworks",
-          "description": "基于 VS Code 的多端研发套件",
+          "description": "基于 VS Code 的多端研发套件。同时包含",
           "link": "https://marketplace.visualstudio.com/items?itemName=iceworks-team.iceworks",
           "icon": "https://img.alicdn.com/imgextra/i4/O1CN01fpoIOY26SKXzOtTrR_!!6000000007660-2-tps-500-500.png",
-          "version": "1.0.0",
+          "version": null,
           "recommended": true,
           "isInternal": false,
           "type": "IDEExtension",
@@ -304,8 +304,68 @@
           "name": "imgcook.imgcook",
           "description": "将设计转换为代码的智能工具。",
           "link": "https://marketplace.visualstudio.com/items?itemName=imgcook.imgcook",
-          "icon": "//img.alicdn.com/tfs/TB1bbwkzY2pK1RjSZFsXXaNlXXa-128-128.png",
-          "version": "1.0.0",
+          "icon": "https://img.alicdn.com/tfs/TB1bbwkzY2pK1RjSZFsXXaNlXXa-128-128.png",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "npm",
+          "name": "eg2.vscode-npm-script",
+          "description": "npm support for VS Code",
+          "link": "https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script",
+          "icon": "https://img.alicdn.com/imgextra/i1/O1CN01b63wep1fmwldCixzH_!!6000000004050-2-tps-360-140.png",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Vetur",
+          "name": "octref.vetur",
+          "description": "Vue tooling for VS Code",
+          "link": "https://marketplace.visualstudio.com/items?itemName=octref.vetur",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN01HJaut21ZeLdUV6OtU_!!6000000003219-2-tps-128-128.png",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Live Server",
+          "name": "ritwickdey.LiveServer",
+          "description": "快速启动具有静态和动态页面实时重新加载功能的开发本地服务器",
+          "link": "https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01Ck9wJU1YxknobqFdV_!!6000000003126-2-tps-256-256.png",
+          "version": null,
+          "recommended": false,
+          "isInternal": false,
+          "type": "IDEExtension",
+          "options": {
+            "IDEType": "VSCode"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Code Runner",
+          "name": "formulahendry.code-runner",
+          "description": "Run C, C++, Java, JS, PHP, Python, Perl, Ruby, Go, Lua, Groovy, PowerShell... in VS Code.",
+          "link": "https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN01aiF9Bk23jmoUJnSER_!!6000000007292-2-tps-167-59.png",
+          "version": null,
           "recommended": false,
           "isInternal": false,
           "type": "IDEExtension",

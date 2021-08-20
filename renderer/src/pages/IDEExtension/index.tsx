@@ -1,13 +1,11 @@
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import ExtensionList from './components/ExtensionList';
-import styles from './index.module.scss';
 
 function IDEExtension() {
   return (
-    <div className={styles.container}>
-      <PageHeader title="编辑器插件" />
+    <PageContainer style={{ marginBottom: 60 }} title="编辑器插件">
       <ExtensionList />
-    </div>
+    </PageContainer>
   );
 }
 
