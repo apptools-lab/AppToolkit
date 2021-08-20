@@ -70,6 +70,7 @@ const AppList: FC<{}> = () => {
           <BallonConfirm
             onConfirm={async () => await uninstallApp(packageInfo)}
             title={`确定卸载 ${packageInfo.name}？`}
+            align="bl"
           >
             <Button text type="primary" className={styles.btn}>
               {!uninstallStatus ? '卸载' : <Icon type="loading" />}
