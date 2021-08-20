@@ -277,10 +277,27 @@
           "title": "React Developer Tools",
           "name": "React Developer Tools",
           "id": "fmkadmapgofadopljbjfkapdkoienihi",
-          "description": "React 组件调试工具",
+          "description": "React 应用调试工具",
           "link": "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
           "icon": "https://img.alicdn.com/imgextra/i1/O1CN0194acAl1gfuI5v48lm_!!6000000004170-73-tps-16-16.ico",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/React-Developer-Tools_v4.16.0%20(8_16_2021).crx",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "browserExtension",
+          "options": {
+            "browserType": "Chrome"
+          },
+          "platforms": ["darwin", "win32"]
+        },
+        {
+          "title": "Vue.js devtools",
+          "name": "Vue.js devtools",
+          "id": "nhdogjmejiglipccpnnnanhbledajbpd",
+          "description": "Vue 应用调试工具",
+          "link": "https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd",
+          "icon": "https://img.alicdn.com/imgextra/i3/O1CN01HJaut21ZeLdUV6OtU_!!6000000003219-2-tps-128-128.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/Vue.js-devtools_v5.3.4.crx",
           "version": null,
           "recommended": true,
           "isInternal": false,

@@ -1,12 +1,11 @@
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import ExtensionList from './components/ExtensionList';
 
 function BrowserExtension() {
   return (
-    <div style={{ marginBottom: 60 }}>
-      <PageHeader title="浏览器插件" />
+    <PageContainer style={{ marginBottom: 60 }} title="浏览器插件">
       <ExtensionList />
-    </div>
+    </PageContainer>
   );
 }
 
