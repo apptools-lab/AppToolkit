@@ -79,7 +79,7 @@
         {
           "title": "Google Chrome",
           "name": "Google Chrome",
-          "description": "强大、快速的网页浏览器",
+          "description": "由 Google 开发的一款设计简单、高效、强大的 Web 浏览器。",
           "link": "https://www.google.com/chrome/",
           "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
@@ -88,21 +88,7 @@
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
-        },
-        {
-          "title": "Firefox",
-          "name": "Firefox",
-          "description": "Mozilla开发的自由及开放源代码的网页浏览器",
-          "link": "mozilla.org/en-US/firefox/",
-          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01mu0pmV1c7JvIgrE58_!!6000000003553-0-tps-220-229.jpg",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Firefox%2091.0.1.dmg",
-          "version": null,
-          "recommended": false,
-          "isInternal": false,
-          "type": "dmg",
-          "platforms": ["darwin"]
         }
-
       ]
     },
     {
@@ -112,7 +98,7 @@
         {
           "title": "Visual Studio Code",
           "name": "Visual Studio Code",
-          "description": "跨平台、轻量的代码编辑器",
+          "description": "由微软开发的跨平台的源代码编辑器，具有丰富的语言和运行时扩展的生态系统。",
           "link": "https://code.visualstudio.com/",
           "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
           "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
@@ -121,56 +107,17 @@
           "isInternal": false,
           "type": "dmg",
           "platforms": ["darwin"]
-        },
-        {
-          "title": "WebStorm",
-          "name": "WebStorm",
-          "description": "JetBrains 公司推出的智能 JavaScript IDE",
-          "link": "https://www.jetbrains.com/webstorm/",
-          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Hs6liW1N6f7MTGCI8_!!6000000001521-0-tps-256-256.jpg",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/WebStorm-2021.2.dmg",
-          "version": null,
-          "recommended": false,
-          "isInternal": false,
-          "type": "dmg",
-          "platforms": ["darwin"]
         }
       ]
     },
     {
-      "category": "debug",
-      "title": "调试",
+      "category": "api-debug",
+      "title": "接口调试",
       "packages": [
-        {
-          "title": "iHosts",
-          "name": "iHosts",
-          "description": "Hosts 环境管理工具",
-          "isInternal": true,
-          "link": "http://ihosts.alibaba-inc.com/",
-          "icon": "https://gw.alicdn.com/tfs/TB1dj._PFXXXXXGaXXXXXXXXXXX-256-256.png",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/iHosts-2.1.5.dmg",
-          "version": null,
-          "recommended": true,
-          "type": "dmg",
-          "platforms": ["darwin"]
-        },
-         {
-          "title": "SwitchHosts",
-          "name": "SwitchHosts",
-          "description": "Hosts 快速切换工具",
-          "isInternal": true,
-          "link": "https://swh.app/",
-          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01LSkv2s21zhL9Fo5Nu_!!6000000007056-2-tps-225-225.png",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/SwitchHosts_4.0.2.6057.dmg",
-          "version": null,
-          "recommended": false,
-          "type": "dmg",
-          "platforms": ["darwin"]
-        },
         {
           "title": "Postman",
           "name": "Postman",
-          "description": "简单易用的接口调试工具",
+          "description": "一款简单好用的接口测试工具，可以发送几乎所有类型的 HTTP 请求。",
           "isInternal": false,
           "link": "https://www.postman.com/",
           "icon": "https://img.alicdn.com/imgextra/i4/O1CN01nvbd3u1oZy5Ioi53h_!!6000000005240-2-tps-512-512.png",
@@ -179,11 +126,17 @@
           "recommended": true,
           "type": "dmg",
           "platforms": ["darwin"]
-        },
+        }
+      ]
+    },
+    {
+      "category": "proxy",
+      "title": "网络代理",
+      "packages": [
         {
           "title": "Charles",
           "name": "Charles",
-          "description": "HTTP 代理工具",
+          "description": "一款强大的网络抓包和网络代理工具，允许开发者查看所有 HTTP 通信信息。",
           "isInternal": false,
           "link": "www.charlesproxy.com",
           "icon": "https://img.alicdn.com/imgextra/i4/O1CN01CqzQcF1u5B9VgUgN3_!!6000000005985-55-tps-512-512.svg",
@@ -196,39 +149,32 @@
       ]
     },
     {
-      "category": "utility",
-      "title": "实用工具",
+      "category": "hosts",
+      "title": "Hosts",
       "packages": [
-        {
-          "title": "Sourcetree",
-          "name": "Sourcetree",
-          "description": "Git 可视化管理工具",
-          "isInternal": false,
-          "link": "https://www.sourcetreeapp.com/",
-          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01WlQIbD21jfTlOGnK5_!!6000000007021-0-tps-211-239.jpg",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Sourcetree_4.1.2_238.zip",
+         {
+          "title": "SwitchHosts",
+          "name": "SwitchHosts",
+          "description": "一个管理 hosts 文件的应用，支持快速编辑和切换 hosts 配置。",
+          "isInternal": true,
+          "link": "https://swh.app/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01LSkv2s21zhL9Fo5Nu_!!6000000007056-2-tps-225-225.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/SwitchHosts_4.0.2.6057.dmg",
           "version": null,
-          "recommended": true,
+          "recommended": false,
           "type": "dmg",
           "platforms": ["darwin"]
-        },
-        {
-          "title": "Typora",
-          "name": "Typora",
-          "description": "由Abner Lee开发的轻量级Markdown编辑器",
-          "isInternal": false,
-          "link": "https://www.postman.com/",
-          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01BKOoel28gBmVEdkHU_!!6000000007961-0-tps-1024-1024.jpg",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Typora.dmg",
-          "version": null,
-          "recommended": true,
-          "type": "dmg",
-          "platforms": ["darwin"]
-        },
+        }
+      ]
+    },
+    {
+      "category": "terminal",
+      "title": "终端",
+      "packages": [
         {
           "title": "iTerm",
           "name": "iTerm",
-          "description": "MacOS 终端利器",
+          "description": "一个为 MacOS 编写的，功能齐全的终端仿真程序，目标是在为用户提供最佳的命令行体验。",
           "isInternal": false,
           "link": "https://iterm2.com/",
           "icon": "https://img.alicdn.com/imgextra/i2/O1CN01pYnGui1ks3GGM2ZZe_!!6000000004738-2-tps-512-512.png",
