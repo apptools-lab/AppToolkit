@@ -1,14 +1,11 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { Grid, Button, Message, Icon, Loading } from '@alifd/next';
-import AppCard from '@/components/AppCard';
+import { Button, Message, Icon, Loading, List } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
 import { PackageInfo } from '@/interfaces/base';
 import { AppInfo, ProcessStatus } from '@/interfaces/application';
 import BallonConfirm from '@/components/BalloonConfirm';
-
-const { Row, Col } = Grid;
 
 const AppList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('application');
@@ -146,19 +143,19 @@ const AppList: FC<{}> = () => {
         appsInfo.map((appInfo: AppInfo) => (
           <div className={styles.appInfo} key={appInfo.category}>
             <div className={styles.title}>{appInfo.title}</div>
-            <Row wrap gutter={8}>
-              {
-                appInfo.packages.map((packageInfo: PackageInfo, index: number) => (
-                  <Col s={12} l={8} key={packageInfo.name}>
-                    <AppCard
-                      {...packageInfo}
-                      operation={<Operation packageInfo={packageInfo} />}
-                      showSplitLine={appInfo.packages.length - (appInfo.packages.length % 2 ? 1 : 2) > index}
-                    />
-                  </Col>
-                ))
-              }
-            </Row>
+            <List
+              dataSource={appInfo.packages || []}
+              renderItem={(item: PackageInfo, i: number) => (
+                <List.Item
+                  key={i}
+                  extra={<Operation packageInfo={item} />}
+                  title={<a href={item.link} target="__blank" className={styles.subTitle}>{item.title}</a>}
+                  media={<img src={item.icon} alt="appIcon" className={styles.icon} />}
+                >
+                  <p className={styles.description}>{item.description}</p>
+                </List.Item>
+              )}
+            />
           </div>
         ))
       }
