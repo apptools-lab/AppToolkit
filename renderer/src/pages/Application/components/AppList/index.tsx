@@ -1,11 +1,13 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { Button, Message, Icon, Loading, List } from '@alifd/next';
+import { Button, Message, Icon, Loading, List, Tag } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
 import { PackageInfo } from '@/interfaces/base';
 import { AppInfo, ProcessStatus } from '@/interfaces/application';
 import BallonConfirm from '@/components/BalloonConfirm';
+
+const presetColors = ['blue', 'green', 'orange', 'red', 'turquoise', 'yellow'];
 
 const AppList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('application');
@@ -141,16 +143,20 @@ const AppList: FC<{}> = () => {
   return (
     <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
       {
-        appsInfo.map((appInfo: AppInfo) => (
+        appsInfo.map((appInfo: AppInfo, index: number) => (
           <div className={styles.appInfo} key={appInfo.category}>
-            <div className={styles.title}>{appInfo.title}</div>
             <List
               dataSource={appInfo.packages || []}
               renderItem={(item: PackageInfo, i: number) => (
                 <List.Item
                   key={i}
                   extra={<Operation packageInfo={item} />}
-                  title={<a href={item.link} target="__blank" className={styles.subTitle}>{item.title}</a>}
+                  title={
+                    <div className={styles.title}>
+                      <a href={item.link} target="__blank" className={styles.subTitle}>{item.title}</a>
+                      <Tag size="small" className={styles.tag} type="normal" color={presetColors[index % presetColors.length]}>{appInfo.title}</Tag>
+                    </div>
+                }
                   media={<img src={item.icon} alt="appIcon" className={styles.icon} />}
                 >
                   <p className={styles.description}>{item.description}</p>
