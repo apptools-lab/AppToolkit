@@ -10,6 +10,7 @@ import log from '../utils/log';
 import { record } from '../recorder';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import { send as sendMainWindow } from '../window';
+import ping = require('ping');
 
 const childProcessMap = new Map();
 
@@ -79,5 +80,17 @@ export default () => {
 
       sendMainWindow(channel, data);
     });
+  });
+
+  ipcMain.handle('check-webstore-host-alive', async (e: IpcMainInvokeEvent, browserType: string) => {
+    const browserHosts = {
+      Chrome: 'chrome.google.com',
+    };
+    if (browserHosts[browserType]) {
+      const { alive } = await ping.promise.probe(browserHosts[browserType]);
+      return alive;
+    }
+    // default download extension
+    return false;
   });
 };

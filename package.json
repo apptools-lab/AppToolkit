@@ -5,8 +5,8 @@
   "description": "The Frontend Developer Toolkit",
   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
-    "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install --no-package-lock",
-    "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install --no-package-lock",
+    "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install",
+    "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:electron": "npm run copy:static && electron ./dist",
     "copy:static": "cp -R ./main/data ./dist",
@@ -99,6 +99,7 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "package-json": "^7.0.0",
+    "ping": "^0.4.1",
     "react-intersection-observer": "^8.32.0",
     "shell-profile": "^1.0.3",
     "shelljs": "^0.8.4",

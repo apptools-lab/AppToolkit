@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent, shell } from 'electron';
-import { Grid, Button, Message, Icon, Loading, Dialog } from '@alifd/next';
+import { Grid, Button, Message, Icon, Loading, Dialog, Tag } from '@alifd/next';
 import AppCard from '@/components/AppCard';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
@@ -23,6 +23,17 @@ const ExtensionList: FC<{}> = () => {
     dispatcher.getExtensionsInfo();
   }, []);
 
+  const handleInstall = async (packageInfo: PackageInfo) => {
+    const { packagePath, link, options: { browserType } } = packageInfo;
+    const alive = await dispatcher.checkBrowserHostAlive(browserType);
+
+    if (alive) {
+      openDialog(alive, packagePath, link, browserType);
+    } else {
+      installBrowserExtension(packageInfo);
+    }
+  };
+
   const installBrowserExtension = (packageInfo: PackageInfo) => {
     ipcRenderer
       .invoke('install-browser-extension', {
@@ -35,31 +46,48 @@ const ExtensionList: FC<{}> = () => {
       });
   };
 
-  const openDialog = (packageInfo: PackageInfo) => {
-    Dialog.show({
+  const openDialog = (alive: boolean, packagePath: string, link?: string, browserType?: string) => {
+    const dialog = Dialog.show({
       title: '提示',
+      style: { width: 500 },
+      height: alive ? '220px' : '170px',
       content: (
-        <div style={{ height: 80, lineHeight: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button
-              type="primary"
-              style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}
-              text
-              onClick={() => shell.showItemInFolder(packageInfo.sourceFilePath)}
-            >
-              插件安装包<CustomIcon style={{ fontSize: 14 }} type="tiaozhuan-zhuanqu" />
-            </Button>
-            已下载到本地，请自行在浏览器的扩展程序管理中安装。
-          </div>
-          <br />
-          <div>详细的安装方式请参考<a href="https://appworks.site/pack/basic/toolkit.html">文档</a>。</div>
+        <div className={styles.dialog}>
+          {alive ? (
+            <div>Toolkit 目前不能自动安装浏览器插件，需要自行在 {browserType} 应用商店安装。点击下方确定按钮将跳转到插件安装页面。</div>
+          ) : (
+            <>
+              <div>
+                <Button
+                  type="primary"
+                  className={styles.btn}
+                  text
+                  onClick={() => shell.showItemInFolder(packagePath)}
+                >
+                  插件安装包<CustomIcon className={styles.icon} type="tiaozhuan-zhuanqu" />
+                </Button>
+                已下载到本地，请自行在浏览器的扩展程序管理中安装。
+              </div>
+              <br />
+              <div>详细的安装方式请参考<a href="https://appworks.site/pack/basic/toolkit.html" target="_blank" rel="noreferrer">文档</a>。</div>
+            </>
+          )}
         </div>
       ),
-      footer: false,
+      footer: !!alive,
+      onOk: () => {
+        if (alive) {
+          shell.openExternal(link);
+          dialog.hide();
+        }
+      },
+      okProps: {
+        children: '确定',
+      },
     });
   };
 
-  const Operation = ({ packageInfo }) => {
+  const Operation = ({ packageInfo }: { packageInfo: PackageInfo }) => {
     const { versionStatus } = packageInfo;
     let installStatus;
 
@@ -67,25 +95,27 @@ const ExtensionList: FC<{}> = () => {
     if (installStatusIndex > -1) {
       installStatus = installStatuses[installStatusIndex].status;
     }
-
     return (
       <>
-        {versionStatus === 'uninstalled' ? (
-          <Button text type="primary" className={styles.btn} onClick={() => installBrowserExtension(packageInfo)}>
-            {!installStatus ? '安装' : <Icon type="loading" />}
-          </Button>
-        ) : (
-          <Button text type="primary" className={styles.btn} onClick={() => openDialog(packageInfo)}>
-            查看
-          </Button>
-        )}
+        {
+          versionStatus === 'installed' ? (
+            <span style={{ color: 'gray' }}>已安装</span>
+          ) : (
+            <Button text type="primary" className={styles.btn} onClick={async () => handleInstall(packageInfo)}>
+              {installStatus || effectsState.checkBrowserHostAlive.isLoading ? <Icon type="loading" /> : '安装'}
+            </Button>
+          )
+        }
       </>
     );
   };
 
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, installStatus: ProcessStatus) {
-      const { status, errMsg } = installStatus;
+      const { status, errMsg, packagePath } = installStatus;
+      if (status === 'finish') {
+        openDialog(false, packagePath);
+      }
       if (status === 'finish' || status === 'error') {
         dispatcher.removeInstallStatus(installStatus);
         dispatcher.getExtensionsInfo();
@@ -117,6 +147,7 @@ const ExtensionList: FC<{}> = () => {
 
   return (
     <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
+      {/* <Tag className={styles.tag} type="normal" color="yellow">Toolkit 目前不能自动安装浏览器插件，需要自行在应用商店或本地安装。</Tag> */}
       {
         extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
           <div className={styles.extensionInfo} key={extensionInfo.category}>
@@ -138,6 +169,7 @@ const ExtensionList: FC<{}> = () => {
           </div>
         ))
       }
+      <Dialog title="安装提示" />
     </Loading>
   );
 };

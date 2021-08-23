@@ -15,7 +15,7 @@ export interface PackageInfo {
   versionStatus: keyof typeof VersionStatus;
   localVersion: string | null;
   localPath: string | null;
-  sourceFilePath?: string;
+  packagePath?: string;
   warningMessage?: string;
   options?: { [key: string]: any };
   [key: string]: any;
@@ -31,7 +31,7 @@ export enum VersionStatus {
   'upgradeable' = '可升级'
 }
 
-export interface IInstallResultData {
+export interface InstallResultData {
   status: 'error' | 'finish';
   title: string;
   duration: number;
@@ -44,4 +44,5 @@ export interface ProcessStatus {
   currentIndex?: number;
   result?: any;
   errMsg?: string;
+  packagePath?: string;
 }

@@ -33,5 +33,8 @@ export default {
       const extensionsInfo = await ipcRenderer.invoke('get-browser-extensions-info');
       this.setState({ extensionsInfo });
     },
+    async checkBrowserHostAlive(browserType: string) {
+      return await ipcRenderer.invoke('check-webstore-host-alive', browserType);
+    },
   }),
 };

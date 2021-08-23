@@ -1,4 +1,4 @@
-import { PackageInfo, IInstallResultData } from '@/interfaces/base';
+import { PackageInfo, InstallResultData } from '@/interfaces/base';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -46,7 +46,7 @@ export default {
       prevState.installResult = [];
     },
 
-    updateInstallResult(prevState, installResult: IInstallResultData[]) {
+    updateInstallResult(prevState, installResult: InstallResultData[]) {
       prevState.installResult = installResult;
     },
   },

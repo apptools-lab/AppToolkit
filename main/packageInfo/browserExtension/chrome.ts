@@ -12,6 +12,14 @@ async function getChromeExtensionInfo(basePackageInfo: BasePackageInfo) {
   const extensionInfo: LocalPackageInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
   const { id } = basePackageInfo;
 
+  const packageFileName = getPackageFileName(basePackageInfo);
+  const sourceFilePath = path.join(TOOLKIT_PACKAGES_DIR, packageFileName);
+  const sourceFileExists = await fse.pathExists(sourceFilePath);
+  if (sourceFileExists) {
+    // local package(.crx) path
+    extensionInfo.packagePath = sourceFilePath;
+  }
+
   const extensionPath = path.join(MAC_CHROME_EXTENSIONS_PATH, id);
   const paths = await globby(['*/manifest.json'], { deep: 2, cwd: extensionPath });
   if (paths.length) {
@@ -19,12 +27,6 @@ async function getChromeExtensionInfo(basePackageInfo: BasePackageInfo) {
     extensionInfo.versionStatus = 'installed';
     extensionInfo.localVersion = version;
     extensionInfo.localPath = extensionPath;
-    const packageFileName = getPackageFileName(basePackageInfo);
-    const sourceFilePath = path.join(TOOLKIT_PACKAGES_DIR, packageFileName);
-    const sourceFileExists = await fse.pathExists(sourceFilePath);
-    if (sourceFileExists) {
-      extensionInfo.sourceFilePath = sourceFilePath;
-    }
   }
 
   return extensionInfo;
