@@ -3,14 +3,8 @@
   padding-bottom: 30px;
 
   .appInfo {
-    margin: 0 40px;
+    margin: 24px 40px 0;
     border-bottom: 1px solid #e6e6e6;
-
-    .title {
-      font-size: 20px;
-      padding: 16px 0;
-      font-weight: bold;
-    }
 
     .btn {
       font-size: 12px;
@@ -27,10 +21,27 @@
       margin-right: 14px;
     }
 
-    .subTitle {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
+    .title {
+      display: flex;
+      align-items: center;
+
+      .subTitle {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        user-select: none;
+      }
+
+      .tag {
+        margin-left: 10px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 10px;
+
+        :global(.next-tag-body) {
+          font-size: 10px;
+        }
+      }
     }
 
     .description {

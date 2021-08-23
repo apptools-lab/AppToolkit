@@ -7,6 +7,7 @@ interface IBallonConfirm {
   onCancel?: any;
   style?: { [k: string]: string };
   disable?: boolean;
+  align?: 'b' | 't' | 'r' | 'l' | 'tl' | 'tr' | 'bl' | 'br' | 'lt' | 'lb' | 'rt' | 'rb';
 }
 const BallonConfirm: FC<IBallonConfirm> = ({
   title,
@@ -15,6 +16,7 @@ const BallonConfirm: FC<IBallonConfirm> = ({
   onCancel,
   style = {},
   disable = false,
+  align = 'b',
 }) => {
   const [visible, setVisible] = useState(false);
 
@@ -28,7 +30,7 @@ const BallonConfirm: FC<IBallonConfirm> = ({
   const onClose = () => setVisible(false);
 
   return (
-    <Balloon closable={false} trigger={<div onClick={onClick}>{children}</div>} style={style} visible={disable ? false : visible}>
+    <Balloon align={align} closable={false} trigger={<div onClick={onClick}>{children}</div>} style={style} visible={disable ? false : visible}>
       <div><Icon type="prompt" style={{ color: '#f9ca24', marginRight: 5 }} />{title}</div>
       <div style={{ marginTop: 5, display: 'flex', justifyContent: 'flex-end' }}>
         <Button
