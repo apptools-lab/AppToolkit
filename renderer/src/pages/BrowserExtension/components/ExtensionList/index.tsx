@@ -147,7 +147,6 @@ const ExtensionList: FC<{}> = () => {
 
   return (
     <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
-      {/* <Tag className={styles.tag} type="normal" color="yellow">Toolkit 目前不能自动安装浏览器插件，需要自行在应用商店或本地安装。</Tag> */}
       {
         extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
           <div className={styles.extensionInfo} key={extensionInfo.category}>
