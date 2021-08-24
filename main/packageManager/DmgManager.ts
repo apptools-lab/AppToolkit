@@ -22,7 +22,7 @@ class DmgManager implements IPackageManager {
   }
 
   async install(packageInfo: PackageInfo, dmgPath: string) {
-    const { name } = packageInfo;
+    const { id } = packageInfo;
     // mount app to the disk
     const mounter = new Mounter();
     const { devices, eject } = await mounter.attach(dmgPath);
@@ -39,7 +39,7 @@ class DmgManager implements IPackageManager {
     const regPkgType = Object.keys(this.dmgProcessor).map((key) => `*${key}`);
     const appNames = globby.sync(regPkgType, { onlyFiles: false, deep: 1, cwd: mountPoint });
 
-    const ret = { name, localPath: null };
+    const ret = { id, localPath: null };
 
     // install app
     for (const appName of appNames) {
@@ -47,7 +47,7 @@ class DmgManager implements IPackageManager {
       const extname = path.extname(appName);
       const installFunc = this.dmgProcessor[extname];
       if (installFunc) {
-        const localPath = await installFunc({ sourcePath, appName, name });
+        const localPath = await installFunc({ sourcePath, appName, id });
         ret.localPath = localPath;
       }
     }
@@ -66,7 +66,7 @@ class DmgManager implements IPackageManager {
     return dest;
   };
 
-  installPkg = async ({ sourcePath, name }) => {
+  installPkg = async ({ sourcePath, id }) => {
     const modifiedSource = formatWhitespaceInPath(sourcePath);
     const options = { name: 'AppWorks Toolkit' };
 
@@ -87,7 +87,7 @@ class DmgManager implements IPackageManager {
           }
           if (stdout) {
             writeLog(this.channel, stdout.toString());
-            resolve(path.join('/usr/local', name));
+            resolve(path.join('/usr/local', id));
           }
         },
       );

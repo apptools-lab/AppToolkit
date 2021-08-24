@@ -3,9 +3,15 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Button, Message, Icon, Loading, List, Tag } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
-import { PackageInfo } from '@/interfaces/base';
-import { AppInfo, ProcessStatus } from '@/interfaces/application';
+import { PackageInfo, ProcessStatus } from '@/interfaces/base';
+import { AppInfo } from '@/interfaces/application';
 import BallonConfirm from '@/components/BalloonConfirm';
+
+const INSTALL_APP_CHANNEL = 'install-app';
+const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
+
+const UNINSTALL_APP_CHANNEL = 'uninstall-app';
+const UNINSTALL_APP_PROCESS_STATUS_CHANNEL = 'uninstall-app-process-status';
 
 const presetColors = ['blue', 'green', 'orange', 'red', 'turquoise', 'yellow'];
 
@@ -13,12 +19,6 @@ const AppList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('application');
   const effectsState = store.useModelEffectsState('application');
   const { appsInfo, installStatuses, uninstallStatuses } = state;
-
-  const INSTALL_APP_CHANNEL = 'install-app';
-  const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
-
-  const UNINSTALL_APP_CHANNEL = 'uninstall-app';
-  const UNINSTALL_APP_PROCESS_STATUS_CHANNEL = 'uninstall-app-process-status';
 
   useEffect(() => {
     dispatcher.getAppsInfo();
@@ -48,17 +48,17 @@ const AppList: FC<{}> = () => {
       });
   };
 
-  const Operation = ({ packageInfo }) => {
+  const Operation = ({ packageInfo }: { packageInfo: PackageInfo }) => {
     const { versionStatus } = packageInfo;
     let installStatus;
     let uninstallStatus;
 
-    const installStatusIndex = installStatuses.findIndex(({ name }) => name === packageInfo.name);
+    const installStatusIndex = installStatuses.findIndex(({ id }) => id === packageInfo.id);
     if (installStatusIndex > -1) {
       installStatus = installStatuses[installStatusIndex].status;
     }
 
-    const uninstallStatusIndex = uninstallStatuses.findIndex(({ name }) => name === packageInfo.name);
+    const uninstallStatusIndex = uninstallStatuses.findIndex(({ id }) => id === packageInfo.id);
     if (uninstallStatusIndex > -1) {
       uninstallStatus = uninstallStatuses[uninstallStatusIndex].status;
     }
@@ -71,7 +71,7 @@ const AppList: FC<{}> = () => {
         ) : (
           <BallonConfirm
             onConfirm={async () => await uninstallApp(packageInfo)}
-            title={`确定卸载 ${packageInfo.name}？`}
+            title={`确定卸载 ${packageInfo.title}？`}
             align="bl"
           >
             <Button text type="primary" className={styles.btn}>

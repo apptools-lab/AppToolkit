@@ -25,13 +25,13 @@ class CliManager implements IPackageManager {
   }
 
   install = async (packageInfo: PackageInfo, shPath: string) => {
-    const { name } = packageInfo;
-    const installFunc = this.cliProcessor[name];
+    const { id } = packageInfo;
+    const installFunc = this.cliProcessor[id];
     if (installFunc) {
       await installFunc({ shPath, packageInfo });
     }
 
-    return { name };
+    return { id };
   };
 
   private installNode = async ({ shPath, packageInfo }) => {

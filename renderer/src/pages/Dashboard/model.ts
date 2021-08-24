@@ -41,7 +41,7 @@ export default {
       // skip the start step
       prevState.currentStep = 1;
       prevState.pkgInstallStep = 0;
-      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: PackageInfo) => ({ name: item.name, status: 'wait' }));
+      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map(({ id }: PackageInfo) => ({ id, status: 'wait' }));
       prevState.selectedInstalledPackagesList = selectedInstalledPackagesList;
       prevState.installResult = [];
     },

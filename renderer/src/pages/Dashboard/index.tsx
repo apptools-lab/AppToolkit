@@ -12,8 +12,13 @@ import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
 import store from './store';
+import { stat } from 'original-fs';
 
 const { Row, Col } = Grid;
+
+const TERM_ID = 'dashboard';
+const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
+const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
 
 const Dashboard = () => {
   const [visible, setVisible] = useState(false);
@@ -30,10 +35,6 @@ const Dashboard = () => {
     currentStep,
     installResult,
   } = state;
-
-  const TERM_ID = 'dashboard';
-  const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
-  const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
 
   const writeChunk = (
     e: IpcRendererEvent,
@@ -52,7 +53,7 @@ const Dashboard = () => {
       return;
     }
     const selectedPackagesList = uninstalledPackagesList.filter((item) => {
-      return packageNames.includes(item.name);
+      return packageNames.includes(item.id);
     });
     const xterm = xtermManager.getTerm(TERM_ID);
     if (xterm) {
@@ -146,10 +147,13 @@ const Dashboard = () => {
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
         {selectedInstalledPackagesList.map((item: PackageInfo, index: number) => {
-          const { status } = pkgInstallStatuses[index] || {};
+          let { status } = pkgInstallStatuses[index] || {};
+          if (status === 'downloaded') {
+            status = 'process';
+          }
           return (
             <Step.Item
-              key={item.name}
+              key={item.id}
               title={item.title}
               className={classnames(
                 styles.installStepItem,
@@ -197,9 +201,9 @@ const Dashboard = () => {
         ) : (
           <Row wrap gutter={8}>
             {basePackagesList.map((item: PackageInfo, index: number) => (
-              <Col s={12} l={8} key={item.name}>
+              <Col s={12} l={8} key={item.id}>
                 <AppCard
-                  name={item.title}
+                  title={item.title}
                   description={item.description}
                   link={item.link}
                   icon={item.icon}
@@ -217,7 +221,6 @@ const Dashboard = () => {
                   }
                   recommended={item.recommended}
                   showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
-
                 />
               </Col>
             ))}

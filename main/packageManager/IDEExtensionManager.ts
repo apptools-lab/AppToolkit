@@ -25,11 +25,11 @@ class IDEExtensionManager implements IPackageManager {
   }
 
   install = async (packageInfo: PackageInfo) => {
-    const { name, options: { IDEType } } = packageInfo;
-    const ret = { name };
+    const { id, options: { IDEType } } = packageInfo;
+    const ret = { id };
     const installFunc = this.IDETypeProcessor[IDEType];
     if (installFunc) {
-      await installFunc(name);
+      await installFunc(id);
     }
     return ret;
   };
@@ -69,7 +69,7 @@ class IDEExtensionManager implements IPackageManager {
 
       const { bases = [] } = this.packagesData;
 
-      const vscodeInfo = bases.find((base) => base.name === VSCODE_NAME && base.platforms.includes(process.platform as Platform));
+      const vscodeInfo = bases.find((base) => base.id === VSCODE_NAME && base.platforms.includes(process.platform as Platform));
       if (!vscodeInfo) {
         throw new Error(`${VSCODE_NAME} info was not found.`);
       }

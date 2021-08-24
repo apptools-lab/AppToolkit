@@ -50,7 +50,7 @@ export default () => {
     e: IpcMainInvokeEvent,
     { packageInfo, installChannel, processChannel }: { packageInfo: PackageInfo; installChannel: string; processChannel: string },
   ) => {
-    const childProcessName = `${installChannel}-${packageInfo.name}`;
+    const childProcessName = `${installChannel}-${packageInfo.id}`;
     let childProcess = childProcessMap.get(childProcessName);
     if (childProcess) {
       log.info(`Channel ${childProcessName} has an existed child process.`);
@@ -69,7 +69,7 @@ export default () => {
             module: 'browserExtension',
             action: 'install',
             data: {
-              name: packageInfo.name,
+              name: packageInfo.title,
             },
           });
         }

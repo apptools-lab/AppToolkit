@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent, shell } from 'electron';
-import { Grid, Button, Message, Icon, Loading, Dialog, Tag } from '@alifd/next';
+import { Grid, Button, Message, Icon, Loading, Dialog } from '@alifd/next';
 import AppCard from '@/components/AppCard';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
@@ -10,14 +10,14 @@ import { BrowserExtensionsInfo } from '@/interfaces/browserExtension';
 
 const { Row, Col } = Grid;
 
+const INSTALL_EXTENSION_CHANNEL = 'install-browser-extension';
+const INSTALL_EXTENSION_STATUS_CHANNEL = 'install-browser-extension-process-status';
+
 const ExtensionList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('browserExtension');
   const effectsState = store.useModelEffectsState('browserExtension');
 
   const { extensionsInfo, installStatuses } = state;
-
-  const INSTALL_EXTENSION_CHANNEL = 'install-browser-extension';
-  const INSTALL_EXTENSION_STATUS_CHANNEL = 'install-browser-extension-process-status';
 
   useEffect(() => {
     dispatcher.getExtensionsInfo();
@@ -91,7 +91,7 @@ const ExtensionList: FC<{}> = () => {
     const { versionStatus } = packageInfo;
     let installStatus;
 
-    const installStatusIndex = installStatuses.findIndex(({ name }) => name === packageInfo.name);
+    const installStatusIndex = installStatuses.findIndex(({ id }) => id === packageInfo.id);
     if (installStatusIndex > -1) {
       installStatus = installStatuses[installStatusIndex].status;
     }
@@ -154,10 +154,9 @@ const ExtensionList: FC<{}> = () => {
             <Row wrap gutter={8}>
               {
                 extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
-                  <Col s={12} l={8} key={packageInfo.name}>
+                  <Col s={12} l={8} key={packageInfo.id}>
                     <AppCard
                       {...packageInfo}
-                      name={packageInfo.title}
                       operation={<Operation packageInfo={packageInfo} />}
                       showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
                     />

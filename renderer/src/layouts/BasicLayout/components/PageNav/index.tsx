@@ -79,7 +79,7 @@ const Navigation = (props) => {
   const { pathname } = location;
 
   useEffect(() => {
-    const curSubNav = asideMenuConfig.find((menuConfig) => {
+    const curSubNav = asideMenuConfig.find((menuConfig: IMenuItem) => {
       return menuConfig.children && checkChildPathExists(menuConfig);
     });
 

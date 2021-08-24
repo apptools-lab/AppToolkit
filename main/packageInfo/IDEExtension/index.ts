@@ -7,11 +7,11 @@ const processor = {
 };
 
 export default async (basePackageInfo: BasePackageInfo) => {
-  const { name, options: { IDEType } } = basePackageInfo;
+  const { id, options: { IDEType } } = basePackageInfo;
 
   const getIDEExtensionInfoFunc = processor[IDEType];
   if (getIDEExtensionInfoFunc) {
-    return await getIDEExtensionInfoFunc(name);
+    return await getIDEExtensionInfoFunc(id);
   }
   return DEFAULT_LOCAL_PACKAGE_INFO;
 };

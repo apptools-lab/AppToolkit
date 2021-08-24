@@ -63,12 +63,12 @@ async function installPackages({
 
   for (let i = 0; i < packagesList.length; i++) {
     const packageInfo = packagesList[i];
-    const { downloadUrl, shellName, type, name, title } = packageInfo;
+    const { downloadUrl, shellName, type, id, title } = packageInfo;
     const startTime = Date.now();
     let status;
     let errMsg;
     try {
-      process.send({ channel: processChannel, data: { currentIndex: i, name, status: 'process' } });
+      process.send({ channel: processChannel, data: { currentIndex: i, id, status: 'process' } });
 
       let packagePath: string;
       if (downloadUrl) {
@@ -91,21 +91,21 @@ async function installPackages({
         throw new Error('No package was found.');
       }
 
-      process.send({ channel: processChannel, data: { currentIndex: i, name, packagePath, status: 'downloaded' } });
+      process.send({ channel: processChannel, data: { currentIndex: i, id, packagePath, status: 'downloaded' } });
 
       // install package
       const { localPath } = await install({ packagePath, packageInfo, channel: installChannel, packagesData });
       // install package command
       // e.g: VS Code cli command 'code'
-      await installPkgCommandToPath(name, localPath);
+      await installPkgCommandToPath(id, localPath);
 
       status = 'finish';
-      process.send({ channel: processChannel, data: { currentIndex: i, status, name, packagePath } });
+      process.send({ channel: processChannel, data: { currentIndex: i, status, id, packagePath } });
     } catch (error) {
       errMsg = error instanceof Error ? error.message : error;
       log.error(error);
       status = 'error';
-      process.send({ channel: processChannel, data: { currentIndex: i, status, errMsg, name } });
+      process.send({ channel: processChannel, data: { currentIndex: i, status, errMsg, id } });
     } finally {
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -175,18 +175,18 @@ async function uninstallPackages(
   },
 ) {
   for (const packageInfo of packagesList) {
-    const { localPath, type, name } = packageInfo;
+    const { localPath, type, id } = packageInfo;
     if (localPath && fse.pathExistsSync(localPath)) {
       const PackageManager = packageProcessor[type];
       if (PackageManager) {
-        process.send({ channel: processChannel, data: { name, status: 'process' } });
+        process.send({ channel: processChannel, data: { id, status: 'process' } });
 
         const packageManager = new PackageManager(uninstallChannel, packagesData);
         try {
           await packageManager.uninstall(packageInfo);
-          process.send({ channel: processChannel, data: { name, status: 'finish' } });
+          process.send({ channel: processChannel, data: { id, status: 'finish' } });
         } catch (error) {
-          process.send({ channel: processChannel, data: { name, status: 'error', errMsg: error.message } });
+          process.send({ channel: processChannel, data: { id, status: 'error', errMsg: error.message } });
         }
       }
     }

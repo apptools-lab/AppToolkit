@@ -2,7 +2,7 @@ import * as path from 'path';
 import ini = require('ini');
 import * as fse from 'fs-extra';
 import * as globby from 'globby';
-import { AddUserConfig, UserGitConfig } from '../types/git';
+import { AddUserConfig, UserGitConfig } from '../types';
 import { GLOBAL_GITCONFIG_PATH, TOOLKIT_USER_GIT_CONFIG_DIR } from '../constants';
 import log from '../utils/log';
 import {

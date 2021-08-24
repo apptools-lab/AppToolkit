@@ -1,5 +1,5 @@
 export interface PackageInfo {
-  name: string;
+  id: string;
   title: string;
   description: string;
   link: string;
@@ -18,7 +18,11 @@ export interface PackageInfo {
   packagePath?: string;
   warningMessage?: string;
   options?: { [key: string]: any };
-  [key: string]: any;
+  // [key: string]: any;
+}
+
+export interface NodeInfo extends PackageInfo {
+  managerVersionStatus: keyof typeof VersionStatus;
 }
 
 export type Platforms = ['darwin', 'win32'];
@@ -40,7 +44,7 @@ export interface InstallResultData {
 
 export interface ProcessStatus {
   status: string;
-  name: string;
+  id: string;
   currentIndex?: number;
   result?: any;
   errMsg?: string;

@@ -1,5 +1,4 @@
-import { PackageInfo } from '@/interfaces/base';
-import { ProcessStatus } from '@/interfaces/application';
+import { PackageInfo, ProcessStatus } from '@/interfaces/base';
 import { ipcRenderer } from 'electron';
 
 interface State {
@@ -14,7 +13,7 @@ export default {
   },
   reducers: {
     updateInstallStatus(prevState: State, installStatus: ProcessStatus) {
-      const statusIndex = prevState.installStatuses.findIndex(({ name }) => installStatus.name === name);
+      const statusIndex = prevState.installStatuses.findIndex(({ id }) => installStatus.id === id);
       if (statusIndex > -1) {
         prevState.installStatuses.splice(statusIndex, 1, installStatus);
       } else {
@@ -22,7 +21,7 @@ export default {
       }
     },
     removeInstallStatus(prevState: State, installStatus: ProcessStatus) {
-      const statusIndex = prevState.installStatuses.findIndex(({ name }) => installStatus.name === name);
+      const statusIndex = prevState.installStatuses.findIndex(({ id }) => installStatus.id === id);
       if (statusIndex > -1) {
         prevState.installStatuses.splice(statusIndex, 1);
       }
