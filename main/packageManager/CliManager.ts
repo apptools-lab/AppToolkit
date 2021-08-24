@@ -1,12 +1,12 @@
 import * as execa from 'execa';
 import executeProfile from '../utils/executeProfile';
-import { IPackageInfo, IPackageInstaller } from '../types';
+import { PackageInfo, IPackageManager } from '../types';
 import log from '../utils/log';
 import ensureProfileExists from '../utils/ensureProfileExists';
 import writeLog from '../utils/writeLog';
 import getShellName from '../utils/getShellName';
 
-class CliInstaller implements IPackageInstaller {
+class CliManager implements IPackageManager {
   channel: string;
 
   cliProcessor: { [k: string]: Function };
@@ -24,7 +24,7 @@ class CliInstaller implements IPackageInstaller {
     };
   }
 
-  install = async (packageInfo: IPackageInfo, shPath: string) => {
+  install = async (packageInfo: PackageInfo, shPath: string) => {
     const { name } = packageInfo;
     const installFunc = this.cliProcessor[name];
     if (installFunc) {
@@ -80,4 +80,4 @@ class CliInstaller implements IPackageInstaller {
   };
 }
 
-export default CliInstaller;
+export default CliManager;

@@ -1,16 +1,16 @@
 import * as path from 'path';
 import * as execa from 'execa';
 import checkCommandInstalled from '../utils/checkCommandInstalled';
-import { IPackageInfo, IPackageInstaller, IPackagesData, Platform } from '../types';
+import { PackageInfo, IPackageManager, PackagesData, Platform } from '../types';
 import { INSTALL_COMMAND_PACKAGES, VSCODE_COMMAND_NAME, VSCODE_NAME } from '../constants';
 import writeLog from '../utils/writeLog';
 import getLocalDmgInfo from '../packageInfo/dmg';
 import installCommandToPath from '../utils/installCommandToPath';
 
-class IDEExtensionInstaller implements IPackageInstaller {
+class IDEExtensionManager implements IPackageManager {
   channel: string;
 
-  packagesData: IPackagesData;
+  packagesData: PackagesData;
 
   IDETypeProcessor: { [k: string]: Function };
 
@@ -24,7 +24,7 @@ class IDEExtensionInstaller implements IPackageInstaller {
     };
   }
 
-  install = async (packageInfo: IPackageInfo) => {
+  install = async (packageInfo: PackageInfo) => {
     const { name, options: { IDEType } } = packageInfo;
     const ret = { name };
     const installFunc = this.IDETypeProcessor[IDEType];
@@ -67,9 +67,9 @@ class IDEExtensionInstaller implements IPackageInstaller {
       // try to install code command to the path
       writeLog(this.channel, 'Try to install code command to path.', true, 'info');
 
-      const { apps = [] } = this.packagesData;
+      const { bases = [] } = this.packagesData;
 
-      const vscodeInfo = apps.find((app) => app.name === VSCODE_NAME && app.platforms.includes(process.platform as Platform));
+      const vscodeInfo = bases.find((base) => base.name === VSCODE_NAME && base.platforms.includes(process.platform as Platform));
       if (!vscodeInfo) {
         throw new Error(`${VSCODE_NAME} info was not found.`);
       }
@@ -100,4 +100,4 @@ class IDEExtensionInstaller implements IPackageInstaller {
   };
 }
 
-export default IDEExtensionInstaller;
+export default IDEExtensionManager;

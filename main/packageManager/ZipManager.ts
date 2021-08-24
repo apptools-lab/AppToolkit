@@ -3,16 +3,16 @@ import * as AdmZip from 'adm-zip';
 import * as decompress from 'decompress';
 import { APPLICATIONS_DIR_PATH } from '../constants';
 import writeLog from '../utils/writeLog';
-import { IPackageInstaller, IPackageInfo } from '../types';
+import { IPackageManager, PackageInfo } from '../types';
 
-class ZipInstaller implements IPackageInstaller {
+class ZipManager implements IPackageManager {
   channel: string;
 
   constructor(channel: string) {
     this.channel = channel;
   }
 
-  install = async (packageInfo: IPackageInfo, zipPath: string) => {
+  install = async (packageInfo: PackageInfo, zipPath: string) => {
     const { name } = packageInfo;
     const ret = { name, localPath: null };
 
@@ -36,4 +36,4 @@ class ZipInstaller implements IPackageInstaller {
   };
 }
 
-export default ZipInstaller;
+export default ZipManager;

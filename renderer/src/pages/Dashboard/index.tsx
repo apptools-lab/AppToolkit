@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid, Step, Message, Loading } from '@alifd/next';
+import { Button, Grid, Step, Message, Loading, Balloon, Icon } from '@alifd/next';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import classnames from 'classnames';
-import PageHeader from '@/components/PageHeader';
+import PageContainer from '@/components/PageContainer';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
-import { IPackageInfo } from '@/interfaces';
+import { PackageInfo, VersionStatus } from '@/interfaces/base';
 import { STEP_STATUS_ICON } from '@/constants';
-import AppCard from './components/AppCard';
+import AppCard from '@/components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const installStepItem = (
     <div className={styles.installStep}>
       <Step current={pkgInstallStep} direction="ver" shape="dot">
-        {selectedInstalledPackagesList.map((item: IPackageInfo, index: number) => {
+        {selectedInstalledPackagesList.map((item: PackageInfo, index: number) => {
           const { status } = pkgInstallStatuses[index] || {};
           return (
             <Step.Item
@@ -164,12 +164,11 @@ const Dashboard = () => {
   );
 
   return (
-    <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
-      <PageHeader
-        title="前端开发必备"
-        button={uninstalledPackagesList.length ? installButton : null}
-      />
-      <main>
+    <PageContainer
+      title="前端开发必备"
+      button={uninstalledPackagesList.length ? installButton : null}
+    >
+      <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
         {isInstalling ? (
           <div className={styles.install}>
             <Row wrap>
@@ -197,23 +196,34 @@ const Dashboard = () => {
           </div>
         ) : (
           <Row wrap gutter={8}>
-            {basePackagesList.map((item: IPackageInfo, index: number) => (
+            {basePackagesList.map((item: PackageInfo, index: number) => (
               <Col s={12} l={8} key={item.name}>
                 <AppCard
                   name={item.title}
                   description={item.description}
                   link={item.link}
                   icon={item.icon}
-                  versionStatus={item.versionStatus}
+                  operation={
+                    <div
+                      className={classnames(styles.status, { [styles.uninstalledStatus]: item.versionStatus !== 'installed' })}
+                    >
+                      {VersionStatus[item.versionStatus]}
+                      {item.warningMessage && (
+                      <Balloon trigger={<Icon type="warning" />} closable={false}>
+                        {item.warningMessage}
+                      </Balloon>
+                      )}
+                    </div>
+                  }
                   recommended={item.recommended}
                   showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
-                  warningMessage={item.warningMessage}
+
                 />
               </Col>
             ))}
           </Row>
         )}
-      </main>
+      </Loading>
       {visible && (
         <InstallConfirmDialog
           packages={uninstalledPackagesList}
@@ -221,7 +231,7 @@ const Dashboard = () => {
           onOk={onDialogConfirm}
         />
       )}
-    </Loading>
+    </PageContainer>
   );
 };
 

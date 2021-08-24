@@ -7,6 +7,7 @@ import getFolderPath from './getFolderPath';
 import handleNpmRegistry from './handleNpmRegistry';
 import handleNpmDependency from './handleNpmDependency';
 import checkIsAliInternal from './checkIsAliInternal';
+import handleApp from './handleApp';
 
 export default () => {
   getBasePackagesInfo();
@@ -26,4 +27,6 @@ export default () => {
   handleNpmDependency();
 
   checkIsAliInternal();
+
+  handleApp();
 };

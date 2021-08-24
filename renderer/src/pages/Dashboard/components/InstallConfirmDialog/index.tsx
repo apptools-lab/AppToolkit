@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
-import { IPackageInfo } from '@/interfaces';
+import { PackageInfo } from '@/interfaces/base';
 import { Dialog, Checkbox } from '@alifd/next';
 import styles from './index.module.scss';
 
 interface IInstallConfirmDialog {
-  packages: IPackageInfo[];
+  packages: PackageInfo[];
   onCancel: () => void;
   onOk: (value: string[]) => void;
 }

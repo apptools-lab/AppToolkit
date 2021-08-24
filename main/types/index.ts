@@ -1,4 +1,4 @@
-export interface IBasePackageInfo {
+export interface BasePackageInfo {
   title: string;
   name: string;
   description: string;
@@ -23,50 +23,57 @@ export type PackageType = 'cli' | 'dmg' | 'exe' | 'IDEExtension' | 'npm';
 
 export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
-export interface ILocalPackageInfo {
+export interface LocalPackageInfo {
   localVersion: string | null;
   versionStatus: VersionStatus;
   localPath?: string | null;
   warningMessage?: string;
   [key: string]: any;
 }
-export interface INodeVersionManagerInfo {
+export interface NodeVersionManagerInfo {
   managerVersionStatus: VersionStatus;
 }
 
-export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
+export interface PackageInfo extends BasePackageInfo, LocalPackageInfo { }
 
-export interface INodeManager {
+export interface NodeManager {
   installNode: Function;
 }
 
-export interface IPackageInstaller {
-  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
+export interface IPackageManager {
+  install: (packageInfo: PackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
+  uninstall?: (packageInfo: PackageInfo) => Promise<void>;
 }
 
-export interface IInstallResult {
+export interface InstallResult {
   title: string;
   duration: number;
   status: 'finish' | 'error';
   errMsg?: string;
 }
 
-export interface INodeVersions {
+export interface NodeVersions {
   versions: string[];
   majors: Array<{ version: string; title: string }>;
 }
 
-export interface INPMRegistry {
+export interface NPMRegistry {
   name: string;
   registry: string;
   recommended?: boolean;
   isInternal: boolean;
 }
 
-export interface IPackagesData {
-  bases: IBasePackageInfo[];
+export interface AppInfo {
+  category: string;
+  title: string;
+  packages: BasePackageInfo[];
+}
 
-  apps: IBasePackageInfo[];
+export interface PackagesData {
+  bases: BasePackageInfo[];
 
-  npmRegistries: INPMRegistry[];
+  apps: AppInfo[];
+
+  npmRegistries: NPMRegistry[];
 }

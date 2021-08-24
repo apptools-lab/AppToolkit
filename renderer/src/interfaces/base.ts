@@ -1,4 +1,4 @@
-export interface IPackageInfo {
+export interface PackageInfo {
   name: string;
   title: string;
   description: string;
@@ -35,16 +35,4 @@ export interface IInstallResultData {
   title: string;
   duration: number;
   errMsg?: string;
-}
-
-export interface INodeVersions {
-  versions: string[];
-  majors: Array<{ version: string; title: string }>;
-}
-
-export interface INPMRegistry {
-  name: string;
-  registry: string;
-  isInternal: boolean;
-  recommended?: boolean;
 }

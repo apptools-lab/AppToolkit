@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Button, Box, Typography, List, Tag, Balloon } from '@alifd/next';
-import { IInstallResultData } from '@/interfaces';
+import { IInstallResultData } from '@/interfaces/base';
 import styles from './index.module.scss';
 
 const { Group: TagGroup } = Tag;

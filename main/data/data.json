@@ -73,30 +73,118 @@
   ],
   "apps": [
     {
-      "title": "Google Chrome",
-      "name": "Google Chrome",
-      "description": "强大、快速的网页浏览器",
-      "link": "https://www.google.com/chrome/",
-      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
-      "version": null,
-      "recommended": true,
-      "isInternal": false,
-      "type": "dmg",
-      "platforms": ["darwin"]
+      "category": "browser",
+      "title": "浏览器",
+      "packages": [
+        {
+          "title": "Google Chrome",
+          "name": "Google Chrome",
+          "description": "由 Google 开发的一款设计简单、高效、强大的 Web 浏览器。",
+          "link": "https://www.google.com/chrome/",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
     },
     {
-      "title": "Visual Studio Code",
-      "name": "Visual Studio Code",
-      "description": "跨平台、轻量的代码编辑器",
-      "link": "https://code.visualstudio.com/",
-      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
-      "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
-      "version": null,
-      "recommended": true,
-      "isInternal": false,
-      "type": "dmg",
-      "platforms": ["darwin"]
+      "category": "IDE",
+      "title": "IDE",
+      "packages": [
+        {
+          "title": "Visual Studio Code",
+          "name": "Visual Studio Code",
+          "description": "由微软开发的跨平台的源代码编辑器，具有丰富的语言和运行时扩展的生态系统。",
+          "link": "https://code.visualstudio.com/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
+          "version": null,
+          "recommended": true,
+          "isInternal": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
+    },
+    {
+      "category": "api-debug",
+      "title": "接口调试",
+      "packages": [
+        {
+          "title": "Postman",
+          "name": "Postman",
+          "description": "一款简单好用的接口测试工具，可以发送几乎所有类型的 HTTP 请求。",
+          "isInternal": false,
+          "link": "https://www.postman.com/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01nvbd3u1oZy5Ioi53h_!!6000000005240-2-tps-512-512.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Postman-osx-8.10.0.zip",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
+    },
+    {
+      "category": "proxy",
+      "title": "网络代理",
+      "packages": [
+        {
+          "title": "Charles",
+          "name": "Charles",
+          "description": "一款强大的网络抓包和网络代理工具，允许开发者查看所有 HTTP 通信信息。",
+          "isInternal": false,
+          "link": "www.charlesproxy.com",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01CqzQcF1u5B9VgUgN3_!!6000000005985-55-tps-512-512.svg",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/Charles.zip",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
+    },
+    {
+      "category": "hosts",
+      "title": "Hosts",
+      "packages": [
+         {
+          "title": "SwitchHosts",
+          "name": "SwitchHosts",
+          "description": "一个管理 hosts 文件的应用，支持快速编辑和切换 hosts 配置。",
+          "isInternal": true,
+          "link": "https://swh.app/",
+          "icon": "https://img.alicdn.com/imgextra/i4/O1CN01LSkv2s21zhL9Fo5Nu_!!6000000007056-2-tps-225-225.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/SwitchHosts_4.0.2.6057.dmg",
+          "version": null,
+          "recommended": false,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
+    },
+    {
+      "category": "terminal",
+      "title": "终端",
+      "packages": [
+        {
+          "title": "iTerm",
+          "name": "iTerm",
+          "description": "一个为 MacOS 编写的，功能齐全的终端仿真程序，目标是在为用户提供最佳的命令行体验。",
+          "isInternal": false,
+          "link": "https://iterm2.com/",
+          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01pYnGui1ks3GGM2ZZe_!!6000000004738-2-tps-512-512.png",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/iTerm2-3_4_8.zip",
+          "version": null,
+          "recommended": true,
+          "type": "dmg",
+          "platforms": ["darwin"]
+        }
+      ]
     }
   ],
   "npmPackages": [

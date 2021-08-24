@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Input, Icon, Table, Button, Message, Balloon } from '@alifd/next';
-import { ISearchNpmDependency } from '@/interfaces/npmDependency';
+import { ISearchNpmDependency } from '@/interfaces/node';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';
@@ -13,7 +13,7 @@ const defaultTableColumnProps: any = {
   width: 80,
 };
 
-function InstallNpmDependency() {
+function NpmDependencyInstaller() {
   const [state, dispatcher] = store.useModel('npmDependency');
   const { searchValue, queryNpmDependencies, curInstallDepIndex } = state;
   const effectsState = store.useModelEffectsState('npmDependency');
@@ -107,4 +107,4 @@ function InstallNpmDependency() {
   );
 }
 
-export default InstallNpmDependency;
+export default NpmDependencyInstaller;
