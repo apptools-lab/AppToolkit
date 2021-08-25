@@ -1,8 +1,8 @@
 import * as shell from 'shelljs';
 import * as globby from 'globby';
-import { BasePackageInfo } from 'types';
-import { APPLICATIONS_DIR_PATH, DEFAULT_LOCAL_PACKAGE_INFO } from '../constants';
-import getVersionStatus from '../utils/getVersionStatus';
+import { BasePackageInfo } from '../../types';
+import { APPLICATIONS_DIR_PATH, DEFAULT_LOCAL_PACKAGE_INFO } from '../../constants';
+import getVersionStatus from '../../utils/getVersionStatus';
 
 async function getLocalDmgInfo(basePackageInfo: BasePackageInfo) {
   const { id, version: latestVersion } = basePackageInfo;

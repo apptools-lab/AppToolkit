@@ -11,6 +11,7 @@ import DmgManager from './DmgManager';
 import CliManager from './CliManager';
 import ZipManager from './ZipManager';
 import IDEExtensionManager from './IDEExtensionManager';
+import NpmDependencyManager from './NpmDependencyManager';
 
 // avoid error: 'Invalid package /Applications/xxx.app/Contents/Resources/app.asar'
 process.noAsar = true;
@@ -20,9 +21,10 @@ const packageProcessor = {
   zip: ZipManager,
   dmg: DmgManager,
   IDEExtension: IDEExtensionManager,
+  npmDependency: NpmDependencyManager,
 };
 
-const NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE = ['IDEExtension'];
+const NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE = ['IDEExtension', 'npmDependency'];
 
 process.on('message', processListener);
 
