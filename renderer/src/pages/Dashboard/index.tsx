@@ -12,7 +12,6 @@ import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
 import store from './store';
-import { stat } from 'original-fs';
 
 const { Row, Col } = Grid;
 

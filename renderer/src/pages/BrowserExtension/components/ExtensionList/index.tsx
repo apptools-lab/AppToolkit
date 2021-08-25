@@ -145,7 +145,7 @@ const ExtensionList: FC<{}> = () => {
       Message.error(effectsState.getExtensionsInfo.error.message);
     }
   }, [effectsState.getExtensionsInfo.error]);
-  console.log(extensionsInfo, 'extensionsInfo');
+
   return (
     <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
       {
