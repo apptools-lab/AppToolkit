@@ -1,7 +1,7 @@
 import { PackageInfo } from './base';
 
 export interface AppInfo {
-  category: string;
+  id: string;
   title: string;
   packages: PackageInfo[];
 }

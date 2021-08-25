@@ -144,7 +144,7 @@ const AppList: FC<{}> = () => {
     <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
       {
         appsInfo.map((appInfo: AppInfo, index: number) => (
-          <div className={styles.appInfo} key={appInfo.category}>
+          <div className={styles.appInfo} key={appInfo.id}>
             <List
               dataSource={appInfo.packages || []}
               renderItem={(item: PackageInfo, i: number) => (
