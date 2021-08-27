@@ -107,5 +107,5 @@ export interface InstalledDependency {
 }
 
 export interface InstalledDependencies {
-  dependencies: {[key: string]: InstalledDependency};
+  dependencies: Record<string, InstalledDependency>;
 }
