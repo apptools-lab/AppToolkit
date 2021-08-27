@@ -103,7 +103,7 @@
   ],
   "apps": [
     {
-      "category": "browser",
+      "id": "browser",
       "title": "浏览器",
       "packages": [
         {
@@ -122,7 +122,7 @@
       ]
     },
     {
-      "category": "IDE",
+      "id": "IDE",
       "title": "IDE",
       "packages": [
         {
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "category": "api-debug",
+      "id": "api-debug",
       "title": "接口调试",
       "packages": [
         {
@@ -160,7 +160,7 @@
       ]
     },
     {
-      "category": "proxy",
+      "id": "proxy",
       "title": "网络代理",
       "packages": [
         {
@@ -179,7 +179,7 @@
       ]
     },
     {
-      "category": "hosts",
+      "id": "hosts",
       "title": "Hosts",
       "packages": [
          {
@@ -198,7 +198,7 @@
       ]
     },
     {
-      "category": "terminal",
+      "id": "terminal",
       "title": "终端",
       "packages": [
         {
@@ -237,7 +237,7 @@
   ],
   "browserExtensions": [
     {
-      "category": "Chrome",
+      "id": "Google Chrome",
       "title" : "Chrome",
       "extensions": [
         {

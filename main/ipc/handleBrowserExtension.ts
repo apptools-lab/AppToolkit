@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import store, { packagesDataKey } from '../store';
-import { BrowserExtensionInfo, PackagesData, Platform, PackageInfo } from '../types';
+import { BrowserExtensionInfo, PackagesData, Platform, PackageInfo, BasePackageInfo } from '../types';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
 import { getPackageInfo } from '../packageInfo';
 import log from '../utils/log';
@@ -17,22 +17,40 @@ const childProcessMap = new Map();
 export default () => {
   ipcMain.handle('get-browser-extensions-info', async () => {
     const data: PackagesData = store.get(packagesDataKey);
-    const { browserExtensions = [] } = data;
+    const { browserExtensions = [], apps } = data;
     const isAliInternal = await checkIsAliInternal();
 
-    // 1. only return the extension info in current platform
-    // 2. remove internal extension when not in the ali internal
-    const browserExtensionsInfo = browserExtensions.map((item: BrowserExtensionInfo) => {
-      const { extensions = [] } = item;
+    const browserExtensionsInfo: BrowserExtensionInfo[] = [];
+
+    for (const browserExtension of browserExtensions) {
+      const { extensions = [], id } = browserExtension;
+      let baseBrowserInfo: BasePackageInfo;
+
+      apps.forEach((item) => {
+        const { packages = [] } = item;
+        packages.forEach((pkg) => {
+          if (pkg.id === id) {
+            baseBrowserInfo = pkg;
+          }
+        });
+      });
+      let browserInfo: PackageInfo;
+      if (baseBrowserInfo) {
+        browserInfo = await getPackageInfo(baseBrowserInfo);
+      }
+
+      // 1. only return the extension info in current platform
+      // 2. remove internal extension when not in the ali internal
       const filterExtensions = extensions.filter(({ isInternal, platforms }) => {
         return platforms.includes(process.platform as Platform) && (isInternal ? isAliInternal : true);
       });
 
-      return {
-        ...item,
+      browserExtensionsInfo.push({
+        ...browserExtension,
+        versionStatus: browserInfo ? browserInfo.versionStatus : 'uninstalled',
         extensions: filterExtensions,
-      };
-    });
+      });
+    }
 
     const result = [];
     for (const browserExtensionInfo of browserExtensionsInfo) {

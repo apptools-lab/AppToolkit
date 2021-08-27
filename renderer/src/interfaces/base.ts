@@ -18,7 +18,6 @@ export interface PackageInfo {
   packagePath?: string;
   warningMessage?: string;
   options?: { [key: string]: any };
-  // [key: string]: any;
 }
 
 export interface NodeInfo extends PackageInfo {

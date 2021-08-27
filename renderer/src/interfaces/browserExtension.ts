@@ -1,7 +1,8 @@
-import { PackageInfo } from './base';
+import { PackageInfo, VersionStatus } from './base';
 
 export interface BrowserExtensionsInfo {
-  category: string;
+  id: string;
   title: string;
+  versionStatus: keyof typeof VersionStatus;
   extensions: PackageInfo[];
 }

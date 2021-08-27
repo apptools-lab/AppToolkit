@@ -7,6 +7,7 @@ import store from '../../store';
 import styles from './index.module.scss';
 import { PackageInfo, ProcessStatus } from '@/interfaces/base';
 import { BrowserExtensionsInfo } from '@/interfaces/browserExtension';
+import BrowserNotInstalled from '../BrowserNotInstalled';
 
 const { Row, Col } = Grid;
 
@@ -149,21 +150,26 @@ const ExtensionList: FC<{}> = () => {
     <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
       {
         extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
-          <div className={styles.extensionInfo} key={extensionInfo.category}>
+          <div className={styles.extensionInfo} key={extensionInfo.id}>
             <div className={styles.title}>{extensionInfo.title}</div>
-            <Row wrap gutter={8}>
-              {
-                extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
-                  <Col s={12} l={8} key={packageInfo.id}>
-                    <AppCard
-                      {...packageInfo}
-                      operation={<Operation packageInfo={packageInfo} />}
-                      showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
-                    />
-                  </Col>
-                ))
-              }
-            </Row>
+            {extensionInfo.versionStatus === 'uninstalled' ? (
+              <BrowserNotInstalled browser={extensionInfo.id} />
+            ) : (
+              <Row wrap gutter={8}>
+                {
+                 extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
+                   <Col s={12} l={8} key={packageInfo.id}>
+                     <AppCard
+                       {...packageInfo}
+                       operation={<Operation packageInfo={packageInfo} />}
+                       showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
+                     />
+                   </Col>
+                 ))
+               }
+              </Row>
+            )}
+
           </div>
         ))
       }

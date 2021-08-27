@@ -65,14 +65,15 @@ export interface NPMRegistry {
 }
 
 export interface AppInfo {
-  category: string;
+  id: string;
   title: string;
   packages: BasePackageInfo[];
 }
 
 export interface BrowserExtensionInfo {
-  category: string;
+  id: string;
   title: string;
+  versionStatus: VersionStatus;
   extensions: BasePackageInfo[];
 }
 
