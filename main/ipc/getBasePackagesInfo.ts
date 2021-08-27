@@ -9,10 +9,15 @@ export default () => {
     const data = store.get(packagesDataKey);
     const { bases = [] }: { bases: BasePackageInfo[] } = data;
     const isAliInternal = await checkIsAliInternal();
-    const basePackages = bases.filter(({ isInternal, platforms }) => {
+    const basePackages = bases.filter(({ isInternal, platforms, options = {} }) => {
       // 1. only return the package info in current platform
       // 2. remove internal package when not in the ali internal
-      return platforms.includes(process.platform as Platform) && (isInternal ? isAliInternal : true);
+      let shouldDisplayInCurEnv = isInternal ? isAliInternal : true;
+      if (options.onlyInCurEnv) {
+        // only display in current env
+        shouldDisplayInCurEnv = isAliInternal === isInternal;
+      }
+      return platforms.includes(process.platform as Platform) && shouldDisplayInCurEnv;
     });
     const packagesData = await Promise.all(basePackages.map((basePackageInfo: BasePackageInfo) => {
       return getPackageInfo(basePackageInfo);

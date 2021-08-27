@@ -69,6 +69,36 @@
         "IDEType": "VSCode"
       },
       "platforms": ["darwin", "win32"]
+    },
+    {
+      "title": "tnpm",
+      "id": "tnpm",
+      "description": "阿里内部的 npm 包管理工具，可以更快安装 npm 依赖",
+      "link": "https://web.npm.alibaba-inc.com/package/tnpm",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01Cbbgr31ui6ourNmOe_!!6000000006070-2-tps-59-68.png",
+      "version": "latest",
+      "isInternal": true,
+      "recommended": true,
+      "type": "npmDependency",
+      "options": {
+        "onlyInCurEnv": true
+      },
+      "platforms": ["darwin", "win32"]
+    },
+    {
+      "title": "cnpm",
+      "id": "cnpm",
+      "description": "淘宝推出的 npm 包管理工具，使用淘宝镜像源，可以更快安装 npm 依赖",
+      "link": "https://www.npmjs.com/package/cnpm",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01Cbbgr31ui6ourNmOe_!!6000000006070-2-tps-59-68.png",
+      "version": "latest",
+      "isInternal": false,
+      "recommended": true,
+      "type": "npmDependency",
+      "options": {
+        "onlyInCurEnv": true
+      },
+      "platforms": ["darwin", "win32"]
     }
   ],
   "apps": [
@@ -185,15 +215,6 @@
           "platforms": ["darwin"]
         }
       ]
-    }
-  ],
-  "npmPackages": [
-    {
-      "name": "@ali/def-cli",
-      "description": "DEF 脚手架",
-      "version": "",
-      "recommended": true,
-      "isInternal": true
     }
   ],
   "npmRegistries": [

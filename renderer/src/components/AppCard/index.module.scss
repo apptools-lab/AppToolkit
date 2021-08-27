@@ -42,10 +42,13 @@
       margin-top: 2px;
       width: 100%;
       font-size: 12px;
+      height: 28px;
       color: rgb(128, 128, 128);
-      overflow: hidden;
+      overflow: hidden; 
       text-overflow: ellipsis;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
 
     .operation {

@@ -5,12 +5,14 @@ import getLocalCliInfo from './cli';
 import getLocalDmgInfo from './dmg';
 import getIDEExtensionInfo from './IDEExtension';
 import getBrowserExtensionInfo from './browserExtension';
+import getNpmDependencyInfo from './npmDependency';
 
 const getLocalInfoProcessor = {
   dmg: getLocalDmgInfo,
   cli: getLocalCliInfo,
   IDEExtension: getIDEExtensionInfo,
   browserExtension: getBrowserExtensionInfo,
+  npmDependency: getNpmDependencyInfo,
 };
 
 export async function getPackageInfo(packageInfo: BasePackageInfo): Promise<PackageInfo> {

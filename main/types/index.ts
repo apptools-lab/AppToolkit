@@ -99,3 +99,13 @@ export interface UserGitConfig {
   gitDirs: string[];
   user: { name: string; email: string; hostName: string };
 }
+
+export interface InstalledDependency {
+  version: string;
+  from?: string;
+  resolved?: string;
+}
+
+export interface InstalledDependencies {
+  dependencies: Record<string, InstalledDependency>;
+}
