@@ -5,8 +5,8 @@ import { APPLICATIONS_DIR_PATH, DEFAULT_LOCAL_PACKAGE_INFO } from '../constants'
 import getVersionStatus from '../utils/getVersionStatus';
 
 async function getLocalDmgInfo(basePackageInfo: BasePackageInfo) {
-  const { name, version: latestVersion } = basePackageInfo;
-  const app = /\.app$/.test(name) ? name : `${name}.app`;
+  const { id, version: latestVersion } = basePackageInfo;
+  const app = /\.app$/.test(id) ? id : `${id}.app`;
   const appInfo = { ...DEFAULT_LOCAL_PACKAGE_INFO };
 
   const paths = await globby([app], {

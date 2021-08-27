@@ -1,4 +1,4 @@
-import { PackageInfo, IInstallResultData } from '@/interfaces/base';
+import { PackageInfo, InstallResultData } from '@/interfaces/base';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -41,12 +41,12 @@ export default {
       // skip the start step
       prevState.currentStep = 1;
       prevState.pkgInstallStep = 0;
-      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map((item: PackageInfo) => ({ name: item.name, status: 'wait' }));
+      prevState.pkgInstallStatuses = selectedInstalledPackagesList.map(({ id }: PackageInfo) => ({ id, status: 'wait' }));
       prevState.selectedInstalledPackagesList = selectedInstalledPackagesList;
       prevState.installResult = [];
     },
 
-    updateInstallResult(prevState, installResult: IInstallResultData[]) {
+    updateInstallResult(prevState, installResult: InstallResultData[]) {
       prevState.installResult = installResult;
     },
   },

@@ -7,8 +7,8 @@ const processor = {
 };
 
 export default async (basePackageInfo: BasePackageInfo) => {
-  const { name, version, options } = basePackageInfo;
-  const getLocalInfoFunc = processor[name];
+  const { id, version, options } = basePackageInfo;
+  const getLocalInfoFunc = processor[id];
 
-  return getLocalInfoFunc ? await getLocalInfoFunc(name, version, options) : await getLocalCliInfo(name, version);
+  return getLocalInfoFunc ? await getLocalInfoFunc(id, version, options) : await getLocalCliInfo(id, version);
 };

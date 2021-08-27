@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { AddUserConfig } from 'types/git';
+import { AddUserConfig } from '../types';
 import {
   getGlobalGitConfig,
   updateGlobalGitConfig,

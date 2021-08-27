@@ -1,6 +1,6 @@
 export interface BasePackageInfo {
   title: string;
-  name: string;
+  id: string;
   description: string;
   icon: string;
   downloadUrl?: string;
@@ -28,7 +28,7 @@ export interface LocalPackageInfo {
   versionStatus: VersionStatus;
   localPath?: string | null;
   warningMessage?: string;
-  [key: string]: any;
+  packagePath?: string;
 }
 export interface NodeVersionManagerInfo {
   managerVersionStatus: VersionStatus;
@@ -41,7 +41,7 @@ export interface NodeManager {
 }
 
 export interface IPackageManager {
-  install: (packageInfo: PackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
+  install: (packageInfo: PackageInfo, packagePath?: string) => Promise<{ id: string; localPath?: string }>;
   uninstall?: (packageInfo: PackageInfo) => Promise<void>;
 }
 
@@ -65,9 +65,16 @@ export interface NPMRegistry {
 }
 
 export interface AppInfo {
-  category: string;
+  id: string;
   title: string;
   packages: BasePackageInfo[];
+}
+
+export interface BrowserExtensionInfo {
+  id: string;
+  title: string;
+  versionStatus: VersionStatus;
+  extensions: BasePackageInfo[];
 }
 
 export interface PackagesData {
@@ -76,4 +83,19 @@ export interface PackagesData {
   apps: AppInfo[];
 
   npmRegistries: NPMRegistry[];
+
+  browserExtensions: BrowserExtensionInfo[];
+}
+
+export interface AddUserConfig {
+  configName: string;
+  SSHPublicKey: string;
+  user: { name: string; email: string; hostName: string };
+}
+
+export interface UserGitConfig {
+  SSHPublicKey: string;
+  configName: string;
+  gitDirs: string[];
+  user: { name: string; email: string; hostName: string };
 }

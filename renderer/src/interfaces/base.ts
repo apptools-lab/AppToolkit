@@ -1,5 +1,5 @@
 export interface PackageInfo {
-  name: string;
+  id: string;
   title: string;
   description: string;
   link: string;
@@ -15,9 +15,13 @@ export interface PackageInfo {
   versionStatus: keyof typeof VersionStatus;
   localVersion: string | null;
   localPath: string | null;
+  packagePath?: string;
   warningMessage?: string;
   options?: { [key: string]: any };
-  [key: string]: any;
+}
+
+export interface NodeInfo extends PackageInfo {
+  managerVersionStatus: keyof typeof VersionStatus;
 }
 
 export type Platforms = ['darwin', 'win32'];
@@ -30,9 +34,18 @@ export enum VersionStatus {
   'upgradeable' = '可升级'
 }
 
-export interface IInstallResultData {
+export interface InstallResultData {
   status: 'error' | 'finish';
   title: string;
   duration: number;
   errMsg?: string;
+}
+
+export interface ProcessStatus {
+  status: string;
+  id: string;
+  currentIndex?: number;
+  result?: any;
+  errMsg?: string;
+  packagePath?: string;
 }

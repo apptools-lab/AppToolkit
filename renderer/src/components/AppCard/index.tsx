@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import styles from './index.module.scss';
 
 interface IAppCard {
-  name: string;
+  title: string;
   description: string;
   icon: string;
   link: string;
@@ -12,7 +12,7 @@ interface IAppCard {
 }
 
 const AppCard: React.FC<IAppCard> = ({
-  name,
+  title,
   description,
   icon,
   link,
@@ -29,7 +29,7 @@ const AppCard: React.FC<IAppCard> = ({
       </div>
       <div className={classnames(styles.right, { [styles.splitLine]: showSplitLine })}>
         <div className={styles.title}>
-          <a href={link} target="__blank">{name}</a>
+          <a href={link} target="__blank">{title}</a>
           {recommended &&
             <img src="https://img.alicdn.com/imgextra/i1/O1CN016h0vOh1W0YLcwNuAf_!!6000000002726-55-tps-32-32.svg" alt="recommendIcon" />
           }

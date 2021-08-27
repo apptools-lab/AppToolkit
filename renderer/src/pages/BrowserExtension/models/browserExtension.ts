@@ -4,14 +4,12 @@ import { ipcRenderer } from 'electron';
 interface State {
   appsInfo: PackageInfo[];
   installStatuses: ProcessStatus[];
-  uninstallStatuses: ProcessStatus[];
 }
 
 export default {
   state: {
-    appsInfo: [],
+    extensionsInfo: [],
     installStatuses: [],
-    uninstallStatuses: [],
   },
   reducers: {
     updateInstallStatus(prevState: State, installStatus: ProcessStatus) {
@@ -28,25 +26,14 @@ export default {
         prevState.installStatuses.splice(statusIndex, 1);
       }
     },
-    updateUninstallStatus(prevState: State, uninstallStatus: ProcessStatus) {
-      const statusIndex = prevState.uninstallStatuses.findIndex(({ id }) => uninstallStatus.id === id);
-      if (statusIndex > -1) {
-        prevState.uninstallStatuses.splice(statusIndex, 1, uninstallStatus);
-      } else {
-        prevState.uninstallStatuses.push(uninstallStatus);
-      }
-    },
-    removeUninstallStatus(prevState: State, uninstallStatus: ProcessStatus) {
-      const statusIndex = prevState.uninstallStatuses.findIndex(({ id }) => uninstallStatus.id === id);
-      if (statusIndex > -1) {
-        prevState.uninstallStatuses.splice(statusIndex, 1);
-      }
-    },
   },
   effects: () => ({
-    async getAppsInfo() {
-      const appsInfo = await ipcRenderer.invoke('get-apps-info');
-      this.setState({ appsInfo });
+    async getExtensionsInfo() {
+      const extensionsInfo = await ipcRenderer.invoke('get-browser-extensions-info');
+      this.setState({ extensionsInfo });
+    },
+    async checkBrowserHostAlive(browserType: string) {
+      return await ipcRenderer.invoke('check-webstore-host-alive', browserType);
     },
   }),
 };

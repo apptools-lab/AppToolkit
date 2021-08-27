@@ -3,6 +3,10 @@
 # dependencies
 node_modules/
 
+# lock
+package-lock.json
+yarn.lock
+
 # production
 dist/
 release/

@@ -8,7 +8,7 @@ export default () => {
   ipcMain.handle('get-node-info', () => {
     const data = store.get(packagesDataKey);
     const { bases = [] }: { bases: BasePackageInfo[] } = data;
-    const nodeBasicInfo = bases.find((base: BasePackageInfo) => base.name === 'node');
+    const nodeBasicInfo = bases.find((base: BasePackageInfo) => base.id === 'node');
     const nodeInfo = getPackageInfo(nodeBasicInfo);
 
     return nodeInfo;

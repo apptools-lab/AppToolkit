@@ -13,8 +13,8 @@ class ZipManager implements IPackageManager {
   }
 
   install = async (packageInfo: PackageInfo, zipPath: string) => {
-    const { name } = packageInfo;
-    const ret = { name, localPath: null };
+    const { id } = packageInfo;
+    const ret = { id, localPath: null };
 
     const zip = new AdmZip(zipPath);
     const appEntry = zip.getEntries()[0];

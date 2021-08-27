@@ -1,0 +1,49 @@
+.extensionsList {
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: 30px;
+
+  .tag {
+    color: black;
+    margin: 20px 0 0 38px;
+  }
+
+  .extensionInfo {
+    margin: 0 38px;
+    border-bottom: 1px solid #e6e6e6;
+
+    .title {
+      font-size: 20px;
+      padding: 20px 0;
+      font-weight: bold;
+    }
+
+    .btn {
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #f2f2f7;
+      width: 64px;
+      height: 24px;
+      border-radius: 10px;
+    }
+  }
+}
+
+.dialog {
+  line-height: 20px;
+
+  div:nth-of-type(1) {
+    display: flex;
+    align-items: center;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      margin-right: 5px;
+
+      .icon {
+        font-size: 14px;
+      }
+    }
+  }
+}

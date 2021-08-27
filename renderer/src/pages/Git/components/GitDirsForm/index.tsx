@@ -17,7 +17,7 @@ const GitDirsForm = ({ refresh, gitDirs = [], configName }) => {
     },
   });
 
-  const getDataSource = () => {
+  const getDataSource = (): Array<{ id: number; value: string}> => {
     return Array.from(field.getValue('gitDirs'));
   };
 
