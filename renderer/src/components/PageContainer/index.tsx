@@ -15,7 +15,7 @@ const PageContainer: FC<PageContainerProps> = ({ children, title, style, button 
   return (
     <div style={{ ...style }}>
       <PageHeader title={title} button={button} sticky={inView} />
-      <div ref={ref} style={{ height: 'calc(100vh - 178px)' }}>{children}</div>
+      <div ref={ref} style={{ height: 'calc(100vh - 108px)' }}>{children}</div>
     </div>
   );
 };

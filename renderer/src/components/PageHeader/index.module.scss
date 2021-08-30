@@ -12,7 +12,7 @@
   z-index: 10;
 
   .title {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
   }
 }
@@ -21,7 +21,8 @@
   margin: 0;
   background: #f9f9f9;
   position: sticky;
-  top: -40px;
+  top: 0;
+  padding: 16px 0;
 
   .title {
     font-size: 14px;
@@ -29,5 +30,10 @@
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  .btn {
+    position: absolute;
+    right: 20px;
   }
 }

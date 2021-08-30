@@ -1,6 +1,5 @@
 .xtermContainer {
   position: relative;
-  // width: 100%;
   background: $color-fill1-1;
 
   .clearIcon {
@@ -14,8 +13,7 @@
 }
 
 .xtermRef {
-  height: calc(100% + 20px);
-  // width: calc(100% + 20px);
+  height: calc(100vh - 248px);
 
   &>div {
     padding: 10px;

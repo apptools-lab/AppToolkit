@@ -100,7 +100,7 @@ const ExtensionList: FC<{}> = () => {
       <>
         {
           versionStatus === 'installed' ? (
-            <span style={{ color: 'gray' }}>已安装</span>
+            <span style={{ color: 'gray', fontSize: 12 }}>已安装</span>
           ) : (
             <Button text type="primary" className={styles.btn} onClick={async () => handleInstall(packageInfo)}>
               {installStatus || effectsState.checkBrowserHostAlive.isLoading ? <Icon type="loading" /> : '安装'}

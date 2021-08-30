@@ -12,7 +12,7 @@ const PageHeader: FC<PageHeaderProps> = ({ title, button = null, sticky = false 
   return (
     <div className={cn(styles.header, { [styles.sticky]: !sticky })}>
       <div className={styles.title}>{title}</div>
-      {button}
+      <div className={styles.btn}>{button}</div>
     </div>
   );
 };

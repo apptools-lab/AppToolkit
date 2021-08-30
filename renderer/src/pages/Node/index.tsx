@@ -34,7 +34,7 @@ const Node = () => {
     goBack();
   };
 
-  const cannelInstallBtn = (currentStep !== 3 && nodeInstallVisible) ? (
+  const cannelInstallBtn = (currentStep !== 2 && nodeInstallVisible) ? (
     <div className={styles.cannelBtn}>
       <Button type="normal" onClick={cancelNodeInstall}>
         取消安装

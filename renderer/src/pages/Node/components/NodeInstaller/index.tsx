@@ -164,7 +164,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
     case 1:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} />
         </div>
       );
       break;

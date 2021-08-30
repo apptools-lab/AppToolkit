@@ -1,5 +1,5 @@
 .card {
-  height: 146px;
+  min-height: 146px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -9,8 +9,8 @@
     margin: 0 20px;
 
     img {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
     }
   }
 
