@@ -97,7 +97,7 @@ function NpmDependencyInstaller() {
         aria-label="input with config of innerAfter"
         onChange={(value: string) => dispatcher.updateSearchValue(value)}
       />
-      <Table dataSource={queryNpmDependencies} className={styles.table} loading={effectsState.searchNpmDependencies.isLoading}>
+      <Table size="small" dataSource={queryNpmDependencies} className={styles.table} loading={effectsState.searchNpmDependencies.isLoading}>
         <Table.Column {...defaultTableColumnProps} title="npm 依赖" dataIndex="name" width={120} />
         <Table.Column {...defaultTableColumnProps} title="版本" dataIndex="version" />
         <Table.Column {...defaultTableColumnProps} title="主页" dataIndex="homepage" cell={homepageRender} />

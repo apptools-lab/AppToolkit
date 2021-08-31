@@ -44,7 +44,7 @@ function NpmDependency() {
           <NpmDependencyInstaller />
         </Dropdown>
       </div>
-      <Table loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>
+      <Table size="small" loading={effectsState.getGlobalNpmDependencies.isLoading} dataSource={npmDependencies} className={styles.table}>
         <Table.Column {...defaultTableColumnProps} width={300} title="npm 依赖" dataIndex="name" />
         <Table.Column {...defaultTableColumnProps} title="当前版本" dataIndex="currentVersion" />
         <Table.Column {...defaultTableColumnProps} title="最新版本" dataIndex="latestVersion" cell={latestVersionCell} />
