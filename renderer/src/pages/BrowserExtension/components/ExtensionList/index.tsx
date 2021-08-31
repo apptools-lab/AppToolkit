@@ -70,7 +70,7 @@ const ExtensionList: FC<{}> = () => {
                 已下载到本地，请自行在浏览器的扩展程序管理中安装。
               </div>
               <br />
-              <div>详细的安装方式请参考<a href="https://appworks.site/pack/basic/toolkit.html" target="_blank" rel="noreferrer">文档</a>。</div>
+              <div>详细的安装方式请参考<a href="https://github.com/appworks-lab/toolkit#浏览器插件管理" target="_blank" rel="noreferrer">文档</a>。</div>
             </>
           )}
         </div>

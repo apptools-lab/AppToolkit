@@ -11,7 +11,7 @@ export default () => {
         align="t"
         delay={200}
       >
-        该目录下的 Git 项目都将使用此 Git 配置，详细说明参考<a href="https://appworks.site/pack/basic/toolkit.html#使用不同的-git-配置" target="__blank">文档</a>
+        该目录下的 Git 项目都将使用此 Git 配置，详细说明参考<a href="https://github.com/appworks-lab/toolkit#使用不同的 Git 配置" target="__blank">文档</a>
       </Tooltip>
     </span>
   );
