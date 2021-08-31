@@ -10,7 +10,7 @@
   <a href="/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
 </p>
 
-#  AppToolkit
+# AppToolkit
 
 > 一款帮助开发者更轻松的管理前端开发软件，更快速配置前端环境的前端研发工具箱。
 
