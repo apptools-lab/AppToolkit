@@ -1,5 +1,5 @@
 {
-  "name": "appworks-toolkit",
+  "name": "AppToolkit",
   "private": true,
   "version": "0.3.0",
   "description": "The Frontend Developer Toolkit",
@@ -27,8 +27,8 @@
   },
   "main": "./dist/index.js",
   "build": {
-    "appId": "appworks-toolkit",
-    "productName": "AppWorks Toolkit",
+    "appId": "AppToolkit",
+    "productName": "AppToolkit",
     "files": [
       "dist/**/*",
       "package.json"

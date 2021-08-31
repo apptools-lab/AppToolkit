@@ -10,7 +10,7 @@
   <a href="/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
 </p>
 
-# AppWorks Toolkit
+#  AppToolkit
 
 > 一款多端开发的工具箱，以帮助开发者更快速配置前端环境，更轻松管理开发软件。
 
