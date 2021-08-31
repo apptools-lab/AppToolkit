@@ -70,6 +70,7 @@ Toolkit 提供全局 npm 依赖的可视化管理，支持查看、安装、重�
 这时就需要在本地配置多份 Git 配置和 SSH 密钥了。Toolkit 为了减少用户的配置成本，支持可视化管理不同用户账号的 Git 配置。
 
 ![添加 Git 配置](https://img.alicdn.com/imgextra/i3/O1CN01KWwkIp27lr4GBdk02_!!6000000007838-2-tps-1720-1200.png_790x10000.jpg)
+
 其中，部分字段的说明如下：
 
 - 配置名称：建议填写 Git 服务器的名称，比如 Github、GitLab
