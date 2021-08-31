@@ -56,7 +56,7 @@
       "platforms": ["darwin"]
     },
     {
-      "title": "AppWorks Pack",
+      "title": "AppWorks",
       "id": "iceworks-team.iceworks",
       "description": "基于 VS Code 的多端研发套件",
       "link": "https://marketplace.visualstudio.com/items?itemName=iceworks-team.iceworks",
