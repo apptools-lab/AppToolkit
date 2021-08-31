@@ -36,5 +36,6 @@ export const NPMRC_PATH = path.join(HOME_DIR, '.npmrc');
 export const NPM_REGISTRY = 'https://registry.npmjs.org/';
 export const TAOBAO_NPM_REGISTRY = 'https://registry.npm.taobao.org';
 export const TAOBAO_NODE_MIRROR = 'https://npm.taobao.org/mirrors/node';
+export const REGISTRY_FIELD = 'registry';
 // git
 export const GLOBAL_GITCONFIG_PATH = path.join(HOME_DIR, '.gitconfig');
