@@ -68,7 +68,7 @@ class DmgManager implements IPackageManager {
 
   installPkg = async ({ sourcePath, id }) => {
     const modifiedSource = formatWhitespaceInPath(sourcePath);
-    const options = { name: 'AppWorks Toolkit' };
+    const options = { name: 'AppToolkit' };
 
     return new Promise((resolve, reject) => {
       sudo.exec(
