@@ -16,6 +16,16 @@ const asideMenuConfig = [
     path: '/git',
     icon: 'git',
   },
+  {
+    name: '桌面客户端',
+    path: '/application',
+    icon: 'application',
+  },
+  {
+    name: '浏览器插件',
+    path: '/browser-extension',
+    icon: 'liulanqi',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

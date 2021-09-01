@@ -1,4 +1,5 @@
-import { IPackageInfo, INodeVersions } from '@/interfaces';
+import { PackageInfo } from '@/interfaces/base';
+import { INodeVersions } from '@/interfaces/node';
 import { ipcRenderer } from 'electron';
 
 const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };
@@ -30,7 +31,7 @@ export default {
     nodeInstallProcessStatusChannel: 'install-node-process-status',
   },
   reducers: {
-    updateNodeInfo(prevState, payload: IPackageInfo) {
+    updateNodeInfo(prevState, payload: PackageInfo) {
       prevState.nodeInfo = payload;
     },
 
@@ -75,7 +76,7 @@ export default {
   },
   effects: (dispatch) => ({
     async getNodeInfo() {
-      const nodeInfo: IPackageInfo = await ipcRenderer.invoke('get-node-info');
+      const nodeInfo: PackageInfo = await ipcRenderer.invoke('get-node-info');
       dispatch.nodeVersion.updateNodeInfo(nodeInfo);
     },
 

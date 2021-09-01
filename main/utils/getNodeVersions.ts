@@ -1,6 +1,6 @@
 import allNodeVersions = require('all-node-versions');
 import { TAOBAO_NODE_MIRROR } from '../constants';
-import { INodeVersions } from '../types';
+import { NodeVersions } from '../types';
 
 interface IMajorVersion {
   major: number;
@@ -8,7 +8,7 @@ interface IMajorVersion {
   lts?: string;
 }
 
-async function getNodeVersions(): Promise<INodeVersions> {
+async function getNodeVersions(): Promise<NodeVersions> {
   const MIN_MAJOR = 10;
 
   const options = {

@@ -1,5 +1,5 @@
 import { Grid, Button, Balloon } from '@alifd/next';
-import { IPackageInfo } from '@/interfaces';
+import { NodeInfo } from '@/interfaces/base';
 import store from '../../store';
 import styles from './index.module.scss';
 
@@ -8,7 +8,7 @@ const { Row, Col } = Grid;
 const NodeVersion = () => {
   const [state, dispatchers] = store.useModel('nodeVersion');
   const { nodeInfo, nodeInstallChannel, nodeInstallProcessStatusChannel } = state;
-  const { localVersion, managerVersionStatus } = nodeInfo as IPackageInfo;
+  const { localVersion, managerVersionStatus } = nodeInfo as NodeInfo;
 
   const onSwitchVersionBtnClick = async () => {
     await dispatchers.clearCaches({ installChannel: nodeInstallChannel, processChannel: nodeInstallProcessStatusChannel });

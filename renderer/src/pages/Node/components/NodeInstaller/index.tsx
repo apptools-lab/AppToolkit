@@ -4,7 +4,7 @@ import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { IPackageInfo } from '@/interfaces';
+import { PackageInfo } from '@/interfaces/base';
 import store from '../../store';
 import InstallResult from '../NodeInstallResult';
 import CustomGlobalDepsPathDialog from '../CustomGlobalDepsPathDialog';
@@ -29,7 +29,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
     nodeInfo,
   } = state;
   const { globalDependenciesInfo } = npmDependencyState;
-  const { options = {} } = nodeInfo as IPackageInfo;
+  const { options = {} } = nodeInfo as PackageInfo;
   const { managerName } = options;
   const effectsLoading = store.useModelEffectsLoading('nodeVersion');
   const effectsErrors = store.useModelEffectsError('nodeVersion');
@@ -164,7 +164,7 @@ const NodeInstaller: FC<INodeInstaller> = ({ goBack }) => {
     case 1:
       mainbody = (
         <div className={styles.term}>
-          <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ rows: 32 }} />
+          <XtermTerminal id={TERM_ID} name={TERM_ID} />
         </div>
       );
       break;

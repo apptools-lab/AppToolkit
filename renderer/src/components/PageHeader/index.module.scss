@@ -7,26 +7,33 @@
   padding: 60px 0 10px;
   margin: 0 40px;
   border-bottom: 1px solid rgb(230, 230, 230);
-  position: sticky;
-  top: -40px;
+
   background: white;
   z-index: 10;
 
   .title {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
   }
 }
 
 .sticky {
   margin: 0;
-  background: rgba($color: #f9f9f9, $alpha: 0.95);
-  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 15%);
+  background: #f9f9f9;
+  position: sticky;
+  top: 0;
+  padding: 16px 0;
+
   .title {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  .btn {
+    position: absolute;
+    right: 20px;
   }
 }

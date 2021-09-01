@@ -1,4 +1,4 @@
-import { INPMRegistry } from '@/interfaces';
+import { NPMRegistry } from '@/interfaces/node';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -10,9 +10,9 @@ export default {
   },
   effects: () => ({
     async getAllNpmRegistries() {
-      const allNpmRegistries: INPMRegistry[] = await ipcRenderer.invoke('get-all-npm-registries');
+      const allNpmRegistries: NPMRegistry[] = await ipcRenderer.invoke('get-all-npm-registries');
       const npmRegistries = allNpmRegistries
-        .map(({ registry, recommended = false }: INPMRegistry) => ({ value: registry, label: registry, recommended }));
+        .map(({ registry, recommended = false }: NPMRegistry) => ({ value: registry, label: registry, recommended }));
       this.setState({ allNpmRegistries: npmRegistries });
     },
 

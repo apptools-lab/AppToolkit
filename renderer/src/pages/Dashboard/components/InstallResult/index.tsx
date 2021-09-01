@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { Button, Box, Typography, List, Tag, Balloon } from '@alifd/next';
-import { IInstallResultData } from '@/interfaces';
+import { InstallResultData } from '@/interfaces/base';
 import styles from './index.module.scss';
 
 const { Group: TagGroup } = Tag;
 
 interface IInstallResult {
   goBack: any;
-  result: IInstallResultData[];
+  result: InstallResultData[];
 }
 
 const successTag = <Tag type="normal" color="green" size="medium">成功</Tag>;

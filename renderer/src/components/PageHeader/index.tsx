@@ -1,31 +1,18 @@
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC } from 'react';
 import cn from 'classnames';
 import styles from './index.module.scss';
 
-interface IPageHeader {
+interface PageHeaderProps {
   title: string;
   button?: React.ReactNode;
+  sticky?: boolean;
 }
 
-const PageHeader: FC<IPageHeader> = ({ title, button = null }) => {
-  const headerRef = useRef(null);
-  const [sticky, setSticky] = useState(false);
-
-  useEffect(() => {
-    function handleScroll() {
-      if (headerRef.current.offsetTop >= 40) {
-        setSticky(true);
-      } else {
-        setSticky(false);
-      }
-    }
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+const PageHeader: FC<PageHeaderProps> = ({ title, button = null, sticky = false }) => {
   return (
-    <div className={cn(styles.header, { [styles.sticky]: sticky })} ref={headerRef}>
+    <div className={cn(styles.header, { [styles.sticky]: !sticky })}>
       <div className={styles.title}>{title}</div>
-      {button}
+      <div className={styles.btn}>{button}</div>
     </div>
   );
 };

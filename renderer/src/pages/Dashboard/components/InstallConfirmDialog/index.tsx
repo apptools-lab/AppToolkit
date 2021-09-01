@@ -1,17 +1,17 @@
 import { FC, useState } from 'react';
-import { IPackageInfo } from '@/interfaces';
+import { PackageInfo } from '@/interfaces/base';
 import { Dialog, Checkbox } from '@alifd/next';
 import styles from './index.module.scss';
 
 interface IInstallConfirmDialog {
-  packages: IPackageInfo[];
+  packages: PackageInfo[];
   onCancel: () => void;
   onOk: (value: string[]) => void;
 }
 
 const InstallConfirmDialog: FC<IInstallConfirmDialog> = ({ packages, onCancel, onOk }) => {
   const [selectedPackages, setSelectedPackages] = useState(() => {
-    const initialState = packages.map((item) => { return item.name; });
+    const initialState = packages.map((item) => { return item.id; });
     return initialState;
   });
 
@@ -31,7 +31,7 @@ const InstallConfirmDialog: FC<IInstallConfirmDialog> = ({ packages, onCancel, o
       <Checkbox.Group direction="ver" value={selectedPackages} onChange={onSelectedPackagesChange}>
         {
           packages.map((item) => (
-            <Checkbox value={item.name} key={item.name}>{item.title}</Checkbox>
+            <Checkbox value={item.id} key={item.id}>{item.title}</Checkbox>
           ))
         }
       </Checkbox.Group>

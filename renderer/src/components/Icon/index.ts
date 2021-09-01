@@ -4,7 +4,7 @@ import DynamicIcon from '@icedesign/dynamic-icon';
 const Icon = DynamicIcon.create({
   fontFamily: 'toolkit',
   prefix: 'toolkit',
-  css: 'https://at.alicdn.com/t/font_2523538_agqzazql1xa.css',
+  css: 'https://at.alicdn.com/t/font_2523538_54f3by262ta.css',
 });
 
 export default Icon;
