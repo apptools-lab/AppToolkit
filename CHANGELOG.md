@@ -16,6 +16,7 @@
 - Feat: add recommend icon to registry
 - Feat: update log to sls
 - Fix: page header component style and node install style
+
 ## 0.2.0
 
 - Feat: git manager, including global config, user config and SSH key
