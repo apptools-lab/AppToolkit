@@ -1,8 +1,21 @@
 # CHANGELOG
 
+## 0.3.0
+
+- Feat: support install tnpm or cnpm
+- Feat: support install mac app
+- Feat: support install chrome extension
+- Feat: smaller window size
+- chore: update readme
+
 ## 0.2.1
 
 - Fix: fail to get internal npm package info
+- Feat: use default shell to excute sh file
+- Feat: add global dependencies prefix path
+- Feat: add recommend icon to registry
+- Feat: update log to sls
+- Fix: page header component style and node install style
 
 ## 0.2.0
 
