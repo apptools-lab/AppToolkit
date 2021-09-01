@@ -11,7 +11,6 @@
 ## 0.2.1
 
 - Fix: fail to get internal npm package info
-- Fix: fail to get internal npm package info
 - Feat: use default shell to excute sh file
 - Feat: add global dependencies prefix path
 - Feat: add recommend icon to registry
