@@ -35,16 +35,14 @@ const AppDetail: FC<AppDetailProps> = ({
         <div className={styles.content}>
           <a href={link} target="_blank" rel="noreferrer">{title}</a>
           <div>{description}</div>
-          <div style={{ width: 28 }}>
-            {operation || null}
-          </div>
+          <div>{operation || null}</div>
         </div>
       </div>
       <div className={styles.carousel}>
         {imgList && imgList.length && (
         <Carousel showIndicators={false} showStatus={false} showThumbs={false}>
           {imgList.map((img: string) => (
-            <img src={img} key={img} style={{ height: '300px' }} />
+            <img src={img} key={img} />
           ))}
         </Carousel>
         )}
@@ -54,7 +52,7 @@ const AppDetail: FC<AppDetailProps> = ({
           Array.isArray(detail) ? (
             detail.map((item) => {
               if (typeof item === 'string') {
-                return <p>{item}</p>;
+                return <div key={item}>{item}</div>;
               } else if (typeof item === 'object') {
                 return (
                   <div key={item.title}>
@@ -66,7 +64,7 @@ const AppDetail: FC<AppDetailProps> = ({
               return null;
             })
           ) : (
-            <p>{detail}</p>
+            <div>{detail}</div>
           )
         }
       </div>

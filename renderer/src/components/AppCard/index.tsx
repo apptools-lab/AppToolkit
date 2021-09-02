@@ -9,27 +9,26 @@ interface IAppCard {
   recommended?: boolean;
   showSplitLine?: boolean;
   operation?: React.ReactNode | null;
+  showDetailPage?: Function;
 }
 
 const AppCard: React.FC<IAppCard> = ({
   title,
   description,
   icon,
-  link,
   recommended,
   operation = null,
   showSplitLine = true,
+  showDetailPage = () => {},
 }) => {
   return (
     <div className={styles.card}>
       <div className={styles.left}>
-        <a href={link} target="_blank" rel="noreferrer">
-          <img src={icon} alt="appIcon" />
-        </a>
+        <img src={icon} alt="appIcon" onClick={() => showDetailPage()} />
       </div>
       <div className={classnames(styles.right, { [styles.splitLine]: showSplitLine })}>
         <div className={styles.title}>
-          <a href={link} target="_blank" rel="noreferrer">{title}</a>
+          <div onClick={() => showDetailPage()}>{title}</div>
           {recommended &&
             <img src="https://img.alicdn.com/imgextra/i1/O1CN016h0vOh1W0YLcwNuAf_!!6000000002726-55-tps-32-32.svg" alt="recommendIcon" />
           }

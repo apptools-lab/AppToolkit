@@ -189,7 +189,9 @@ const AppList: FC<{}> = () => {
                         extra={<Operation packageInfo={item} />}
                         title={
                           <div className={styles.title}>
-                            <div onClick={() => showDetailPage(item)} className={styles.subTitle}>{item.title}</div>
+                            <div onClick={() => showDetailPage(item)} className={styles.subTitle}>
+                              {item.title}
+                            </div>
                             <Tag size="small" className={styles.tag} type="normal" color={presetColors[index % presetColors.length]}>
                               {appInfo.title}
                             </Tag>
@@ -208,9 +210,9 @@ const AppList: FC<{}> = () => {
           </PageContainer>
         ) : (
           <AppDetail
+            {...currentAppInfo as any}
             goBack={goBack}
             operation={<Operation packageInfo={currentAppInfo as any} balloonAlign="br" />}
-            {...currentAppInfo as any}
           />
         )
       }

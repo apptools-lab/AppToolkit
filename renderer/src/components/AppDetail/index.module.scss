@@ -36,9 +36,9 @@
         font-size: 12px;
       }
 
-      button {
+      div:nth-of-type(2) {
+        width: 36px;
         margin-top: 10px;
-        border-radius: 30px;
       }
     }
   }
@@ -51,19 +51,23 @@
     width: 100%;
     display: flex;
     justify-content: center;
+
+    img {
+      height: 360px;
+      border-radius: 14px;
+    }
   }
 
   .detail {
-
+    line-height: 20px;
     .title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 500;
     }
 
     .content {
       margin: 5px 0 20px;
       font-size: 12px;
-      line-height: 18px;
     }
   }
 }

@@ -11,6 +11,7 @@
     img {
       width: 56px;
       height: 56px;
+      cursor: pointer;
     }
   }
 
@@ -26,12 +27,13 @@
       height: 32px;
       line-height: 32px;
 
-      a {
+      div {
         max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         color: #333;
+        cursor: pointer;
       }
       img {
         margin-left: 10px;

@@ -129,10 +129,9 @@
             }
           ],
           "imgList": [
-            "https://img.alicdn.com/imgextra/i1/O1CN01jvYZCz1eJLYdORXZI_!!6000000003850-2-tps-924-578.png",
-            "https://www.google.com/chrome/static/images/homepage/homepage_tools-2x.png",
-            "https://www.google.com/chrome/static/images/homepage/homepage_privacy-2x.png",
-            "https://www.google.com/chrome/static/images/homepage/homepage_features-2x.png"
+            "https://img.alicdn.com/imgextra/i4/O1CN013AF1UR1ou7Vw8sVfT_!!6000000005284-2-tps-2878-1746.png",
+            "https://img.alicdn.com/imgextra/i1/O1CN01eywdjI1EQ3LTZfVF5_!!6000000000345-2-tps-2874-1750.png",
+            "https://img.alicdn.com/imgextra/i2/O1CN01t4X91z21bskOJk6eG_!!6000000007004-2-tps-2878-1748.png"
           ],
           "link": "https://www.google.com/chrome/",
           "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
@@ -162,9 +161,7 @@
           "type": "dmg",
           "platforms": ["darwin"],
           "imgList": [
-            "https://img.alicdn.com/imgextra/i2/O1CN01M0YegS1fujV7VUWUq_!!6000000004067-2-tps-1416-886.png",
-            "https://img.alicdn.com/imgextra/i1/O1CN01pL0qTp1cadH1rPHzO_!!6000000003617-2-tps-940-645.png"
-          ],
+            "https://img.alicdn.com/imgextra/i2/O1CN01M0YegS1fujV7VUWUq_!!6000000004067-2-tps-1416-886.png"          ],
           "detail": [
             {
               "title": "智能",
@@ -238,7 +235,9 @@
           "recommended": true,
           "type": "dmg",
           "platforms": ["darwin"],
-          "imgList": ["https://www.charlesproxy.com/assets/sm/upload/ze/ob/56/d0/charles-macosx.png?k=f51db4fab2"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i3/O1CN0172s1BL1rrJwMwTdBi_!!6000000005684-2-tps-2872-1748.png"
+          ],
           "detail": [
             {
               "title": "SSL 代理",
@@ -277,12 +276,7 @@
           "type": "dmg",
           "platforms": ["darwin"],
           "imgList": [
-            "https://swh.app/images/features/syntax-highlight.png",
-            "https://swh.app/images/features/multiple-selection.png",
-            "https://swh.app/images/features/tray-window.png",
-            "https://swh.app/images/features/export-import.png",
-            "https://swh.app/images/features/quick-comment.png",
-            "https://swh.app/images/features/dark-mode.png"
+            "https://img.alicdn.com/imgextra/i1/O1CN01Z3XWgM1pR622NObNS_!!6000000005356-2-tps-2876-1752.png"
           ],
           "detail": [
             {
@@ -391,7 +385,21 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://lh3.googleusercontent.com/XWuZGqIrIsaoKHUqqQ2rs_GhS5JaH1p5pPBIUpj22mjNRNdR3Ana8FKz4B7JwsA6HIFVXGuU7pa4ELiW6iUNhs0Iyg=w640-h400-e365-rj-sc0x00ffffff",
+            "https://reactjs.org/static/3046f500b9bfc052bde8b7b3b3cfc243/ad997/flame-chart.png"
+          ],
+          "detail": [
+            {
+              "title": "组件调试",
+              "content": "Components 选项卡显示在页面上呈现的根组件，以及它们最终呈现的子组件。通过选择树中的一个组件，您可以在右侧面板中检查和编辑其当前道具和状态。"
+            },
+            {
+              "title": "组件性能",
+              "content": "使用 React 的实验性 Profiler API 来收集每个呈现组件的时间信息，以确定 React 应用程序中的性能瓶颈。"
+            }
+          ]
         },
         {
           "title": "Redux DevTools",
@@ -407,7 +415,16 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://user-images.githubusercontent.com/7957859/48663602-3aac4900-ea9b-11e8-921f-97059cbb599c.png"
+          ],
+          "detail": [
+            {
+              "title": "介绍"
+            },
+            "通过 Redux DevTools，可以清晰的看到当前 store 的 State 和触发的 Action 变化。"
+          ]
         },
         {
           "title": "山海关插件",
@@ -423,7 +440,17 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i4/O1CN01OzHO0l1azFKFdno3c_!!6000000003400-2-tps-2878-1752.png",
+            "https://img.alicdn.com/imgextra/i1/O1CN01IqJ2G01SxrCPNhreQ_!!6000000002314-2-tps-2878-1750.png"
+          ],
+          "detail": [
+            {
+              "title": "介绍"
+            },
+            "这是一个集本地代理、mock、接口转发为一体的工具，用于对接口环境配置、mock数据设置等。用户可以在开发中使用该插件，可以将接口数据代理到本地mock、预发环境接口数据等。"
+          ]
         },
         {
           "title": "Ali Test Login",
@@ -439,15 +466,24 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://lh3.googleusercontent.com/Ys95PxccfrdqD-KazkA7Lw1QDllgkX1GpjZPPMrd_7v42Q0p_k6ZuXk4OTXHnJVqwy_AWYDvnZrFtGUG3ZgxvXsmkw=w640-h400-e365-rj-sc0x00ffffff"
+          ],
+          "detail": [
+            {
+              "title": "介绍"
+            },
+            "这是一个面向阿里巴巴开发测试员工使用的辅助登录插件，用来显示用户在阿里巴巴的所有测试账号，点击测试账号即可快捷的完成测试账号的登录操作，以提升测试效率。"
+          ]
         },
         {
-          "title": "极速二维码-多场景解码工具",
-          "id": "eefoinodjigoedmfjkbikmdhecggljgc",
-          "description": "二维码生成、截屏解码、图片解码等诸多功能。",
-          "link": "https://chrome.google.com/webstore/detail/the-quick-qr-code-multi-s/eefoinodjigoedmfjkbikmdhecggljgc",
-          "icon": "https://img.alicdn.com/imgextra/i2/O1CN01WYv0r91xHUeQokfKl_!!6000000006418-2-tps-128-128.png",
-          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/The-Quick-QR-Code-Multi-scene-decoding-tool_v3.5.1.crx",
+          "title": "二维码生成器 (Quick QR)",
+          "id": "afpbjjgbdimpioenaedcjgkaigggcdpp",
+          "description": "方便地把当前页面转化成二维码",
+          "link": "https://chrome.google.com/webstore/detail/qr-code-generator/afpbjjgbdimpioenaedcjgkaigggcdpp",
+          "icon": "https://lh3.googleusercontent.com/lmKPPwyDZddSxT4DBtw9PsexjcVd1Ssw9P1nmOMbB9HlmPFebHgOBWHcDMYzISBmzmZWSXvQWUid3MMp5GbL2Xe4hA=w128-h128-e365",
+          "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/chrome-extensions/QR-Code-Generator_v9.16.crx",
           "version": null,
           "recommended": false,
           "isInternal": false,
@@ -455,7 +491,20 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i2/O1CN01V7D6451zidM2GLIYv_!!6000000006748-2-tps-2878-1750.png"
+          ],
+          "detail": [
+            {
+              "title": "特性"
+            },
+            "1. 为当前页面生成二维码",
+            "2. 为页面上任一链接生成二维码（右键点击即可）",
+            "3. 输入任何内容生成二维码",
+            "4. 二维码分辨率可自行设置，支持高清二维码",
+            "5. 支持 Logo、批量生成（点击相应按钮）"
+          ]
         },
         {
           "title": "XSwitch",
@@ -471,7 +520,16 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i1/O1CN01MRNadg1txOQJmT8eG_!!6000000005968-2-tps-2878-1752.png"
+          ],
+          "detail": [
+            {
+              "title": "特性"
+            },
+            "一个重定向 URL 并允许 CORS 使本地开发体验轻松愉快的工具。"
+          ]
         },
         {
           "title": "Octotree - GitHub code tree",
@@ -487,7 +545,20 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://lh3.googleusercontent.com/yEhcwst5muYssFTkxD4kg3_r8Up1VKBwkE8Y36yhKv6V1dq--uq_8lhXVuQtlSIzK80LuJVHPhLggLRgt_69CEwvXQ=w640-h400-e365-rj-sc0x00ffffff",
+            "https://lh3.googleusercontent.com/Z04WLg7D12KSqMmtAEo8NWyGNPf0oMFk02Xr0COVTstSd-ri7gCTinvwMGrfbW29oyP2aAPoE_ZQL812vzGVJfV7HA=w640-h400-e365-rj-sc0x00ffffff"
+          ],
+          "detail": [
+            {
+              "title": "特性"
+            },
+            "1. 快速类IDE代码树",
+            "2. 快速文件搜索",
+            "3. 高性能，适用于任何大小的存储库",
+            "4. 支持 GitHub 主题"
+          ]
         },
         {
           "title": "JSON Viewer",
@@ -503,7 +574,19 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i2/O1CN01kiMRlc1o5HYIgQtTA_!!6000000005173-2-tps-2878-1754.png"
+          ],
+          "detail": [
+            {
+              "title": "特性"
+            },
+            "1. 语法高亮",
+            "2. 可折叠树，带有缩进向导和项目计数",
+            "3. 用于在原始 JSON 和解析 JSON 之间切换的按钮",
+            "4. 解析后的JSON作为全局变量JSON导出，因此您可以在控制台中使用"
+          ]
         },
         {
           "title": "Vue.js devtools",
@@ -519,7 +602,11 @@
           "options": {
             "browserType": "Chrome"
           },
-          "platforms": ["darwin", "win32"]
+          "platforms": ["darwin", "win32"],
+          "imgList": [
+            "https://img.alicdn.com/imgextra/i4/O1CN01RdTVAz1qNijB20Ubv_!!6000000005484-2-tps-2878-1750.png"
+          ],
+          "detail": ""
         }
       ]
     }
