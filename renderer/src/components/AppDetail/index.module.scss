@@ -1,0 +1,69 @@
+.appDetail {
+  margin: 20px 0 60px;
+  padding: 0 40px;
+
+  .nav {
+    margin-left: -30px;
+    i {
+      cursor: pointer;
+    }
+  }
+
+  .header {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 68px;
+      height: 68px;
+    }
+
+    .content {
+      margin-left: 30px;
+
+      a {
+        font-size: 22px;
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #333;
+      }
+
+      div:nth-of-type(1) {
+        margin-top: 5px;
+        color: gray;
+        font-size: 12px;
+      }
+
+      button {
+        margin-top: 10px;
+        border-radius: 30px;
+      }
+    }
+  }
+
+  .carousel, .detail {
+    margin-top: 30px;
+  }
+
+  .carousel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .detail {
+
+    .title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .content {
+      margin: 5px 0 20px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+  }
+}
