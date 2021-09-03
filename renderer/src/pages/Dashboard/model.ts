@@ -51,8 +51,8 @@ export default {
     },
   },
   effects: (dispatch) => ({
-    async getBasePackages() {
-      const data = await ipcRenderer.invoke('get-base-packages-info');
+    async getBasePackages(force = false) {
+      const data = await ipcRenderer.invoke('get-base-packages-info', force);
       dispatch.dashboard.updateBasePackagesList(data);
       const packagesList = data.filter((basePackage: PackageInfo) => {
         return basePackage.versionStatus !== 'installed';
