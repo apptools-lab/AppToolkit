@@ -1,10 +1,15 @@
 import * as path from 'path';
 import { BrowserWindow } from 'electron';
 import * as isDev from 'electron-is-dev';
+import openAboutWindow from 'about-window';
+
+const packageJSON = require('../package.json');
+
+const { name } = packageJSON;
 
 let mainWindow: BrowserWindow;
 
-function createWindow() {
+function createMainWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 860,
@@ -31,11 +36,23 @@ function createWindow() {
   }
 }
 
-function send(channel: string, ...args: any[]) {
+function sendToMainWindow(channel: string, ...args: any[]) {
   mainWindow.webContents.send(channel, ...args);
 }
 
+function createAboutWindow() {
+  openAboutWindow({
+    icon_path: path.join(__dirname, '../resources/icon.png'),
+    product_name: name,
+    package_json_dir: path.resolve(`${__dirname}/../`),
+    copyright: 'Copyright © 2021-present AppToolkit',
+    homepage: 'https://github.com/appworks-lab/toolkit',
+    bug_report_url: 'https://github.com/appworks-lab/toolkit/issues',
+  });
+}
+
 export {
-  createWindow,
-  send,
+  createMainWindow,
+  sendToMainWindow,
+  createAboutWindow,
 };

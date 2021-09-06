@@ -9,7 +9,7 @@ import checkIsAliInternal from '../utils/checkIsAliInternal';
 import log from '../utils/log';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import { record } from '../recorder';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 
 const childProcessMap = new Map();
 
@@ -76,7 +76,7 @@ export default () => {
         }
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 
@@ -112,7 +112,7 @@ export default () => {
         }
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 };

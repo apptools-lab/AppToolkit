@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
 import * as path from 'path';
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import {
   getGlobalDependencies,
   uninstallGlobalDependency,
@@ -61,7 +61,7 @@ export default () => {
           action: 'createCustomGlobalDependenciesDir',
         });
       }
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 
