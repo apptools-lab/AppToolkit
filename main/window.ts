@@ -28,11 +28,11 @@ function createMainWindow() {
   // and load the index.html of the app.
   if (isDev) {
     // eslint-disable-next-line @iceworks/best-practices/no-http-url
-    mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL('http://localhost:3000/main/');
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.resolve(__dirname, './assets/index.html'));
+    mainWindow.loadFile(path.resolve(__dirname, './assets/main.html'));
   }
 }
 
