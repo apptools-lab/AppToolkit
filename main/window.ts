@@ -8,6 +8,7 @@ const packageJSON = require('../package.json');
 const { name } = packageJSON;
 
 let mainWindow: BrowserWindow;
+let updaterWindow: BrowserWindow;
 
 function createMainWindow() {
   // Create the browser window.
@@ -40,6 +41,37 @@ function sendToMainWindow(channel: string, ...args: any[]) {
   mainWindow.webContents.send(channel, ...args);
 }
 
+async function createUpdaterWindow() {
+  // Create the browser window.
+  updaterWindow = new BrowserWindow({
+    width: 500,
+    height: 300,
+    resizable: false,
+    fullscreenable: false,
+    maximizable: false,
+    minimizable: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  // and load the index.html of the app.
+  if (isDev) {
+    // Open the DevTools.
+    updaterWindow.webContents.openDevTools();
+    // eslint-disable-next-line @iceworks/best-practices/no-http-url
+    await updaterWindow.loadURL('http://localhost:3000/updater/');
+  } else {
+    await updaterWindow.loadFile(path.resolve(__dirname, './assets/updater.html'));
+  }
+}
+
+function sendToUpdaterWindow(channel: string, ...args: any[]) {
+  updaterWindow.webContents.send(channel, ...args);
+}
+
 function createAboutWindow() {
   openAboutWindow({
     icon_path: path.join(__dirname, '../resources/icon.png'),
@@ -54,5 +86,9 @@ function createAboutWindow() {
 export {
   createMainWindow,
   sendToMainWindow,
+  createUpdaterWindow,
+  sendToUpdaterWindow,
   createAboutWindow,
+  mainWindow,
+  updaterWindow,
 };

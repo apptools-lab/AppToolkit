@@ -1,3 +1,29 @@
 .updaterContainer {
   width: 100%;
+  padding: 0 20px;
+
+  div {
+    padding-top: 16px;
+  }
+
+  .title {
+    font-weight: 500;
+  }
+
+  .changelog {
+    font-size: 12px;
+  }
+
+  ul {
+    margin-top: 10px;
+    height: 96px;
+    overflow-y: scroll;
+  }
+
+  .btnWrap {
+    float: right;
+    button:nth-of-type(2) {
+      margin-left: 10px;
+    }
+  }
 }

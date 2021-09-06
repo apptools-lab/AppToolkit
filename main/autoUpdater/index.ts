@@ -1,7 +1,11 @@
 import { NsisUpdater, MacUpdater, AppImageUpdater } from 'electron-updater';
-import { app, dialog } from 'electron';
+import { app } from 'electron';
+import fetch from 'node-fetch';
 import * as isDev from 'electron-is-dev';
 import log from '../utils/log';
+import { createUpdaterWindow, sendToUpdaterWindow } from '../window';
+
+const { version: currentVersion } = require('../../package.json');
 
 let AutoUpdater;
 if (process.platform === 'win32') {
@@ -39,22 +43,27 @@ autoUpdater.on('download-progress', (meta) => {
 
 autoUpdater.on('update-downloaded', (info) => {
   log.info('update-downloaded', info);
-  app.whenReady().then(() => {
-    const clickId = dialog.showMessageBoxSync({
-      type: 'info',
-      title: '升级提示',
-      message: '已为你下载到最新版，是否立即升级?',
-      buttons: ['马上升级', '手动重启'],
-      cancelId: 1,
+  const { version: latestVersion } = info;
+  app.whenReady()
+    .then(() => {
+      return createUpdaterWindow();
+    })
+    .then(() => {
+      return fetchChangelog(latestVersion);
+    })
+    .then((changelog) => {
+      sendToUpdaterWindow('update-info', {
+        currentVersion,
+        latestVersion,
+        changelog,
+      });
+    })
+    .catch((e) => {
+      log.error(e);
     });
-    if (clickId === 0) {
-      autoUpdater.quitAndInstall();
-      app.quit();
-    }
-  });
 });
 
-export function checkForUpdates() {
+export async function checkForUpdates() {
   if (isDev) {
     return;
   }
@@ -62,5 +71,10 @@ export function checkForUpdates() {
   return autoUpdater.checkForUpdates();
 }
 
-export default autoUpdater;
+async function fetchChangelog(version: string) {
+  const res = await fetch(`https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/changelog/${version}.json`);
+  const content = await res.json();
+  return content;
+}
 
+export default autoUpdater;
