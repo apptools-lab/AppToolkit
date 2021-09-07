@@ -63,7 +63,7 @@ autoUpdater.on('update-downloaded', (info) => {
     });
 });
 
-export async function checkForUpdates() {
+export function checkForUpdates() {
   if (isDev) {
     return;
   }

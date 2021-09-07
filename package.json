@@ -17,7 +17,7 @@
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
     "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build",
-    "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app",
+    "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app && npm run upload:app",
     "upload:app": "ts-node ./scripts/uploadApp",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",

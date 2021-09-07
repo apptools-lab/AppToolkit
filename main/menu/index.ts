@@ -23,7 +23,7 @@ function setAppMenu() {
           click: async () => {
             const updateInfo = await checkForUpdates();
             if (updateInfo) {
-              const { versionInfo } = updateInfo as any;
+              const { versionInfo } = updateInfo;
               if (
                 versionInfo &&
               versionInfo.version &&
