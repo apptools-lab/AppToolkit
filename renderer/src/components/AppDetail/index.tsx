@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { Icon } from '@alifd/next';
 import styles from './index.module.scss';
 import { PackageInfo } from '@/interfaces/base';
@@ -20,6 +20,20 @@ const AppDetail: FC<AppDetailProps> = ({
   detail,
   goBack,
 }) => {
+  useEffect(() => {
+    function handleStickyChange(e) {
+      const header = e.detail.target; // header became sticky or stopped sticking.
+      const sticking = e.detail.stuck; // true when header is sticky.
+      console.log(header, sticking);
+      header.classList.toggle('shadow', sticking); // add drop shadow when sticking.
+      document.querySelector('.who-is-sticking').textContent = header.textContent;
+    }
+    document.addEventListener('sticky-change', handleStickyChange);
+
+    return () => {
+      document.removeEventListener('sticky-change', handleStickyChange);
+    };
+  });
   return (
     <div className={styles.appDetail}>
       <div className={styles.nav}>

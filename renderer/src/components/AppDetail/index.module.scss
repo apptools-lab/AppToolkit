@@ -4,6 +4,9 @@
 
   .nav {
     margin-left: -30px;
+    position: sticky;
+    top: 20px;
+
     i {
       cursor: pointer;
     }
