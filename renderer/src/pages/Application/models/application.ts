@@ -1,4 +1,4 @@
-import { PackageInfo, ProcessStatus } from '@/interfaces/base';
+import { PackageInfo, ProcessStatus } from '@/types/base';
 import { ipcRenderer } from 'electron';
 
 interface State {

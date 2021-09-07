@@ -1,7 +1,9 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode } from 'react';
+import cn from 'classnames';
 import { Icon } from '@alifd/next';
+import { useInView } from 'react-intersection-observer';
 import styles from './index.module.scss';
-import { PackageInfo } from '@/interfaces/base';
+import { PackageInfo } from '@/types/base';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
@@ -15,56 +17,48 @@ const AppDetail: FC<AppDetailProps> = ({
   icon,
   description,
   operation,
-  imgList,
+  images,
   link,
-  detail,
+  intro,
   goBack,
 }) => {
-  useEffect(() => {
-    function handleStickyChange(e) {
-      const header = e.detail.target; // header became sticky or stopped sticking.
-      const sticking = e.detail.stuck; // true when header is sticky.
-      console.log(header, sticking);
-      header.classList.toggle('shadow', sticking); // add drop shadow when sticking.
-      document.querySelector('.who-is-sticking').textContent = header.textContent;
-    }
-    document.addEventListener('sticky-change', handleStickyChange);
-
-    return () => {
-      document.removeEventListener('sticky-change', handleStickyChange);
-    };
+  const { ref, inView } = useInView({
+    threshold: 0.95,
   });
+
   return (
     <div className={styles.appDetail}>
-      <div className={styles.nav}>
+      <div className={cn(styles.nav, { [styles.sticky]: !inView })}>
         <Icon
           type="arrow-left"
           onClick={() => {
             goBack();
           }}
         />
+        {!inView && <div>{title}</div>}
       </div>
-      <div className={styles.header}>
-        <img src={icon} alt="icon" />
-        <div className={styles.content}>
-          <a href={link} target="_blank" rel="noreferrer">{title}</a>
-          <div>{description}</div>
-          <div>{operation || null}</div>
+      <main ref={ref} style={{ height: 'calc(100vh - 40px)' }}>
+        <div className={styles.header}>
+          <img src={icon} alt="icon" />
+          <div className={styles.content}>
+            <a href={link} target="_blank" rel="noreferrer">{title}</a>
+            <div>{description}</div>
+            <div>{operation || null}</div>
+          </div>
         </div>
-      </div>
-      <div className={styles.carousel}>
-        {imgList && imgList.length && (
-        <Carousel showIndicators={false} showStatus={false} showThumbs={false}>
-          {imgList.map((img: string) => (
-            <img src={img} key={img} />
-          ))}
-        </Carousel>
-        )}
-      </div>
-      <div className={styles.detail}>
-        {
-          Array.isArray(detail) ? (
-            detail.map((item) => {
+        <div className={styles.carousel}>
+          {images && images.length && (
+          <Carousel showIndicators={false} showStatus={false} showThumbs={false}>
+            {images.map((img: string) => (
+              <img src={img} key={img} />
+            ))}
+          </Carousel>
+          )}
+        </div>
+        <div className={styles.intro}>
+          {
+          Array.isArray(intro) ? (
+            intro.map((item) => {
               if (typeof item === 'string') {
                 return <div key={item}>{item}</div>;
               } else if (typeof item === 'object') {
@@ -78,10 +72,12 @@ const AppDetail: FC<AppDetailProps> = ({
               return null;
             })
           ) : (
-            <div>{detail}</div>
+            <div>{intro}</div>
           )
         }
-      </div>
+        </div>
+      </main>
+
     </div>
   );
 };

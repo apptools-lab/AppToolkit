@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import PageContainer from '@/components/PageContainer';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
-import { PackageInfo, VersionStatus } from '@/interfaces/base';
+import { PackageInfo, VersionStatus } from '@/types/base';
 import { STEP_STATUS_ICON } from '@/constants';
 import AppCard from '@/components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';

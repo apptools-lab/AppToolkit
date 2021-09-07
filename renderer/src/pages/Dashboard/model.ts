@@ -1,4 +1,4 @@
-import { PackageInfo, InstallResultData } from '@/interfaces/base';
+import { PackageInfo, InstallResultData } from '@/types/base';
 import { ipcRenderer } from 'electron';
 
 export default {

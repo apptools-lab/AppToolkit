@@ -3,13 +3,15 @@ export interface BasePackageInfo {
   id: string;
   description: string;
   icon: string;
-  downloadUrl?: string;
-  shellName?: string;
   version: string | null;
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
+  downloadUrl?: string;
+  shellName?: string;
   platforms?: Platforms;
+  images?: string[];
+  intro?: string | string[] | Array<{ title: string; content: string }>;
   options?: {
     [k: string]: any;
   };

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Input, Icon, Table, Button, Message, Balloon } from '@alifd/next';
-import { ISearchNpmDependency } from '@/interfaces/node';
+import { ISearchNpmDependency } from '@/types/node';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';

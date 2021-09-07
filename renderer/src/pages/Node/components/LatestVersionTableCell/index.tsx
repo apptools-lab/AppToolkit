@@ -1,4 +1,4 @@
-import { INpmDependency } from '@/interfaces/node';
+import { INpmDependency } from '@/types/node';
 import { Button, Message, Icon, Balloon } from '@alifd/next';
 import CustomIcon from '@/components/Icon';
 import { useEffect } from 'react';

@@ -12,8 +12,8 @@ export interface PackageInfo {
   versionStatus: keyof typeof VersionStatus;
   localVersion: string | null;
   localPath: string | null;
-  imgList?: string[];
-  detail?: string | string[] | Array<{ title: string; content: string }>;
+  images?: string[];
+  intro?: string | string[] | Array<{ title: string; content: string }>;
   platforms?: Platforms;
   downloadUrl?: string;
   shellName?: string;
