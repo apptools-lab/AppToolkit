@@ -112,12 +112,16 @@ const AppList: FC<{}> = () => {
 
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, installStatus: ProcessStatus) {
-      const { status, errMsg } = installStatus;
+      const { status, errMsg, id } = installStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeInstallStatus(installStatus);
         dispatcher.getAppsInfo();
-        const currentState = store.getState();
-        dispatcher.setCurrentAppInfo({ ...currentState.application.currentAppInfo, versionStatus: 'installed' } as any);
+        return;
+      }
+      const { application } = store.getState();
+      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'installed' };
+        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
         return;
       }
       if (status === 'error') {
@@ -140,12 +144,16 @@ const AppList: FC<{}> = () => {
 
   useEffect(() => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
-      const { status, errMsg } = uninstallStatus;
+      const { status, errMsg, id } = uninstallStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeUninstallStatus(uninstallStatus);
         dispatcher.getAppsInfo();
-        const currentState = store.getState();
-        dispatcher.setCurrentAppInfo({ ...currentState.application.currentAppInfo, versionStatus: 'uninstalled' } as any);
+        return;
+      }
+      const { application } = store.getState();
+      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'uninstalled' };
+        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
         return;
       }
       if (status === 'error') {

@@ -28,7 +28,7 @@ const ExtensionList: FC<{}> = () => {
 
   const handleInstall = async (packageInfo: PackageInfo) => {
     const { packagePath, link, options: { browserType } } = packageInfo;
-    const alive = await dispatcher.checkBrowserHostAlive(browserType);
+    const alive = await dispatcher.checkBrowserHostIsAccessible(browserType);
 
     if (alive) {
       openDialog(alive, packagePath, link, browserType);
@@ -120,7 +120,7 @@ const ExtensionList: FC<{}> = () => {
             <span style={{ color: 'gray', fontSize: 12 }}>已安装</span>
           ) : (
             <Button text type="primary" style={btnStyle} onClick={async () => handleInstall(packageInfo)}>
-              {installStatus || effectsState.checkBrowserHostAlive.isLoading ? <Icon type="loading" /> : '安装'}
+              {installStatus || effectsState.checkBrowserHostIsAccessible.isLoading ? <Icon type="loading" /> : '安装'}
             </Button>
           )
         }

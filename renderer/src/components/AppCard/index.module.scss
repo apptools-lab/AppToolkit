@@ -27,6 +27,14 @@
       height: 32px;
       line-height: 32px;
 
+      a {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #333;
+      }
+
       div {
         max-width: 200px;
         overflow: hidden;
@@ -46,7 +54,7 @@
       font-size: 12px;
       height: 28px;
       color: rgb(128, 128, 128);
-      overflow: hidden; 
+      overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-box-orient: vertical;

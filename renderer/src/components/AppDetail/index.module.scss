@@ -1,6 +1,4 @@
 .appDetail {
-  padding-bottom: 30px;
-
   .nav {
     display: flex;
     justify-content: center;
@@ -30,6 +28,7 @@
 
   main {
     padding: 0 40px;
+    height: calc(100vh - 60px);
 
     .header {
       margin-top: 20px;
@@ -82,6 +81,8 @@
 
     .intro {
       line-height: 20px;
+      padding-bottom: 20px;
+
       .title {
         font-size: 18px;
         font-weight: 500;

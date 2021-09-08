@@ -33,6 +33,29 @@
       "title": "Google Chrome",
       "id": "Google Chrome",
       "description": "强大、快速的网页浏览器",
+      "intro": [
+        {
+          "title": "速度快",
+          "content": "使用WebKit引擎。WebKit简易小巧，并能有效率的运用存储器，对新开发者来说相当容易上手。Chrome具有DNS预先截取功能。当浏览网页时，“Google Chrome”可查询或预先截取网页上所有链接的IP地址。"
+        },
+        {
+          "title": "不易崩溃",
+          "content": "Chrome最大的亮点就是其多进程架构，保护浏览器不会因恶意网页和应用软件而崩溃。每个标签、窗口和插件都在各自的环境中运行，因此一个站点出了问题不会影响打开其它站点。通过将每个站点和应用软件限制在一个封闭的环境中这种架构，这进一步提高了系统的安全性。"
+        },
+        {
+          "title": "几乎隐身",
+          "content": "说Chrome的界面简洁不足以说明其简洁程度。Chrome几乎不像是一款应用软件，屏幕的绝大多数空间都被用于显示用户访问的站点，屏幕上不会显示Chrome的按钮和标志。Chrome的设计人员表示，他们希望用户忘记自己在使用一款浏览器软件，他们的目标基本上实现了。"
+        },
+        {
+          "title": "更加安全",
+          "content": "“Google Chrome”会定期地更新防止网络钓鱼和恶意软件的黑名单，并在用户试图浏览可能造成电脑损害的网站时予以警告。“Google Chrome”中的每一个标签页都是一个沙箱（sandbox），以防止“恶意软件破坏用户系统”或“利用标签页影响其他标签页”。"
+        }
+      ],
+      "images": [
+        "https://img.alicdn.com/imgextra/i4/O1CN013AF1UR1ou7Vw8sVfT_!!6000000005284-2-tps-2878-1746.png",
+        "https://img.alicdn.com/imgextra/i1/O1CN01eywdjI1EQ3LTZfVF5_!!6000000000345-2-tps-2874-1750.png",
+        "https://img.alicdn.com/imgextra/i2/O1CN01t4X91z21bskOJk6eG_!!6000000007004-2-tps-2878-1748.png"
+      ],
       "link": "https://www.google.com/chrome/",
       "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
@@ -46,6 +69,23 @@
       "title": "Visual Studio Code",
       "id": "Visual Studio Code",
       "description": "跨平台、轻量的代码编辑器",
+      "images": [
+        "https://img.alicdn.com/imgextra/i2/O1CN01M0YegS1fujV7VUWUq_!!6000000004067-2-tps-1416-886.png"
+      ],
+      "intro": [
+        {
+          "title": "智能",
+          "content": "使用IntelliSense超越语法高亮显示和自动完成，它提供基于变量类型、函数定义和导入模块的智能完成。"
+        },
+        {
+          "title": "调试",
+          "content": "从编辑器中直接调试代码。启动或连接到正在运行的应用程序，并使用断点、调用堆栈和交互式控制台进行调试。"
+        },
+        {
+          "title": "内置 Git 命令",
+          "content": "与Git和其他SCM提供商合作从未如此容易。从编辑器中查看差异、暂存文件并进行提交。从任何托管的SCM服务推送和拉送。"
+        }
+      ],
       "link": "https://code.visualstudio.com/",
       "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
       "downloadUrl": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
@@ -58,7 +98,36 @@
     {
       "title": "AppWorks",
       "id": "iceworks-team.iceworks",
-      "description": "基于 VS Code 的多端研发套件",
+      "description": "基于 VS Code 插件的前端研发工具集",
+      "images": [
+        "https://img.alicdn.com/imgextra/i1/O1CN01p9WfQv1NddcJo0iaA_!!6000000001593-1-tps-900-562.gif",
+        "https://img.alicdn.com/imgextra/i4/O1CN01l3sg4x1SYD03hbh6A_!!6000000002258-1-tps-900-562.gif",
+        "https://img.alicdn.com/imgextra/i1/O1CN01UwLdFD1PU8dJXVTNg_!!6000000001843-1-tps-900-562.gif",
+        "https://img.alicdn.com/imgextra/i3/O1CN01JXVSwK1vbz7c7FDyU_!!6000000006192-1-tps-900-562.gif",
+        "https://img.alicdn.com/imgextra/i1/O1CN01yZHsOP1wqvexiEz5r_!!6000000006360-1-tps-900-562.gif"
+      ],
+      "intro": [
+        {
+          "title": "强大的编码辅助",
+          "content": "代码补全，定义预览与跳转，代码片段，代码重构的多重助力，让前端工程开发更轻松。不但支持 JavaScript 文件，对样式文件同样有效。"
+        },
+        {
+          "title": "极简的开发流程",
+          "content": "我们将创建、调试和发布项目的操作通过插件的方式集成到了常用的编辑器中，让项目的开发流程更简单。"
+        },
+        {
+          "title": "友好的开发体验",
+          "content": "我们提供了基于物料的可视化开发方式，区块组装生成页面，一键添加物料到代码，这对于新人来说非常友好。"
+        },
+        {
+          "title": "详尽的代码分析",
+          "content": "非常快速的获取多维度检测报告，支持一键快速修复问题。帮助团队实现代码规范统一，提升和改善代码质量。并为阿里内部工程提供数据分析服务。"
+        },
+        {
+          "title": "完善的编程指标",
+          "content": "我们自动追踪您在编辑器中的编码行为，通过对收集到的数据进行量化，以帮助您从数据中学习，更高效地编写代码，提高生产力。"
+        }
+      ],
       "link": "https://marketplace.visualstudio.com/items?itemName=iceworks-team.iceworks",
       "icon": "https://img.alicdn.com/imgextra/i4/O1CN01fpoIOY26SKXzOtTrR_!!6000000007660-2-tps-500-500.png",
       "version": "1.0.0",

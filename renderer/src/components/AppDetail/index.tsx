@@ -23,7 +23,7 @@ const AppDetail: FC<AppDetailProps> = ({
   goBack,
 }) => {
   const { ref, inView } = useInView({
-    threshold: 0.95,
+    threshold: 0.99,
   });
 
   return (
@@ -37,7 +37,7 @@ const AppDetail: FC<AppDetailProps> = ({
         />
         {!inView && <div>{title}</div>}
       </div>
-      <main ref={ref} style={{ height: 'calc(100vh - 40px)' }}>
+      <main ref={ref}>
         <div className={styles.header}>
           <img src={icon} alt="icon" />
           <div className={styles.content}>

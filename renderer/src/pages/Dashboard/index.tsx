@@ -12,6 +12,7 @@ import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
 import store from './store';
+import PackageDetail from './components/PackageDetail';
 
 const { Row, Col } = Grid;
 
@@ -33,6 +34,7 @@ const Dashboard = () => {
     pkgInstallStep,
     currentStep,
     installResult,
+    packageDetailVisible,
   } = state;
 
   const writeChunk = (
@@ -51,19 +53,26 @@ const Dashboard = () => {
     if (!packageNames.length) {
       return;
     }
-    const selectedPackagesList = uninstalledPackagesList.filter((item) => {
+    const packagesList = uninstalledPackagesList.filter((item) => {
       return packageNames.includes(item.id);
     });
+
     const xterm = xtermManager.getTerm(TERM_ID);
     if (xterm) {
       xterm.clear(TERM_ID);
     }
+    // init install state
     await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStep(selectedPackagesList);
+    dispatchers.initStep(packagesList);
+
+    await installPackages(packagesList);
+  }
+
+  async function installPackages(packagesList: PackageInfo[]) {
     ipcRenderer
       .invoke('install-base-packages', {
-        packagesList: selectedPackagesList,
+        packagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       })
@@ -72,22 +81,24 @@ const Dashboard = () => {
       });
   }
 
+  const showDetailPage = (packageInfo: PackageInfo) => {
+    dispatchers.setPackageDetailVisible(true);
+    dispatchers.setCurrentPackageInfo(packageInfo);
+  };
+
   function onDialogOpen() { setVisible(true); }
 
   function onDialogClose() { setVisible(false); }
 
-  function goBack() {
+  function goBackFromInstallPage() {
     dispatchers.updateInstallStatus(false);
     dispatchers.getBasePackages();
   }
 
   async function handleCancelInstall() {
     await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
-    await ipcRenderer.invoke(
-      'cancel-install-base-packages',
-      INSTALL_PACKAGE_CHANNEL,
-    );
-    goBack();
+    await ipcRenderer.invoke('cancel-install-base-packages', INSTALL_PACKAGE_CHANNEL);
+    goBackFromInstallPage();
   }
 
   useEffect(() => {
@@ -110,11 +121,17 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result }) {
+    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result, id }) {
       const { dashboard } = store.getState();
       if (status === 'done') {
         dispatchers.updateCurrentStep((dashboard.currentStep as number) + 1);
         dispatchers.updateInstallResult(result);
+        return;
+      }
+
+      if ((dashboard.currentPackageInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentPackageInfo = { ...dashboard.currentPackageInfo as PackageInfo, versionStatus: 'installed' };
+        dispatchers.setCurrentPackageInfo(newCurrentPackageInfo);
         return;
       }
       dispatchers.updatePkgInstallStep(currentIndex);
@@ -167,73 +184,77 @@ const Dashboard = () => {
   );
 
   return (
-    <PageContainer
-      title="前端开发必备"
-      button={uninstalledPackagesList.length ? installButton : null}
-    >
-      <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
-        {isInstalling ? (
-          <div className={styles.install}>
-            <Row wrap>
-              <Col span={6}>
-                <Step current={currentStep} direction="ver">
-                  <Step.Item title="开始" />
-                  <Step.Item
-                    title="安装"
-                    content={installStepItem}
-                  />
-                  <Step.Item title="完成" />
-                </Step>
-              </Col>
-              <Col span={18}>
-                {(currentStep === 2) ? (
-                  <InstallResult
-                    goBack={goBack}
-                    result={installResult}
-                  />
-                ) : (
-                  <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68 }} />
-                )}
-              </Col>
-            </Row>
-          </div>
-        ) : (
-          <Row wrap gutter={8}>
-            {basePackagesList.map((item: PackageInfo, index: number) => (
-              <Col s={12} l={8} key={item.id}>
-                <AppCard
-                  title={item.title}
-                  description={item.description}
-                  link={item.link}
-                  icon={item.icon}
-                  operation={
-                    <div
-                      className={classnames(styles.status, { [styles.uninstalledStatus]: item.versionStatus !== 'installed' })}
-                    >
-                      {VersionStatus[item.versionStatus]}
-                      {item.warningMessage && (
-                      <Balloon trigger={<Icon type="warning" />} closable={false}>
-                        {item.warningMessage}
-                      </Balloon>
-                      )}
-                    </div>
+    <>
+      {!packageDetailVisible ? (
+        <PageContainer
+          title="前端开发必备"
+          button={uninstalledPackagesList.length ? installButton : null}
+        >
+          <Loading className={styles.dashboard} visible={effectsState.getBasePackages.isLoading}>
+            {isInstalling ? (
+              <div className={styles.install}>
+                <Row wrap>
+                  <Col span={6}>
+                    <Step current={currentStep} direction="ver">
+                      <Step.Item title="开始" />
+                      <Step.Item
+                        title="安装"
+                        content={installStepItem}
+                      />
+                      <Step.Item title="完成" />
+                    </Step>
+                  </Col>
+                  <Col span={18}>
+                    {(currentStep === 2) ? (
+                      <InstallResult
+                        goBack={goBackFromInstallPage}
+                        result={installResult}
+                      />
+                    ) : (
+                      <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68 }} />
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            ) : (
+              <Row wrap gutter={8}>
+                {basePackagesList.map((item: PackageInfo, index: number) => (
+                  <Col s={12} l={8} key={item.id}>
+                    <AppCard
+                      {...item}
+                      showDetailPage={(item.images || item.intro) ? () => showDetailPage(item) : undefined}
+                      operation={
+                        <div
+                          className={classnames(styles.status, { [styles.uninstalledStatus]: item.versionStatus !== 'installed' })}
+                        >
+                          {VersionStatus[item.versionStatus]}
+                          {item.warningMessage && (
+                          <Balloon trigger={<Icon type="warning" />} closable={false}>
+                            {item.warningMessage}
+                          </Balloon>
+                          )}
+                        </div>
                   }
-                  recommended={item.recommended}
-                  showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
-                />
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Loading>
-      {visible && (
-        <InstallConfirmDialog
-          packages={uninstalledPackagesList}
-          onCancel={onDialogClose}
-          onOk={onDialogConfirm}
-        />
+                      showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </Loading>
+          {visible && (
+          <InstallConfirmDialog
+            packages={uninstalledPackagesList}
+            onCancel={onDialogClose}
+            onOk={onDialogConfirm}
+          />
+          )}
+        </PageContainer>
+      ) : (
+        <PackageDetail installPackages={installPackages} />
       )}
-    </PageContainer>
+    </>
+
   );
 };
 
