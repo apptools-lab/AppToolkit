@@ -200,8 +200,8 @@ const ExtensionList: FC<{}> = () => {
         ) : (
           <AppDetail
             goBack={goBack}
-            operation={<Operation packageInfo={currentExtensionInfo as any} />}
-            {...currentExtensionInfo as any}
+            operation={<Operation packageInfo={currentExtensionInfo as PackageInfo} />}
+            {...currentExtensionInfo as PackageInfo}
           />
         )
       }

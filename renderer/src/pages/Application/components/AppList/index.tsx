@@ -118,6 +118,7 @@ const AppList: FC<{}> = () => {
         dispatcher.getAppsInfo();
         return;
       }
+      // update current app info
       const { application } = store.getState();
       if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
         const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'installed' };
@@ -150,6 +151,7 @@ const AppList: FC<{}> = () => {
         dispatcher.getAppsInfo();
         return;
       }
+      // update current app info
       const { application } = store.getState();
       if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
         const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'uninstalled' };
@@ -218,9 +220,9 @@ const AppList: FC<{}> = () => {
           </PageContainer>
         ) : (
           <AppDetail
-            {...currentAppInfo as any}
+            {...currentAppInfo as PackageInfo}
             goBack={goBack}
-            operation={<Operation packageInfo={currentAppInfo as any} balloonAlign="br" />}
+            operation={<Operation packageInfo={currentAppInfo as PackageInfo} balloonAlign="br" />}
           />
         )
       }

@@ -57,8 +57,8 @@ const PackageDetail = ({ installPackages }) => {
   return (
     <AppDetail
       goBack={goBackFromDetailPage}
-      operation={<Operation packageInfo={currentPackageInfo as any} />}
-      {...currentPackageInfo as any}
+      operation={<Operation packageInfo={currentPackageInfo as PackageInfo} />}
+      {...currentPackageInfo as PackageInfo}
     />
   );
 };
