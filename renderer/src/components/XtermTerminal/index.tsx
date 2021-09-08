@@ -7,11 +7,12 @@ import styles from './index.module.scss';
 
 interface IXtermTerminal {
   id: string;
+  height?: string;
   name?: string;
   options?: object;
 }
 
-const XtermTerminal: FC<IXtermTerminal> = ({ id, name, options }) => {
+const XtermTerminal: FC<IXtermTerminal> = ({ id, name, options, height }) => {
   const xtermRef = useRef(id);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const XtermTerminal: FC<IXtermTerminal> = ({ id, name, options }) => {
         className={styles.clearIcon}
         onClick={() => term.clear(id)}
       />
-      <div ref={xtermRef} className={styles.xtermRef} />
+      <div ref={xtermRef} className={styles.xtermRef} style={{ height }} />
     </div>
   );
 };

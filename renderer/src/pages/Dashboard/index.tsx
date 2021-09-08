@@ -21,7 +21,7 @@ const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
 const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
 
 const Dashboard = () => {
-  const [visible, setVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
   const [state, dispatchers] = store.useModel('dashboard');
   const effectsState = store.useModelEffectsState('dashboard');
@@ -86,9 +86,9 @@ const Dashboard = () => {
     dispatchers.setCurrentPackageInfo(packageInfo);
   };
 
-  function onDialogOpen() { setVisible(true); }
+  function onDialogOpen() { setDialogVisible(true); }
 
-  function onDialogClose() { setVisible(false); }
+  function onDialogClose() { setDialogVisible(false); }
 
   function goBackFromInstallPage() {
     dispatchers.updateInstallStatus(false);
@@ -211,7 +211,7 @@ const Dashboard = () => {
                         result={installResult}
                       />
                     ) : (
-                      <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68 }} />
+                      <XtermTerminal id={TERM_ID} name={TERM_ID} height="calc(100vh - 200px)" />
                     )}
                   </Col>
                 </Row>
@@ -242,7 +242,7 @@ const Dashboard = () => {
               </Row>
             )}
           </Loading>
-          {visible && (
+          {dialogVisible && (
           <InstallConfirmDialog
             packages={uninstalledPackagesList}
             onCancel={onDialogClose}
@@ -254,7 +254,6 @@ const Dashboard = () => {
         <PackageDetail installPackages={installPackages} />
       )}
     </>
-
   );
 };
 

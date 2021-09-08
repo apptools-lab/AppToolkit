@@ -1,12 +1,10 @@
 .dashboard {
   width: 100%;
   height: calc(100vh - 160px);
-  margin-top: 30px;
+  margin-top: 36px;
   padding: 0 40px;
 
   .install {
-    margin-top: 38px;
-
     :global {
       .next-step-vertical {
         height: 100%;
