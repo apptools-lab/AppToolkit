@@ -3,9 +3,11 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Button, Message, Icon, Loading, List, Tag } from '@alifd/next';
 import store from '../../store';
 import styles from './index.module.scss';
-import { PackageInfo, ProcessStatus } from '@/interfaces/base';
-import { AppInfo } from '@/interfaces/application';
-import BallonConfirm from '@/components/BalloonConfirm';
+import { PackageInfo, ProcessStatus } from '@/types/base';
+import { AppInfo } from '@/types/application';
+import BalloonConfirm, { BalloonAlign } from '@/components/BalloonConfirm';
+import AppDetail from '@/components/AppDetail';
+import PageContainer from '@/components/PageContainer';
 
 const INSTALL_APP_CHANNEL = 'install-app';
 const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
@@ -18,7 +20,7 @@ const presetColors = ['blue', 'green', 'orange', 'red', 'turquoise', 'yellow'];
 const AppList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('application');
   const effectsState = store.useModelEffectsState('application');
-  const { appsInfo, installStatuses, uninstallStatuses } = state;
+  const { appsInfo, installStatuses, uninstallStatuses, detailVisible, currentAppInfo } = state;
 
   useEffect(() => {
     dispatcher.getAppsInfo();
@@ -36,10 +38,10 @@ const AppList: FC<{}> = () => {
       });
   };
 
-  const uninstallApp = async (packageInfo) => {
+  const uninstallApp = async (appInfo: PackageInfo) => {
     ipcRenderer
       .invoke('uninstall-app', {
-        packageInfo,
+        packageInfo: appInfo,
         uninstallChannel: UNINSTALL_APP_CHANNEL,
         processChannel: UNINSTALL_APP_PROCESS_STATUS_CHANNEL,
       })
@@ -48,7 +50,13 @@ const AppList: FC<{}> = () => {
       });
   };
 
-  const Operation = ({ packageInfo }: { packageInfo: PackageInfo }) => {
+  const Operation = ({
+    packageInfo,
+    balloonAlign,
+  }: {
+    packageInfo: PackageInfo;
+    balloonAlign?: BalloonAlign;
+  }) => {
     const { versionStatus } = packageInfo;
     let installStatus;
     let uninstallStatus;
@@ -62,33 +70,59 @@ const AppList: FC<{}> = () => {
     if (uninstallStatusIndex > -1) {
       uninstallStatus = uninstallStatuses[uninstallStatusIndex].status;
     }
+
+    const btnStyle = {
+      fontSize: 12,
+      fontWeight: 700,
+      backgroundColor: '#f2f2f7',
+      width: 64,
+      height: 24,
+      borderRadius: 10,
+    };
     return (
-      <>
+      <div>
         {versionStatus === 'uninstalled' ? (
-          <Button text type="primary" className={styles.btn} onClick={() => installApp(packageInfo)}>
+          <Button text type="primary" style={btnStyle} onClick={() => installApp(packageInfo)}>
             {!installStatus ? '安装' : <Icon type="loading" />}
           </Button>
         ) : (
-          <BallonConfirm
+          <BalloonConfirm
             onConfirm={async () => await uninstallApp(packageInfo)}
             title={`确定卸载 ${packageInfo.title}？`}
-            align="bl"
+            align={balloonAlign || 'bl'}
           >
-            <Button text type="primary" className={styles.btn}>
+            <Button text type="primary" style={btnStyle} className={styles.btn}>
               {!uninstallStatus ? '卸载' : <Icon type="loading" />}
             </Button>
-          </BallonConfirm>
+          </BalloonConfirm>
         )}
-      </>
+      </div>
     );
+  };
+
+  const showDetailPage = (appInfo: PackageInfo) => {
+    dispatcher.setDetailVisible(true);
+    dispatcher.setCurrentAppInfo(appInfo);
+  };
+
+  const goBack = () => {
+    dispatcher.setDetailVisible(false);
+    dispatcher.setCurrentAppInfo({} as any);
   };
 
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, installStatus: ProcessStatus) {
-      const { status, errMsg } = installStatus;
+      const { status, errMsg, id } = installStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeInstallStatus(installStatus);
         dispatcher.getAppsInfo();
+        return;
+      }
+      // update current app info
+      const { application } = store.getState();
+      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'installed' };
+        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
         return;
       }
       if (status === 'error') {
@@ -111,10 +145,17 @@ const AppList: FC<{}> = () => {
 
   useEffect(() => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
-      const { status, errMsg } = uninstallStatus;
+      const { status, errMsg, id } = uninstallStatus;
       if (status === 'finish' || status === 'error') {
         dispatcher.removeUninstallStatus(uninstallStatus);
         dispatcher.getAppsInfo();
+        return;
+      }
+      // update current app info
+      const { application } = store.getState();
+      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'uninstalled' };
+        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
         return;
       }
       if (status === 'error') {
@@ -140,33 +181,52 @@ const AppList: FC<{}> = () => {
       Message.error(effectsState.getAppsInfo.error.message);
     }
   }, [effectsState.getAppsInfo.error]);
+
   return (
-    <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
+    <>
       {
-        appsInfo.map((appInfo: AppInfo, index: number) => (
-          <div className={styles.appInfo} key={appInfo.id}>
-            <List
-              dataSource={appInfo.packages || []}
-              renderItem={(item: PackageInfo, i: number) => (
-                <List.Item
-                  key={i}
-                  extra={<Operation packageInfo={item} />}
-                  title={
-                    <div className={styles.title}>
-                      <a href={item.link} target="__blank" className={styles.subTitle}>{item.title}</a>
-                      <Tag size="small" className={styles.tag} type="normal" color={presetColors[index % presetColors.length]}>{appInfo.title}</Tag>
-                    </div>
-                }
-                  media={<img src={item.icon} alt="appIcon" className={styles.icon} />}
-                >
-                  <p className={styles.description}>{item.description}</p>
-                </List.Item>
-              )}
-            />
-          </div>
-        ))
+        !detailVisible ? (
+          <PageContainer title="桌面客户端">
+            <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
+              {
+              appsInfo.map((appInfo: AppInfo, index: number) => (
+                <div className={styles.appInfo} key={appInfo.id}>
+                  <List
+                    dataSource={appInfo.packages || []}
+                    renderItem={(item: PackageInfo, i: number) => (
+                      <List.Item
+                        key={i}
+                        extra={<Operation packageInfo={item} />}
+                        title={
+                          <div className={styles.title}>
+                            <div onClick={() => showDetailPage(item)} className={styles.subTitle}>
+                              {item.title}
+                            </div>
+                            <Tag size="small" className={styles.tag} type="normal" color={presetColors[index % presetColors.length]}>
+                              {appInfo.title}
+                            </Tag>
+                          </div>
+                        }
+                        media={<img src={item.icon} alt="appIcon" className={styles.icon} onClick={() => showDetailPage(item)} />}
+                      >
+                        <p className={styles.description}>{item.description}</p>
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              ))
+            }
+            </Loading>
+          </PageContainer>
+        ) : (
+          <AppDetail
+            {...currentAppInfo as PackageInfo}
+            goBack={goBack}
+            operation={<Operation packageInfo={currentAppInfo as PackageInfo} balloonAlign="br" />}
+          />
+        )
       }
-    </Loading>
+    </>
   );
 };
 

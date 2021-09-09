@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Input, Icon, Table, Button, Message, Balloon } from '@alifd/next';
-import { ISearchNpmDependency } from '@/interfaces/node';
+import { ISearchNpmDependency } from '@/types/node';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';
@@ -27,7 +27,7 @@ function NpmDependencyInstaller() {
   };
 
   const homepageRender = (value: string) => {
-    return <>{value && <a href={value} target="__blank">查看</a>}</>;
+    return <>{value && <a href={value} target="_blank" rel="noreferrer">查看</a>}</>;
   };
 
   const onInstallGlobalDep = async (dependency: ISearchNpmDependency, index: number) => {

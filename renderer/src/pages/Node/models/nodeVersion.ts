@@ -1,5 +1,5 @@
-import { PackageInfo } from '@/interfaces/base';
-import { INodeVersions } from '@/interfaces/node';
+import { PackageInfo } from '@/types/base';
+import { INodeVersions } from '@/types/node';
 import { ipcRenderer } from 'electron';
 
 const DEFAULT_INSTALL_RESULT = { nodeVersion: '', npmVersion: '' };

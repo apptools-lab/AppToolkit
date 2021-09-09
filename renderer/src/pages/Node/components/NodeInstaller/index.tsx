@@ -4,7 +4,7 @@ import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
 import { STEP_STATUS_ICON } from '@/constants';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { PackageInfo } from '@/interfaces/base';
+import { PackageInfo } from '@/types/base';
 import store from '../../store';
 import InstallResult from '../NodeInstallResult';
 import CustomGlobalDepsPathDialog from '../CustomGlobalDepsPathDialog';

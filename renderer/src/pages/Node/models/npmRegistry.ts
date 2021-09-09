@@ -1,4 +1,4 @@
-import { NPMRegistry } from '@/interfaces/node';
+import { NPMRegistry } from '@/types/node';
 import { ipcRenderer } from 'electron';
 
 export default {

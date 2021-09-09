@@ -5,9 +5,11 @@ import AppCard from '@/components/AppCard';
 import CustomIcon from '@/components/Icon';
 import store from '../../store';
 import styles from './index.module.scss';
-import { PackageInfo, ProcessStatus } from '@/interfaces/base';
-import { BrowserExtensionsInfo } from '@/interfaces/browserExtension';
+import { PackageInfo, ProcessStatus } from '@/types/base';
+import { BrowserExtensionsInfo } from '@/types/browserExtension';
 import BrowserNotInstalled from '../BrowserNotInstalled';
+import PageContainer from '@/components/PageContainer';
+import AppDetail from '@/components/AppDetail';
 
 const { Row, Col } = Grid;
 
@@ -18,7 +20,7 @@ const ExtensionList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('browserExtension');
   const effectsState = store.useModelEffectsState('browserExtension');
 
-  const { extensionsInfo, installStatuses } = state;
+  const { extensionsInfo, installStatuses, detailVisible, currentExtensionInfo } = state;
 
   useEffect(() => {
     dispatcher.getExtensionsInfo();
@@ -26,7 +28,7 @@ const ExtensionList: FC<{}> = () => {
 
   const handleInstall = async (packageInfo: PackageInfo) => {
     const { packagePath, link, options: { browserType } } = packageInfo;
-    const alive = await dispatcher.checkBrowserHostAlive(browserType);
+    const alive = await dispatcher.checkBrowserHostIsAccessible(browserType);
 
     if (alive) {
       openDialog(alive, packagePath, link, browserType);
@@ -46,7 +48,14 @@ const ExtensionList: FC<{}> = () => {
         Message.error(error.message);
       });
   };
-
+  const btnStyle = {
+    fontSize: 12,
+    fontWeight: 700,
+    backgroundColor: '#f2f2f7',
+    width: 64,
+    height: 24,
+    borderRadius: 10,
+  };
   const openDialog = (alive: boolean, packagePath: string, link?: string, browserType?: string) => {
     const dialog = Dialog.show({
       title: '提示',
@@ -58,17 +67,15 @@ const ExtensionList: FC<{}> = () => {
             <div>Toolkit 目前不能自动安装浏览器插件，需要自行在 {browserType} 应用商店安装。点击下方确定按钮将跳转到插件安装页面。</div>
           ) : (
             <>
-              <div>
-                <Button
-                  type="primary"
-                  className={styles.btn}
-                  text
-                  onClick={() => shell.showItemInFolder(packagePath)}
-                >
-                  插件安装包<CustomIcon className={styles.icon} type="tiaozhuan-zhuanqu" />
-                </Button>
-                已下载到本地，请自行在浏览器的扩展程序管理中安装。
-              </div>
+              <Button
+                type="primary"
+                style={btnStyle}
+                text
+                onClick={() => shell.showItemInFolder(packagePath)}
+              >
+                插件安装包<CustomIcon className={styles.icon} type="tiaozhuan-zhuanqu" />
+              </Button>
+              已下载到本地，请自行在浏览器的扩展程序管理中安装。
               <br />
               <div>详细的安装方式请参考<a href="https://github.com/appworks-lab/toolkit#浏览器插件管理" target="_blank" rel="noreferrer">文档</a>。</div>
             </>
@@ -88,6 +95,16 @@ const ExtensionList: FC<{}> = () => {
     });
   };
 
+  const showDetailPage = (appInfo: PackageInfo) => {
+    dispatcher.setDetailVisible(true);
+    dispatcher.setCurrentExtensionInfo(appInfo);
+  };
+
+  const goBack = () => {
+    dispatcher.setDetailVisible(false);
+    dispatcher.setCurrentExtensionInfo({} as any);
+  };
+
   const Operation = ({ packageInfo }: { packageInfo: PackageInfo }) => {
     const { versionStatus } = packageInfo;
     let installStatus;
@@ -102,8 +119,8 @@ const ExtensionList: FC<{}> = () => {
           versionStatus === 'installed' ? (
             <span style={{ color: 'gray', fontSize: 12 }}>已安装</span>
           ) : (
-            <Button text type="primary" className={styles.btn} onClick={async () => handleInstall(packageInfo)}>
-              {installStatus || effectsState.checkBrowserHostAlive.isLoading ? <Icon type="loading" /> : '安装'}
+            <Button text type="primary" style={btnStyle} onClick={async () => handleInstall(packageInfo)}>
+              {installStatus || effectsState.checkBrowserHostIsAccessible.isLoading ? <Icon type="loading" /> : '安装'}
             </Button>
           )
         }
@@ -147,34 +164,50 @@ const ExtensionList: FC<{}> = () => {
   }, [effectsState.getExtensionsInfo.error]);
 
   return (
-    <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
+    <>
       {
-        extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
-          <div className={styles.extensionInfo} key={extensionInfo.id}>
-            <div className={styles.title}>{extensionInfo.title}</div>
-            {extensionInfo.versionStatus === 'uninstalled' ? (
-              <BrowserNotInstalled browser={extensionInfo.id} />
-            ) : (
-              <Row wrap gutter={8}>
-                {
-                 extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
-                   <Col s={12} l={8} key={packageInfo.id}>
-                     <AppCard
-                       {...packageInfo}
-                       operation={<Operation packageInfo={packageInfo} />}
-                       showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
-                     />
-                   </Col>
-                 ))
-               }
-              </Row>
-            )}
-
-          </div>
-        ))
+        !detailVisible ? (
+          <PageContainer title="浏览器插件">
+            <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
+              {
+              extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
+                <div className={styles.extensionInfo} key={extensionInfo.id}>
+                  <div className={styles.title}>{extensionInfo.title}</div>
+                  {extensionInfo.versionStatus === 'uninstalled' ? (
+                    <BrowserNotInstalled browser={extensionInfo.id} />
+                  ) : (
+                    <Row wrap gutter={8}>
+                      {
+                      extensionInfo.extensions.map((packageInfo: PackageInfo, index: number) => (
+                        <Col s={12} l={8} key={packageInfo.id}>
+                          <AppCard
+                            {...packageInfo}
+                            operation={<Operation packageInfo={packageInfo} />}
+                            showSplitLine={extensionInfo.extensions.length - (extensionInfo.extensions.length % 2 ? 1 : 2) > index}
+                            showDetailPage={() => showDetailPage(packageInfo)}
+                          />
+                        </Col>
+                      ))
+                    }
+                    </Row>
+                  )}
+                </div>
+              ))
+            }
+              <Dialog title="安装提示" />
+            </Loading>
+          </PageContainer>
+        ) : (
+          <AppDetail
+            goBack={goBack}
+            operation={<Operation packageInfo={currentExtensionInfo as PackageInfo} />}
+            {...currentExtensionInfo as PackageInfo}
+          />
+        )
       }
-      <Dialog title="安装提示" />
-    </Loading>
+    </>
+
+
   );
 };
 

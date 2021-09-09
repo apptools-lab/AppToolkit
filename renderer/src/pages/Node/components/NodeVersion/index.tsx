@@ -1,5 +1,5 @@
 import { Grid, Button, Balloon } from '@alifd/next';
-import { NodeInfo } from '@/interfaces/base';
+import { NodeInfo } from '@/types/base';
 import store from '../../store';
 import styles from './index.module.scss';
 

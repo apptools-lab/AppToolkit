@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { PackageInfo } from '@/interfaces/base';
+import { PackageInfo } from '@/types/base';
 import { Dialog, Checkbox } from '@alifd/next';
 import styles from './index.module.scss';
 

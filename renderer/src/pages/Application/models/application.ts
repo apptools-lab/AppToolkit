@@ -1,10 +1,12 @@
-import { PackageInfo, ProcessStatus } from '@/interfaces/base';
+import { PackageInfo, ProcessStatus } from '@/types/base';
 import { ipcRenderer } from 'electron';
 
 interface State {
   appsInfo: PackageInfo[];
   installStatuses: ProcessStatus[];
   uninstallStatuses: ProcessStatus[];
+  detailVisible: boolean;
+  currentAppInfo: PackageInfo;
 }
 
 export default {
@@ -12,6 +14,8 @@ export default {
     appsInfo: [],
     installStatuses: [],
     uninstallStatuses: [],
+    detailVisible: false,
+    currentAppInfo: {},
   },
   reducers: {
     updateInstallStatus(prevState: State, installStatus: ProcessStatus) {
@@ -41,6 +45,12 @@ export default {
       if (statusIndex > -1) {
         prevState.uninstallStatuses.splice(statusIndex, 1);
       }
+    },
+    setDetailVisible(prevState: State, detailVisible: boolean) {
+      prevState.detailVisible = detailVisible;
+    },
+    setCurrentAppInfo(prevState: State, appInfo: PackageInfo) {
+      prevState.currentAppInfo = appInfo;
     },
   },
   effects: () => ({
