@@ -78,7 +78,7 @@ const Dashboard = () => {
 
   function goBack() {
     dispatchers.updateInstallStatus(false);
-    dispatchers.getBasePackages();
+    dispatchers.getBasePackages(true);
   }
 
   async function handleCancelInstall() {
