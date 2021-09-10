@@ -100,6 +100,11 @@ function setAppMenu() {
           accelerator: 'CommandOrControl+W',
         },
         {
+          label: '刷新',
+          role: 'reload',
+          accelerator: 'CommandOrControl+R',
+        },
+        {
           label: '最小化',
           role: 'minimize',
           accelerator: 'CommandOrControl+M',
