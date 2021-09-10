@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Message, Input, Field, Grid, Button, Icon as NextIcon } from '@alifd/next';
 import Icon from '@/components/Icon';
 import GitDirFormItemLabel from '../GitDirFormItemLabel';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;

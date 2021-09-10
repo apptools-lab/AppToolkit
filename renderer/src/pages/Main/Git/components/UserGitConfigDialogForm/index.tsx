@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Dialog, Form, Field, Input, Message, Icon, Button } from '@alifd/next';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import HostNameFormItemLabel from '../HostNameFormItemLabel';
 import styles from './index.module.scss';
 

@@ -3,7 +3,7 @@ import { Field, Message } from '@alifd/next';
 import debounce from 'lodash.debounce';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import BaseGitConfig from '../BaseGitConfig';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const GlobalGitConfig: FC<{}> = () => {

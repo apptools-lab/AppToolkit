@@ -1,7 +1,7 @@
 import { useEffect, FC } from 'react';
 import { Message, Collapse, Button, Dialog } from '@alifd/next';
 import Icon from '@/components/Icon';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import UserGitConfig from '../UserGitConfig';
 import UserGitConfigDialogForm from '../UserGitConfigDialogForm';
 import styles from './index.module.scss';

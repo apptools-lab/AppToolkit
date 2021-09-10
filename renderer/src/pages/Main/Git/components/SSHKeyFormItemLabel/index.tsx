@@ -11,7 +11,7 @@ export default () => {
         align="t"
         delay={200}
       >
-        添加 SSH 公钥教程，请参考<a href="https://github.com/appworks-lab/toolkit#添加 SSH 公钥" target="__blank">文档</a>
+        添加 SSH 公钥教程，请参考<a href="https://github.com/appworks-lab/toolkit#添加 SSH 公钥" target="_blank" rel="noreferrer">文档</a>
       </Tooltip>
     </span>
   );

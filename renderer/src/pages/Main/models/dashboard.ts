@@ -1,4 +1,4 @@
-import { PackageInfo, InstallResultData } from '@/interfaces/base';
+import { PackageInfo, InstallResultData } from '@/types/base';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -11,6 +11,8 @@ export default {
     pkgInstallStep: 0,
     pkgInstallStatuses: [],
     installResult: [],
+    packageDetailVisible: false,
+    currentPackageInfo: {},
   },
   reducers: {
     updateBasePackagesList(prevState, basePackagesList: PackageInfo[]) {
@@ -49,10 +51,17 @@ export default {
     updateInstallResult(prevState, installResult: InstallResultData[]) {
       prevState.installResult = installResult;
     },
+
+    setPackageDetailVisible(prevState, packageDetailVisible: boolean) {
+      prevState.packageDetailVisible = packageDetailVisible;
+    },
+    setCurrentPackageInfo(prevState, packageInfo: PackageInfo) {
+      prevState.currentPackageInfo = packageInfo;
+    },
   },
   effects: (dispatch) => ({
-    async getBasePackages() {
-      const data = await ipcRenderer.invoke('get-base-packages-info');
+    async getBasePackages(force = false) {
+      const data = await ipcRenderer.invoke('get-base-packages-info', force);
       dispatch.dashboard.updateBasePackagesList(data);
       const packagesList = data.filter((basePackage: PackageInfo) => {
         return basePackage.versionStatus !== 'installed';

@@ -1,7 +1,7 @@
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Dialog, Form, Input, Progress } from '@alifd/next';
 import { useEffect } from 'react';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 
 const CustomGlobalDepsDialog = () => {
   const formItemLayout = {

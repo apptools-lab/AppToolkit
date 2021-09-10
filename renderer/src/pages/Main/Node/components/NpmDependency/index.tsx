@@ -1,7 +1,7 @@
 import { Table, Button, Message, Dropdown } from '@alifd/next';
 import { useEffect } from 'react';
-import { INpmDependency } from '@/interfaces/node';
-import store from '../../../store';
+import { INpmDependency } from '@/types/node';
+import store from '@/pages/Main/store';
 import NpmDependencyInstaller from '../NpmDependencyInstaller';
 import OperationTableCell from '../OperationTableCell';
 import LatestVersionTableCell from '../LatestVersionTableCell';

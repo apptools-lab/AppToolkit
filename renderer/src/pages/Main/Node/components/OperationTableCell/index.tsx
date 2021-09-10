@@ -1,9 +1,9 @@
 import { Button, Message, Icon, Balloon } from '@alifd/next';
 import BalloonConfirm from '@/components/BalloonConfirm';
-import { INpmDependency } from '@/interfaces/node';
+import { INpmDependency } from '@/types/node';
 import CustomIcon from '@/components/Icon';
 import { useEffect } from 'react';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const { Tooltip } = Balloon;

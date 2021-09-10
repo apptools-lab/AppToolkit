@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Field, Message, Grid, Input } from '@alifd/next';
 import removeObjEmptyValue from '@/utils/removeObjEmptyValue';
 import Icon from '@/components/Icon';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import SSHKeyFormItemLabel from '../SSHKeyFormItemLabel';
 import GitDirsForm from '../GitDirsForm';
 import HostNameFormItemLabel from '../HostNameFormItemLabel';

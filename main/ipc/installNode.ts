@@ -30,7 +30,10 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
-    // fork a child process to install node
+    /**
+     * we need to cancel the install node process
+     * so we create a childProcess and we can kill it later
+     */
     childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
     childProcessMap.set(installChannel, childProcess);
 

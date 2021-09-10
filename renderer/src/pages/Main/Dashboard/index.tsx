@@ -5,13 +5,14 @@ import classnames from 'classnames';
 import PageContainer from '@/components/PageContainer';
 import XtermTerminal from '@/components/XtermTerminal';
 import xtermManager from '@/utils/xtermManager';
-import { PackageInfo, VersionStatus } from '@/interfaces/base';
+import { PackageInfo, VersionStatus } from '@/types/base';
 import { STEP_STATUS_ICON } from '@/constants';
 import AppCard from '@/components/AppCard';
 import InstallConfirmDialog from './components/InstallConfirmDialog';
 import InstallResult from './components/InstallResult';
 import styles from './index.module.scss';
-import store from '../store';
+import store from '@/pages/Main/store';
+import PackageDetail from './components/PackageDetail';
 
 const { Row, Col } = Grid;
 
@@ -20,7 +21,7 @@ const INSTALL_PACKAGE_CHANNEL = 'install-base-package';
 const INSTALL_PROCESS_STATUS_CHANNEL = 'install-base-package-process-status';
 
 const Dashboard = () => {
-  const [visible, setVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
   const [state, dispatchers] = store.useModel('dashboard');
   const effectsState = store.useModelEffectsState('dashboard');
@@ -33,6 +34,7 @@ const Dashboard = () => {
     pkgInstallStep,
     currentStep,
     installResult,
+    packageDetailVisible,
   } = state;
 
   const writeChunk = (
@@ -51,19 +53,26 @@ const Dashboard = () => {
     if (!packageNames.length) {
       return;
     }
-    const selectedPackagesList = uninstalledPackagesList.filter((item) => {
+    const packagesList = uninstalledPackagesList.filter((item) => {
       return packageNames.includes(item.id);
     });
+
     const xterm = xtermManager.getTerm(TERM_ID);
     if (xterm) {
       xterm.clear(TERM_ID);
     }
+    // init install state
     await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
     dispatchers.updateInstallStatus(true);
-    dispatchers.initStep(selectedPackagesList);
+    dispatchers.initStep(packagesList);
+
+    await installPackages(packagesList);
+  }
+
+  async function installPackages(packagesList: PackageInfo[]) {
     ipcRenderer
       .invoke('install-base-packages', {
-        packagesList: selectedPackagesList,
+        packagesList,
         installChannel: INSTALL_PACKAGE_CHANNEL,
         processChannel: INSTALL_PROCESS_STATUS_CHANNEL,
       })
@@ -72,22 +81,24 @@ const Dashboard = () => {
       });
   }
 
-  function onDialogOpen() { setVisible(true); }
+  const showDetailPage = (packageInfo: PackageInfo) => {
+    dispatchers.setPackageDetailVisible(true);
+    dispatchers.setCurrentPackageInfo(packageInfo);
+  };
 
-  function onDialogClose() { setVisible(false); }
+  function onDialogOpen() { setDialogVisible(true); }
 
-  function goBack() {
+  function onDialogClose() { setDialogVisible(false); }
+
+  function goBackFromInstallPage() {
     dispatchers.updateInstallStatus(false);
-    dispatchers.getBasePackages();
+    dispatchers.getBasePackages(true);
   }
 
   async function handleCancelInstall() {
     await dispatchers.clearCaches({ installChannel: INSTALL_PACKAGE_CHANNEL, processChannel: INSTALL_PROCESS_STATUS_CHANNEL });
-    await ipcRenderer.invoke(
-      'cancel-install-base-packages',
-      INSTALL_PACKAGE_CHANNEL,
-    );
-    goBack();
+    await ipcRenderer.invoke('cancel-install-base-packages', INSTALL_PACKAGE_CHANNEL);
+    goBackFromInstallPage();
   }
 
   useEffect(() => {
@@ -110,11 +121,17 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result }) {
+    function handleUpdateInstallStatus(e: IpcRendererEvent, { currentIndex, status, result, id }) {
       const { dashboard } = store.getState();
       if (status === 'done') {
         dispatchers.updateCurrentStep((dashboard.currentStep as number) + 1);
         dispatchers.updateInstallResult(result);
+        return;
+      }
+
+      if ((dashboard.currentPackageInfo as PackageInfo).id === id && status === 'finish') {
+        const newCurrentPackageInfo = { ...dashboard.currentPackageInfo as PackageInfo, versionStatus: 'installed' };
+        dispatchers.setCurrentPackageInfo(newCurrentPackageInfo);
         return;
       }
       dispatchers.updatePkgInstallStep(currentIndex);
@@ -166,6 +183,10 @@ const Dashboard = () => {
     </div>
   );
 
+  if (packageDetailVisible) {
+    return <PackageDetail installPackages={installPackages} />;
+  }
+
   return (
     <PageContainer
       title="前端开发必备"
@@ -188,11 +209,11 @@ const Dashboard = () => {
               <Col span={18}>
                 {(currentStep === 2) ? (
                   <InstallResult
-                    goBack={goBack}
+                    goBack={goBackFromInstallPage}
                     result={installResult}
                   />
                 ) : (
-                  <XtermTerminal id={TERM_ID} name={TERM_ID} options={{ cols: 68 }} />
+                  <XtermTerminal id={TERM_ID} name={TERM_ID} height="calc(100vh - 200px)" />
                 )}
               </Col>
             </Row>
@@ -202,10 +223,8 @@ const Dashboard = () => {
             {basePackagesList.map((item: PackageInfo, index: number) => (
               <Col s={12} l={8} key={item.id}>
                 <AppCard
-                  title={item.title}
-                  description={item.description}
-                  link={item.link}
-                  icon={item.icon}
+                  {...item}
+                  showDetailPage={(item.images || item.intro) ? () => showDetailPage(item) : undefined}
                   operation={
                     <div
                       className={classnames(styles.status, { [styles.uninstalledStatus]: item.versionStatus !== 'installed' })}
@@ -218,7 +237,6 @@ const Dashboard = () => {
                       )}
                     </div>
                   }
-                  recommended={item.recommended}
                   showSplitLine={basePackagesList.length - (basePackagesList.length % 2 ? 1 : 2) > index}
                 />
               </Col>
@@ -226,12 +244,12 @@ const Dashboard = () => {
           </Row>
         )}
       </Loading>
-      {visible && (
-        <InstallConfirmDialog
-          packages={uninstalledPackagesList}
-          onCancel={onDialogClose}
-          onOk={onDialogConfirm}
-        />
+      {dialogVisible && (
+      <InstallConfirmDialog
+        packages={uninstalledPackagesList}
+        onCancel={onDialogClose}
+        onOk={onDialogConfirm}
+      />
       )}
     </PageContainer>
   );

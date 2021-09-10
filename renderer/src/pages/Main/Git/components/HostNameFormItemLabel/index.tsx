@@ -11,7 +11,7 @@ export default () => {
         align="t"
         delay={200}
       >
-        如何查看 Git 服务器域名，请参考<a href="https://github.com/appworks-lab/toolkit#用户 Git 配置" target="__blank">文档</a>
+        如何查看 Git 服务器域名，请参考<a href="https://github.com/appworks-lab/toolkit#用户 Git 配置" target="_blank" rel="noreferrer">文档</a>
       </Tooltip>
     </span>
   );

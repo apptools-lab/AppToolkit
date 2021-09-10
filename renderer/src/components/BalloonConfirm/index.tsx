@@ -1,15 +1,18 @@
 import { FC, useState } from 'react';
 import { Button, Balloon, Icon } from '@alifd/next';
 
-interface IBallonConfirm {
+interface IBalloonConfirm {
   title: string | React.ReactNode;
   onConfirm?: any;
   onCancel?: any;
   style?: { [k: string]: string };
   disable?: boolean;
-  align?: 'b' | 't' | 'r' | 'l' | 'tl' | 'tr' | 'bl' | 'br' | 'lt' | 'lb' | 'rt' | 'rb';
+  align?: BalloonAlign;
 }
-const BallonConfirm: FC<IBallonConfirm> = ({
+
+export type BalloonAlign = 'b' | 't' | 'r' | 'l' | 'tl' | 'tr' | 'bl' | 'br' | 'lt' | 'lb' | 'rt' | 'rb';
+
+const BalloonConfirm: FC<IBalloonConfirm> = ({
   title,
   children,
   onConfirm,
@@ -58,4 +61,4 @@ const BallonConfirm: FC<IBallonConfirm> = ({
   );
 };
 
-export default BallonConfirm;
+export default BalloonConfirm;

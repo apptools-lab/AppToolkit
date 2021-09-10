@@ -47,6 +47,10 @@ export default () => {
   });
 
   ipcMain.handle('create-custom-global-dependencies-dir', async (e: IpcMainInvokeEvent, channel: string, currentGlobalDepsPath: string) => {
+    /**
+     * we need to cancel the process
+     * so we create a childProcess and we can kill it later
+     */
     const childProcess = child_process.fork(path.join(__dirname, '..', 'npm/dependency/createCustomGlobalDepsDir'));
     childProcessMap.set(channel, childProcess);
 

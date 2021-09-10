@@ -54,7 +54,6 @@ export default () => {
       log.info(`Channel ${childProcessName} has an existed child process.`);
       return;
     }
-    // fork a child process to install package
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(childProcessName, childProcess);
     const packagesData = store.get(packagesDataKey);
@@ -90,7 +89,10 @@ export default () => {
       log.info(`Channel ${childProcessName} has an existed child process.`);
       return;
     }
-    // fork a child process to install package
+    /**
+     * we need to cancel the install process
+     * so we create a childProcess and we can kill it later
+     */
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(childProcessName, childProcess);
     const packagesData = store.get(packagesDataKey);

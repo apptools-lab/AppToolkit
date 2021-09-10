@@ -1,5 +1,5 @@
 import { Button, Box, Typography, Tag, List } from '@alifd/next';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const { Group: TagGroup } = Tag;

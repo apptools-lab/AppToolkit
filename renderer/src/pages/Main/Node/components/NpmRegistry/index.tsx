@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Grid, Select, Message, Icon, Balloon } from '@alifd/next';
-import store from '../../../store';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;

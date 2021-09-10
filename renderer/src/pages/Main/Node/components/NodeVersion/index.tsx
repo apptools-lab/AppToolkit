@@ -1,6 +1,6 @@
 import { Grid, Button, Balloon } from '@alifd/next';
-import { NodeInfo } from '@/interfaces/base';
-import store from '../../../store';
+import { NodeInfo } from '@/types/base';
+import store from '@/pages/Main/store';
 import styles from './index.module.scss';
 
 const { Row, Col } = Grid;

@@ -1,12 +1,10 @@
 .dashboard {
   width: 100%;
   height: calc(100vh - 160px);
-  margin-top: 30px;
+  margin-top: 36px;
   padding: 0 40px;
 
   .install {
-    margin-top: 38px;
-
     :global {
       .next-step-vertical {
         height: 100%;
@@ -14,7 +12,11 @@
 
       .next-step-vertical > .next-step-item > div {
         &:nth-child(2) {
-          width: 120px !important;
+          width: 70px !important;
+
+          div {
+            font-size: 12px;
+          }
         }
       }
     }

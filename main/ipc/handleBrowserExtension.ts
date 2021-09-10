@@ -100,7 +100,7 @@ export default () => {
     });
   });
 
-  ipcMain.handle('check-webstore-host-alive', async (e: IpcMainInvokeEvent, browserType: string) => {
+  ipcMain.handle('check-webstore-host-is-accessible', async (e: IpcMainInvokeEvent, browserType: string) => {
     const browserHosts = {
       Chrome: 'chrome.google.com',
     };

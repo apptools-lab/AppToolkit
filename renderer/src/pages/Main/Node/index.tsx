@@ -3,7 +3,7 @@ import { Button } from '@alifd/next';
 import { ipcRenderer } from 'electron';
 import PageContainer from '@/components/PageContainer';
 import styles from './index.module.scss';
-import store from '../store';
+import store from '@/pages/Main/store';
 import NodeVersion from './components/NodeVersion';
 import NpmRegistry from './components/NpmRegistry';
 import NodeInstaller from './components/NodeInstaller';
