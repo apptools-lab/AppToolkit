@@ -33,6 +33,9 @@ const Updater = () => {
           {Array.isArray(changelog.logs) && changelog.logs.map((item) => {
             return (<li key={item}>{item}</li>);
           })}
+          <li>
+            123
+          </li>
         </ul>
       </div>
       <div className={styles.btnWrap}>
