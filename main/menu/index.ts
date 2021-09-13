@@ -24,11 +24,8 @@ function setAppMenu() {
             const updateInfo = await checkForUpdates();
             if (updateInfo) {
               const { versionInfo } = updateInfo;
-              if (
-                versionInfo &&
-              versionInfo.version &&
-              compareVersions.compare(currentVersion, versionInfo.version, '>=')
-              ) {
+              const isLatestVersion = versionInfo && versionInfo.version && compareVersions.compare(currentVersion, versionInfo.version, '>=');
+              if (isLatestVersion) {
                 dialog.showMessageBoxSync({
                   type: 'info',
                   message: 'AppToolkit 已经是最新版本！',
