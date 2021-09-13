@@ -23,10 +23,6 @@ const Updater = () => {
   const onAppQuitInstall = () => {
     ipcRenderer.invoke('app-quit-install');
   };
-
-  const onCloseWindow = () => {
-    ipcRenderer.invoke('close-updater');
-  };
   return (
     <div className={styles.updaterContainer}>
       <div className={styles.title}>新版本的 AppToolkit 已经发布</div>
@@ -40,7 +36,6 @@ const Updater = () => {
         </ul>
       </div>
       <div className={styles.btnWrap}>
-        <Button size="small" onClick={onCloseWindow}>手动重启</Button>
         <Button size="small" type="primary" onClick={onAppQuitInstall}>马上升级</Button>
       </div>
     </div>
