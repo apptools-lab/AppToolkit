@@ -4,16 +4,7 @@ import getVersionStatus from '../../utils/getVersionStatus';
 import executeCommandJSON from '../../utils/executeCommandJSON';
 import log from '../../utils/log';
 import nodeCache from '../../utils/nodeCache';
-
-interface InstalledDependency {
-  version: string;
-  from?: string;
-  resolved?: string;
-}
-
-interface InstalledDependencies {
-  dependencies: {[key: string]: InstalledDependency};
-}
+import { InstalledDependency, InstalledDependencies } from '../../types';
 
 const GLOBAL_DEPS_KEY = 'globalDependencies';
 const IGNORE_DEPENDENCIES = ['npm'];

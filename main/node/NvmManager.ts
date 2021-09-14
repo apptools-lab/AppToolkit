@@ -1,12 +1,12 @@
 import * as path from 'path';
 import * as execa from 'execa';
-import { INodeManager } from '../types';
+import { NodeManager } from '../types';
 import log from '../utils/log';
 import formatNodeVersion from '../utils/formatNodeVersion';
 import getShellName from '../utils/getShellName';
 import getSourcePath from '../utils/getSourcePath';
 
-class NvmManager implements INodeManager {
+class NvmManager implements NodeManager {
   channel: string;
 
   std: string;

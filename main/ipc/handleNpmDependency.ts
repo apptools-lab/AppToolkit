@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
 import * as path from 'path';
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import {
   getGlobalDependencies,
   uninstallGlobalDependency,
@@ -47,6 +47,10 @@ export default () => {
   });
 
   ipcMain.handle('create-custom-global-dependencies-dir', async (e: IpcMainInvokeEvent, channel: string, currentGlobalDepsPath: string) => {
+    /**
+     * we need to cancel the process
+     * so we create a childProcess and we can kill it later
+     */
     const childProcess = child_process.fork(path.join(__dirname, '..', 'npm/dependency/createCustomGlobalDepsDir'));
     childProcessMap.set(channel, childProcess);
 
@@ -64,8 +68,7 @@ export default () => {
       } else if (data.status === 'error') {
         killChannelChildProcess(childProcessMap, channel);
       }
-
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

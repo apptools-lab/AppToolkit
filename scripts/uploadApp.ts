@@ -12,7 +12,7 @@ const { build: { productName }, version } = packageJSON;
 
   let channelExt = '';
   let OSSObjectDir = 'toolkit';
-  // e.g: AppWorks Toolkit-0.1.0
+  // e.g: AppToolkit-0.1.0
   let distFileName = '';
   // e.g: .dmg .exe
   let distFileExt = '';
@@ -29,11 +29,11 @@ const { build: { productName }, version } = packageJSON;
   // upload app resource
   // record latest version for the auto-updater to work. e.g: latest-mac.yml
   const channelFile = `${channel}${channelExt}`;
-  // package installer file without version. e.g: AppWorks Toolkit.dmg
+  // package installer file without version. e.g: AppToolkit.dmg
   const packageWithoutVersionFile = `${productName}${distFileExt}`;
-  // package installer file with version. e.g: AppWorks Toolkit-0.1.0.dmg
+  // package installer file with version. e.g: AppToolkit-0.1.0.dmg
   const packageWithVersionFile = `${distFileName}${distFileExt}`;
-  // package zip file. e.g: AppWorks Toolkit-0.1.0-mac.zip
+  // package zip file. e.g: AppToolkit-0.1.0-mac.zip
   const packageZipFile = `${distFileName}-${platform}.zip`;
 
   const fileLists = [

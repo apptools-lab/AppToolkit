@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as execa from 'execa';
-import { INodeVersionManagerInfo } from '../../types';
+import { NodeVersionManagerInfo } from '../../types';
 import log from '../../utils/log';
 import getShellName from '../../utils/getShellName';
 import getLocalCliInfo from './cli';
@@ -19,7 +19,7 @@ async function getLocalNodeInfo(
   let localNodeInfo = await getLocalCliInfo(name, latestVersion);
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  let nodeManagerInfo = {} as INodeVersionManagerInfo;
+  let nodeManagerInfo = {} as NodeVersionManagerInfo;
   const getNodeManagerInfoFunc = nodeManagerInfoProcessor[managerName];
   if (getNodeManagerInfoFunc) {
     nodeManagerInfo = await getNodeManagerInfoFunc();
@@ -37,8 +37,8 @@ async function getLocalNodeInfo(
   return localNodeInfo;
 }
 
-async function getNvmInfo(): Promise<INodeVersionManagerInfo> {
-  const nvmInfo: INodeVersionManagerInfo = {
+async function getNvmInfo(): Promise<NodeVersionManagerInfo> {
+  const nvmInfo: NodeVersionManagerInfo = {
     managerVersionStatus: 'uninstalled',
   };
   const shFilePath = getSourcePath(path.join(__dirname, '../..'), 'data/shells', 'is-nvm-installed.sh');

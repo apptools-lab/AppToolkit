@@ -1,15 +1,17 @@
-export interface IBasePackageInfo {
+export interface BasePackageInfo {
   title: string;
-  name: string;
+  id: string;
   description: string;
   icon: string;
-  downloadUrl?: string;
-  shellName?: string;
   version: string | null;
   recommended: boolean;
   isInternal: boolean;
   type: PackageType;
+  downloadUrl?: string;
+  shellName?: string;
   platforms?: Platforms;
+  images?: string[];
+  intro?: string | string[] | Array<{ title: string; content: string }>;
   options?: {
     [k: string]: any;
   };
@@ -23,50 +25,89 @@ export type PackageType = 'cli' | 'dmg' | 'exe' | 'IDEExtension' | 'npm';
 
 export type VersionStatus = 'installed' | 'uninstalled' | 'upgradeable';
 
-export interface ILocalPackageInfo {
+export interface LocalPackageInfo {
   localVersion: string | null;
   versionStatus: VersionStatus;
   localPath?: string | null;
   warningMessage?: string;
-  [key: string]: any;
+  packagePath?: string;
 }
-export interface INodeVersionManagerInfo {
+export interface NodeVersionManagerInfo {
   managerVersionStatus: VersionStatus;
 }
 
-export interface IPackageInfo extends IBasePackageInfo, ILocalPackageInfo { }
+export interface PackageInfo extends BasePackageInfo, LocalPackageInfo { }
 
-export interface INodeManager {
+export interface NodeManager {
   installNode: Function;
 }
 
-export interface IPackageInstaller {
-  install: (packageInfo: IPackageInfo, packagePath?: string) => Promise<{ name: string; localPath?: string }>;
+export interface IPackageManager {
+  install: (packageInfo: PackageInfo, packagePath?: string) => Promise<{ id: string; localPath?: string }>;
+  uninstall?: (packageInfo: PackageInfo) => Promise<void>;
 }
 
-export interface IInstallResult {
+export interface InstallResult {
   title: string;
   duration: number;
   status: 'finish' | 'error';
   errMsg?: string;
 }
 
-export interface INodeVersions {
+export interface NodeVersions {
   versions: string[];
   majors: Array<{ version: string; title: string }>;
 }
 
-export interface INPMRegistry {
+export interface NPMRegistry {
   name: string;
   registry: string;
   recommended?: boolean;
   isInternal: boolean;
 }
 
-export interface IPackagesData {
-  bases: IBasePackageInfo[];
+export interface AppInfo {
+  id: string;
+  title: string;
+  packages: BasePackageInfo[];
+}
 
-  apps: IBasePackageInfo[];
+export interface BrowserExtensionInfo {
+  id: string;
+  title: string;
+  versionStatus: VersionStatus;
+  extensions: BasePackageInfo[];
+}
 
-  npmRegistries: INPMRegistry[];
+export interface PackagesData {
+  bases: BasePackageInfo[];
+
+  apps: AppInfo[];
+
+  npmRegistries: NPMRegistry[];
+
+  browserExtensions: BrowserExtensionInfo[];
+}
+
+export interface AddUserConfig {
+  configName: string;
+  SSHPublicKey: string;
+  user: { name: string; email: string; hostName: string };
+}
+
+export interface UserGitConfig {
+  SSHPublicKey: string;
+  configName: string;
+  gitDirs: string[];
+  user: { name: string; email: string; hostName: string };
+}
+
+export interface InstalledDependency {
+  version: string;
+  from?: string;
+  resolved?: string;
+}
+
+export interface InstalledDependencies {
+  dependencies: Record<string, InstalledDependency>;
 }
