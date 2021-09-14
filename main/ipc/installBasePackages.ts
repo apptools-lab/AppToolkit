@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { PackageInfo } from '../types';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 import nodeCache from '../utils/nodeCache';
@@ -55,7 +55,7 @@ export default () => {
         nodeCache.set(channel, processCaches);
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

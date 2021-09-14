@@ -1,7 +1,8 @@
 {
+  "mpa": true,
   "outputDir": "../dist/assets",
   "publicPath": "./",
-  "customWebpack": true,
+  "minify": "esbuild",
   "plugins": [
     [
       "build-plugin-fusion",
@@ -18,9 +19,6 @@
       }
     ],
     "build-plugin-css-assets-local",
-    ["build-plugin-webpack5", {
-      "remoteRuntime": true
-    }],
     "./build.plugin.js"
   ]
 }

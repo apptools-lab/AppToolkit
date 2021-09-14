@@ -5,6 +5,7 @@
   "dependencies": {
     "@alifd/next": "^1.19.4",
     "@alifd/theme-design-pro": "^0.x",
+    "@ice/store-plugin-immer": "^1.0.0-0",
     "@icedesign/dynamic-icon": "^0.1.8",
     "classnames": "^2.3.1",
     "date-time": "^3.1.0",
@@ -26,8 +27,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-webpack5": "^1.2.2",
-    "ice.js": "^1.0.0",
-    "webpack": "^5.30.0",
+    "ice.js": "2.0.0-rc.1",
     "typescript": "^4.0.0"
   },
   "scripts": {

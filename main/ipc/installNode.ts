@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import nodeCache from '../utils/nodeCache';
 import log from '../utils/log';
@@ -76,7 +76,7 @@ export default () => {
         nodeCache.set(channel, processCaches);
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

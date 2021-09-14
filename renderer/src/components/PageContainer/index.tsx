@@ -10,7 +10,7 @@ interface PageContainerProps {
 
 const PageContainer: FC<PageContainerProps> = ({ children, title, style, button }) => {
   const { ref, inView } = useInView({
-    threshold: 0.999,
+    threshold: 0.99,
   });
   return (
     <div style={{ ...style }}>

@@ -9,7 +9,7 @@ import { getPackageInfo } from '../packageInfo';
 import log from '../utils/log';
 import { record } from '../recorder';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import ping = require('ping');
 
 const childProcessMap = new Map();
@@ -96,7 +96,7 @@ export default () => {
         }
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

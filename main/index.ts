@@ -1,12 +1,13 @@
 import { app, BrowserWindow } from 'electron';
 import modifyProcessEnv from './utils/modifyProcessEnv';
-import { createWindow } from './window';
+import { createMainWindow } from './window';
 import handleIPC from './ipc';
-import { checkForUpdates } from './utils/autoUpdater';
+import { checkForUpdates } from './autoUpdater';
 import getPackagesData from './utils/getPackagesData';
 import { autoDownloadPackages } from './autoDownloader';
 import store, { packagesDataKey } from './store';
 import { recordDAU } from './recorder';
+import setMenu from './menu';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
@@ -18,20 +19,25 @@ app.whenReady()
   .finally(() => {
     modifyProcessEnv();
 
-    createWindow();
+    createMainWindow();
 
     handleIPC();
 
-    checkForUpdates();
-
-    autoDownloadPackages();
-
-    recordDAU();
+    setMenu();
 
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+      if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
     });
   });
+
+
+app.on('will-finish-launching', () => {
+  checkForUpdates();
+
+  autoDownloadPackages();
+
+  recordDAU();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
