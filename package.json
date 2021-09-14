@@ -1,9 +1,9 @@
 {
   "name": "AppToolkit",
   "private": true,
-  "version": "0.3.0",
-  "description": "The Frontend Developer Toolkit",
-  "scripts": {
+  "version": "0.4.0",
+  "description": "The Frontend Application Toolkit",
+   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
     "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install",
     "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install",
@@ -104,7 +104,6 @@
     "node-fetch": "^2.6.1",
     "package-json": "^7.0.0",
     "ping": "^0.4.1",
-    "react-intersection-observer": "^8.32.0",
     "shell-profile": "^1.0.3",
     "shelljs": "^0.8.4",
     "ssh-config": "^4.0.6",
