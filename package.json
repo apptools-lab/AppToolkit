@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.4.0",
   "description": "The Frontend Application Toolkit",
-   "scripts": {
+  "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
     "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install",
     "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install",
