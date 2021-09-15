@@ -15,23 +15,35 @@ const { Row, Col } = Grid;
 
 const INSTALL_EXTENSION_CHANNEL = 'install-browser-extension';
 const INSTALL_EXTENSION_STATUS_CHANNEL = 'install-browser-extension-process-status';
+const REMOVE_STATE_STATUSES = ['finish', 'error'];
+
+const installBtnStyle = {
+  fontSize: 12,
+  fontWeight: 700,
+  backgroundColor: '#f2f2f7',
+  width: 64,
+  height: 24,
+  borderRadius: 10,
+};
 
 const ExtensionList: FC<{}> = () => {
   const [state, dispatcher] = store.useModel('browserExtension');
   const effectsState = store.useModelEffectsState('browserExtension');
 
-  const { extensionsInfo, installStatuses, detailVisible, currentExtensionInfo } = state;
+  const { extensionsInfo, installStatuses, detailVisible, currentExtensionInfo, checkingBrowserHostExtensionId } = state;
 
   useEffect(() => {
     dispatcher.getExtensionsInfo();
   }, []);
 
   const handleInstall = async (packageInfo: PackageInfo) => {
-    const { packagePath, link, options: { browserType } } = packageInfo;
-    const alive = await dispatcher.checkBrowserHostIsAccessible(browserType);
+    const { packagePath, link, options: { browserType }, id } = packageInfo;
+    dispatcher.addCheckingBrowserHostExtensionId(id);
+    const hostIsAccessible = await dispatcher.checkBrowserHostIsAccessible(browserType);
+    dispatcher.removeCheckingBrowserHostExtensionId(id);
 
-    if (alive) {
-      openDialog(alive, packagePath, link, browserType);
+    if (hostIsAccessible) {
+      openDialog(hostIsAccessible, packagePath, link, browserType);
     } else {
       installBrowserExtension(packageInfo);
     }
@@ -48,32 +60,24 @@ const ExtensionList: FC<{}> = () => {
         Message.error(error.message);
       });
   };
-  const btnStyle = {
-    fontSize: 12,
-    fontWeight: 700,
-    backgroundColor: '#f2f2f7',
-    width: 64,
-    height: 24,
-    borderRadius: 10,
-  };
-  const openDialog = (alive: boolean, packagePath: string, link?: string, browserType?: string) => {
+
+  const openDialog = (hostIsAccessible: boolean, packagePath: string, link?: string, browserType?: string) => {
     const dialog = Dialog.show({
       title: '提示',
       style: { width: 500 },
-      height: alive ? '220px' : '170px',
+      height: hostIsAccessible ? '220px' : '170px',
       content: (
         <div className={styles.dialog}>
-          {alive ? (
+          {hostIsAccessible ? (
             <div>Toolkit 目前不能自动安装浏览器插件，需要自行在 {browserType} 应用商店安装。点击下方确定按钮将跳转到插件安装页面。</div>
           ) : (
             <>
               <Button
                 type="primary"
-                style={btnStyle}
                 text
                 onClick={() => shell.showItemInFolder(packagePath)}
               >
-                插件安装包<CustomIcon className={styles.icon} type="tiaozhuan-zhuanqu" />
+                插件安装包<CustomIcon size={14} type="tiaozhuan-zhuanqu" />
               </Button>
               已下载到本地，请自行在浏览器的扩展程序管理中安装。
               <br />
@@ -82,9 +86,9 @@ const ExtensionList: FC<{}> = () => {
           )}
         </div>
       ),
-      footer: !!alive,
+      footer: !!hostIsAccessible,
       onOk: () => {
-        if (alive) {
+        if (hostIsAccessible) {
           shell.openExternal(link);
           dialog.hide();
         }
@@ -106,10 +110,10 @@ const ExtensionList: FC<{}> = () => {
   };
 
   const Operation = ({ packageInfo }: { packageInfo: PackageInfo }) => {
-    const { versionStatus } = packageInfo;
+    const { versionStatus, id } = packageInfo;
     let installStatus;
 
-    const installStatusIndex = installStatuses.findIndex(({ id }) => id === packageInfo.id);
+    const installStatusIndex = installStatuses.findIndex((item) => id === item.id);
     if (installStatusIndex > -1) {
       installStatus = installStatuses[installStatusIndex].status;
     }
@@ -119,8 +123,12 @@ const ExtensionList: FC<{}> = () => {
           versionStatus === 'installed' ? (
             <span style={{ color: 'gray', fontSize: 12 }}>已安装</span>
           ) : (
-            <Button text type="primary" style={btnStyle} onClick={async () => handleInstall(packageInfo)}>
-              {installStatus || effectsState.checkBrowserHostIsAccessible.isLoading ? <Icon type="loading" /> : '安装'}
+            <Button text type="primary" style={installBtnStyle} onClick={async () => handleInstall(packageInfo)}>
+              {installStatus || (checkingBrowserHostExtensionId.includes(id) && effectsState.checkBrowserHostIsAccessible.isLoading) ? (
+                <Icon type="loading" />
+              ) : (
+                '安装'
+              )}
             </Button>
           )
         }
@@ -131,20 +139,25 @@ const ExtensionList: FC<{}> = () => {
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, installStatus: ProcessStatus) {
       const { status, errMsg, packagePath } = installStatus;
-      if (status === 'finish') {
-        openDialog(false, packagePath);
-      }
-      if (status === 'finish' || status === 'error') {
+
+      if (REMOVE_STATE_STATUSES.includes(status)) {
         dispatcher.removeInstallStatus(installStatus);
-        dispatcher.getExtensionsInfo();
-        return;
-      }
-      if (status === 'error') {
-        Message.error(errMsg);
-        return;
       }
 
-      dispatcher.updateInstallStatus(installStatus);
+      switch (status) {
+        case 'done':
+          dispatcher.getExtensionsInfo();
+          break;
+        case 'error':
+          Message.error(errMsg);
+          break;
+        case 'finish':
+          openDialog(false, packagePath);
+          break;
+        default:
+          dispatcher.updateInstallStatus(installStatus);
+          break;
+      }
     }
 
     ipcRenderer.on(INSTALL_EXTENSION_STATUS_CHANNEL, handleUpdateInstallStatus);

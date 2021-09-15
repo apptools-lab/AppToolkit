@@ -6,6 +6,7 @@ interface State {
   installStatuses: ProcessStatus[];
   detailVisible: boolean;
   currentExtensionInfo: PackageInfo;
+  checkingBrowserHostExtensionId: string[];
 }
 
 export default {
@@ -14,6 +15,7 @@ export default {
     installStatuses: [],
     detailVisible: false,
     currentExtensionInfo: {},
+    checkingBrowserHostExtensionId: [],
   },
   reducers: {
     updateInstallStatus(prevState: State, installStatus: ProcessStatus) {
@@ -35,6 +37,15 @@ export default {
     },
     setCurrentExtensionInfo(prevState: State, extensionInfo: PackageInfo) {
       prevState.currentExtensionInfo = extensionInfo;
+    },
+    addCheckingBrowserHostExtensionId(prevState: State, extensionId: string) {
+      prevState.checkingBrowserHostExtensionId.push(extensionId);
+    },
+    removeCheckingBrowserHostExtensionId(prevState: State, extensionId: string) {
+      const index = prevState.checkingBrowserHostExtensionId.findIndex((id: string) => extensionId === id);
+      if (index > -1) {
+        prevState.checkingBrowserHostExtensionId.splice(index, 1);
+      }
     },
   },
   effects: () => ({
