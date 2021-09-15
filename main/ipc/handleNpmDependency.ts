@@ -59,14 +59,18 @@ export default () => {
     childProcessMap.set(channel, childProcess);
 
     childProcess.on('message', ({ data }: any) => {
-      if (data.status === 'done') {
-        killChannelChildProcess(childProcessMap, channel);
-        record({
-          module: 'node',
-          action: 'createCustomGlobalDependenciesDir',
-        });
-      } else if (data.status === 'error') {
-        killChannelChildProcess(childProcessMap, channel);
+      switch (data.status) {
+        case 'done':
+          record({
+            module: 'node',
+            action: 'createCustomGlobalDependenciesDir',
+          });
+        // eslint-disable-next-line no-fallthrough
+        case 'error':
+          killChannelChildProcess(childProcessMap, channel);
+          break;
+        default:
+          break;
       }
       sendToMainWindow(channel, data);
     });
