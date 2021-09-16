@@ -12,6 +12,7 @@ import CliManager from './CliManager';
 import ZipManager from './ZipManager';
 import IDEExtensionManager from './IDEExtensionManager';
 import NpmDependencyManager from './NpmDependencyManager';
+import getSourcePath from '../utils/getSourcePath';
 
 // avoid error: 'Invalid package /Applications/xxx.app/Contents/Resources/app.asar'
 process.noAsar = true;
@@ -86,7 +87,7 @@ async function installPackages({
           packagePath = await downloadFile(downloadUrl, TOOLKIT_PACKAGES_DIR, packageFileName, installChannel);
         }
       } else if (shellName) {
-        packagePath = path.resolve(__dirname, '../data/shells', shellName);
+        packagePath = getSourcePath(path.join(__dirname, '..'), 'data/shells', shellName);
       }
 
       if (!packagePath && !NOT_NEED_TO_DOWNLOAD_PACKAGE_TYPE.includes(type)) {

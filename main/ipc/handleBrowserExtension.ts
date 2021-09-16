@@ -82,17 +82,21 @@ export default () => {
 
     childProcess.on('message', ({ channel, data }: any) => {
       if (channel === processChannel) {
-        if (data.status === 'done') {
-          record({
-            module: 'browserExtension',
-            action: 'install',
-            data: {
-              name: packageInfo.title,
-            },
-          });
-        }
-        if (data.status === 'done' || data.status === 'error') {
-          killChannelChildProcess(childProcessMap, childProcessName);
+        switch (data.status) {
+          case 'done':
+            record({
+              module: 'browserExtension',
+              action: 'install',
+              data: {
+                name: packageInfo.title,
+              },
+            });
+          // eslint-disable-next-line no-fallthrough
+          case 'error':
+            killChannelChildProcess(childProcessMap, childProcessName);
+            break;
+          default:
+            break;
         }
       }
 

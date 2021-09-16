@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { BrowserWindow } from 'electron';
-import * as isDev from 'electron-is-dev';
 import openAboutWindow from 'about-window';
 
 const packageJSON = require('../package.json');
@@ -27,7 +26,7 @@ function createMainWindow() {
   });
 
   // and load the index.html of the app.
-  if (isDev) {
+  if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line @iceworks/best-practices/no-http-url
     mainWindow.loadURL('http://localhost:3000/main/');
     // Open the DevTools.
@@ -58,7 +57,7 @@ async function createUpdaterWindow() {
   });
 
   // and load the index.html of the app.
-  if (isDev) {
+  if (process.env.NODE_ENV === 'development') {
     // Open the DevTools.
     updaterWindow.webContents.openDevTools();
     // eslint-disable-next-line @iceworks/best-practices/no-http-url

@@ -62,6 +62,8 @@ export default () => {
           const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
+        } else if (status === 'error') {
+          killChannelChildProcess(childProcessMap, installChannel);
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];

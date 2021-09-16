@@ -35,12 +35,18 @@ export default () => {
 
     childProcess.on('message', ({ channel, data }: any) => {
       if (channel === processChannel) {
-        if (data.status === 'done') {
-          killChannelChildProcess(childProcessMap, installChannel);
-          record({
-            module: 'base',
-            action: 'installPackages',
-          });
+        switch (data.status) {
+          case 'done':
+            record({
+              module: 'base',
+              action: 'installPackages',
+            });
+          // eslint-disable-next-line no-fallthrough
+          case 'error':
+            killChannelChildProcess(childProcessMap, installChannel);
+            break;
+          default:
+            break;
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];

@@ -3,7 +3,7 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Button, Message, Icon, Loading, List, Tag } from '@alifd/next';
 import store from '@/pages/Main/store';
 import styles from './index.module.scss';
-import { PackageInfo, ProcessStatus } from '@/types/base';
+import { PackageInfo, ProcessStatus, VersionStatus } from '@/types/base';
 import { AppInfo } from '@/types/application';
 import BalloonConfirm, { BalloonAlign } from '@/components/BalloonConfirm';
 import AppDetail from '@/components/AppDetail';
@@ -14,6 +14,17 @@ const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
 
 const UNINSTALL_APP_CHANNEL = 'uninstall-app';
 const UNINSTALL_APP_PROCESS_STATUS_CHANNEL = 'uninstall-app-process-status';
+
+const REMOVE_STATE_STATUSES = ['finish', 'error'];
+
+const btnStyle = {
+  fontSize: 12,
+  fontWeight: 700,
+  backgroundColor: '#f2f2f7',
+  width: 64,
+  height: 24,
+  borderRadius: 10,
+};
 
 const presetColors = ['blue', 'green', 'orange', 'red', 'turquoise', 'yellow'];
 
@@ -71,14 +82,6 @@ const AppList: FC<{}> = () => {
       uninstallStatus = uninstallStatuses[uninstallStatusIndex].status;
     }
 
-    const btnStyle = {
-      fontSize: 12,
-      fontWeight: 700,
-      backgroundColor: '#f2f2f7',
-      width: 64,
-      height: 24,
-      borderRadius: 10,
-    };
     return (
       <div>
         {versionStatus === 'uninstalled' ? (
@@ -110,27 +113,36 @@ const AppList: FC<{}> = () => {
     dispatcher.setCurrentAppInfo({} as any);
   };
 
+  // update current app info which show in the detail page
+  function updateCurrentAppInfo(versionStatus: keyof typeof VersionStatus, id: string) {
+    const { application } = store.getState();
+    if ((application.currentAppInfo as PackageInfo).id === id) {
+      const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus };
+      dispatcher.setCurrentAppInfo(newCurrentAppInfo);
+    }
+  }
+
   useEffect(() => {
     function handleUpdateInstallStatus(e: IpcRendererEvent, installStatus: ProcessStatus) {
       const { status, errMsg, id } = installStatus;
-      if (status === 'finish' || status === 'error') {
-        dispatcher.removeInstallStatus(installStatus);
-        dispatcher.getAppsInfo();
-        return;
-      }
-      // update current app info
-      const { application } = store.getState();
-      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
-        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'installed' };
-        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
-        return;
-      }
-      if (status === 'error') {
-        Message.error(errMsg);
-        return;
-      }
 
-      dispatcher.updateInstallStatus(installStatus);
+      if (REMOVE_STATE_STATUSES.includes(status)) {
+        dispatcher.removeInstallStatus(installStatus);
+      }
+      switch (status) {
+        case 'done':
+          dispatcher.getAppsInfo();
+          break;
+        case 'error':
+          Message.error(errMsg);
+          break;
+        case 'finish':
+          updateCurrentAppInfo('installed', id);
+          break;
+        default:
+          dispatcher.updateInstallStatus(installStatus);
+          break;
+      }
     }
 
     ipcRenderer.on(INSTALL_APP_PROCESS_STATUS_CHANNEL, handleUpdateInstallStatus);
@@ -146,24 +158,25 @@ const AppList: FC<{}> = () => {
   useEffect(() => {
     function handleUpdateUninstallStatus(e: IpcRendererEvent, uninstallStatus: ProcessStatus) {
       const { status, errMsg, id } = uninstallStatus;
-      if (status === 'finish' || status === 'error') {
+
+      if (REMOVE_STATE_STATUSES.includes(status)) {
         dispatcher.removeUninstallStatus(uninstallStatus);
-        dispatcher.getAppsInfo();
-        return;
-      }
-      // update current app info
-      const { application } = store.getState();
-      if ((application.currentAppInfo as PackageInfo).id === id && status === 'finish') {
-        const newCurrentAppInfo = { ...application.currentAppInfo as PackageInfo, versionStatus: 'uninstalled' };
-        dispatcher.setCurrentAppInfo(newCurrentAppInfo);
-        return;
-      }
-      if (status === 'error') {
-        Message.error(errMsg);
-        return;
       }
 
-      dispatcher.updateUninstallStatus(uninstallStatus);
+      switch (status) {
+        case 'done':
+          dispatcher.getAppsInfo();
+          break;
+        case 'error':
+          Message.error(errMsg);
+          break;
+        case 'finish':
+          updateCurrentAppInfo('uninstalled', id);
+          break;
+        default:
+          dispatcher.updateUninstallStatus(uninstallStatus);
+          break;
+      }
     }
 
     ipcRenderer.on(UNINSTALL_APP_PROCESS_STATUS_CHANNEL, handleUpdateUninstallStatus);

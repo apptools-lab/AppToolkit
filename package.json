@@ -1,14 +1,14 @@
 {
   "name": "AppToolkit",
   "private": true,
-  "version": "0.3.0",
-  "description": "The Frontend Developer Toolkit",
+  "version": "0.4.0",
+  "description": "The Frontend Application Toolkit",
   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
     "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install",
     "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
-    "start:electron": "npm run copy:static && electron ./dist",
+    "start:electron": "npm run copy:static && NODE_ENV=development electron ./dist",
     "copy:static": "cp -R ./main/data ./dist",
     "watch": "rm -rf ./dist && npm run watch:renderer & npm run watch:main",
     "watch:renderer": "cd ./renderer && npm start",
@@ -16,7 +16,7 @@
     "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
-    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build",
+    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --x64",
     "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app && npm run upload:app",
     "upload:app": "ts-node ./scripts/uploadApp",
     "lint": "npm run eslint && npm run stylelint",
@@ -34,13 +34,16 @@
       "package.json",
       "resources"
     ],
+    "extraResources": {
+      "from": "./main/data",
+      "to": "data"
+    },
     "publish": [
       {
         "provider": "generic",
         "url": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/${os}"
       }
     ],
-    "asar": false,
     "afterSign": "scripts/notarize.js",
     "directories": {
       "buildResources": "resource",
@@ -87,7 +90,6 @@
     "compare-versions": "^3.6.0",
     "cross-spawn": "^7.0.3",
     "decompress": "^4.2.1",
-    "electron-is-dev": "^2.0.0",
     "electron-log": "^4.3.4",
     "electron-store": "^8.0.0",
     "electron-updater": "^4.3.9",
@@ -102,7 +104,6 @@
     "node-fetch": "^2.6.1",
     "package-json": "^7.0.0",
     "ping": "^0.4.1",
-    "react-intersection-observer": "^8.32.0",
     "shell-profile": "^1.0.3",
     "shelljs": "^0.8.4",
     "ssh-config": "^4.0.6",
