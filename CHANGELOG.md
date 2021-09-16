@@ -1,17 +1,24 @@
 # CHANGELOG
 
+## 0.4.0
+
+- Feat: add base packages info cache
+- Feat: support view app or tool details
+- Feat: enhance app updates and show the changelog
+- Feat: support build an asar package
+
 ## 0.3.0
 
 - Feat: support install tnpm or cnpm
 - Feat: support install mac app
 - Feat: support install chrome extension
 - Feat: smaller window size
-- chore: update readme
+- Chore: update readme
 
 ## 0.2.1
 
 - Fix: fail to get internal npm package info
-- Feat: use default shell to excute sh file
+- Feat: use default shell to execute sh file
 - Feat: add global dependencies prefix path
 - Feat: add recommend icon to registry
 - Feat: update log to sls
