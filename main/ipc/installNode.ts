@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import nodeCache from '../utils/nodeCache';
 import log from '../utils/log';
@@ -30,7 +30,10 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
-    // fork a child process to install node
+    /**
+     * we need to cancel the install node process
+     * so we create a childProcess and we can kill it later
+     */
     childProcess = child_process.fork(path.join(__dirname, '..', 'node/index'));
     childProcessMap.set(installChannel, childProcess);
 
@@ -59,6 +62,8 @@ export default () => {
           const nodeEnvPath = result.nodePath.replace('/bin/node', '/bin');
           // process.env.PATH: /usr/local/bin -> /Users/xxx/.nvm/versions/node/v14.15.0/bin:/usr/local/bin
           process.env.PATH = `${nodeEnvPath}${path.delimiter}${process.env.PATH}`;
+        } else if (status === 'error') {
+          killChannelChildProcess(childProcessMap, installChannel);
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];
@@ -73,7 +78,7 @@ export default () => {
         nodeCache.set(channel, processCaches);
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

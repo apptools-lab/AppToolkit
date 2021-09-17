@@ -11,6 +11,7 @@
     img {
       width: 56px;
       height: 56px;
+      cursor: pointer;
     }
   }
 
@@ -33,6 +34,15 @@
         white-space: nowrap;
         color: #333;
       }
+
+      div {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #333;
+        cursor: pointer;
+      }
       img {
         margin-left: 10px;
       }
@@ -44,7 +54,7 @@
       font-size: 12px;
       height: 28px;
       color: rgb(128, 128, 128);
-      overflow: hidden; 
+      overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-box-orient: vertical;

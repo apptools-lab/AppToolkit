@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ipcMain } from 'electron';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { PackageInfo } from '../types';
-import { send as sendMainWindow } from '../window';
+import { sendToMainWindow } from '../window';
 import killChannelChildProcess from '../utils/killChannelChildProcess';
 import log from '../utils/log';
 import nodeCache from '../utils/nodeCache';
@@ -22,7 +22,10 @@ export default () => {
       log.info(`Channel ${installChannel} has an existed child process.`);
       return;
     }
-    // fork a child process to install package
+    /**
+     * we need to cancel the install process
+     * so we create a childProcess and we can kill it later
+     */
     childProcess = child_process.fork(path.join(__dirname, '..', 'packageManager/index'));
     childProcessMap.set(installChannel, childProcess);
     // After packing the Electron app, the electron module which the electron-store require, couldn't be found in childProcess.
@@ -32,12 +35,18 @@ export default () => {
 
     childProcess.on('message', ({ channel, data }: any) => {
       if (channel === processChannel) {
-        if (data.status === 'done') {
-          killChannelChildProcess(childProcessMap, installChannel);
-          record({
-            module: 'base',
-            action: 'installPackages',
-          });
+        switch (data.status) {
+          case 'done':
+            record({
+              module: 'base',
+              action: 'installPackages',
+            });
+          // eslint-disable-next-line no-fallthrough
+          case 'error':
+            killChannelChildProcess(childProcessMap, installChannel);
+            break;
+          default:
+            break;
         }
         // save process data to cache
         const processCaches = nodeCache.get(channel) || [];
@@ -52,7 +61,7 @@ export default () => {
         nodeCache.set(channel, processCaches);
       }
 
-      sendMainWindow(channel, data);
+      sendToMainWindow(channel, data);
     });
   });
 

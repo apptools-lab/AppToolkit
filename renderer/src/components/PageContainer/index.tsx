@@ -10,12 +10,12 @@ interface PageContainerProps {
 
 const PageContainer: FC<PageContainerProps> = ({ children, title, style, button }) => {
   const { ref, inView } = useInView({
-    threshold: 0.999,
+    threshold: 0.99,
   });
   return (
     <div style={{ ...style }}>
-      <PageHeader title={title} button={button} sticky={inView} />
-      <div ref={ref} style={{ height: 'calc(100vh - 108px)' }}>{children}</div>
+      <PageHeader title={title} button={button} sticky={!inView} />
+      <div ref={ref} style={{ height: `calc(100vh - ${(inView) ? 108 : 50}px)` }}>{children}</div>
     </div>
   );
 };

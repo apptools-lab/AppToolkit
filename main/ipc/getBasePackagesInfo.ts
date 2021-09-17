@@ -1,11 +1,18 @@
-import { ipcMain } from 'electron';
+import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { BasePackageInfo, Platform } from '../types';
 import { getPackageInfo } from '../packageInfo';
 import checkIsAliInternal from '../utils/checkIsAliInternal';
 import store, { packagesDataKey } from '../store';
+import nodeCache from '../utils/nodeCache';
+
+const basePackagesInfoKey = 'basePackagesInfo';
 
 export default () => {
-  ipcMain.handle('get-base-packages-info', async () => {
+  ipcMain.handle('get-base-packages-info', async (e: IpcMainInvokeEvent, force = false) => {
+    const cache = nodeCache.get(basePackagesInfoKey);
+    if (!force && cache) {
+      return cache;
+    }
     const data = store.get(packagesDataKey);
     const { bases = [] }: { bases: BasePackageInfo[] } = data;
     const isAliInternal = await checkIsAliInternal();
@@ -22,6 +29,9 @@ export default () => {
     const packagesData = await Promise.all(basePackages.map((basePackageInfo: BasePackageInfo) => {
       return getPackageInfo(basePackageInfo);
     }));
+
+    nodeCache.set(basePackagesInfoKey, packagesData);
+
     return packagesData;
   });
 };

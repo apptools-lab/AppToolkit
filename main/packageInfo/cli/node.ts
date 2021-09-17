@@ -4,6 +4,7 @@ import { NodeVersionManagerInfo } from '../../types';
 import log from '../../utils/log';
 import getShellName from '../../utils/getShellName';
 import getLocalCliInfo from './cli';
+import getSourcePath from '../../utils/getSourcePath';
 
 const nodeManagerInfoProcessor = {
   nvm: getNvmInfo,
@@ -40,7 +41,7 @@ async function getNvmInfo(): Promise<NodeVersionManagerInfo> {
   const nvmInfo: NodeVersionManagerInfo = {
     managerVersionStatus: 'uninstalled',
   };
-  const shFilePath = path.resolve(__dirname, '../../data/shells', 'is-nvm-installed.sh');
+  const shFilePath = getSourcePath(path.join(__dirname, '../..'), 'data/shells', 'is-nvm-installed.sh');
   try {
     const { stdout } = await execa(getShellName(), [shFilePath]);
     if (stdout === 'nvm') {
