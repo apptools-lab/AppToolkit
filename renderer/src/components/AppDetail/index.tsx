@@ -57,24 +57,24 @@ const AppDetail: FC<AppDetailProps> = ({
         </div>
         <div className={styles.intro}>
           {
-          Array.isArray(intro) ? (
-            intro.map((item) => {
-              if (typeof item === 'string') {
-                return <div key={item}>{item}</div>;
-              } else if (typeof item === 'object') {
-                return (
-                  <div key={item.title}>
-                    <div className={styles.title}>{item.title}</div>
-                    <div className={styles.content}>{item.content}</div>
-                  </div>
-                );
-              }
-              return null;
-            })
-          ) : (
-            <div>{intro}</div>
-          )
-        }
+            Array.isArray(intro) ? (
+              intro.map((item) => {
+                if (typeof item === 'string') {
+                  return <div key={item}>{item}</div>;
+                } else if (typeof item === 'object') {
+                  return (
+                    <div key={item.title}>
+                      <div className={styles.title}>{item.title}</div>
+                      <div className={styles.content}>{item.content}</div>
+                    </div>
+                  );
+                }
+                return null;
+              })
+            ) : (
+              <div>{intro}</div>
+            )
+          }
         </div>
       </main>
     </div>
