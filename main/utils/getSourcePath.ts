@@ -1,7 +1,8 @@
 import * as path from 'path';
 
 function getSourcePath(dir: string, ...args: string[]) {
-  const sourcePath = path.join(process.env.NODE_ENV === 'development' ? dir : process.resourcesPath, ...args);
+  const resourcesPath = process.env.NODE_ENV === 'development' ? dir : (process.resourcesPath || process.env.resourcesPath);
+  const sourcePath = path.join(resourcesPath, ...args);
   return sourcePath;
 }
 
