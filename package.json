@@ -1,7 +1,7 @@
 {
   "name": "AppToolkit",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "The Frontend Application Toolkit",
   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
