@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 import { PackageInfo, ProcessStatus } from '@/types/base';
 import { BrowserExtensionsInfo } from '@/types/browserExtension';
 import BrowserNotInstalled from '../BrowserNotInstalled';
-import PageContainer from '@/components/PageContainer';
+import PageHeader from '@/components/PageHeader';
 import AppDetail from '@/components/AppDetail';
 
 const { Row, Col } = Grid;
@@ -186,7 +186,8 @@ const ExtensionList: FC<{}> = () => {
     );
   }
   return (
-    <PageContainer title="浏览器插件">
+    <>
+      <PageHeader title="浏览器插件" />
       <Loading className={styles.extensionsList} visible={effectsState.getExtensionsInfo.isLoading}>
         {
           extensionsInfo.map((extensionInfo: BrowserExtensionsInfo) => (
@@ -215,7 +216,7 @@ const ExtensionList: FC<{}> = () => {
         }
         <Dialog title="安装提示" />
       </Loading>
-    </PageContainer>
+    </>
   );
 };
 

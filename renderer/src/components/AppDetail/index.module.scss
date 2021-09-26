@@ -11,6 +11,15 @@
       left: 10px;
       cursor: pointer;
     }
+  }
+
+  .navSticky {
+    @extend .nav;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    z-index: 10;
 
     div {
       font-size: 14px;
@@ -18,17 +27,9 @@
     }
   }
 
-  .sticky {
-    position: sticky;
-    top: 0;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid rgb(230, 230, 230);
-    z-index: 10;
-  }
-
   main {
     padding: 0 40px;
-    height: calc(100vh - 60px);
+    // height: calc(100% - 60px);
 
     .header {
       margin-top: 20px;
