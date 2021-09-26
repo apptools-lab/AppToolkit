@@ -5,7 +5,6 @@ import styles from './index.module.scss';
 interface PageHeaderProps {
   title: string;
   button?: React.ReactNode;
-  sticky?: boolean;
 }
 
 const PageHeader: FC<PageHeaderProps> = ({ title, button = null }) => {
