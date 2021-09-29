@@ -17,7 +17,8 @@
   }
 }
 
-.sticky {
+.stickyHeader {
+  @extend .header;
   margin: 0;
   background: #f9f9f9;
   position: sticky;

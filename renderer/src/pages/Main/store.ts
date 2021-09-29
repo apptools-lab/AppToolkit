@@ -1,5 +1,4 @@
 import { createStore, IStoreModels } from 'ice';
-import ImmerPlugin from '@ice/store-plugin-immer';
 import dashboardModel from './models/dashboard';
 import applicationModel from './models/application';
 import gitModel from './models/git';
@@ -28,6 +27,4 @@ const models: IModels = {
   npmDependency: npmDependencyModel,
 };
 
-export default createStore(models, {
-  plugins: [ImmerPlugin()],
-});
+export default createStore(models);
