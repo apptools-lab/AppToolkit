@@ -7,7 +7,7 @@ import { PackageInfo, ProcessStatus, VersionStatus } from '@/types/base';
 import { AppInfo } from '@/types/application';
 import BalloonConfirm, { BalloonAlign } from '@/components/BalloonConfirm';
 import AppDetail from '@/components/AppDetail';
-import PageContainer from '@/components/PageContainer';
+import PageHeader from '@/components/PageHeader';
 
 const INSTALL_APP_CHANNEL = 'install-app';
 const INSTALL_APP_PROCESS_STATUS_CHANNEL = 'install-app-process-status';
@@ -205,7 +205,8 @@ const AppList: FC<{}> = () => {
     );
   }
   return (
-    <PageContainer title="桌面客户端">
+    <>
+      <PageHeader title="桌面客户端" />
       <Loading className={styles.appList} visible={effectsState.getAppsInfo.isLoading}>
         {
           appsInfo.map((appInfo: AppInfo, index: number) => (
@@ -236,7 +237,7 @@ const AppList: FC<{}> = () => {
           ))
         }
       </Loading>
-    </PageContainer>
+    </>
   );
 };
 

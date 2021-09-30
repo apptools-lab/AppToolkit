@@ -1,5 +1,4 @@
 import { FC, ReactNode } from 'react';
-import cn from 'classnames';
 import { Icon } from '@alifd/next';
 import { useInView } from 'react-intersection-observer';
 import styles from './index.module.scss';
@@ -23,21 +22,22 @@ const AppDetail: FC<AppDetailProps> = ({
   goBack,
 }) => {
   const { ref, inView } = useInView({
-    threshold: 0.99,
+    threshold: 0,
   });
 
   return (
     <div className={styles.appDetail}>
-      <div className={cn(styles.nav, { [styles.sticky]: !inView })}>
-        <Icon
-          type="arrow-left"
-          onClick={() => {
-            goBack();
-          }}
-        />
-        {!inView && <div>{title}</div>}
+      <div ref={ref} className={styles.nav}>
+        <Icon type="arrow-left" onClick={() => goBack()} />
       </div>
-      <main ref={ref}>
+      {!inView && (
+        <div className={styles.navSticky}>
+          <Icon type="arrow-left" onClick={() => goBack()} />
+          <div>{title}</div>
+        </div>
+      )}
+
+      <main>
         <div className={styles.header}>
           <img src={icon} alt="icon" />
           <div className={styles.content}>
@@ -57,27 +57,26 @@ const AppDetail: FC<AppDetailProps> = ({
         </div>
         <div className={styles.intro}>
           {
-          Array.isArray(intro) ? (
-            intro.map((item) => {
-              if (typeof item === 'string') {
-                return <div key={item}>{item}</div>;
-              } else if (typeof item === 'object') {
-                return (
-                  <div key={item.title}>
-                    <div className={styles.title}>{item.title}</div>
-                    <div className={styles.content}>{item.content}</div>
-                  </div>
-                );
-              }
-              return null;
-            })
-          ) : (
-            <div>{intro}</div>
-          )
-        }
+            Array.isArray(intro) ? (
+              intro.map((item) => {
+                if (typeof item === 'string') {
+                  return <div key={item}>{item}</div>;
+                } else if (typeof item === 'object') {
+                  return (
+                    <div key={item.title}>
+                      <div className={styles.title}>{item.title}</div>
+                      <div className={styles.content}>{item.content}</div>
+                    </div>
+                  );
+                }
+                return null;
+              })
+            ) : (
+              <div>{intro}</div>
+            )
+          }
         </div>
       </main>
-
     </div>
   );
 };

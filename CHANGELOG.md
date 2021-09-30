@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.1
+
+- Fix: resourcesPath not found
+- Fix: sticky header style
+
 ## 0.4.0
 
 - Feat: add base packages info cache
