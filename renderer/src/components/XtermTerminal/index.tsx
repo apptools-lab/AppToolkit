@@ -27,7 +27,7 @@ const XtermTerminal: FC<IXtermTerminal> = ({ id, name, options, height }) => {
     }
 
     const handleResize = debounce(() => { currentTerm.fitAddon.fit(); }, 500);
-    // listen reszie
+    // listen resize
     window.addEventListener('resize', handleResize);
 
     return () => {
