@@ -188,12 +188,12 @@ nvm_install_node() {
   NODE_VERSION_LOCAL="$(nvm_node_version)"
   if [ -z "$NODE_VERSION_LOCAL" ] || [ "$NODE_VERSION_LOCAL" = "N/A" ]; then
     # return 0
-    NODE_VERSION_LOCAL="$(NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node nvm version-remote --lts)"
+    NODE_VERSION_LOCAL="$(NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node nvm version-remote --lts)"
     nvm_echo "=> The Local Node is not found. It will install node "$NODE_VERSION_LOCAL" version."
   fi
 
   nvm_echo "=> Installing Node.js version $NODE_VERSION_LOCAL"
-  NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node nvm install "$NODE_VERSION_LOCAL"
+  NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node nvm install "$NODE_VERSION_LOCAL"
   local CURRENT_NVM_NODE
 
   CURRENT_NVM_NODE="$(nvm_version current)"

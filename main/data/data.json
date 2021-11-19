@@ -430,7 +430,7 @@
     },
     {
       "name": "taobao",
-      "registry": "https://registry.npm.taobao.org/",
+      "registry": "https://registry.npmmirror.com /",
       "isInternal": false,
       "recommended": true
     }

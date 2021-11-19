@@ -5,7 +5,7 @@
   "description": "The Frontend Application Toolkit",
   "scripts": {
     "setup": "npm run install:main && npm run install:renderer",
-    "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install",
+    "install:main": "rm -rf node_modules && ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ npm install",
     "install:renderer": "rm -rf renderer/node_modules && cd renderer && npm install",
     "start": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "start:electron": "npm run copy:static && NODE_ENV=development electron ./dist",
@@ -16,7 +16,7 @@
     "build": "rm -rf ./dist && npm run build:renderer && npm run build:main",
     "build:renderer": "cd ./renderer && npm run build",
     "build:main": "tsc --build ./main/tsconfig.json",
-    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder build --x64",
+    "build:app": "NPM_CONFIG_ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ electron-builder build --x64",
     "package": "rm -rf release && npm run build && npm run copy:static && npm run build:app && npm run upload:app",
     "upload:app": "ts-node ./scripts/uploadApp",
     "lint": "npm run eslint && npm run stylelint",
