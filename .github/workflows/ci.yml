@@ -16,6 +16,6 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
-        run: npm run setup
+        run: npm i
       - name: Lint
         run: npm run lint
