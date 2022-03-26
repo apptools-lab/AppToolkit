@@ -1,9 +1,7 @@
 # 忽略目录
-dist/
-release/
-demo/
+build/
 tests/
-__test__
+demo/
 
 # node 覆盖率文件
 coverage/

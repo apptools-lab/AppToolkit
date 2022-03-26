@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.0
+
+- Feat: release new version
+
 ## 0.4.1
 
 - Fix: resourcesPath not found
