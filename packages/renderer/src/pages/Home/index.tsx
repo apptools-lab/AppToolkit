@@ -20,6 +20,7 @@ function App() {
           <button type="button" onClick={() => setCount((e) => e + 1)}>
             🪂 Click me : {count}
           </button>
+          <div onClick={async () => await openFile()}>Open File</div>
           <p>
             <a
               className="App-link"
@@ -43,6 +44,11 @@ function App() {
       </header>
     </div>
   );
+}
+
+async function openFile() {
+  const filePath = await window.electronAPI.openFile();
+  console.log('filePath: ', filePath);
 }
 
 export default App;

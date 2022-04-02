@@ -1,10 +1,13 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
+import { registerIpcHandleEvents } from './ipc';
 
 const isDevelopment = import.meta.env.DEV;
 
 app.whenReady()
   .then(() => {
+    registerIpcHandleEvents();
+
     createWindow();
 
     app.on('activate', () => {
