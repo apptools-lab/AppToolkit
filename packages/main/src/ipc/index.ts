@@ -1,5 +1,5 @@
-import { registerCommonIpcHandleEvents } from './common';
+import { registerCommonIpcEvents } from './common';
 
-export function registerIpcHandleEvents() {
-  registerCommonIpcHandleEvents();
+export function handleIpc() {
+  registerCommonIpcEvents();
 }
