@@ -92,11 +92,11 @@ export async function getSSHConfig(configId: string) {
 export async function getSSHConfigs() {
   const sshConfigSections = await getSSHConfigSections();
   const SSHConfigs: ISSHConfig[] = [];
-  // @ts-ignore
+  // @ts-ignore TODO: param type
   for (const { param, value, config } of sshConfigSections) {
-    const restConfig = {} as ISSHConfig;
+    const restConfig = {} as unknown as ISSHConfig;
     config.forEach(({ param, value }: any) => {
-      // @ts-ignore
+      // @ts-ignore TODO: param type
       restConfig[param] = value;
     });
     SSHConfigs.push({
