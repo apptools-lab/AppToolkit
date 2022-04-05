@@ -11,6 +11,8 @@ import {
   getSSHConfig,
   addSSHConfig,
   sshConfigPath,
+  updateSSHConfig,
+  removeSSHConfig,
 } from '../src/git';
 import * as path from 'path';
 import * as os from 'os';
@@ -111,6 +113,7 @@ describe('ssh', () => {
     expect(sshConfigContent.includes(mockSSHConfig.configId)).toBeTruthy();
 
     if (sshConfigExists) {
+      // reset ssh config
       await fse.writeFile(sshConfigPath, originalSSHConfig, 'utf-8');
     }
   });
@@ -126,6 +129,7 @@ describe('ssh', () => {
     expect(allSSHConfigs.find(sshConfig => sshConfig.HostName === mockSSHConfig.hostName)).toBeDefined();
 
     if (sshConfigExists) {
+      // reset ssh config
       await fse.writeFile(sshConfigPath, originalSSHConfig, 'utf-8');
     }
   });
@@ -141,7 +145,43 @@ describe('ssh', () => {
     expect(sshConfig).toBeDefined();
 
     if (sshConfigExists) {
+      // reset ssh config
       await fse.writeFile(sshConfigPath, originalSSHConfig, 'utf-8');
     }
-  })
+  });
+
+  test('update ssh config', async () => {
+    let originalSSHConfig = '';
+    const sshConfigExists = await fse.pathExists(sshConfigPath);
+    if (sshConfigExists) {
+      originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
+    }
+    await addSSHConfig(mockSSHConfig);
+    const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
+    expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
+    const newHost = 'example.com';
+    await updateSSHConfig(mockSSHConfig.configId, { Host: newHost });
+    const sshConfig = await getSSHConfig(mockSSHConfig.configId);
+    expect(sshConfig.Host).toBe(newHost);
+
+    if (sshConfigExists) {
+      // reset ssh config
+      await fse.writeFile(sshConfigPath, originalSSHConfig, 'utf-8');
+    }
+  });
+
+  test('remove ssh config', async () => {
+    let originalSSHConfig = '';
+    const sshConfigExists = await fse.pathExists(sshConfigPath);
+    if (sshConfigExists) {
+      originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
+    }
+    await addSSHConfig(mockSSHConfig);
+    const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
+    expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
+
+    await removeSSHConfig(mockSSHConfig.configId);
+    const removedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
+    expect(removedSSHConfig.includes(mockSSHConfig.hostName)).toBeFalsy();
+  });
 });
