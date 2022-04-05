@@ -2,7 +2,7 @@
 
 \. "$NVM_DIR/nvm.sh"
 
-NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node nvm install $1
+NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node nvm install $1
 nvm alias default $1
 
 # echo the new version node path
