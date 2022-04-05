@@ -13,7 +13,7 @@ jobs:
         run: echo ${BRANCH_NAME}
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: npm i
