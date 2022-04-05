@@ -159,6 +159,7 @@ describe('ssh', () => {
     await addSSHConfig(mockSSHConfig);
     const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
+
     const newHost = 'example.com';
     await updateSSHConfig(mockSSHConfig.configId, { Host: newHost });
     const sshConfig = await getSSHConfig(mockSSHConfig.configId);
@@ -171,11 +172,6 @@ describe('ssh', () => {
   });
 
   test('remove ssh config', async () => {
-    let originalSSHConfig = '';
-    const sshConfigExists = await fse.pathExists(sshConfigPath);
-    if (sshConfigExists) {
-      originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
-    }
     await addSSHConfig(mockSSHConfig);
     const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
