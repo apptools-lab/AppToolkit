@@ -13,6 +13,8 @@ import {
   sshConfigPath,
   updateSSHConfig,
   removeSSHConfig,
+  getUserGitDirs,
+  setUserGitDir,
 } from '../src/git';
 import * as path from 'path';
 import * as os from 'os';
@@ -81,6 +83,34 @@ describe('config', () => {
     expect(newGlobalConfig['user.email']).toBe(mockGlobalConfig['user.email']);
     // remove git user config
     await fse.remove(path.join(path.dirname(userConfigPath), '..'));
+  });
+  
+  test('set user git dir', async () => {
+    const dirPath = '/path/to/test';
+    await setUserGitDir(mockUserConfigId, dirPath);
+
+    const globalGitConfig = await getGlobalGitConfig();
+    const keys = Object.keys(globalGitConfig);
+    const key = keys.find(key => key.includes(dirPath));
+    expect(key).not.toBeUndefined();
+    const value = globalGitConfig[key];
+    expect(value.includes(mockUserConfigId)).toBeTruthy();
+    // reset global config
+    delete globalGitConfig[key];
+    setGlobalGitConfig(globalGitConfig);
+  });
+
+  test('get user git dirs', async () => {
+    const dirPath = '/path/to/test';
+    await setUserGitDir(mockUserConfigId, dirPath);
+    const userGitDirs = await getUserGitDirs(mockUserConfigId);
+    expect(userGitDirs.length).not.toBe(0);
+    // reset global config
+    const globalGitConfig = await getGlobalGitConfig();
+    const keys = Object.keys(globalGitConfig);
+    const key = keys.find(key => key.includes(dirPath));
+    delete globalGitConfig[key];
+    setGlobalGitConfig(globalGitConfig);
   });
 })
 

@@ -5,6 +5,7 @@ import type { GitConfigScope } from 'simple-git';
 import { TMP_DIR } from '../constants';
 
 const userConfigDir = path.join(TMP_DIR, 'git', 'user-config');
+const gitDirStr = 'includeif.gitdir:';
 
 type GitConfig = Record<string, string>;
 
@@ -54,6 +55,43 @@ export async function setUserGitConfig(configId: string, config: GitConfig) {
 export async function removeUserGitConfig(configId: string) {
   const configPath = path.join(userConfigDir, configId);
   await fse.remove(configPath);
+}
+
+export async function getUserGitDirs(configId: string): Promise<string[]> {
+  const globalGitConfig = await getGlobalGitConfig();
+
+  const gitDirs = [];
+  for (const key of Object.keys(globalGitConfig)) {
+    if (key.startsWith(gitDirStr)) {
+      const gitDir = key.replace(gitDirStr, '').replace(/\.path$/, '');
+      const value = globalGitConfig[key];
+      // for example: value = '/Users/luhc228/.AppToolkit/git/user-config/github/.git/config'
+      const pathItems = value.split(path.sep);
+      const currentConfigId = pathItems[pathItems.length - 3];
+      if (configId === currentConfigId) {
+        gitDirs.push(gitDir);
+      }
+    }
+  }
+
+  return gitDirs;
+}
+
+export async function setUserGitDir(configId: string, dirPath: string) {
+  const key = `${gitDirStr}${dirPath}${dirPath.endsWith(path.sep) ? '' : path.sep}.path`;
+  await setGlobalGitConfig({
+    [key]: path.join(userConfigDir, configId, '.git', 'config'),
+  });
+}
+// TODO:
+export async function removeUserGitDir(configId: string, dirPath: string) {
+  const key = `${gitDirStr}${dirPath}${dirPath.endsWith(path.sep) ? '' : path.sep}.path`;
+  const globalGitConfig = await getGlobalGitConfig();
+  const configPath = globalGitConfig[key];
+
+  setGlobalGitConfig({
+    [key]: path.join(userConfigDir, configId, '.git', 'config'),
+  });
 }
 
 /**
