@@ -8,7 +8,7 @@
     "start": "icejs start --disable-open --rootDir ./packages/renderer",
     "prebuild": "icejs build --rootDir ./packages/renderer",
     "build": "NPM_CONFIG_ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ electron-builder build --config electron-builder.config.js",
-    "test": "vitest",
+    "test": "vitest --config ./vitest.config.ts",
     "lint": "npm run eslint && npm run stylelint",
     "lint:fix": "npm run eslint:fix && npm run stylelint:fix",
     "eslint": "eslint --ext .ts,.tsx,.js,.jsx ./",
