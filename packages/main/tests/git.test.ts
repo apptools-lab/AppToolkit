@@ -100,7 +100,7 @@ describe('ssh', () => {
     await fse.remove(sshPublicKeyPath);
   });
 
-  test.skip('add ssh config', async () => {
+  test('add ssh config', async () => {
     let originalSSHConfig = '';
     const sshConfigExists = await fse.pathExists(sshConfigPath);
     if (sshConfigExists) {
@@ -118,7 +118,7 @@ describe('ssh', () => {
     }
   });
 
-  test.skip('get all ssh config', async () => {
+  test('get all ssh config', async () => {
     let originalSSHConfig = '';
     const sshConfigExists = await fse.pathExists(sshConfigPath);
     if (sshConfigExists) {
@@ -134,7 +134,7 @@ describe('ssh', () => {
     }
   });
 
-  test.skip('get one ssh config', async () => {
+  test('get one ssh config', async () => {
     let originalSSHConfig = '';
     const sshConfigExists = await fse.pathExists(sshConfigPath);
     if (sshConfigExists) {
