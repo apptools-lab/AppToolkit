@@ -25,11 +25,6 @@ const mockGlobalConfig = {
   'user.name': mockUsername,
   'user.email': mockEmail,
 };
-const mockSSHConfig = {
-  hostName: 'test.com',
-  userName: mockUsername,
-  configId: mockUserConfigId,
-};
 
 describe('config', () => {
   test('get global config', async () => {
@@ -106,6 +101,11 @@ describe('ssh', () => {
     if (sshConfigExists) {
       originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     }
+    const mockSSHConfig = {
+      hostName: 'add-ssh-config.com',
+      userName: 'add-ssh-config',
+      configId: 'add-ssh-config',
+    };
     await addSSHConfig(mockSSHConfig);
     const sshConfigContent = await fse.readFile(sshConfigPath, 'utf-8');
     expect(sshConfigContent.includes(mockSSHConfig.hostName)).toBeTruthy();
@@ -124,6 +124,11 @@ describe('ssh', () => {
     if (sshConfigExists) {
       originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     }
+    const mockSSHConfig = {
+      hostName: 'get-all-ssh-config.com',
+      userName: 'get-all-ssh-config',
+      configId: 'get-all-ssh-config',
+    };
     await addSSHConfig(mockSSHConfig);
     const allSSHConfigs = await getSSHConfigs();
     expect(allSSHConfigs.find(sshConfig => sshConfig.HostName === mockSSHConfig.hostName)).toBeDefined();
@@ -140,6 +145,11 @@ describe('ssh', () => {
     if (sshConfigExists) {
       originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     }
+    const mockSSHConfig = {
+      hostName: 'get-one-ssh-config.com',
+      userName: 'get-one-ssh-config',
+      configId: 'get-one-ssh-config',
+    };
     await addSSHConfig(mockSSHConfig);
     const sshConfig = await getSSHConfig(mockSSHConfig.configId);
     expect(sshConfig).toBeDefined();
@@ -156,6 +166,11 @@ describe('ssh', () => {
     if (sshConfigExists) {
       originalSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     }
+    const mockSSHConfig = {
+      hostName: 'update-ssh-config.com',
+      userName: 'update-one-ssh-config',
+      configId: 'update-one-ssh-config',
+    };
     await addSSHConfig(mockSSHConfig);
     const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
@@ -172,6 +187,11 @@ describe('ssh', () => {
   });
 
   test('remove ssh config', async () => {
+    const mockSSHConfig = {
+      hostName: 'remove-ssh-config.com',
+      userName: 'remove-ssh-config',
+      configId: 'remove-ssh-config',
+    };
     await addSSHConfig(mockSSHConfig);
     const addedSSHConfig = await fse.readFile(sshConfigPath, 'utf-8');
     expect(addedSSHConfig.includes(mockSSHConfig.hostName)).toBeTruthy();
