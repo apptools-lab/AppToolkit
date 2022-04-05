@@ -8,8 +8,8 @@ const userConfigDir = path.join(TMP_DIR, 'git', 'user-config');
 
 type GitConfig = Record<string, string>;
 
-export async function getGlobalConfig() {
-  const globalConfigList = await getConfigList({ scope: 'global' });
+export async function getGlobalGitConfig() {
+  const globalConfigList = await getGitConfigList({ scope: 'global' });
   const { files: [globalConfigKey], values } = globalConfigList;
 
   const globalConfig = {
@@ -19,11 +19,11 @@ export async function getGlobalConfig() {
   return globalConfig;
 }
 
-export async function setGlobalConfig(config: GitConfig) {
-  await setConfig({ config, scope: 'global' });
+export async function setGlobalGitConfig(config: GitConfig) {
+  await setGitConfig({ config, scope: 'global' });
 }
 
-export async function addUserConfig(configId: string) {
+export async function addUserGitConfig(configId: string) {
   const baseDir = path.join(userConfigDir, configId);
   if (fse.pathExistsSync(baseDir)) {
     throw new Error(`Git user config has already existed in ${baseDir}.`);
@@ -34,9 +34,9 @@ export async function addUserConfig(configId: string) {
   return getUserConfigPath(configId);
 }
 
-export async function getUserConfig(configId: string) {
+export async function getUserGitConfig(configId: string) {
   const baseDir = path.join(userConfigDir, configId);
-  const configList = await getConfigList({ baseDir, scope: 'local' });
+  const configList = await getGitConfigList({ baseDir, scope: 'local' });
   const { files: [globalConfigKey], values } = configList;
 
   const userConfig = {
@@ -46,12 +46,12 @@ export async function getUserConfig(configId: string) {
   return userConfig;
 }
 
-export async function setUserConfig(configId: string, config: GitConfig) {
+export async function setUserGitConfig(configId: string, config: GitConfig) {
   const baseDir = path.join(userConfigDir, configId);
-  await setConfig({ scope: 'local', baseDir, config });
+  await setGitConfig({ scope: 'local', baseDir, config });
 }
 
-export async function removeUserConfig(configId: string) {
+export async function removeUserGitConfig(configId: string) {
   const configPath = path.join(userConfigDir, configId);
   await fse.remove(configPath);
 }
@@ -72,7 +72,7 @@ async function initGit(baseDir: string) {
   await git.init();
 }
 
-async function getConfigList(
+async function getGitConfigList(
   {
     baseDir,
     scope,
@@ -84,7 +84,7 @@ async function getConfigList(
   return git.listConfig(scope);
 }
 
-async function setConfig({
+async function setGitConfig({
   config,
   scope,
   baseDir,
