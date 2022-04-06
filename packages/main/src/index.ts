@@ -1,10 +1,13 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
+import { handleIpc } from './ipc';
 
 const isDevelopment = import.meta.env.DEV;
 
 app.whenReady()
   .then(() => {
+    handleIpc();
+
     createWindow();
 
     app.on('activate', () => {
