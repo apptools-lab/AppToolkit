@@ -32,12 +32,14 @@ if (!isDevelopment) {
 
 async function createWindow() {
   const mainWindow = new BrowserWindow({
-    show: false, // Use 'ready-to-show' event to show window
+    show: false,
     webPreferences: {
       preload: join(__dirname, '../../preload/build/index.cjs'),
     },
-    width: 800,
-    height: 600,
+    minWidth: 800,
+    minHeight: 600,
+    frame: false,
+    titleBarStyle: 'hiddenInset',
   });
 
   mainWindow.on('ready-to-show', () => {
