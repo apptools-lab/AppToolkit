@@ -1,52 +1,46 @@
-import { createElement } from 'react';
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
+import ProLayout from '@ant-design/pro-layout';
 import { Link } from 'ice';
 import { asideMenuConfig } from './menuConfig';
 
-const loopMenuItem = (menus) =>
-  menus.map(({ icon, children, ...item }) => ({
-    ...item,
-    icon: createElement(icon),
-    children: children && loopMenuItem(children),
-  }));
 
 export default function BasicLayout({ children, location }) {
   return (
     <ProLayout
-      title="icejs & antd"
+      title={false}
+      logo={false}
       style={{
         minHeight: '100vh',
       }}
+      navTheme="light"
       location={{
         pathname: location.pathname,
       }}
-      headerRender={false}
-      menuDataRender={() => loopMenuItem(asideMenuConfig)}
-      menuItemRender={(item, defaultDom) => {
+      fixSiderbar
+      fixedHeader
+      headerRender={() => <LayoutHeader />}
+      menuDataRender={() => asideMenuConfig}
+      menuItemRender={(item, element) => {
         if (!item.path) {
-          return defaultDom;
+          return element;
         }
-        return <Link to={item.path}>{defaultDom}</Link>;
+        return <Link to={item.path}>{element}</Link>;
       }}
-      footerRender={() => (
-        <DefaultFooter
-          links={[
-            {
-              key: 'icejs',
-              title: 'icejs',
-              href: 'https://github.com/ice-lab/icejs',
-            },
-            {
-              key: 'antd',
-              title: 'antd',
-              href: 'https://github.com/ant-design/ant-design',
-            },
-          ]}
-          copyright="by icejs & antd"
-        />
-      )}
+      menu={{
+        defaultOpenAll: true,
+      }}
+      collapsed={false}
+      collapsedButtonRender={false}
+      siderWidth={180}
     >
-      <div style={{ minHeight: '60vh' }}>{children}</div>
+      <div style={{ minHeight: '60vh', background: 'white' }}>{children}</div>
     </ProLayout>
+  );
+}
+
+function LayoutHeader() {
+  return (
+    <div >
+      logo
+    </div>
   );
 }
