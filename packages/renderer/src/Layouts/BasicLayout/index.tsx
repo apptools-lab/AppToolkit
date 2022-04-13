@@ -44,7 +44,7 @@ function LayoutHeader() {
 function WinLayoutHeader() {
   const setMin = () => {
     console.log('min');
-    ipcRenderer.send('min-app');
+    window.electronAPI.setMin();
   };
   return (
     <div className={styles.win_header}>

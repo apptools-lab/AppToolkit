@@ -1,14 +1,13 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { handleIpc } from './ipc';
 
 const isDevelopment = import.meta.env.DEV;
 
 app.whenReady()
-  .then(() => {
-    handleIpc();
-
-    createWindow();
+  .then(createWindow)
+  .then((mainWindow) => {
+    handleIpc(mainWindow);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -50,10 +49,6 @@ async function createWindow() {
     }
   });
 
-  ipcMain.on('min-app', () => {
-    mainWindow.minimize();
-  });
-
   const { RENDERER_DEV_SERVER_URL } = process.env;
 
   const pageUrl = isDevelopment && RENDERER_DEV_SERVER_URL
@@ -61,4 +56,6 @@ async function createWindow() {
     : new URL(join(__dirname, '../../renderer/build/index.html'), `file://${__dirname}`).toString();
 
   await mainWindow.loadURL(pageUrl);
+
+  return mainWindow;
 }

@@ -1,5 +1,6 @@
+import { BrowserWindow } from 'electron';
 import { registerCommonIpcEvents } from './common';
 
-export function handleIpc() {
-  registerCommonIpcEvents();
+export function handleIpc(mainWindow: BrowserWindow) {
+  registerCommonIpcEvents(mainWindow);
 }
