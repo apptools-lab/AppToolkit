@@ -1,0 +1,30 @@
+.layout_header {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+.win_header {
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 20px;
+  -webkit-app-region: drag;
+}
+.selection {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  line-height: 48px;
+  -webkit-app-region: drag;
+}
+.logo_text {
+  margin-left: 6px;
+  font-weight: 500;
+  font-size: 18px;
+  color: '#4A4848';
+}

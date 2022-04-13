@@ -3,7 +3,8 @@ import * as path from 'path';
 import * as os from 'os';
 import fse from 'fs-extra';
 import consola from 'consola';
-import SSHConfigUtils, { Line, SSHConfig as GenericSSHConfig } from 'ssh-config';
+import type { Line, SSHConfig as GenericSSHConfig } from 'ssh-config';
+import SSHConfigUtils from 'ssh-config';
 import sshKeyGen from 'ssh-keygen';
 
 const sshKeyGenAsync = util.promisify(sshKeyGen);
@@ -88,11 +89,11 @@ export async function getSSHConfig(configId: string) {
 export async function getSSHConfigs() {
   const sshConfigSections = await getSSHConfigSections();
   const SSHConfigs: SSHConfig[] = [];
-  // @ts-ignore TODO: param type
+  // @ts-expect-error TODO: param type
   for (const { param, value, config } of sshConfigSections) {
     const restConfig = {} as unknown as SSHConfig;
     config.forEach(({ param, value }: any) => {
-      // @ts-ignore TODO: param type
+      // @ts-expect-error TODO: param type
       restConfig[param] = value;
     });
     SSHConfigs.push({

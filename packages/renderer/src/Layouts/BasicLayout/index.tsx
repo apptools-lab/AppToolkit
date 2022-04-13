@@ -2,6 +2,8 @@ import ProLayout from '@ant-design/pro-layout';
 import { Link } from 'ice';
 import { asideMenuConfig } from './menuConfig';
 import logo from '@/assets/logo.png';
+import styles from './index.module.scss';
+import { ipcRenderer } from 'electron';
 
 export default function BasicLayout({ children, location }) {
   const platform = window.electronAPI.getPlatform();
@@ -10,27 +12,18 @@ export default function BasicLayout({ children, location }) {
     <ProLayout
       title={false}
       logo={false}
-      style={{
-        minHeight: '100vh',
-      }}
+      style={{ minHeight: '100vh' }}
       navTheme="light"
-      location={{
-        pathname: location.pathname,
-      }}
+      location={{ pathname: location.pathname }}
       fixSiderbar
       fixedHeader
       menuHeaderRender={isWin32 ? () => <Logo /> : undefined}
-      headerRender={isWin32 ? false : () => <LayoutHeader />}
+      headerRender={isWin32 ? () => <WinLayoutHeader /> : () => <LayoutHeader />}
       menuDataRender={() => asideMenuConfig}
       menuItemRender={(item, element) => {
-        if (!item.path) {
-          return element;
-        }
-        return <Link to={item.path}>{element}</Link>;
+        return <Link to={item.path || '/home'}>{element}</Link>;
       }}
-      menu={{
-        defaultOpenAll: true,
-      }}
+      menu={{ defaultOpenAll: true }}
       collapsed={false}
       collapsedButtonRender={false}
       siderWidth={180}
@@ -43,46 +36,36 @@ export default function BasicLayout({ children, location }) {
 
 function LayoutHeader() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingRight: 20,
-      }}
-    >
+    <div className={styles.layout_header}>
       <Logo />
+    </div>
+  );
+}
+function WinLayoutHeader() {
+  const setMin = () => {
+    console.log('min');
+    ipcRenderer.send('min-app');
+  };
+  return (
+    <div className={styles.win_header}>
+      <div className={styles.selection}>
+        <div onClick={setMin}>最小化</div>
+        <div>最大化</div>
+        <div>关闭</div>
+      </div>
     </div>
   );
 }
 
 function Logo() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        height: 48,
-        lineHeight: 48,
-      }}
-    >
+    <div className={styles.logo}>
       <img
-        style={{
-          height: 18,
-
-        }}
+        style={{ height: 18 }}
         src={logo}
         alt="logo"
       />
-      <div
-        style={{
-          marginLeft: 6,
-          fontWeight: 500,
-          fontSize: 18,
-          color: '#4A4848',
-        }}
-      >
-        AppToolkit
-      </div>
+      <div className={styles.logo_text}> AppToolkit</div>
     </div>
   );
 }

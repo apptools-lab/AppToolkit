@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { handleIpc } from './ipc';
 
@@ -48,6 +48,10 @@ async function createWindow() {
     if (isDevelopment) {
       mainWindow?.webContents.openDevTools();
     }
+  });
+
+  ipcMain.on('min-app', () => {
+    mainWindow.minimize();
   });
 
   const { RENDERER_DEV_SERVER_URL } = process.env;
