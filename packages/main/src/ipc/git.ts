@@ -7,5 +7,7 @@ import {
 export function registerGitIpcEvents() {
   ipcMain.handle('git-getGlobalConfig', getGlobalGitConfig);
 
-  ipcMain.handle('git-setGlobalConfig', (e, config) => setGlobalGitConfig(config));
+  ipcMain.handle('git-setGlobalConfig', async (_, config) => {
+    await setGlobalGitConfig(config);
+  });
 }
