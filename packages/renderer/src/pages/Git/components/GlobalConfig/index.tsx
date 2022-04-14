@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Form, Input, Switch } from 'antd';
-import { GitConfig } from '../../../../../../types';
+import type { GitConfig } from '../../../../../../types';
 import styles from './index.module.scss';
 
 function GlobalConfig() {

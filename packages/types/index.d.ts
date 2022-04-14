@@ -12,6 +12,8 @@ interface CommonAPI {
   getPlatform: () => NodeJS.Platform;
 
   setMin: () => void;
+  setMax: () => boolean;
+  setClose: () => void;
 }
 
 export interface IElectronAPI extends
