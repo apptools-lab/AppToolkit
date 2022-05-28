@@ -83,23 +83,38 @@ function MenuRender({ win32 = false }: { win32: boolean }) {
       {asideMenuConfig.map((item) => {
         if (Array.isArray(item.routes)) {
           return (
-            <>
-              <NavLink to="/env" activeClassName={styles.link_active} className={styles.link} exact onClick={() => setRotate(!rotate)}>
+            <div key={item.path}>
+              <div
+                className={styles.link}
+                onClick={() => setRotate(!rotate)}
+              >
                 <div className={styles.link_icon}>{item.icon}</div>{item.name}
                 <svg className={styles.drop} style={rotate ? { transform: 'rotate(180deg)' } : undefined} t="1649934439347" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="35038" width="20" height="20"><path d="M217.6 311.808l384.512 384.512-90.624 90.624-384.512-384.512 90.624-90.624z" fill="#FC634F" p-id="35039" /><path d="M896.512 401.92L512 786.432 420.864 696.32l384.512-384.512 91.136 90.112z" fill="#FC634F" p-id="35040" /></svg>
-              </NavLink>
+              </div>
               {rotate && item.routes.map((route) => {
                 return (
-                  <NavLink to={route.path} className={styles.sub_link} activeClassName={styles.link_active} exact>
+                  <NavLink
+                    key={route.path}
+                    to={route.path}
+                    className={styles.sub_link}
+                    activeClassName={styles.link_active}
+                    exact
+                  >
                     <div className={styles.link_icon}>{route.icon}</div>{route.name}
                   </NavLink>
                 );
               })}
-            </>
+            </div>
           );
         }
         return (
-          <NavLink to={item.path} className={styles.link} activeClassName={styles.link_active} exact>
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={styles.link}
+            activeClassName={styles.link_active}
+            exact
+          >
             <div className={styles.link_icon}>{item.icon}</div>{item.name}
           </NavLink>
         );
