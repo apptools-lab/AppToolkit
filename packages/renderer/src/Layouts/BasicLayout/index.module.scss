@@ -31,7 +31,7 @@
   display: flex;
   -webkit-app-region: no-drag;
 }
-.logo {
+.logoPlaceholder {
   display: flex;
   align-items: center;
   height: 48px;
@@ -56,7 +56,7 @@
   color: #545454;
   font-size: 15px;
   width: 170px;
-  height: 35px;
+  height: 40px;
   display: flex;
   align-items: center;
   padding: 10px;
@@ -80,7 +80,7 @@
   color: #545454;
   font-size: 15px;
   width: 170px;
-  height: 35px;
+  height: 40px;
   display: flex;
   align-items: center;
   padding: 10px 10px 10px 32px;

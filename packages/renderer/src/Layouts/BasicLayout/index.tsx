@@ -1,13 +1,13 @@
 import ProLayout from '@ant-design/pro-layout';
 import { NavLink } from 'ice';
+import { useState } from 'react';
 import { asideMenuConfig } from './menuConfig';
 import logo from '@/assets/logo.png';
 import styles from './index.module.scss';
-import { useState } from 'react';
 
 export default function BasicLayout({ children, location }) {
   const platform = window.electronAPI.getPlatform();
-  const isWin32 = platform === 'win32';
+  const win32 = platform === 'win32';
   return (
     <ProLayout
       title={false}
@@ -17,8 +17,8 @@ export default function BasicLayout({ children, location }) {
       location={{ pathname: location.pathname }}
       fixSiderbar
       fixedHeader
-      headerRender={isWin32 ? () => <WinLayoutHeader /> : () => <LayoutHeader />}
-      menuRender={MenuRender}
+      headerRender={win32 ? () => <WinLayoutHeader /> : () => <MacLayoutHeader />}
+      menuRender={() => <MenuRender win32={win32} />}
       menu={{ defaultOpenAll: true }}
       collapsed={false}
       collapsedButtonRender={false}
@@ -30,7 +30,7 @@ export default function BasicLayout({ children, location }) {
   );
 }
 
-function LayoutHeader() {
+function MacLayoutHeader() {
   return (
     <div className={styles.layout_header}>
       <Logo />
@@ -64,22 +64,22 @@ function WinLayoutHeader() {
 
 function Logo() {
   return (
-    <div className={styles.logo}>
+    <div className={styles.logoPlaceholder}>
       <img
         style={{ height: 18 }}
         src={logo}
         alt="logo"
       />
-      <div className={styles.logo_text}> AppToolkit</div>
+      <div className={styles.logo_text}>AppToolkit</div>
     </div>
   );
 }
 
-function MenuRender() {
+function MenuRender({ win32 = false }: { win32: boolean }) {
   const [rotate, setRotate] = useState(false);
   return (
     <div className={styles.menu}>
-      <Logo />
+      {win32 ? <Logo /> : <div className={styles.logoPlaceholder} />}
       {asideMenuConfig.map((item) => {
         if (Array.isArray(item.routes)) {
           return (
