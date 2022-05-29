@@ -12,7 +12,7 @@ export default function BasicLayout({ children, location }) {
     <ProLayout
       title={false}
       logo={false}
-      style={{ minHeight: '100vh' }}
+      style={{ minHeight: '100%' }}
       navTheme="light"
       location={{ pathname: location.pathname }}
       fixSiderbar

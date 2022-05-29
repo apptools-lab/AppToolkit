@@ -1,14 +1,15 @@
+import Swiper from './components/Swiper';
+import Recommendation from './components/Recommendation';
+import styles from './index.module.scss';
+
 function App() {
   return (
-    <div className="App">
-      <div onClick={async () => await openFile()}>Open File</div>
+    <div className={styles.container}>
+      <Swiper />
+      <Recommendation />
     </div>
   );
 }
 
-async function openFile() {
-  const filePath = await window.electronAPI.openFile();
-  console.log('filePath: ', filePath);
-}
 
 export default App;
