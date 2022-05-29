@@ -1,9 +1,8 @@
 import { join, resolve } from 'path';
 import { builtinModules } from 'module';
-import commonjs from '@rollup/plugin-commonjs';
 
 const PACKAGE_ROOT = resolve();
-
+console.log('process.env===>', process.env);
 /**
  * @type {import('vite').UserConfig}
  * @see https://vitejs.dev/config/
@@ -21,16 +20,12 @@ const config = {
     target: 'node16',
     outDir: join(__dirname, 'build'),
     assetsDir: '.',
-    minify: false,
+    minify: process.env.NODE_NEV === 'development',
     lib: {
       entry: join(__dirname, 'src', 'index.ts'),
       formats: ['cjs'],
     },
     rollupOptions: {
-      treeshake: {
-        propertyReadSideEffects: false,
-      },
-      // plugins: [commonjs({ include: ['shell'] })],
       external: [
         'electron',
         'electron-devtools-installer',
