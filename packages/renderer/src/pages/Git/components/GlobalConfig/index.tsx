@@ -1,9 +1,10 @@
+import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Form, Input, Switch } from 'antd';
 import type { GitConfig } from '../../../../../../types';
 import styles from './index.module.scss';
 
-function GlobalConfig() {
+const GlobalConfig: FC = () => {
   const [form] = Form.useForm();
 
   const getGlobalGitConfig = async () => {
@@ -45,6 +46,6 @@ function GlobalConfig() {
       </Form>
     </div>
   );
-}
+};
 
 export default GlobalConfig;

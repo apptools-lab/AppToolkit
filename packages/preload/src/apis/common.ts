@@ -8,5 +8,4 @@ export default {
   setMin: () => ipcRenderer.send('min-app'),
   setMax: () => { return ipcRenderer.sendSync('max-app'); },
   setClose: () => ipcRenderer.send('close-app'),
-
 };

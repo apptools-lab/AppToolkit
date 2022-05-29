@@ -5,9 +5,10 @@ import { handleIpc } from './ipc';
 const isDevelopment = import.meta.env.DEV;
 
 app.whenReady()
+  .then(handleIpc)
   .then(createWindow)
   .then((mainWindow) => {
-    handleIpc(mainWindow);
+    // handleIpc(mainWindow);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();

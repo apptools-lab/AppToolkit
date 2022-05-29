@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import { Row, Col } from 'antd';
 import styles from './index.module.scss';
 
@@ -24,6 +25,13 @@ const data = [
 ];
 
 const Recommendation: FC = () => {
+  const getToolsInfo = async () => {
+    const toolsInfo = await window.electronAPI.getToolsInfo();
+    console.log('toolsInfo', toolsInfo);
+  };
+  useEffect(() => {
+    getToolsInfo();
+  }, []);
   return (
     <div className={styles.recommendation}>
       <div className={styles.title}>为你精选</div>

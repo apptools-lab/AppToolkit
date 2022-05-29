@@ -1,5 +1,6 @@
 import { join, resolve } from 'path';
 import { builtinModules } from 'module';
+import commonjs from '@rollup/plugin-commonjs';
 
 const PACKAGE_ROOT = resolve();
 
@@ -20,16 +21,24 @@ const config = {
     target: 'node16',
     outDir: join(__dirname, 'build'),
     assetsDir: '.',
-    minify: process.env.MODE !== 'development',
+    minify: false,
     lib: {
       entry: join(__dirname, 'src', 'index.ts'),
       formats: ['cjs'],
     },
     rollupOptions: {
+      treeshake: {
+        propertyReadSideEffects: false,
+      },
+      // plugins: [commonjs({ include: ['shell'] })],
       external: [
         'electron',
         'electron-devtools-installer',
         ...builtinModules,
+        'node:url',
+        'node:stream',
+        'node:fs',
+        'node:path',
       ],
       output: {
         entryFileNames: '[name].cjs',
