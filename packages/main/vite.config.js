@@ -2,7 +2,7 @@ import { join, resolve } from 'path';
 import { builtinModules } from 'module';
 
 const PACKAGE_ROOT = resolve();
-console.log('builtinModules', builtinModules);
+
 /**
  * @type {import('vite').UserConfig}
  * @see https://vitejs.dev/config/

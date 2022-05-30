@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { handleIpc } from './ipc';
+import { registerWindowTitleBarIpcEvents } from './ipc/windowTitleBar';
 
 const isDevelopment = import.meta.env.DEV;
 
@@ -8,7 +9,7 @@ app.whenReady()
   .then(handleIpc)
   .then(createWindow)
   .then((mainWindow) => {
-    // handleIpc(mainWindow);
+    registerWindowTitleBarIpcEvents(mainWindow);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
