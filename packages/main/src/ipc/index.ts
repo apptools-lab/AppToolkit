@@ -3,7 +3,9 @@ import { registerCommonIpcEvents } from './common';
 import { registerGitIpcEvents } from './git';
 import { registerToolIpcEvents } from './tool';
 
-export function handleIpc(mainWindow: BrowserWindow) {
+export function handleIpc(
+  // mainWindow: BrowserWindow
+) {
   registerToolIpcEvents();
   // registerCommonIpcEvents(mainWindow);
 

@@ -19,7 +19,6 @@ interface ToolInfo {
 
 interface LocalToolInfo {
   installed: boolean;
-  upgradable?: boolean;
   localPath?: string | null;
   localVersion?: string | null;
 }

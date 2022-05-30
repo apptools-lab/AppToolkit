@@ -10,7 +10,9 @@ export const MAC_APPS_DIR_PATH = '/Applications';
 // default value
 export const DEFAULT_LOCAL_TOOL_INFO: LocalToolInfo = {
   installed: false,
-  upgradable: false,
   localPath: null,
   localVersion: null,
 };
+
+// VSCode
+export const VSCODE_CLI_COMMAND_NAME = 'code';
