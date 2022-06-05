@@ -1,0 +1,87 @@
+.layout_header {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+.win_header {
+  height: 48px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  
+  -webkit-app-region: drag;
+}
+.svg, .svg_close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  width: 48px;
+}
+.svg:hover {
+  background-color: #fafafa;
+}
+.svg_close:hover {
+  background-color: red;
+  path {
+    fill: white;
+  }
+}
+.selection {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+.logoPlaceholder {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  line-height: 48px;
+  -webkit-app-region: drag;
+}
+.logo_text {
+  margin-left: 6px;
+  font-weight: 500;
+  font-size: 18px;
+  color: '#4A4848';
+}
+.menu {
+  width: 180px;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+  background-color: #edf0f5;
+  padding: 5px;
+}
+.link {
+  color: #545454;
+  font-size: 15px;
+  width: 170px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+}
+.link_active {
+  color: #40a9ff !important;
+  background-color: white;
+  border-radius: 5px;
+}
+.link_icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+.drop {
+  position: absolute;
+  right: 10px;
+}
+.sub_link {
+  color: #545454;
+  font-size: 15px;
+  width: 170px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 10px 32px;
+}

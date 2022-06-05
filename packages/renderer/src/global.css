@@ -1,5 +1,28 @@
 @import 'antd/dist/antd.css';
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 body {
   -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+.ant-pro-sider-logo {
+  padding: 0 16px 16px;
+}
+
+.ant-pro-sider .ant-layout-sider .ant-pro-sider-fixed {
+  z-index: 0;
+}
+
+.ant-layout > aside {
+  background: #eaeef3;
+}
+
+.ant-layout > header {
+  background: #eaeef3 !important;
+}
+
+main[class='ant-layout-content ant-pro-basicLayout-content ant-pro-basicLayout-has-header'] {
+  margin: 0;
 }

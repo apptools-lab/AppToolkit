@@ -1,14 +1,15 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { handleIpc } from './ipc';
+import { registerWindowTitleBarIpcEvents } from './ipc/windowTitleBar';
 
 const isDevelopment = import.meta.env.DEV;
 
 app.whenReady()
-  .then(() => {
-    handleIpc();
-
-    createWindow();
+  .then(handleIpc)
+  .then(createWindow)
+  .then((mainWindow) => {
+    registerWindowTitleBarIpcEvents(mainWindow);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -32,12 +33,14 @@ if (!isDevelopment) {
 
 async function createWindow() {
   const mainWindow = new BrowserWindow({
-    show: false, // Use 'ready-to-show' event to show window
+    show: false,
     webPreferences: {
       preload: join(__dirname, '../../preload/build/index.cjs'),
     },
-    width: 800,
-    height: 600,
+    minWidth: 800,
+    minHeight: 600,
+    frame: false,
+    titleBarStyle: 'hiddenInset',
   });
 
   mainWindow.on('ready-to-show', () => {
@@ -55,4 +58,6 @@ async function createWindow() {
     : new URL(join(__dirname, '../../renderer/build/index.html'), `file://${__dirname}`).toString();
 
   await mainWindow.loadURL(pageUrl);
+
+  return mainWindow;
 }

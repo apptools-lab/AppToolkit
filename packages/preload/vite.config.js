@@ -1,7 +1,7 @@
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { builtinModules } from 'module';
 
-const PACKAGE_ROOT = resolve();
+const PACKAGE_ROOT = __dirname;
 
 /**
  * @type {import('vite').UserConfig}
@@ -12,7 +12,7 @@ const config = {
   root: PACKAGE_ROOT,
   resolve: {
     alias: {
-      '/@/': `${join(PACKAGE_ROOT, 'src')}/`,
+      '@': `${join(PACKAGE_ROOT, 'src')}`,
     },
   },
   build: {
@@ -26,10 +26,7 @@ const config = {
       formats: ['cjs'],
     },
     rollupOptions: {
-      external: [
-        'electron',
-        ...builtinModules,
-      ],
+      external: ['electron', ...builtinModules],
       output: {
         entryFileNames: '[name].cjs',
       },

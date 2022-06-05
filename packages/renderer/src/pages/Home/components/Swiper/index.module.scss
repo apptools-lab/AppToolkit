@@ -1,0 +1,11 @@
+.swiper {
+  :global(.slick-slide) {
+    padding: 0 8px;
+  }
+}
+
+.img {
+  height: 42vh;
+  border-radius: 10px;
+  object-fit: cover;
+}

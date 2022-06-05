@@ -1,7 +1,7 @@
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { builtinModules } from 'module';
 
-const PACKAGE_ROOT = resolve();
+const PACKAGE_ROOT = __dirname;
 
 /**
  * @type {import('vite').UserConfig}
@@ -12,7 +12,7 @@ const config = {
   root: PACKAGE_ROOT,
   resolve: {
     alias: {
-      '/@/': `${join(PACKAGE_ROOT, 'src')}/`,
+      '@': `${join(PACKAGE_ROOT, 'src')}`,
     },
   },
   build: {
@@ -20,7 +20,7 @@ const config = {
     target: 'node16',
     outDir: join(__dirname, 'build'),
     assetsDir: '.',
-    minify: process.env.MODE !== 'development',
+    minify: process.env.NODE_NEV === 'development',
     lib: {
       entry: join(__dirname, 'src', 'index.ts'),
       formats: ['cjs'],
@@ -30,6 +30,13 @@ const config = {
         'electron',
         'electron-devtools-installer',
         ...builtinModules,
+        'node:url',
+        'node:stream',
+        'node:fs',
+        'node:path',
+        'node:util',
+        'node:buffer',
+        'node:net',
       ],
       output: {
         entryFileNames: '[name].cjs',
