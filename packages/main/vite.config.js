@@ -34,6 +34,9 @@ const config = {
         'node:stream',
         'node:fs',
         'node:path',
+        'node:util',
+        'node:buffer',
+        'node:net',
       ],
       output: {
         entryFileNames: '[name].cjs',

@@ -4,7 +4,7 @@ import type { LocalToolInfo } from '../../types';
 
 // path
 const HOME_DIR = os.homedir();
-export const TMP_DIR = path.join(HOME_DIR, '.AppToolkit');
+export const APP_TOOLKIT_TMP_DIR = path.join(HOME_DIR, '.AppToolkit');
 export const MAC_APPS_DIR_PATH = '/Applications';
 
 // default value

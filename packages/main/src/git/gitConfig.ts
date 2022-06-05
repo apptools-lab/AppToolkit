@@ -1,12 +1,12 @@
 import * as path from 'path';
 import fse from 'fs-extra';
 import simpleGit from 'simple-git';
-import { TMP_DIR } from '@/constants';
+import { APP_TOOLKIT_TMP_DIR } from '@/constants';
 import transformStrToBool from '@/utils/transformStrToBool';
 import type { GitConfigScope } from 'simple-git';
 import type { GitConfig } from '../../../types';
 
-const userConfigDir = path.join(TMP_DIR, 'git', 'user-config');
+const userConfigDir = path.join(APP_TOOLKIT_TMP_DIR, 'git', 'user-config');
 const gitDirStr = 'includeif.gitdir:';
 
 export async function getGlobalGitConfig() {
