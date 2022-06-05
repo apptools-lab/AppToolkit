@@ -1,7 +1,7 @@
 import { globby } from 'globby';
 import consola from 'consola';
 import fse from 'fs-extra';
-import { DEFAULT_LOCAL_TOOL_INFO, MAC_APPS_DIR_PATH, VSCODE_CLI_COMMAND_NAME } from '../constants';
+import { DEFAULT_LOCAL_TOOL_INFO, MAC_APPS_DIR_PATH, VSCODE_CLI_COMMAND_NAME } from '@/constants';
 import type { LocalToolInfo, ToolType } from '../../../types';
 import which from './which';
 import executeCommand from './executeCommand';
