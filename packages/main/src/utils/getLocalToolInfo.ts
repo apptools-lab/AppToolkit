@@ -8,11 +8,11 @@ import executeCommand from './executeCommand';
 
 type GetLocalToolInfo = (toolId: string) => Promise<LocalToolInfo>;
 
-const getLocalMacAppInfo = async (toolId: string) => {
+const getLocalMacAppInfo = async (id: string) => {
   const localMacAppInfo = { ...DEFAULT_LOCAL_TOOL_INFO };
   try {
     // get mac app local path
-    const app = /\.app$/.test(toolId) ? toolId : `${toolId}.app`;
+    const app = /\.app$/.test(id) ? id : `${id}.app`;
     const paths = await globby([app], {
       cwd: MAC_APPS_DIR_PATH,
       onlyDirectories: true,
@@ -23,6 +23,7 @@ const getLocalMacAppInfo = async (toolId: string) => {
     }
     const appPath = `${MAC_APPS_DIR_PATH}/${app}`;
     localMacAppInfo.localPath = appPath;
+    localMacAppInfo.installed = true;
     // get mac app local version
     const appInfoPList = `${appPath}/Contents/Info.plist`;
     const info = await fse.readFile(appInfoPList, 'utf-8');
@@ -37,12 +38,12 @@ const getLocalMacAppInfo = async (toolId: string) => {
   }
 };
 
-const getLocalCliInfo: GetLocalToolInfo = async (toolId: string) => {
+const getLocalCliInfo: GetLocalToolInfo = async (id: string) => {
   const localCliInfo = { ...DEFAULT_LOCAL_TOOL_INFO };
   console.time('getLocalCliInfo');
   try {
     // get local cli path
-    const cliPathInfo = which(toolId);
+    const cliPathInfo = which(id);
     if (!cliPathInfo) {
       return localCliInfo;
     }
@@ -53,6 +54,7 @@ const getLocalCliInfo: GetLocalToolInfo = async (toolId: string) => {
       cliPath = cliPathInfo;
     }
     localCliInfo.localPath = cliPath;
+    localCliInfo.installed = true;
     // get cli version
     const stdout = await executeCommand(localCliInfo.localPath!, ['--version']);
     const cliVersionMatch = stdout.match(/(\d+(\.\d+)*)/);
@@ -79,6 +81,7 @@ const getLocalNpmPackageInfo: GetLocalToolInfo = async (id: string) => {
       return localNpmPackageInfo;
     }
     localNpmPackageInfo.localPath = localPath;
+    localNpmPackageInfo.installed = true;
     // get local npm package version
     const ret = await executeCommand('npm', ['list', '-g', id, '--json']);
     const { dependencies } = JSON.parse(ret);
@@ -93,14 +96,14 @@ const getLocalNpmPackageInfo: GetLocalToolInfo = async (id: string) => {
   }
 };
 
-const getLocalWindowsAppInfo: GetLocalToolInfo = async (toolId: string) => {
+const getLocalWindowsAppInfo: GetLocalToolInfo = async (id: string) => {
   // TODO:
   return {
     installed: true,
   };
 };
 
-const getLocalVSCodeExtInfo: GetLocalToolInfo = async (toolId: string) => {
+const getLocalVSCodeExtInfo: GetLocalToolInfo = async (id: string) => {
   console.time('getLocalVSCodeExtInfo');
   const localVSCodeExtInfo = { ...DEFAULT_LOCAL_TOOL_INFO };
   if (!which(VSCODE_CLI_COMMAND_NAME)) {
@@ -111,10 +114,11 @@ const getLocalVSCodeExtInfo: GetLocalToolInfo = async (toolId: string) => {
     // get local vscode extension version
     const stdout = await executeCommand(VSCODE_CLI_COMMAND_NAME, ['--list-extensions', '--show-versions']);
     const extensionsList = stdout.split('\n');
-    const localExtensionInfo = extensionsList.find((ext: string) => (new RegExp(`${toolId}@`)).test(ext));
+    const localExtensionInfo = extensionsList.find((ext: string) => (new RegExp(`${id}@`)).test(ext));
     if (localExtensionInfo) {
       const [, version] = localExtensionInfo.split('@');
       localVSCodeExtInfo.localVersion = version;
+      localVSCodeExtInfo.installed = true;
     }
   } catch (err) {
     consola.error('getLocalVSCodeExtInfo', err);

@@ -1,0 +1,47 @@
+{
+  "darwin": [
+    {
+      "name": "Git",
+      "id": "git",
+      "description": "分布式版本控制软件",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN012cOEYH1QgKmtKX8Ju_!!6000000002005-2-tps-200-200.png",
+      "link": "https://git-scm.com/",
+      "packageType": "dmg",
+      "type": "cli",
+      "downloadLink": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/git-2.31.0-intel-universal-mavericks.dmg",
+      "version": "2.31.0",
+      "categories": [
+        "recommended"
+      ]
+    },
+    {
+      "title": "Google Chrome",
+      "id": "Google Chrome",
+      "description": "强大、快速的网页浏览器",
+      "link": "https://www.google.com/chrome/",
+      "icon": "https://img.alicdn.com/imgextra/i2/O1CN01jRdeW91kg8w2eH4YR_!!6000000004712-0-tps-225-225.jpg",
+      "packageType": "dmg",
+      "type": "macApp",
+      "downloadLink": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/googlechrome.dmg",
+      "version": "88.0.0",
+      "categories": [
+        "recommended"
+      ]
+    },
+    {
+      "title": "Visual Studio Code",
+      "id": "Visual Studio Code",
+      "description": "跨平台、轻量的代码编辑器",
+      "link": "https://code.visualstudio.com/",
+      "icon": "https://img.alicdn.com/imgextra/i4/O1CN01Jujm911lApTQ1ghkF_!!6000000004779-0-tps-225-225.jpg",
+      "packageType": "dmg",
+      "type": "macApp",
+      "downloadLink": "https://iceworks.oss-cn-hangzhou.aliyuncs.com/toolkit/packages/dmg/VSCode-darwin-universal.zip",
+      "version": "1.56.0",
+      "categories": [
+        "recommended"
+      ]
+    }
+  ],
+  "win32": []
+}

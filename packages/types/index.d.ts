@@ -1,11 +1,11 @@
+/** Git */
 export type GitConfig = Record<string, string>;
 
-type System = 'win32' | 'darwin';
+/** Tool */
 /** 安装包类型 */
 type PackageType = 'dmg' | 'exe' | 'vsix' | 'npmPackage';
 /** 工具类型 */
 type ToolType = 'cli' | 'npmPackage' | 'macApp' | 'windowsApp' | 'vscodeExt';
-
 interface ToolInfo {
   name: string;
   id: string;
@@ -14,25 +14,22 @@ interface ToolInfo {
   link: string;
   packageType: PackageType;
   type: ToolType;
-  category?: string;
+  downloadLink: string;
+  version: string;
+  categories: string[];
 }
-
 interface LocalToolInfo {
   installed: boolean;
   localPath?: string | null;
   localVersion?: string | null;
 }
+export type ToolsInfo = Record<NodeJS.Platform, ToolInfo[]>;
 
-interface ToolData {
-  [k in System]: ToolInfo;
-}
-
-/** APIs */
+/** IPC APIs */
 interface GitAPI {
   getGlobalGitConfig: () => Promise<GitConfig>;
   setGlobalGitConfig: (config: GitConfig) => Promise<void>;
 }
-
 interface CommonAPI {
   openFile: () => Promise<undefined | string>;
   getPlatform: () => NodeJS.Platform;
@@ -43,8 +40,7 @@ interface CommonAPI {
 }
 
 interface ToolAPI {
-  getToolsInfo: () => Promise<ToolInfo>;
+  getRecommendedToolsInfo: () => Promise<ToolsInfo[]>;
 }
-
 export interface IElectronAPI extends GitAPI, CommonAPI, ToolAPI {
 }

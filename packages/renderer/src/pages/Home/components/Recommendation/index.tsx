@@ -25,12 +25,12 @@ const data = [
 ];
 
 const Recommendation: FC = () => {
-  const getToolsInfo = async () => {
-    const toolsInfo = await window.electronAPI.getToolsInfo();
+  const getRecommendedToolsInfo = async () => {
+    const toolsInfo = await window.electronAPI.getRecommendedToolsInfo();
     console.log('toolsInfo', toolsInfo);
   };
   useEffect(() => {
-    getToolsInfo();
+    getRecommendedToolsInfo();
   }, []);
   return (
     <div className={styles.recommendation}>

@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
 
 export default {
-  getToolsInfo: () => ipcRenderer.invoke('tool-getInfo'),
+  getRecommendedToolsInfo: () => ipcRenderer.invoke('tool.getRecommendedToolsInfo'),
 };
